@@ -101,6 +101,58 @@ You can tune the `cluster_sensitivity` (default `0.5`):
 
 ---
 
+## Understanding Phonetic Mappings
+
+Because orthography (spelling) varies wildly across languages, the library uses grapheme-to-IPA mappings to translate "written" words into "spoken" phonetic vectors.
+
+Without a good mapping, the library would treat letters as arbitrary symbols. By mapping them to IPA (International Phonetic Alphabet) symbols, the system can leverage **Distinctive Feature Theory**:
+
+* **Linguistic Intelligence**: The engine knows that 'p' and 'b' are both bilabial stops and differ only by voicing.
+* **Weighted Distance**: Mappings allow the algorithm to compute distance based on articulatory features like nasality or place of articulation rather than simple character replacement.
+* **Cluster Precision**: A word is converted into a sequence of **cluster IDs**. Accurate mappings ensure that words which sound similar (e.g., "frend" and "friend") result in the same or highly similar cluster sequences, significantly increasing search recall.
+
+A mapping is a Python dictionary where keys are graphemes (single letters or digraphs) and values are lists of potential IPA realizations:
+
+```python
+# Example: Mapping 'x' to its multiple sounds
+"x": ["ʃ", "ks", "z", "s"] 
+
+```
+
+The `PhoneticFuzzySearch` class uses a **Breadth-First Search (BFS)** substitution traversal to expand a single word into all possible phonetic sequences. For example, a word containing "x" would generate several phonetic variants to ensure that no matter how the user perceives the sound, the index can find a match.
+
+---
+
+### How to Support a New Language
+
+To add support for a new language, follow these three steps:
+
+Create a dictionary covering the unique phonology of your language. You can inherit from `BASE_LATIN` to save time on standard characters.
+
+```python
+MY_LANG_MAPPING = {
+    **BASE_LATIN,
+    "sh": ["ʃ"],  # Explicitly define digraphs
+    "aa": ["aː"], # Long vowels
+}
+
+```
+
+If a letter has multiple sounds (like 'c' in English), include all of them in the list. The engine's variant generator will index all possibilities, allowing for a "fuzzy" phonetic match.
+
+Pass your custom mapping into the `PhoneticFuzzySearch` constructor.
+
+```python
+from phonematcher.clustering import PhoneticFuzzySearch
+
+ffs = PhoneticFuzzySearch(mapping=MY_LANG_MAPPING, cluster_sensitivity=0.4)
+
+```
+
+> **Pro Tip:** If your language is highly phonetic (like Spanish or Italian), you can keep `cluster_sensitivity` low (approx. 0.3). For languages with complex spelling-to-sound rules (like English or French), a higher sensitivity (0.5 - 0.6) helps group divergent spellings into the same cluster.
+
+---
+
 ## 📜 License
 
 This project is adapted from `pyphone` and `fast_fuzzy_search` by [lingz](https://github.com/lingz) and is released under the **MIT License**.
