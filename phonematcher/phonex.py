@@ -3,13 +3,9 @@ This module is adapted from:
 https://github.com/lingz/pyphone
 MIT License.
 """
-import re
 
-# TODO - latin alphabet only - adjust if needed
-alpha_only = re.compile('[^a-zA-Z]')
 
 def _tokenize(w):
-    w = alpha_only.sub('', w)
     # Marks each character for stable substring replacement.
     return "".join(["_" + letter for letter in w])
 
