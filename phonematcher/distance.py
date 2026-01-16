@@ -482,7 +482,10 @@ def is_vowel_phone(phone: str) -> bool:
         The data model places the vowel/consonant flag in feature[0].
         A True at feature[0] means vowel.
     """
-    return vectorize_phones(phone)[0]
+    try:
+        return vectorize_phones(phone)[0]
+    except:
+        return False
 
 
 def phonetic_distance(phone_a: str, phone_b: str) -> float:
@@ -536,8 +539,11 @@ def phonetic_distance(phone_a: str, phone_b: str) -> float:
         factor = 2.0
 
     # --- Step 4: retrieve merged feature vectors ---
-    vecA = vectorize_phones(phone_a)
-    vecB = vectorize_phones(phone_b)
+    try:
+        vecA = vectorize_phones(phone_a)
+        vecB = vectorize_phones(phone_b)
+    except:
+        return 3.0
 
     # --- Step 5: accumulate weighted mismatches ---
     diff_sum = 0.0
