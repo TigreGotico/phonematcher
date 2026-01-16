@@ -292,7 +292,7 @@ class PhoneticFuzzySearch:
 
 
 # ---------------------------------------------------------------------------
-# English phone mapping
+# Phone mapping - LLM Generated
 # ---------------------------------------------------------------------------
 EN_MAPPING = {
     "b": ["b"],
@@ -367,6 +367,906 @@ EN_MAPPING = {
     "eau": ["ju"],
     "le": ["ɛl"],
     "on": ["ɛn"],
+}
+NL_MAPPING = {
+    # Consonants
+    "b": ["b"],
+    "d": ["d"],
+    "g": ["ɣ"],        # Dutch voiced velar fricative
+    "h": ["h"],
+    "j": ["j"],
+    "k": ["k"],
+    "l": ["l"],
+    "m": ["m"],
+    "n": ["n"],
+    "p": ["p"],
+    "r": ["r"],
+    "s": ["s"],
+    "t": ["t"],
+    "v": ["v"],
+    "w": ["ʋ"],        # Dutch approximant
+    "z": ["z"],
+    "ch": ["x"],       # Dutch voiceless velar fricative
+    "sch": ["sx"],     # Dutch "sch" pronounced [sx]
+    "sj": ["ʃ"],       # Dutch "sj" as in loanwords
+    "tsj": ["tʃ"],     # Dutch "tsj" as in "tsja"
+    "f": ["f"],
+
+    # Vowels
+    "a": ["ɑ"],        # short 'a' as in 'kat'
+    "aa": ["aː"],      # long 'aa' as in 'maan'
+    "e": ["ɛ"],        # short 'e' as in 'pet'
+    "ee": ["eː"],      # long 'ee' as in 'been'
+    "i": ["ɪ"],        # short 'i' as in 'vis'
+    "ie": ["iː"],      # long 'ie' as in 'fiet'
+    "o": ["ɔ"],        # short 'o' as in 'pot'
+    "oo": ["oː"],      # long 'oo' as in 'boom'
+    "u": ["ʏ"],        # short 'u' as in 'put'
+    "uu": ["yː"],      # long 'uu' as in 'muur'
+    "ei": ["ɛi"],      # as in 'meid'
+    "ij": ["ɛi"],      # same as 'ei'
+    "ai": ["ɛi"],      # less common, same diphthong
+    "au": ["ɑu"],      # as in 'mauw'
+    "ou": ["ɑu"],      # as in 'koud'
+    "eu": ["øː"],      # as in 'neus'
+    "ui": ["œy"],      # as in 'huis'
+    "oe": ["u"],       # as in 'boek'
+    "ieuw": ["iu"],    # as in 'nieuw'
+    "ieu": ["iu"],     # variant
+
+    # Other vowel combos
+    "aai": ["aːi"],    # as in 'paai'
+    "ooi": ["oːi"],    # as in 'kooi'
+    "aou": ["ɑu"],     # uncommon
+
+    # Suffixes
+    "ng": ["ŋ"],
+    "nk": ["ŋk"],
+}
+DE_MAPPING = {
+    # Consonants
+    "b": ["b"],
+    "d": ["d"],
+    "g": ["ɡ"],
+    "j": ["j"],      # "ja" = /ja/
+    "v": ["f", "v"], # "vater" = /f/, "von" = /f/ or /v/ depending
+    "w": ["v"],      # German 'w' pronounced like English 'v'
+    "z": ["ts"],     # "zeit" = /tsaɪt/
+    "s": ["z", "s"], # word-initial 's' /z/, otherwise /s/
+    "ß": ["s"],       # sharp S
+    "c": ["k", "ts"], # usually 'c' = /k/, 'ce' /tsɛ/
+    "ch": ["x", "ç"], # 'ach' /ax/, 'ich' /iç/
+    "sch": ["ʃ"],    # 'schön' /ʃøːn/
+    "sp": ["ʃp"],    # word-initial
+    "st": ["ʃt"],    # word-initial
+    "pf": ["pf"],    # 'Pferd' /pferd/
+    "th": ["t"],     # archaic; mostly /t/
+    "r": ["r"],      # alveolar/trilled
+    "l": ["l"],
+    "m": ["m"],
+    "n": ["n"],
+    "ng": ["ŋ"],
+    "h": ["h"],
+    "x": ["ks"],
+
+    # Vowels
+    "a": ["a"],        # short /a/ as in "Mann"
+    "aa": ["aː"],      # long /aː/ as in "Saat"
+    "ä": ["ɛ"],        # short /ɛ/ as in "Mädchen"
+    "äh": ["eː"],      # long /eː/ as in "ähnlich"
+    "e": ["ɛ"],        # short /ɛ/ as in "Bett"
+    "ee": ["eː"],      # long /eː/ as in "Seele"
+    "i": ["ɪ"],        # short /ɪ/ as in "mit"
+    "ie": ["iː"],      # long /iː/ as in "Liebe"
+    "o": ["ɔ"],        # short /ɔ/ as in "Sonne"
+    "oo": ["oː"],      # long /oː/ as in "Boot"
+    "u": ["ʊ"],        # short /ʊ/ as in "Mutter"
+    "uu": ["uː"],      # long /uː/ as in "Schule"
+    "ü": ["y"],        # short /y/ as in "Müll"
+    "üh": ["yː"],      # long /yː/ as in "fühlen"
+    "ö": ["ø"],        # short /ø/ as in "schön"
+    "öh": ["øː"],      # long /øː/ as in "Höhle"
+    "au": ["aʊ"],      # diphthong
+    "ei": ["aɪ"],      # diphthong
+    "ai": ["aɪ"],      # diphthong
+    "eu": ["ɔʏ"],      # diphthong
+    "äu": ["ɔʏ"],      # diphthong
+    "ou": ["oʊ"],      # loanwords
+    "oi": ["ɔɪ"],      # rare loanwords
+
+    # Special endings
+    "er": ["ɐ"],       # unstressed /ɐ/
+    "el": ["əl"],      # unstressed /əl/
+    "en": ["ən"],      # unstressed /ən/
+}
+DA_MAPPING = {
+    # Consonants
+    "b": ["b"],
+    "d": ["d", "ð"],  # soft /d/ often realized as /ð/ medially
+    "g": ["ɡ", "ɡ̊"],  # sometimes devoiced at word-end
+    "j": ["j"],  # /j/ as in "ja"
+    "f": ["f", "v"],  # final /v/ in some positions
+    "h": ["h"],
+    "k": ["k", "g̊"],  # /g̊/ for soft /g/ sometimes
+    "p": ["p"],
+    "r": ["r", "ɐ˞"],  # alveolar/trilled or uvular
+    "s": ["s", "z"],  # voiced between vowels
+    "t": ["t"],
+    "v": ["v", "f"],  # sometimes devoiced
+    "w": ["v"],  # borrowed words
+    "z": ["s", "z"],  # mostly in loanwords
+    "c": ["k", "s"],  # depending on word
+    "x": ["ks"],
+    "q": ["k"],
+    "ng": ["ŋ"],
+    "ch": ["k", "tʃ"],  # borrowed
+    "th": ["t", "θ"],  # borrowed words
+
+    # Common vowel letters
+    "a": ["ɑ", "æ"],  # short/long variation
+    "aa": ["ɔ"],  # modern /å/
+    "e": ["ɛ", "ə", "e"],  # varies by position
+    "i": ["i", "ɪ"],
+    "o": ["ɔ", "o", "u"],
+    "u": ["u", "ʉ", "y"],  # front rounded in some contexts
+    "y": ["y", "ʏ"],
+    "æ": ["ɛ"],
+    "ø": ["ø", "œ"],
+    "å": ["ɔ", "ɒ"],
+
+    # Digraphs / vowel combinations
+    "au": ["ɔu"],
+    "ei": ["ai", "ɛi"],
+    "oi": ["ɔi"],
+    "ai": ["ɛi"],
+    "øy": ["øy"],
+    "ou": ["au"],
+    "ie": ["iə"],  # borrowed words
+    "ei": ["ai"],
+    "au": ["ɔu"],
+
+    # Silent letters / specific endings
+    "e": ["ə"],  # often unstressed final 'e'
+    "r": ["ɐ˞", "r"],  # soft /r/
+    "ld": ["l"],  # final 'd' often silent
+    "nd": ["n"],  # final 'd' often silent
+    "st": ["sd"],  # assimilated cluster
+    "rt": ["ɐ˞t"],  # common realization
+
+    # Loanwords / borrowed spellings
+    "ph": ["f"],
+    "th": ["t", "θ"],
+    "sh": ["ʃ"],
+    "ch": ["tʃ", "k"],
+
+    # Word endings
+    "er": ["ɐ"],  # common in weak endings
+    "en": ["ən"],  # definite ending or weak syllable
+    "et": ["ət"],  # definite neuter ending
+    "te": ["tə"],  # past tense ending
+
+    # Others
+    "ou": ["au"],
+    "oo": ["u"],
+    "øy": ["øy"],
+}
+NO_MAPPING = {
+    "b": ["b"],
+    "d": ["d"],
+    "g": ["ɡ", "j"],  # g soft / hard
+    "j": ["j"],
+    "f": ["f"],
+    "h": ["h"],
+    "y": ["y"],
+    "c": ["k", "s"],  # loanwords
+    "k": ["k"],
+    "q": ["k"],
+    "ck": ["k"],
+    "l": ["l"],
+    "m": ["m"],
+    "n": ["n"],
+    "ng": ["ŋ"],
+    "p": ["p"],
+    "r": ["r"],  # alveolar trill
+    "s": ["s"],
+    "sj": ["ʃ"],  # sj-sound
+    "skj": ["ʃ"],
+    "tj": ["tʃ"],  # t + j clusters
+    "t": ["t"],
+    "v": ["v"],
+    "w": ["v"],  # often pronounced like 'v'
+    "x": ["ks"],
+    "z": ["s"],
+    "æ": ["æ"],
+    "ø": ["ø"],
+    "å": ["oː"],
+    "a": ["ɑ", "aː"],
+    "e": ["e", "ɛ"],
+    "i": ["i"],
+    "o": ["u", "oː"],
+    "u": ["ʉ", "uː"],
+    "au": ["ɔu"],
+    "ei": ["æi"],
+    "øy": ["øy"],
+    "ei": ["ei"],
+    "ie": ["iə"],
+    "ai": ["ɑi"],
+    "øy": ["øi"],
+    "ei": ["ei"],
+    "y": ["y"],
+    "øy": ["øy"],
+    "å": ["oː"],
+    "ar": ["ɑr"],
+    "or": ["oːr"],
+    "er": ["ɛr"],
+    "ir": ["ir"],
+    "ur": ["ʉr"],
+    "år": ["oːr"],
+    "eir": ["eir"],
+    "eir": ["eːr"],
+    "en": ["ɛn"],
+    "el": ["ɛl"],
+    "om": ["ɔm"],
+    "on": ["ɔn"],
+    "un": ["ʉn"],
+    "in": ["in"],
+    "inn": ["in"],
+    "ett": ["et"],
+    "ikk": ["ik"],
+    # common consonant clusters
+    "sk": ["sk"],
+    "sp": ["sp"],
+    "st": ["st"],
+    "tr": ["tr"],
+    "dr": ["dr"],
+    "kr": ["kr"],
+}
+SV_MAPPING = {
+    # Consonants
+    "b": ["b"],
+    "d": ["d"],
+    "g": ["ɡ", "ɡj"],      # g hard/soft
+    "j": ["j"],             # y-sound /j/
+    "f": ["f"],
+    "h": ["h"],
+    "k": ["k", "ɕ"],        # k before front vowels -> /ɕ/
+    "ck": ["k"],
+    "l": ["l"],
+    "m": ["m"],
+    "n": ["n", "ŋ"],        # ng
+    "ng": ["ŋ"],
+    "p": ["p"],
+    "r": ["r"],             # rolled or tapped
+    "s": ["s"],
+    "sj": ["ɧ"],            # sj-sound
+    "sk": ["ɧ"],            # before front vowels
+    "stj": ["ɧ"],
+    "tj": ["ɕ"],            # tj-sound
+    "t": ["t"],
+    "v": ["v"],
+    "w": ["v"],             # Swedish often pronounces w as v
+    "z": ["s"],             # z pronounced as s
+    "x": ["ks"],
+    # Vowels
+    "a": ["ɑ", "aː"],       # short vs long
+    "å": ["oː"],            # long o
+    "ä": ["ɛ", "ɛː"],       # short/long e
+    "e": ["ɛ", "eː"],       # short/long e
+    "i": ["ɪ", "iː"],
+    "o": ["ɔ", "uː"],       # o short/long
+    "ö": ["ø", "øː"],
+    "u": ["ʉ", "ʉː"],
+    "y": ["y", "yː"],
+    "ei": ["eːi"],
+    "eu": ["øːu"],
+    "au": ["ʊ"],            # rare diphthong
+    "oi": ["ɔɪ"],
+    # Common suffixes and clusters
+    "ar": ["ɑr"],           # e.g., "klar"
+    "er": ["ɛr"],           # e.g., "katter"
+    "or": ["uːr"],          # e.g., "stor"
+    "ur": ["ʉr"],
+    "ir": ["ɪr"],
+    "ör": ["øːr"],
+    "åre": ["oːrɛ"],        # specific endings
+    "ie": ["iːɛ"],           # e.g., "serie"
+    "tion": ["ʃɔn"],        # loanwords from English/French
+    "skj": ["ɧ"],
+    "tj": ["ɕ"],
+    "dj": ["ɟ"],            # some loanwords
+    # Diphthongs / common vowel combos
+    "ai": ["aɪ"],           # rare
+    "ay": ["aɪ"],
+    "ey": ["eːy"],
+    "au": ["ɔu"],
+    "ou": ["uː"],
+    "oi": ["ɔɪ"],
+    # Special sequences
+    "ch": ["ɧ"],             # often in loanwords
+    "ph": ["f"],             # loanwords
+    "sh": ["ɧ"],             # loanwords
+}
+
+PT_MAPPING = {
+    # Consonants
+    "b": ["b"],
+    "c": ["k"],          # default hard; soft c handled via "ce", "ci"
+    "ç": ["s"],          # cedilla
+    "d": ["d"],
+    "f": ["f"],
+    "g": ["ɡ"],          # hard g; soft g handled below
+    "h": [""],           # silent in BP
+    "j": ["ʒ"],          # e.g., "jogo"
+    "k": ["k"],
+    "l": ["l"],
+    "m": ["m"],
+    "n": ["n"],
+    "p": ["p"],
+    "q": ["k"],
+    "r": ["ʁ"],          # initial R or after consonant
+    "rr": ["ʁ"],         # strong R between vowels
+    "s": ["s"],          # default S; soft S handled below
+    "ss": ["s"],         # unvoiced S
+    "v": ["v"],
+    "w": ["w"],
+    "x": ["ʃ"],          # default for 'x' at start, middle: see exceptions
+    "z": ["z"],
+
+    # Soft consonants / digraphs
+    "ch": ["ʃ"],         # chocolate
+    "lh": ["ʎ"],         # palatal L
+    "nh": ["ɲ"],         # palatal N
+    "gu": ["ɡ"],         # before 'a','o','u'; silent before 'e','i'
+    "qu": ["k"],         # before 'e','i'
+
+    # Vowels (oral)
+    "a": ["a"],
+    "e": ["e", "ɛ"],      # 'e' can be closed/open
+    "é": ["e"],           # stressed
+    "ê": ["ɛ"],           # closed
+    "i": ["i"],
+    "o": ["o", "ɔ"],      # closed/open
+    "ó": ["o"],
+    "ô": ["ɔ"],
+    "u": ["u"],
+
+    # Vowels (nasal)
+    "ã": ["ɐ̃"],
+    "ão": ["ɐ̃w̃"],
+    "õe": ["õj̃e"],
+    "em": ["ẽ"],          # nasalized e before m/n at end of syllable
+    "en": ["ẽ"],
+    "im": ["ĩ"],
+    "in": ["ĩ"],
+    "om": ["õ"],
+    "on": ["õ"],
+
+    # Diphthongs
+    "ai": ["ai"],
+    "ei": ["ei"],
+    "oi": ["oi"],
+    "ui": ["ui"],
+    "au": ["aw"],
+    "ou": ["ow"],
+
+    # Common combinations / suffixes
+    "sc": ["s"],          # before 'e','i'
+    "sç": ["s"],
+    "gue": ["ɡe"],        # soft e
+    "gui": ["ɡi"],
+    "ge": ["ʒe"],         # soft g
+    "gi": ["ʒi"],
+}
+GL_MAPPING = {
+    # Consonants
+    "b": ["b"],
+    "v": ["b", "v"],  # Galician v is often pronounced like b
+    "c": ["k", "s"],  # c before e/i is /s/, else /k/
+    "ç": ["s"],       # sometimes used historically
+    "ch": ["tʃ"],     # loanwords
+    "d": ["d"],
+    "f": ["f"],
+    "g": ["ɡ", "ɣ"],  # g before e/i: /ʒ/ in some regions
+    "gu": ["ɡ"],      # before e/i to keep hard g
+    "h": [],          # silent in Galician
+    "j": ["ʒ"],       # borrowed words
+    "l": ["l", "ʎ"],  # l and palatalized ll
+    "m": ["m"],
+    "n": ["n", "ɲ"],  # n and palatalized ñ
+    "ñ": ["ɲ"],
+    "ng": ["ŋ"],      # mostly in loanwords
+    "p": ["p"],
+    "q": ["k"],       # always followed by u
+    "r": ["ɾ", "r"],  # single vs trilled
+    "s": ["s", "z"],  # voicing intervocalic
+    "t": ["t"],
+    "x": ["ʃ", "ks"], # x pronounced /ʃ/ or /ks/ depending on position
+    "z": ["θ"],        # in some areas; often /s/
+    "lh": ["ʎ"],       # palatal lateral
+    "nh": ["ɲ"],       # palatal nasal
+
+    # Vowels
+    "a": ["a"],
+    "á": ["a"],
+    "e": ["ɛ", "e"],
+    "é": ["ɛ"],
+    "i": ["i"],
+    "í": ["i"],
+    "o": ["o", "ɔ"],
+    "ó": ["o"],
+    "u": ["u"],
+    "ú": ["u"],
+
+    # Common vowel combinations
+    "ai": ["aj"],  # ai diphthong
+    "ei": ["ej"],
+    "oi": ["oj"],
+    "au": ["aw"],
+    "ou": ["ow"],
+
+    # Common endings / sequences
+    "ar": ["ar"],
+    "er": ["ɛr"],
+    "ir": ["ir"],
+    "ur": ["ur"],
+    "or": ["or"],
+    "as": ["as"],
+    "es": ["es"],
+    "os": ["os"],
+    "is": ["is"],
+
+    # Others / loanwords
+    "ph": ["f"],
+    "th": ["t"],     # usually simplified
+    "wh": ["w"],     # rare
+}
+ES_MAPPING = {
+    # Consonants
+    "b": ["b"],
+    "v": ["b"],          # Spanish: b and v often pronounced the same
+    "c": ["k"],          # before a, o, u
+    "ch": ["tʃ"],
+    "d": ["d"],
+    "f": ["f"],
+    "g": ["ɡ"],          # before a, o, u
+    "gu": ["ɡ"],         # before e, i (silent u otherwise)
+    "h": [],             # silent
+    "j": ["x"],
+    "k": ["k"],
+    "l": ["l"],
+    "ll": ["ʎ", "ʝ"],    # y-like in some regions
+    "m": ["m"],
+    "n": ["n"],
+    "ñ": ["ɲ"],
+    "p": ["p"],
+    "q": ["k"],          # always with u: qu
+    "r": ["ɾ"],          # tapped r
+    "s": ["s"],
+    "t": ["t"],
+    "x": ["ks", "s"],    # borrowed words
+    "y": ["ʝ", "i"],     # vowel y / consonant y
+    "z": ["θ"],          # Castilian Spanish; ["s"] in Latin America
+
+    # Digraphs / combinations
+    "ce": ["θe"],
+    "ci": ["θi"],
+    "ge": ["xe"],
+    "gi": ["xi"],
+    "gue": ["ɡe"],
+    "gui": ["ɡi"],
+    "que": ["ke"],
+    "qui": ["ki"],
+
+    # Vowels
+    "a": ["a"],
+    "á": ["a"],
+    "e": ["e"],
+    "é": ["e"],
+    "i": ["i"],
+    "í": ["i"],
+    "o": ["o"],
+    "ó": ["o"],
+    "u": ["u"],
+    "ú": ["u"],
+    "ü": ["u"],         # in gue/gui to indicate u is pronounced
+
+    # Diphthongs / common vowel sequences
+    "ai": ["ai"],
+    "ay": ["ai"],
+    "ei": ["ei"],
+    "ey": ["ei"],
+    "oi": ["oi"],
+    "oy": ["oi"],
+    "au": ["au"],
+    "eu": ["eu"],
+    "ou": ["ou"],
+
+    # Syllable combinations
+    "rr": ["r"],         # trilled
+    "qu": ["k"],         # before e/i
+
+    # Endings
+    "ción": ["θjon"],
+    "sión": ["sjɔn"],
+    "dad": ["ðad"],
+    "tad": ["tad"],
+}
+CA_MAPPING = {
+    # Consonants
+    "b": ["b"],
+    "v": ["v"],  # /v/ or /b/ depending on context, simplified as /v/
+    "c": ["k"],  # hard c
+    "ç": ["s"],  # c cedilla
+    "d": ["d"],
+    "g": ["ɡ", "ʒ"],  # /ɡ/ before a, o, u; /ʒ/ before e, i
+    "j": ["ʒ"],
+    "ll": ["ʎ"],
+    "l": ["l"],
+    "m": ["m"],
+    "n": ["n"],
+    "ny": ["ɲ"],
+    "p": ["p"],
+    "q": ["k"],
+    "r": ["r"],  # tapped /r/
+    "rr": ["r"],  # trilled /r/
+    "s": ["s"],
+    "ss": ["s"],
+    "t": ["t"],
+    "x": ["ʃ", "ks"],  # /ʃ/ or /ks/ depending on context
+    "z": ["z"],  # used rarely
+    "f": ["f"],
+    "h": [],  # silent
+    "ch": ["tʃ"],  # borrowed words
+    "gu": ["ɡ"],  # hard g before e, i (silent u)
+    "gü": ["ɡw"],  # explicit u
+    "qu": ["k"],  # hard q
+    "w": ["w"],  # foreign
+    # Vowels
+    "a": ["a"],
+    "à": ["a"],
+    "e": ["ə", "ɛ"],  # unstressed /ə/, stressed /ɛ/
+    "é": ["ɛ"],
+    "è": ["ɛ"],
+    "i": ["i"],
+    "í": ["i"],
+    "o": ["ɔ", "o"],  # stressed /ɔ/, unstressed /o/
+    "ó": ["o"],
+    "ò": ["ɔ"],
+    "u": ["u"],
+    "ú": ["u"],
+    "ü": ["y"],  # front rounded
+    # Diphthongs and common vowel combinations
+    "ai": ["aj"],
+    "au": ["aw"],
+    "ei": ["ej"],
+    "eu": ["ew"],
+    "oi": ["oj"],
+    "ou": ["ow"],
+    "ia": ["ja"],
+    "ie": ["je"],
+    "io": ["jo"],
+    "iu": ["ju"],
+    "ua": ["wa"],
+    "ue": ["we"],
+    "ui": ["wi"],
+    "uo": ["wo"],
+    "uy": ["wi"],  # rare
+    # Common endings
+    "ig": ["tʃ"],  # final ig pronounced /tʃ/ in Catalan
+    "rt": ["rt"],
+    "nt": ["nt"],
+    "ct": ["kt"],
+    "sc": ["s"],  # before e, i
+}
+FR_MAPPING = {
+    # Consonants
+    "b": ["b"],
+    "c": ["k"],          # default hard c
+    "ç": ["s"],          # soft c
+    "d": ["d"],
+    "f": ["f"],
+    "g": ["ɡ"],          # default hard g
+    "gu": ["ɡ"],         # hard g before e/i
+    "j": ["ʒ"],
+    "k": ["k"],
+    "l": ["l"],
+    "m": ["m"],
+    "n": ["n"],
+    "p": ["p"],
+    "q": ["k"],
+    "r": ["ʁ"],
+    "s": ["s"],
+    "t": ["t"],
+    "v": ["v"],
+    "w": ["w"],
+    "x": ["ks", "gz"],    # depending on context
+    "y": ["j", "i"],      # sometimes consonant j or vowel i
+    "z": ["z"],
+
+    # Digraphs / special consonants
+    "ch": ["ʃ"],
+    "gn": ["ɲ"],
+    "ph": ["f"],
+    "th": ["t"],          # French 'th' is usually just 't'
+    "qu": ["k"],
+
+    # Vowels
+    "a": ["a"],
+    "à": ["a"],
+    "â": ["ɑ"],
+    "e": ["ə", "ɛ"],      # schwa or open e
+    "é": ["e"],
+    "è": ["ɛ"],
+    "ê": ["ɛ"],
+    "ë": ["ə"],
+    "i": ["i"],
+    "î": ["i"],
+    "ï": ["i"],
+    "o": ["o", "ɔ"],
+    "ô": ["o"],
+    "u": ["y"],
+    "ù": ["y"],
+    "û": ["y"],
+    "ü": ["y"],
+
+    # Nasal vowels
+    "an": ["ɑ̃"],
+    "en": ["ɑ̃"],
+    "in": ["ɛ̃"],
+    "ain": ["ɛ̃"],
+    "aim": ["ɛ̃"],
+    "on": ["ɔ̃"],
+    "om": ["ɔ̃"],
+    "un": ["œ̃"],
+    "um": ["œ̃"],
+
+    # Diphthongs / vowel combinations
+    "ai": ["ɛ"],
+    "au": ["o"],
+    "eau": ["o"],
+    "eu": ["ø", "œ"],
+    "ou": ["u"],
+    "oi": ["wa"],
+    "oy": ["wa"],
+
+    # Endings
+    "ent": ["ɑ̃"],  # silent in many verbs except 3rd person plural
+    "er": ["e"],    # infinitive verbs
+    "ez": ["e"],    # imperative / 2nd person
+    "es": ["ɛ"],    # plural or 2nd person singular
+    "et": ["ɛ"],
+    "ette": ["ɛt"],
+
+    # Misc
+    "le": ["lə", "l"],  # depending on position
+    "la": ["la"],
+    "les": ["le", "lez"],
+    "des": ["de", "dez"],
+}
+IT_MAPPING = {
+    # Consonants
+    "b": ["b"],
+    "c": ["k"],           # default hard 'c'
+    "ch": ["k"],          # always hard 'c' before e/i
+    "ci": ["tʃ"],         # soft 'c' before i
+    "ce": ["tʃ"],         # soft 'c' before e
+    "d": ["d"],
+    "f": ["f"],
+    "g": ["ɡ"],           # hard 'g' default
+    "gh": ["ɡ"],          # hard 'g' before e/i
+    "gi": ["dʒ"],         # soft 'g' before i
+    "ge": ["dʒ"],         # soft 'g' before e
+    "h": [""],            # silent in Italian
+    "l": ["l"],
+    "gl": ["ɡl"],         # 'gli' simplified; see below
+    "gli": ["ʎ"],         # palatal lateral
+    "m": ["m"],
+    "n": ["n"],
+    "gn": ["ɲ"],          # palatal nasal
+    "p": ["p"],
+    "q": ["k"],           # always followed by 'u'
+    "qu": ["kw"],         # 'qu' sequence
+    "r": ["r"],           # trilled
+    "s": ["s"],           # default voiceless
+    "z": ["ts", "dz"],    # Italian 'z' can be voiced or voiceless
+
+    # Vowels
+    "a": ["a"],
+    "e": ["e", "ɛ"],      # closed/open e
+    "i": ["i"],
+    "o": ["o", "ɔ"],      # closed/open o
+    "u": ["u"],
+
+    # Vowel combinations / diphthongs
+    "ai": ["ai"],
+    "au": ["au"],
+    "ei": ["ei"],
+    "oi": ["oi"],
+    "ia": ["ja"],
+    "ie": ["je"],
+    "io": ["jo"],
+    "iu": ["ju"],
+    "ua": ["wa"],
+    "ue": ["we"],
+    "uo": ["wo"],
+    "ui": ["wi"],
+
+    # Special sequences
+    "qu": ["kw"],
+    "sc": ["ʃ"],          # 'sc' before e/i
+    "sce": ["ʃe"],
+    "sci": ["ʃi"],
+    "sch": ["sk"],         # 'sch' before e/i
+    "che": ["ke"],
+    "chi": ["ki"],
+    "gli": ["ʎ"],         # palatal lateral
+    "gn": ["ɲ"],          # palatal nasal
+    "ci": ["tʃ"],         # soft c
+    "ce": ["tʃ"],         # soft c
+    "ge": ["dʒ"],         # soft g
+    "gi": ["dʒ"],         # soft g
+}
+
+EUS_MAPPING = {
+    "a": ["a"],
+    "b": ["b"],
+    "d": ["d"],
+    "e": ["e"],
+    "f": ["f"],
+    "g": ["ɡ"],
+    "h": ["h"],
+    "i": ["i"],
+    "j": ["ʝ"],      # j in Basque is like Spanish "y"
+    "k": ["k"],
+    "l": ["l"],
+    "m": ["m"],
+    "n": ["n"],
+    "ñ": ["ɲ"],      # nasal palatal
+    "o": ["o"],
+    "p": ["p"],
+    "r": ["r"],      # trilled
+    "rr": ["r"],     # long trill
+    "s": ["s"],
+    "t": ["t"],
+    "u": ["u"],
+    "x": ["ʃ"],      # Basque x is like English "sh"
+    "z": ["s"],      # z in Basque is /s/ in the north, /θ/ in some dialects
+    "tz": ["ts"],    # affricate
+    "tx": ["tʃ"],    # affricate like English "ch"
+    "ts": ["ts"],
+    "dɡ": ["dʒ"],    # less common, mostly loanwords
+    "ll": ["ʎ"],     # palatal lateral
+    "ai": ["ai"],
+    "ei": ["ei"],
+    "oi": ["oi"],
+    "au": ["au"],
+    "eu": ["eu"],
+    "ia": ["ia"],
+    "ie": ["ie"],
+    "io": ["io"],
+    "iu": ["iu"],
+    "ua": ["ua"],
+    "ue": ["ue"],
+    "uo": ["uo"],
+    "ui": ["ui"],
+}
+
+AR_MAPPING = {
+    # Consonants
+    "ا": ["ɑ"],       # Alif (long a)
+    "ب": ["b"],
+    "ت": ["t"],
+    "ث": ["θ"],
+    "ج": ["dʒ"],
+    "ح": ["ħ"],
+    "خ": ["x"],
+    "د": ["d"],
+    "ذ": ["ð"],
+    "ر": ["r"],
+    "ز": ["z"],
+    "س": ["s"],
+    "ش": ["ʃ"],
+    "ص": ["sˤ"],
+    "ض": ["dˤ"],
+    "ط": ["tˤ"],
+    "ظ": ["ðˤ"],
+    "ع": ["ʕ"],
+    "غ": ["ɣ"],
+    "ف": ["f"],
+    "ق": ["q"],
+    "ك": ["k"],
+    "ل": ["l"],
+    "م": ["m"],
+    "ن": ["n"],
+    "ه": ["h"],
+    "و": ["w", "u"],  # Consonant or long vowel
+    "ي": ["j", "i"],  # Consonant or long vowel
+
+    # Hamza and glottal stop
+    "ء": ["ʔ"],
+    "ئ": ["ʔi"],
+    "ؤ": ["ʔu"],
+
+    # Short vowels
+    "َ": ["a"],   # Fatha
+    "ُ": ["u"],   # Damma
+    "ِ": ["i"],   # Kasra
+
+    # Long vowels (already covered by Alif, Waw, Ya)
+    "ى": ["ɑ"],   # Alif Maqsura
+
+    # Tanween (final vowels with 'n')
+    "ً": ["an"],
+    "ٌ": ["un"],
+    "ٍ": ["in"],
+
+    # Shadda (gemination) – handled as double consonant
+    "ّ": [],
+
+    # Sukun (no vowel)
+    "ْ": [],
+
+    # Common combinations / digraphs
+    "ال": ["al"],   # Definite article
+    "لا": ["la"],   # Lam-Alef ligature
+}
+HI_MAPPING = {
+    # Vowels
+    "a": ["ə"],       # अ
+    "aa": ["ɑ"],      # आ
+    "i": ["i"],       # इ
+    "ii": ["iː"],     # ई
+    "u": ["u"],       # उ
+    "uu": ["uː"],     # ऊ
+    "e": ["eː"],      # ए
+    "ai": ["ɛː"],     # ऐ
+    "o": ["oː"],      # ओ
+    "au": ["ɔː"],     # औ
+
+    # Consonants (basic)
+    "k": ["k"],       # क
+    "kh": ["kʰ"],     # ख
+    "g": ["ɡ"],       # ग
+    "gh": ["ɡʰ"],     # घ
+    "ng": ["ŋ"],      # ङ
+
+    "c": ["tʃ"],      # च
+    "ch": ["tʃʰ"],    # छ
+    "j": ["dʒ"],      # ज
+    "jh": ["dʒʰ"],    # झ
+    "ny": ["ɲ"],      # ञ
+
+    "t": ["ʈ"],       # ट
+    "th": ["ʈʰ"],     # ठ
+    "d": ["ɖ"],       # ड
+    "dh": ["ɖʰ"],     # ढ
+    "n": ["ɳ"],       # ण
+
+    "t2": ["t"],      # त
+    "th2": ["tʰ"],    # थ
+    "d2": ["d"],      # द
+    "dh2": ["dʰ"],    # ध
+    "n2": ["n"],      # न
+
+    "p": ["p"],       # प
+    "ph": ["pʰ"],     # फ
+    "b": ["b"],       # ब
+    "bh": ["bʰ"],     # भ
+    "m": ["m"],       # म
+
+    "y": ["j"],       # य
+    "r": ["r"],       # र
+    "l": ["l"],       # ल
+    "v": ["ʋ"],       # व
+    "sh": ["ʃ"],      # श
+    "s": ["s"],       # स
+    "h": ["ɦ"],       # ह
+
+    # Additional consonants
+    "sh2": ["ɕ"],     # ष
+    "ksh": ["kʃ"],    # क्ष
+    "tr": ["t̪ɾ"],    # त्र
+    "gy": ["ɡj"],     # ज्ञ
 }
 
 # ---------------------------------------------------------------------------
