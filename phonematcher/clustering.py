@@ -292,10 +292,12 @@ class PhoneticFuzzySearch:
 
 
 # ---------------------------------------------------------------------------
-# Phone mapping - LLM Generated placeholders: TODO - review
+# Grapheme-to-IPA fallback mappings
 # ---------------------------------------------------------------------------
 # Canonical IPA fallback mapping for individual letters (Latin, Cyrillic, Arabic, etc.)
 # Each letter maps to a list of IPA symbols; one-to-many allowed where ambiguous.
+# These are coarse single-letter approximations; per-language mappings below
+# refine them. Every emitted symbol must exist in distance.phone_features.
 BASE_LATIN = {
     # -----------------------
     # Latin lowercase (core)

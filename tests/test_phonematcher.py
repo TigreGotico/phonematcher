@@ -51,3 +51,23 @@ def test_modifier_application_multiple():
 def test_unknown_phone_raises():
     with pytest.raises(ValueError):
         vectorize_phones("???") # ValueError: Unrecognized phone '?'
+
+
+def test_nasalized_vowel_combining_tilde():
+    # base vowel + combining tilde (U+0303) -> [+nasal]
+    base = vectorize_phones("a")
+    nas = vectorize_phones("ã")
+    assert nas[6] is True            # nasal
+    assert nas[0] is True            # still a vowel (syllabic)
+    assert base[6] is not True
+
+
+def test_nasalized_vowel_precomposed_equals_combining():
+    # precomposed "ã" must decompose to the same vector as "a" + tilde
+    assert vectorize_phones("ã") == vectorize_phones("ã")
+
+
+def test_nasalized_consonant_resolves():
+    # nasalized glide w̃ should resolve (not raise) and be [+nasal]
+    v = vectorize_phones("w̃")
+    assert v[6] is True

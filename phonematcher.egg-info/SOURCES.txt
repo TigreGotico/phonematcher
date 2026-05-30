@@ -1,0 +1,16 @@
+README.md
+setup.py
+phonematcher/__init__.py
+phonematcher/clustering.py
+phonematcher/distance.py
+phonematcher/eudex.py
+phonematcher/phonex.py
+phonematcher/version.py
+phonematcher.egg-info/PKG-INFO
+phonematcher.egg-info/SOURCES.txt
+phonematcher.egg-info/dependency_links.txt
+phonematcher.egg-info/requires.txt
+phonematcher.egg-info/top_level.txt
+tests/test_eudex.py
+tests/test_langs.py
+tests/test_phonematcher.py

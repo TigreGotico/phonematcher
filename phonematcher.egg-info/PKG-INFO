@@ -1,0 +1,11 @@
+Metadata-Version: 2.4
+Name: phonematcher
+Version: 0.0.0a1
+Home-page: https://github.com/TigreGotico/phonematcher
+Author: JarbasAi
+Author-email: jarbasai@mailfence.com
+Requires-Dist: rapidfuzz
+Dynamic: author
+Dynamic: author-email
+Dynamic: home-page
+Dynamic: requires-dist

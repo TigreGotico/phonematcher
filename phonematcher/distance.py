@@ -35,6 +35,7 @@ Feature index layout (0–20):
 The feature system aligns with features used in generative phonology
 and acoustic modeling, but values are hand-curated for each IPA symbol.
 """
+import unicodedata
 from typing import List, Union
 
 NUM_FEATURES = 21
@@ -195,7 +196,7 @@ phone_features = {
           None, False, None, False],
     "ɽ": [False, True, True, True, None, False, False, False, True, False, False, False, True, False, False, None, None,
           None, False, None, False],
-    "ʎ": [False, True, True, True, None, True, False, None, True, False, False, False, True, True, False, True, False,
+    "ʎ": [False, True, True, True, None, True, False, None, True, False, False, False, False, True, False, True, False,
           False, False, None, False],
     "r": [False, True, True, True, None, False, False, False, True, False, False, True, True, False, False, None, None,
           None, False, None, False],
@@ -213,13 +214,13 @@ phone_features = {
           False, False, False, None, False],
     "w": [False, True, False, True, False, False, False, None, True, False, False, False, False, None, True, True,
           False, True, True, None, False],
-    "ɹ": [False, True, False, True, False, False, False, False, True, False, False, False, True, False, False, True,
-          False, True, True, None, False],
+    "ɹ": [False, True, False, True, False, False, False, False, True, False, False, False, True, False, False, False,
+          False, False, False, None, False],
     "ɻ": [False, True, False, True, False, False, False, False, True, False, False, False, True, False, False, False,
           False, False, False, None, False],
     "l": [False, True, True, True, False, True, False, False, True, False, False, True, True, False, False, False,
           False, False, False, None, False],
-    "ɦ": [False, True, True, True, False, False, False, None, False, False, False, False, False, None, False, False,
+    "ɦ": [False, True, True, True, False, False, False, None, True, False, False, False, False, None, False, False,
           False, False, False, None, False],
     "ɑ": [True, True, False, True, None, False, False, None, True, False, False, False, False, False, False, False,
           True, True, False, True, False],
@@ -234,7 +235,7 @@ phone_features = {
     "ʉ": [True, True, False, True, None, False, False, None, True, False, False, False, False, False, True, True, False,
           False, True, True, False],
     "a": [True, True, False, True, False, False, False, None, True, False, False, False, False, False, False, False,
-          True, True, False, True, False],
+          True, False, False, True, False],
     "e": [True, True, False, True, False, False, False, None, True, False, False, False, False, False, False, False,
           False, False, False, True, False],
     "i": [True, True, False, True, False, False, False, None, True, False, False, False, False, False, False, True,
@@ -256,13 +257,13 @@ phone_features = {
     "ɔ": [True, True, False, True, False, False, False, None, True, False, False, False, False, False, False, False,
           False, True, True, False, False],
     "ə": [True, True, False, True, False, False, False, None, True, False, False, False, False, False, False, False,
-          False, True, False, False, False],
+          False, False, False, False, False],
     "ɜ": [True, True, False, True, False, False, False, None, True, False, False, False, False, False, False, False,
-          False, True, False, True, False],
+          False, False, False, True, False],
     "ɛ": [True, True, False, True, False, False, False, None, True, False, False, False, False, False, False, False,
           False, False, False, False, False],
     "ɨ": [True, True, False, True, False, False, False, None, True, False, False, False, False, False, False, True,
-          False, True, False, True, False],
+          False, False, False, True, False],
     "ɪ": [True, True, False, True, False, False, False, None, True, False, False, False, False, False, False, True,
           False, False, False, False, False],
     "ɯ": [True, True, False, True, False, False, False, None, True, False, False, False, False, False, False, True,
@@ -272,7 +273,7 @@ phone_features = {
     "ʊ": [True, True, False, True, False, False, False, None, True, False, False, False, False, False, False, True,
           False, True, True, False, False],
     "ɐ": [True, True, False, True, False, False, False, None, True, False, False, False, False, False, False, False,
-          False, True, False, True, False],
+          True, False, False, True, False],
     "ʌ": [True, True, False, True, False, False, False, None, True, False, False, False, False, False, False, False,
           False, True, False, True, False],
     "ʏ": [True, True, False, True, False, False, False, None, True, False, False, False, False, False, False, True,
@@ -325,6 +326,8 @@ modifiers = {
         15: True,  # raised/tighter tongue position
         18: True,  # lip rounding (common in approximant rhotics)
     },
+
+    "̃": {6: True},  # combining tilde: nasalization, [+nasal]
 }
 
 # ---------------------------------------------------------------------------
@@ -406,6 +409,10 @@ def vectorize_phones(phones: str) -> List[Union[bool, None]]:
 
     if not phones:
         raise ValueError("Phone is empty or None.")
+
+    # --- Step 0: decompose precomposed glyphs (e.g. "ã" -> "a" + combining
+    # tilde) so diacritics are handled uniformly by the modifier path ---
+    phones = unicodedata.normalize("NFD", phones)
 
     # --- Step 1: normalize irregular phones ---
     if phones in _bad_phones:
