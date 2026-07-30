@@ -1,63 +1,56 @@
 # Phonematcher
 
-**Phonematcher** is a Python library for phonetic fuzzy searching and segment-to-segment distance computation. It allows you to find words that "sound like" a query by analyzing International Phonetic Alphabet (IPA) features rather than just comparing raw text.
+Phonematcher is a Python library for phonetic fuzzy search and segment-to-segment distance computation. It finds words that sound like a query by analyzing International Phonetic Alphabet (IPA) features instead of comparing raw text.
 
-By leveraging **Distinctive Feature Theory**, the library can calculate the articulatory distance between sounds (e.g., recognizing that 'p' and 'b' are more similar than 'p' and 'k') and cluster them to improve search recall.
+The library uses distinctive feature theory to calculate the articulatory distance between sounds. For example, it recognizes that "p" and "b" are more similar than "p" and "k". It clusters similar sounds to improve search recall.
 
----
+## Features
 
-## 🚀 Features
+* **Distinctive feature matrix**: maps IPA phones to 21 articulatory features (nasality, voicing, place of articulation, and more).
+* **Weighted phonetic distance**: calculates similarity based on linguistic importance. Major class features, such as "syllabic," carry more weight than fine-grained features, such as "strident."
+* **UPGMA clustering**: groups similar sounds into clusters, based on a configurable sensitivity threshold.
+* **Fuzzy phonetic index**: uses a "Phonex" algorithm to generate phonetic variants, including deletions, for high-recall indexing.
+* **Hybrid scoring**: combines phonetic candidate retrieval with Levenshtein edit-distance ranking.
 
-* **Distinctive Feature Matrix:** Maps IPA phones to 21 articulatory features (nasality, voicing, place of articulation, etc.).
-* **Weighted Phonetic Distance:** Calculates similarity based on linguistic importance (e.g., major class features like "syllabic" carry more weight than "strident").
-* **UPGMA Clustering:** Automatically groups similar sounds into clusters based on a configurable sensitivity threshold.
-* **Fuzzy Phonetic Index:** Uses a "Phonex" algorithm to generate phonetic variants (including deletions) for high-recall indexing.
-* **Hybrid Scoring:** Combines phonetic candidate retrieval with Levenshtein edit-distance ranking.
+## Installation
 
----
-
-## 📦 Installation
-
-Ensure you have the required dependencies:
+Install the required dependency, then install the library:
 
 ```bash
 pip install rapidfuzz
-
+pip install -e .
 ```
 
----
+## Usage
 
-## 🛠 Usage
+### Phonetic distance
 
-### 1. Phonetic Distance
-
-You can compare two IPA symbols to see how linguistically similar they are.
+Compare two IPA symbols to see how linguistically similar they are:
 
 ```python
 from phonematcher.distance import phonetic_distance
 
-# Comparing voiced vs voiceless bilabial stops (very similar)
+# Voiced vs. voiceless bilabial stops (very similar)
 print(phonetic_distance('b', 'p'))  # ~0.043
 
-# Comparing bilabial vs velar stops (less similar)
+# Bilabial vs. velar stops (less similar)
 print(phonetic_distance('p', 'k'))  # ~0.348
 
-# Vowel vs Consonant mismatch (maximal distance)
+# Vowel vs. consonant (maximal distance)
 print(phonetic_distance('a', 'k'))  # 1.0
-
 ```
 
-### 2. Phonetic Fuzzy Search
+### Phonetic fuzzy search
 
-The `PhoneticFuzzySearch` class indexes terms based on their phonetic clusters.
+The `PhoneticFuzzySearch` class indexes terms by their phonetic clusters:
 
 ```python
 from phonematcher.clustering import PhoneticFuzzySearch, EN_MAPPING
 
-# Initialize with a Grapheme-to-Phoneme mapping
+# Initialize with a grapheme-to-phoneme mapping
 ffs = PhoneticFuzzySearch(EN_MAPPING, cluster_sensitivity=0.5)
 
-# Add terms to your index (id, term)
+# Add terms to the index (id, term)
 ffs.add_term('hello world', 0)
 ffs.add_term('greetings', 1)
 ffs.add_term('friendship', 2)
@@ -66,93 +59,87 @@ ffs.add_term('friendship', 2)
 results = ffs.search('helo wrld')
 for match in results:
     print(f"ID: {match.id}, Term: {match.term}, Score: {match.score}")
-
 ```
 
----
+## How it works
 
-## 🧬 How it Works
+### Feature vectorization
 
-### Feature Vectorization
+Every phone resolves to a vector of boolean or null values. For example, the phone `c` (voiceless palatal stop) has these feature values:
 
-Every phone is resolved into a vector of boolean or null values. For example, the phone `c` (voiceless palatal stop) is represented by features like:
+* **Consonantal**: `True`
+* **Voice**: `False`
+* **High**: `True`
+* **Back**: `False`
 
-* **Consonantal:** `True`
-* **Voice:** `False`
-* **High:** `True`
-* **Back:** `False`
+### The search pipeline
 
-### The Search Pipeline
+1. **Phoneticization**: the library expands a word into all possible IPA sequences, based on the mapping.
+2. **Clustering**: phones group into numeric cluster IDs. For example, `s`, `z`, and `ʃ` might fall into the same cluster.
+3. **Variant generation**: to handle misspellings, the indexer generates "deletes" — versions of the phonetic sequence with one or two sounds removed.
+4. **Retrieval**: the query converts to clusters and matches against the index.
+5. **Ranking**: the resulting candidates rank by the Levenshtein distance of the original orthographic strings.
 
-1. **Phoneticization:** The library expands a word into all possible IPA sequences based on your mapping.
-2. **Clustering:** Phones are grouped into numeric IDs (e.g., `s`, `z`, and `ʃ` might all fall into Cluster 5).
-3. **Variant Generation:** To handle misspellings, the indexer generates "deletes"—versions of the phonetic sequence with one or two sounds removed.
-4. **Retrieval:** The query is converted to clusters and matched against the index.
-5. **Ranking:** The resulting candidates are ranked using the Levenshtein distance of the original orthographic strings.
+## Configuration
 
----
+Tune the `cluster_sensitivity` parameter (default `0.5`):
 
-## ⚙️ Configuration
+* **Lower values**: create more specific clusters. Fewer matches, higher precision.
+* **Higher values**: create broader clusters. More matches, higher recall.
 
-You can tune the `cluster_sensitivity` (default `0.5`):
+## Understanding phonetic mappings
 
-* **Lower values:** Create more specific clusters (fewer matches, higher precision).
-* **Higher values:** Create broader clusters (more matches, higher recall).
+Orthography (spelling) varies across languages, so the library uses grapheme-to-IPA mappings to translate written words into spoken phonetic vectors.
 
----
+Without a mapping, the library treats letters as arbitrary symbols. Mapping them to IPA (International Phonetic Alphabet) symbols lets the system use distinctive feature theory:
 
-## Understanding Phonetic Mappings
+* **Linguistic accuracy**: the engine knows that "p" and "b" are both bilabial stops that differ only in voicing.
+* **Weighted distance**: mappings let the algorithm compute distance based on articulatory features, such as nasality or place of articulation, instead of simple character replacement.
+* **Cluster precision**: a word converts into a sequence of cluster IDs. Accurate mappings ensure that words which sound similar (for example, "frend" and "friend") produce the same or highly similar cluster sequences, which increases search recall.
 
-Because orthography (spelling) varies wildly across languages, the library uses grapheme-to-IPA mappings to translate "written" words into "spoken" phonetic vectors.
-
-Without a good mapping, the library would treat letters as arbitrary symbols. By mapping them to IPA (International Phonetic Alphabet) symbols, the system can leverage **Distinctive Feature Theory**:
-
-* **Linguistic Intelligence**: The engine knows that 'p' and 'b' are both bilabial stops and differ only by voicing.
-* **Weighted Distance**: Mappings allow the algorithm to compute distance based on articulatory features like nasality or place of articulation rather than simple character replacement.
-* **Cluster Precision**: A word is converted into a sequence of **cluster IDs**. Accurate mappings ensure that words which sound similar (e.g., "frend" and "friend") result in the same or highly similar cluster sequences, significantly increasing search recall.
-
-A mapping is a Python dictionary where keys are graphemes (single letters or digraphs) and values are lists of potential IPA realizations:
+A mapping is a Python dictionary. Its keys are graphemes (single letters or digraphs) and its values are lists of possible IPA realizations:
 
 ```python
-# Example: Mapping 'x' to its multiple sounds
-"x": ["ʃ", "ks", "z", "s"] 
-
+# Example: mapping 'x' to its multiple sounds
+"x": ["ʃ", "ks", "z", "s"]
 ```
 
-The `PhoneticFuzzySearch` class uses a **Breadth-First Search (BFS)** substitution traversal to expand a single word into all possible phonetic sequences. For example, a word containing "x" would generate several phonetic variants to ensure that no matter how the user perceives the sound, the index can find a match.
+The `PhoneticFuzzySearch` class uses a breadth-first search (BFS) substitution traversal to expand a single word into all possible phonetic sequences. For example, a word containing "x" generates several phonetic variants, so the index can find a match regardless of how the user perceives the sound.
 
----
+### How to support a new language
 
-### How to Support a New Language
+To add support for a new language, follow these steps:
 
-To add support for a new language, follow these three steps:
-
-Create a dictionary covering the unique phonology of your language. You can inherit from `BASE_LATIN` to save time on standard characters.
+1. Create a dictionary that covers the phonology of the language. Inherit from `BASE_LATIN` to reuse the standard characters.
 
 ```python
 MY_LANG_MAPPING = {
     **BASE_LATIN,
-    "sh": ["ʃ"],  # Explicitly define digraphs
-    "aa": ["aː"], # Long vowels
+    "sh": ["ʃ"],  # digraph
+    "aa": ["aː"], # long vowel
 }
-
 ```
 
-If a letter has multiple sounds (like 'c' in English), include all of them in the list. The engine's variant generator will index all possibilities, allowing for a "fuzzy" phonetic match.
-
-Pass your custom mapping into the `PhoneticFuzzySearch` constructor.
+2. If a letter has multiple sounds (for example, "c" in English), include all of them in the list. The variant generator indexes every possibility, which produces a fuzzy phonetic match.
+3. Pass the custom mapping into the `PhoneticFuzzySearch` constructor.
 
 ```python
 from phonematcher.clustering import PhoneticFuzzySearch
 
 ffs = PhoneticFuzzySearch(mapping=MY_LANG_MAPPING, cluster_sensitivity=0.4)
-
 ```
 
-> **Pro Tip:** If your language is highly phonetic (like Spanish or Italian), you can keep `cluster_sensitivity` low (approx. 0.3). For languages with complex spelling-to-sound rules (like English or French), a higher sensitivity (0.5 - 0.6) helps group divergent spellings into the same cluster.
+For a highly phonetic language (such as Spanish or Italian), keep `cluster_sensitivity` low (around 0.3). For a language with complex spelling-to-sound rules (such as English or French), a higher sensitivity (0.5-0.6) helps group divergent spellings into the same cluster.
 
----
+## Documentation
 
-## 📜 License
+See the [docs](docs/quickstart.md) directory for a quickstart guide, the API reference, advanced usage recipes, and the distinctive-feature matrix.
 
-This project is adapted from `pyphone` and `fast_fuzzy_search` by [lingz](https://github.com/lingz) and is released under the **MIT License**.
+## Related projects
+
+- [orthography2ipa](https://github.com/TigreGotico/orthography2ipa) — grapheme-to-IPA phonemization engine.
+- [silabificador](https://github.com/TigreGotico/silabificador) — syllabification library.
+
+## License
+
+This project is adapted from `pyphone` and `fast_fuzzy_search` by [lingz](https://github.com/lingz), and is released under the MIT License.
