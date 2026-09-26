@@ -410,7 +410,16 @@ def vectorize_phones(phones: str) -> List[Union[bool, None]]:
     if not phones:
         raise ValueError("Phone is empty or None.")
 
-    # --- Step 0: decompose precomposed glyphs (e.g. "ã" -> "a" + combining
+    # --- Step 0a: an IPA letter that Unicode also encodes as base+diacritic
+    # must be looked up as written, before any decomposition. "ç" U+00E7 is
+    # the voiceless palatal fricative, one IPA letter, and NFD turns it into
+    # "c" + combining cedilla U+0327, which is not an IPA modifier: the
+    # modifier path then raised, and phonetic_distance("ç", "ç") returned 3.0
+    # instead of 0.0. It is the only key in phone_features that NFD changes.
+    if phones in phone_features:
+        return phone_features[phones]
+
+    # --- Step 0b: decompose precomposed glyphs (e.g. "ã" -> "a" + combining
     # tilde) so diacritics are handled uniformly by the modifier path ---
     phones = unicodedata.normalize("NFD", phones)
 
