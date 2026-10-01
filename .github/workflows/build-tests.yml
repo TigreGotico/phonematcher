@@ -1,0 +1,20 @@
+name: Build Tests
+
+on:
+  pull_request:
+    branches: [dev, master]
+  push:
+    branches: [dev]
+  workflow_dispatch:
+
+jobs:
+  build:
+    uses: OpenVoiceOS/gh-automations/.github/workflows/build-tests.yml@dev
+    with:
+      python_versions: '["3.10", "3.11", "3.12", "3.13", "3.14"]'
+      test_path: 'tests'
+      # tests/ is a package and the repository root holds the flat-layout
+      # phonematcher/ package, so pytest's default prepend import mode puts
+      # the root back on sys.path and the run imports the source tree, not
+      # the wheel the job built. importlib mode inserts nothing.
+      pytest_args: '--import-mode=importlib'
