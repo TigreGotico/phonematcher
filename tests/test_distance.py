@@ -45,3 +45,8 @@ def test_distance_is_symmetric():
 
 def test_a_prenasalization_or_preaspiration_mark_joins_the_following_stop():
     assert segments("ⁿdaʰta") == ["ⁿd", "a", "ʰt", "a"]
+
+
+def test_a_mark_after_a_final_vowel_stays_in_its_word():
+    assert segments("maʰ m") == ["m", "aʰ", " ", "m"]
+    assert segments("maʰ") == ["m", "aʰ"]

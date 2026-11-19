@@ -20,10 +20,22 @@ def segments(ipa: str) -> List[str]:
     out: List[str] = []
     join_next = False
     pending = ""  # marks written before the base they belong to
+
+    def release_pending() -> None:
+        """A held mark with no following base belongs to the segment before it, if any."""
+        nonlocal pending
+        if pending:
+            if out and out[-1] != " ":
+                out[-1] += pending
+            else:
+                out.append(pending)
+            pending = ""
+
     for ch in unicodedata.normalize("NFD", ipa):
         if ch in SUPRASEGMENTALS:
             continue
         if ch.isspace():
+            release_pending()
             if out and out[-1] != " ":
                 out.append(" ")
             continue
@@ -43,8 +55,7 @@ def segments(ipa: str) -> List[str]:
             out.append(pending + ch)
             pending = ""
         join_next = False
-    if pending:
-        out.append(pending)
+    release_pending()
     if out and out[-1] == " ":
         out.pop()
     return [unicodedata.normalize("NFC", s) for s in out]
