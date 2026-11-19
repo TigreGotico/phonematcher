@@ -156,6 +156,129 @@
       "content": {},
       "source": "International Phonetic Association, The IPA Chart (revised to 2015), internationalphoneticassociation.org: the diacritic is named 'Rhoticity'",
       "reason": "PanPhon's rule gives [+high, +round, -anterior], so [ɚ] came out high and rounded. The chart names the mark only. This table reads it as a colouring that keeps the vowel's height and rounding, and keeps PanPhon's [-anterior]."
+    },
+    {
+      "marker": "̥",
+      "name": "Voiceless",
+      "vowels_only": false,
+      "content": {
+        "voi": "-"
+      },
+      "source": "International Phonetic Association, The IPA Chart (revised to 2015), internationalphoneticassociation.org: the diacritic is named 'Voiceless'",
+      "reason": "PanPhon applies the mark only to voiced sonorants, so [d̥] could not be read. It devoices any base.",
+      "conditions": []
+    },
+    {
+      "marker": "̬",
+      "name": "Voiced",
+      "vowels_only": false,
+      "content": {
+        "voi": "+"
+      },
+      "source": "International Phonetic Association, The IPA Chart (revised to 2015), internationalphoneticassociation.org: the diacritic is named 'Voiced'",
+      "reason": "PanPhon has no rule for the mark. It voices any base.",
+      "conditions": []
+    },
+    {
+      "marker": "̝",
+      "name": "Raised",
+      "vowels_only": false,
+      "content": {},
+      "source": "International Phonetic Association, The IPA Chart (revised to 2015), internationalphoneticassociation.org: the diacritic is named 'Raised'",
+      "reason": "PanPhon's rule changes no feature. This table reads the mark as one chart row closer.",
+      "shift": {
+        "height": -1
+      }
+    },
+    {
+      "marker": "̞",
+      "name": "Lowered",
+      "vowels_only": false,
+      "content": {},
+      "source": "International Phonetic Association, The IPA Chart (revised to 2015), internationalphoneticassociation.org: the diacritic is named 'Lowered'",
+      "reason": "PanPhon's rule changes no feature. This table reads the mark as one chart row more open.",
+      "shift": {
+        "height": 1
+      }
+    },
+    {
+      "marker": "̟",
+      "name": "Advanced",
+      "vowels_only": false,
+      "content": {},
+      "source": "International Phonetic Association, The IPA Chart (revised to 2015), internationalphoneticassociation.org: the diacritic is named 'Advanced'",
+      "reason": "PanPhon's rule changes no feature. On a vowel this table reads the mark as one chart column further front.",
+      "shift": {
+        "column": -1
+      }
+    },
+    {
+      "marker": "̠",
+      "name": "Retracted",
+      "vowels_only": false,
+      "content": {},
+      "source": "International Phonetic Association, The IPA Chart (revised to 2015), internationalphoneticassociation.org: the diacritic is named 'Retracted'",
+      "reason": "PanPhon's rule changes no feature. On a vowel this table reads the mark as one chart column further back.",
+      "shift": {
+        "column": 1
+      }
+    },
+    {
+      "marker": "̹",
+      "name": "More rounded",
+      "vowels_only": false,
+      "content": {},
+      "source": "International Phonetic Association, The IPA Chart (revised to 2015), internationalphoneticassociation.org: the diacritic is named 'More rounded'",
+      "reason": "PanPhon has no rule for the mark. On a vowel this table reads it as one step up the rounding scale -, 0, +.",
+      "shift": {
+        "round": 1
+      },
+      "conditions": []
+    },
+    {
+      "marker": "̜",
+      "name": "Less rounded",
+      "vowels_only": false,
+      "content": {},
+      "source": "International Phonetic Association, The IPA Chart (revised to 2015), internationalphoneticassociation.org: the diacritic is named 'Less rounded'",
+      "reason": "PanPhon has no rule for the mark. On a vowel this table reads it as one step down the rounding scale -, 0, +.",
+      "shift": {
+        "round": -1
+      },
+      "conditions": []
+    },
+    {
+      "marker": "̽",
+      "name": "Mid-centralized",
+      "vowels_only": false,
+      "content": {},
+      "source": "International Phonetic Association, The IPA Chart (revised to 2015), internationalphoneticassociation.org: the diacritic is named 'Mid-centralized'",
+      "reason": "PanPhon has no rule for the mark. On a vowel this table reads it as the central column, one row nearer mid.",
+      "shift": {
+        "central": 1,
+        "toward_mid": 1
+      },
+      "conditions": []
+    },
+    {
+      "marker": "̚",
+      "name": "No audible release",
+      "vowels_only": false,
+      "content": {},
+      "source": "International Phonetic Association, The IPA Chart (revised to 2015), internationalphoneticassociation.org: the diacritic is named 'No audible release'",
+      "reason": "PanPhon has no rule for the mark. No feature of this table encodes release, so the mark is read and changes nothing.",
+      "conditions": []
+    },
+    {
+      "marker": "ˑ",
+      "name": "Half-long",
+      "vowels_only": false,
+      "content": {
+        "long": "0"
+      },
+      "source": "International Phonetic Association, The IPA Chart (revised to 2015), internationalphoneticassociation.org: the diacritic is named 'Half-long'",
+      "reason": "PanPhon has no rule for the mark. It sets [long] to 0, between short and long.",
+      "conditions": []
     }
   ],
   "segments": [

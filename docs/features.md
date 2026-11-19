@@ -89,6 +89,13 @@ PanPhon gives 6 of the 28 vowels `delrel` 0 and the rest `delrel` −. A vowel h
 |---|---|---|---|
 | `◌̈` centralized | no change | `front` −, `back` − | the IPA chart names it; the reading is this table's |
 | `◌̝` raised, `◌̞` lowered | no change | one chart row up or down | the IPA chart names them; the reading is this table's |
+| `◌̟` advanced, `◌̠` retracted | no change | on a vowel, one chart column front or back | the IPA chart names them; the reading is this table's |
+| `◌̹` more rounded, `◌̜` less rounded | no rule | on a vowel, one step on the rounding scale −, 0, + | the IPA chart names them; the reading is this table's |
+| `◌̽` mid-centralized | no rule | on a vowel, the central column and one row nearer mid | the IPA chart names it; the reading is this table's |
+| `◌̥` voiceless | `voi` −, only on voiced sonorants | `voi` − on any base | the IPA chart |
+| `◌̬` voiced | no rule | `voi` + on any base | the IPA chart |
+| `◌ˑ` half-long | no rule | `long` 0, between short and long | the IPA chart names it; the reading is this table's |
+| `◌̚` no audible release | no rule | read; no change | the IPA chart |
 | `◌̘` advanced tongue root | `tense` + | `atr` +, `tense` kept | Casali (2007) |
 | `◌̙` retracted tongue root | `tense` − | `atr` −, `tense` kept | Casali (2007) |
 | `◌ʲ` palatalized | `hi` +, `back` − | `palatalized` + | Clements and Hume (1995) |
@@ -108,6 +115,10 @@ Pharyngealized consonants, such as the Arabic emphatics, have a second constrict
 Rhoticity `◌˞` colours a vowel. The IPA chart gives the mark a name and no features. PanPhon's rule made `ɚ` high and rounded. This table reads the mark as a colouring that keeps the vowel's height and rounding, and keeps PanPhon's `ant` −. The precomposed letters `ɚ` and `ɝ` read as `ə˞` and `ɜ˞`, and `ɫ`, the chart's example for `◌̴`, reads as `l̴`.
 
 `hi` means a raised tongue body and `lo` a lowered one, so no segment is [+high, +low]. A mark that adds one keeps the other as the base has it. The build stops if a segment is [+high, +low].
+
+### Scales and their ends
+
+The chart's vowel quadrilateral gives three ordered scales: seven heights, three columns, and the rounding steps −, 0, +. A mark moves a vowel one step on its scale, so `e̞` lies between `e` and `ɛ`, and `ɔ̜` between `ɔ` and `ʌ`. A mark at the end of its scale changes nothing: `ɔ̹` equals `ɔ`, because `ɔ` is already rounded, and `ĕ` equals `e`, because `e` is already short. Two other marks also change nothing. `t̺` equals `t`, because PanPhon's `t` is already apical. `d̚` equals `d`, because no feature of the table encodes the release of a stop.
 
 ## Letters PanPhon does not list
 

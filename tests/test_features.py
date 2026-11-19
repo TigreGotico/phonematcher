@@ -318,3 +318,36 @@ def test_velarized_or_pharyngealized_mark_leaves_the_choice_open():
     """The IPA chart names ◌̴ 'Velarized or pharyngealized': one of the two, not known which."""
     assert feature("l̴", "velarized") is None and feature("l̴", "pharyngealized") is None
     assert vectorize_phones("ɫ") == vectorize_phones("l̴")
+
+
+@pytest.mark.parametrize("segment", ["d̥", "s̬", "t̬", "ɔ̹", "ɔ̜", "e̽", "d̚", "eˑ"])
+def test_every_chart_diacritic_reads(segment):
+    vectorize_phones(segment)
+
+
+def test_voicing_marks_set_voice_on_any_base():
+    assert feature("d̥", "voi") is False and feature("s̬", "voi") is True
+
+
+def test_advanced_and_retracted_move_a_vowel_one_column():
+    """IPA chart: ◌̟ advanced, ◌̠ retracted. [u̟] moves toward central, [e̠] too."""
+    assert feature("u̟", "back") is False and feature("u̟", "front") is False
+    assert feature("e̠", "front") is False and feature("e̠", "back") is False
+    assert feature("ɨ̟", "front") is True
+
+
+def test_rounding_marks_move_one_step_on_the_rounding_scale():
+    """IPA chart: ◌̹ more rounded, ◌̜ less rounded."""
+    assert feature("ɔ̜", "round") is None and feature("ɛ̹", "round") is None
+    assert phonetic_distance("ɔ̜", "ʌ") < phonetic_distance("ɔ", "ʌ")
+
+
+def test_half_long_sits_between_short_and_long():
+    assert feature("eˑ", "long") is None
+    assert phonetic_distance("eˑ", "e") == pytest.approx(phonetic_distance("eˑ", "eː"))
+
+
+def test_mid_centralized_moves_to_the_centre_and_toward_mid():
+    """IPA chart: ◌̽ mid-centralized. [e̽] is central and one row nearer mid than [e]."""
+    assert feature("e̽", "front") is False and feature("e̽", "back") is False
+    assert phonetic_distance("e̽", "ə") < phonetic_distance("ë", "ə")

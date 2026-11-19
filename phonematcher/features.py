@@ -13,6 +13,8 @@ from functools import lru_cache
 from pathlib import Path
 from typing import Dict, Optional, Tuple
 
+from phonematcher.scales import shift
+
 _DATA = json.loads((Path(__file__).parent / "data" / "features.json").read_text(encoding="utf-8"))
 
 #: Feature names, in vector order.
@@ -93,7 +95,7 @@ def vectorize_phones(segment: str) -> Vector:
 
 
 _HI, _LO = FEATURES.index("hi"), FEATURES.index("lo")
-_STEPS = [FEATURES.index(f"h{k}") for k in range(1, 7)]
+_SIGN = {True: "+", False: "-", None: "0"}
 
 
 def _apply_if(diacritic: dict, vec: Vector, segment: str) -> Vector:
@@ -102,13 +104,10 @@ def _apply_if(diacritic: dict, vec: Vector, segment: str) -> Vector:
     if not _applies(diacritic, vec):
         raise ValueError(f"{diacritic['marker']!r} does not apply to the base of {segment!r}")
     out = list(_apply(diacritic, vec))
-    step = {"\u031d": -1, "\u031e": 1}.get(diacritic["marker"], 0)
-    if step and out[0] is True and out[_STEPS[0]] is not None:
-        # Raised and lowered move a vowel one chart row: h1..h6 count the rows below close.
-        row = max(0, min(len(_STEPS), sum(out[i] is True for i in _STEPS) + step))
-        for k, i in enumerate(_STEPS, 1):
-            out[i] = row >= k
-        out[_HI], out[_LO] = row <= 1, row >= 5
+    if "shift" in diacritic:
+        signs = {f: _SIGN[v] for f, v in zip(FEATURES, out)}
+        shift(signs, diacritic["shift"])
+        out = [_VALUE[signs[f]] for f in FEATURES]
     if out[_HI] is True and out[_LO] is True:
         out[_LO if vec[_HI] is True else _HI] = False
     return tuple(out)

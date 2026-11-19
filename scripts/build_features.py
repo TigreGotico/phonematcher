@@ -16,8 +16,15 @@ import json
 import unicodedata
 from pathlib import Path
 
+import importlib.util
+
 import panphon
 import yaml
+
+_spec = importlib.util.spec_from_file_location(
+    "scales", Path(__file__).resolve().parent.parent / "phonematcher" / "scales.py")
+scales = importlib.util.module_from_spec(_spec)
+_spec.loader.exec_module(scales)
 
 DATA = Path(panphon.__file__).parent / "data"
 HERE = Path(__file__).resolve().parent.parent / "phonematcher" / "data"
@@ -38,7 +45,6 @@ STEPS = tuple(f"h{k}" for k in range(1, len(HEIGHTS)))
 SECONDARY = ("palatalized", "velarized", "labialized", "pharyngealized")
 ADDED = {"front": 0.25, "tap": 0.25, "trill": 0.25, "atr": 0.25, **{s: 0.125 for s in STEPS},
          **{s: 0.125 for s in SECONDARY}}
-RAISED, LOWERED = "\u031d", "\u031e"
 
 
 def height_values(index: int) -> dict:
@@ -130,10 +136,18 @@ def main() -> None:
     diacritics = yaml.safe_load((DATA / "diacritic_definitions.yml").read_text(encoding="utf-8"))
     for change in changes["diacritics"]:
         marker = unicodedata.normalize("NFD", change["marker"])
-        for d in diacritics["diacritics"]:
-            if unicodedata.normalize("NFD", d["marker"]) == marker:
-                d["content"] = {**{f: v for f, v in d.get("content", {}).items()
-                                   if f not in change.get("restore", [])}, **change["content"]}
+        found = [d for d in diacritics["diacritics"]
+                 if unicodedata.normalize("NFD", d["marker"]) == marker]
+        if not found:
+            found = [{"marker": marker, "position": "post", "conditions": [], "content": {}}]
+            diacritics["diacritics"].append(found[0])
+        for d in found:
+            d["content"] = {**{f: v for f, v in d.get("content", {}).items()
+                               if f not in change.get("restore", [])}, **change["content"]}
+            if "conditions" in change:
+                d["conditions"] = change["conditions"]
+            if "shift" in change:
+                d["shift"] = change["shift"]
     rules = {unicodedata.normalize("NFD", d["marker"]): d
              for d in diacritics["diacritics"] if d.get("position", "post") == "post"}
 
@@ -150,6 +164,7 @@ def main() -> None:
                 return None
             before = dict(vec)
             vec.update(rule.get("content", {}))
+            scales.shift(vec, rule.get("shift", {}))
             if vec["hi"] == vec["lo"] == "+":
                 vec["lo" if before["hi"] == "+" else "hi"] = "-"
         return vec
@@ -174,11 +189,6 @@ def main() -> None:
             vec.update({f: row[f] for f in panphon_features if row[f] != panphon[base][f]})
         if vec is None:
             vec = bare(seg)
-        if base in chart and vec["syl"] == "+":
-            # Raised and lowered move a vowel one chart row per mark.
-            shift = seg.count(LOWERED) - seg.count(RAISED)
-            if shift:
-                vec.update(height_values(chart[base]["index"] + shift))
         phones[seg] = vec
     both = sorted(s for s, v in phones.items() if v["hi"] == "+" and v["lo"] == "+")
     if both:
@@ -197,7 +207,8 @@ def main() -> None:
             {"marker": unicodedata.normalize("NFD", d["marker"]),
              "position": d.get("position", "post"),
              "conditions": d.get("conditions", []),
-             "content": d.get("content", {})}
+             "content": d.get("content", {}),
+             **({"shift": d["shift"]} if "shift" in d else {})}
             for d in diacritics["diacritics"]
         ],
     }
