@@ -189,7 +189,9 @@ The IPA chart gives the tone letters and the tone diacritics side by side, and e
 | `◌᷅` | `˩˧` | Low rising |
 | `◌᷈` | `˧˦˨` | Rising-falling |
 
-Superscript digits are Chao tone numerals: the digit is the level, so `²¹⁴` is `˨˩˦`. A run of tone letters is one tone. Downstep `ꜜ`, upstep `ꜛ`, global rise `↗` and global fall `↘` mark a phrase, not a syllable, and are dropped like stress marks.
+Superscript digits are Chao tone numerals: the digit is the level, so `²¹⁴` is `˨˩˦`. The left-stem tone letters `꜒` to `꜖` have the levels of `˥` to `˩`. A run of tone letters is one tone, also after a tone diacritic: `má˥` has the tone `˦˥`.
+
+Some marks are not read and are dropped like stress marks. The chart lists downstep `ꜜ` and upstep `ꜛ` with the level tones, but they change the pitch of the tones after them, and a tone here is the contour of one syllable only. Global rise `↗` and global fall `↘` belong to the intonation of a phrase. The neutral-tone numeral `⁰` has no level.
 
 Two tones are compared by their contours. Each tone gives its pitch at the start, the middle and the end of the syllable, by linear steps between its levels. The tone distance is the mean difference of the three pitches, divided by four, the range from `˩` to `˥`. Thus `˥` and `˩` are at 1, `˥` and `˦` at 0.25, and `˧˥` and `˩˥` at 0.25. A tone against a phone costs 1, so a tone never replaces a sound, and a missing tone costs 1, like a missing sound.
 

@@ -14,11 +14,14 @@ DIACRITIC_TONES = {
     "\u030c": "˩˥", "\u0302": "˥˩", "\u1dc4": "˧˥", "\u1dc5": "˩˧", "\u1dc8": "˧˦˨",
 }
 
-#: Chao tone numerals, written as superscript digits: the digit is the level.
-NUMERALS = {"¹": "˩", "²": "˨", "³": "˧", "⁴": "˦", "⁵": "˥"}
+#: Chao tone numerals, written as superscript digits: the digit is the level. The left-stem tone
+#: letters U+A712 to U+A716 have the same levels as the tone letters.
+NUMERALS = {"¹": "˩", "²": "˨", "³": "˧", "⁴": "˦", "⁵": "˥",
+            "\ua712": "˥", "\ua713": "˦", "\ua714": "˧", "\ua715": "˨", "\ua716": "˩"}
 
-#: Downstep, upstep, global rise and global fall: marks of a phrase, not of a syllable.
-PHRASE_MARKS = frozenset("ꜜꜛ↗↘↓↑")
+#: Marks this module does not read: downstep and upstep, global rise and global fall, and the
+#: neutral-tone numeral ⁰, which has no level.
+PHRASE_MARKS = frozenset("ꜜꜛ↗↘↓↑⁰")
 
 _POINTS = 3
 

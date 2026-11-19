@@ -70,3 +70,15 @@ def test_search_finds_a_syllable_with_another_tone_and_ranks_the_same_tone_first
 def test_a_peaking_tone_differs_from_the_level_it_starts_and_ends_on():
     """The middle of the syllable counts, so ˨˦˨ is not ˨."""
     assert tone_distance("˨˦˨", "˨") > 0
+
+
+def test_a_tone_diacritic_and_the_tone_letters_after_it_are_one_tone():
+    assert segments("má˥") == ["m", "a", "˦˥"]
+
+
+def test_left_stem_tone_letters_read_as_their_levels():
+    assert segments("ma꜒꜖") == segments("ma˥˩")
+
+
+def test_the_neutral_tone_numeral_carries_no_segment():
+    assert segments("ma⁰") == ["m", "a"]

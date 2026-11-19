@@ -49,9 +49,12 @@ def segments(ipa: str) -> List[str]:
         if ch in DIACRITIC_TONES and out and out[-1] != " ":
             tone += DIACRITIC_TONES[ch]
             continue
+        if ch in LEVELS and tone:
+            tone += ch
+            continue
         if ch in LEVELS:
             release_pending()
-            if out and is_tone(out[-1]) and not tone:
+            if out and is_tone(out[-1]):
                 out[-1] += ch
             else:
                 release_tone()
