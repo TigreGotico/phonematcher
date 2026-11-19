@@ -1,9 +1,8 @@
 """Phonetic search over IPA terms.
 
-The terms are Portuguese words in broad IPA. The queries are readings of the same words in other
-varieties, written from the dialect descriptions in Cristófaro Silva (1999, Fonética e Fonologia
-do Português): coda /S/ as [s] or [ʃ], /R/ as [ʁ], [χ] or [x], /t d/ before [i] as stops or
-affricates.
+The terms are Portuguese words in broad IPA, from orthography2ipa for pt-PT. The queries are the
+same words as orthography2ipa writes them for other varieties: coda /S/ as [s] or [ʃ], /R/ as [ʁ],
+[χ] or [x], /t d/ before [i] as stops or affricates.
 """
 from phonematcher.clustering import PhoneticFuzzySearch
 
