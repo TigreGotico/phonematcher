@@ -3,9 +3,10 @@ import unicodedata
 from typing import List, Sequence
 
 from phonematcher.features import POST_DIACRITICS, PRE_DIACRITICS, is_vowel_phone, phonetic_distance
+from phonematcher.tone import DIACRITIC_TONES, LEVELS, NUMERALS, PHRASE_MARKS, is_tone, tone_distance
 
 #: Stress, syllable and boundary marks: they carry no segment of their own.
-SUPRASEGMENTALS = frozenset("ˈˌ.‿|‖")
+SUPRASEGMENTALS = frozenset("ˈˌ.‿|‖") | PHRASE_MARKS
 
 _TIES = ("͡", "͜")
 
@@ -15,7 +16,9 @@ def segments(ipa: str) -> List[str]:
 
     A segment is a base symbol with the diacritics and modifier letters that follow it. A tie bar
     joins the symbols on both sides into one segment, so ``t͡ʃ`` is one affricate. Spaces become a
-    ``" "`` segment between words; stress and syllable marks are dropped.
+    ``" "`` segment between words; stress, syllable and phrase-tone marks are dropped. A tone is
+    one segment of tone letters after its syllable: a tone diacritic or a Chao numeral is written
+    as tone letters after the segment that carries it.
     """
     out: List[str] = []
     join_next = False
@@ -31,10 +34,36 @@ def segments(ipa: str) -> List[str]:
                 out.append(pending)
             pending = ""
 
+    tone = ""  # a tone diacritic, written out after the segment that carries it
+
+    def release_tone() -> None:
+        nonlocal tone
+        if tone:
+            out.append(tone)
+            tone = ""
+
     for ch in unicodedata.normalize("NFD", ipa):
+        ch = NUMERALS.get(ch, ch)
         if ch in SUPRASEGMENTALS:
             continue
+        if ch in DIACRITIC_TONES and out and out[-1] != " ":
+            tone += DIACRITIC_TONES[ch]
+            continue
+        if ch in LEVELS and tone:
+            tone += ch
+            continue
+        if ch in LEVELS:
+            release_pending()
+            if out and is_tone(out[-1]):
+                out[-1] += ch
+            else:
+                release_tone()
+                out.append(ch)
+            continue
+        if not (unicodedata.combining(ch) or ch in POST_DIACRITICS):
+            release_tone()
         if ch.isspace():
+            release_tone()
             release_pending()
             if out and out[-1] != " ":
                 out.append(" ")
@@ -56,14 +85,18 @@ def segments(ipa: str) -> List[str]:
             pending = ""
         join_next = False
     release_pending()
+    release_tone()
     if out and out[-1] == " ":
         out.pop()
     return [unicodedata.normalize("NFC", s) for s in out]
 
 
 def substitution_cost(a: str, b: str) -> float:
-    """Cost of replacing segment *a* by *b*: their feature distance, from 0 to 1, so a
-    substitution never costs more than a deletion plus an insertion."""
+    """Cost of replacing segment *a* by *b*, from 0 to 1, so a substitution never costs more than a
+    deletion plus an insertion: the tone distance of two tones, 1 for a tone and a phone, and the
+    feature distance of two phones."""
+    if is_tone(a) or is_tone(b):
+        return tone_distance(a, b) if is_tone(a) and is_tone(b) else 1.0
     return phonetic_distance(a, b)
 
 

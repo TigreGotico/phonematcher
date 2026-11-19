@@ -14,10 +14,16 @@ The package root exports `phonetic_distance`, `vectorize_phones`, `segments`, `i
 
 ## `phonematcher.distance`
 
-- `segments(ipa) -> list[str]`: the segments of an IPA string. A diacritic stays with its base, a tie bar joins two symbols, a space between words becomes one `" "` segment, and stress and syllable marks are dropped.
-- `substitution_cost(a, b) -> float`: the cost of replacing segment `a` by `b`, equal to their feature distance.
+- `segments(ipa) -> list[str]`: the segments of an IPA string. A diacritic stays with its base, a tie bar joins two symbols, a space between words becomes one `" "` segment, and stress, syllable and phrase-tone marks are dropped. A tone is one segment of tone letters after its syllable; a tone diacritic or a Chao numeral is written as tone letters.
+- `substitution_cost(a, b) -> float`: the cost of replacing segment `a` by `b`: the tone distance of two tones, 1 for a tone and a phone, and the feature distance of two phones.
 - `edit_distance(a, b) -> float`: the Levenshtein distance between two segment lists, where a substitution costs `substitution_cost` and an insertion or deletion costs 1.
 - `ipa_distance(a, b) -> float`: `edit_distance` between two IPA strings.
+
+## `phonematcher.tone`
+
+- `is_tone(segment) -> bool`: true for a segment made only of tone letters.
+- `tone_levels(segment) -> tuple[int, ...] | None`: the pitch levels of a tone, 1 (extra low) to 5 (extra high).
+- `tone_distance(a, b) -> float`: the distance between two tones, from 0 to 1. See [features.md](features.md#tone).
 
 ## `phonematcher.clustering`
 
