@@ -6,37 +6,37 @@ Each IPA segment has a vector of 36 distinctive features. A value is `True` (+),
 
 | # | Feature | Meaning | Weight | Source |
 |---|---|---|---|---|
-| 0 | `syl` | syllabic: forms the nucleus of a syllable (vowels, syllabic consonants) | 1 | PanPhon |
-| 1 | `son` | sonorant: air flows without a build-up of pressure (vowels, nasals, liquids, glides) | 1 | PanPhon |
-| 2 | `cons` | consonantal: a major constriction in the vocal tract | 1 | PanPhon |
-| 3 | `cont` | continuant: air keeps flowing through the mouth (fricatives yes, stops no) | 0.5 | PanPhon |
-| 4 | `delrel` | delayed release: a stop that opens into a fricative (affricates) | 0.25 | PanPhon |
-| 5 | `lat` | lateral: air flows past the sides of the tongue | 0.25 | PanPhon |
-| 6 | `nas` | nasal: air flows through the nose | 0.25 | PanPhon |
-| 7 | `strid` | strident: loud, high-frequency noise (sibilants) | 0.125 | PanPhon |
-| 8 | `voi` | voice: the vocal folds vibrate | 0.125 | PanPhon |
-| 9 | `sg` | spread glottis: aspiration and breathy voice | 0.125 | PanPhon |
-| 10 | `cg` | constricted glottis: ejectives, glottal stop, creaky voice | 0.125 | PanPhon |
-| 11 | `ant` | anterior: the constriction is at the alveolar ridge or in front of it | 0.25 | PanPhon |
-| 12 | `cor` | coronal: made with the tip or the blade of the tongue | 0.25 | PanPhon |
-| 13 | `distr` | distributed: a long constriction along the tongue (laminal, not apical) | 0.125 | PanPhon |
-| 14 | `lab` | labial: made with the lips, rounded vowels included | 0.25 | PanPhon; the chart for vowels |
-| 15 | `hi` | high: the tongue body is raised | 0.25 | PanPhon; the chart for vowels |
-| 16 | `lo` | low: the tongue body is lowered | 0.25 | PanPhon; the chart for vowels |
-| 17 | `back` | back: the tongue body is retracted | 0.25 | PanPhon; the chart for vowels |
-| 18 | `round` | round: the lips are rounded | 0.25 | PanPhon; the chart for vowels |
-| 19 | `tense` | tense: a consonant feature in PanPhon; 0 on the chart vowels, whose height the step features give | 0.25 | PanPhon |
-| 20 | `long` | long: the length mark `ː` | 0.125 | PanPhon |
-| 21 | `velaric` | velaric airstream: clicks | 0.25 | PanPhon |
-| 22 | `front` | front: the tongue body is pushed forward | 0.25 | Hayes; the chart for vowels |
-| 23 | `tap` | tap: one fast contact, as in `ɾ` | 0.25 | Hayes |
-| 24 | `trill` | trill: repeated contacts, as in `r` and `ʀ` | 0.25 | Hayes |
-| 25 | `atr` | advanced tongue root: + for `◌̘`, − for `◌̙` and `◌ˤ`, otherwise 0 | 0.25 | Casali (2007) |
-| 26–31 | `h1` … `h6` | vowel height steps: on a chart vowel, + for each row it lies below close and − for the rest; 0 on other segments | 0.125 each | the chart |
-| 32 | `palatalized` | a secondary raising of the tongue body toward the palate: `◌ʲ`, `◌ᶣ` | 0.125 | Clements and Hume (1995) |
-| 33 | `velarized` | a secondary raising of the tongue body toward the velum: `◌ˠ`; 0 for `◌̴` | 0.125 | Clements and Hume (1995) |
-| 34 | `labialized` | a secondary rounding of the lips: `◌ʷ`, `◌ᶣ` | 0.125 | Clements and Hume (1995) |
-| 35 | `pharyngealized` | a secondary constriction in the upper pharynx: `◌ˤ`; 0 for `◌̴` | 0.125 | McCarthy (1994); Hermes et al. (2017) |
+| 0 | `syl` | syllabic: forms the nucleus of a syllable (vowels, syllabic consonants) | 2.75 | PanPhon |
+| 1 | `son` | sonorant: air flows without a build-up of pressure (vowels, nasals, liquids, glides) | 2.75 | PanPhon |
+| 2 | `cons` | consonantal: a major constriction in the vocal tract | 2.75 | PanPhon |
+| 3 | `cont` | continuant: air keeps flowing through the mouth (fricatives yes, stops no) | 1 | PanPhon |
+| 4 | `delrel` | delayed release: a stop that opens into a fricative (affricates) | 1 | PanPhon |
+| 5 | `lat` | lateral: air flows past the sides of the tongue | 1 | PanPhon |
+| 6 | `nas` | nasal: air flows through the nose | 1 | PanPhon |
+| 7 | `strid` | strident: loud, high-frequency noise (sibilants) | 1 | PanPhon |
+| 8 | `voi` | voice: the vocal folds vibrate | 1 | PanPhon |
+| 9 | `sg` | spread glottis: aspiration and breathy voice | 1 | PanPhon |
+| 10 | `cg` | constricted glottis: ejectives, glottal stop, creaky voice | 1 | PanPhon |
+| 11 | `ant` | anterior: the constriction is at the alveolar ridge or in front of it | 1 | PanPhon |
+| 12 | `cor` | coronal: made with the tip or the blade of the tongue | 1 | PanPhon |
+| 13 | `distr` | distributed: a long constriction along the tongue (laminal, not apical) | 1 | PanPhon |
+| 14 | `lab` | labial: made with the lips, rounded vowels included | 1 | PanPhon; the chart for vowels |
+| 15 | `hi` | high: the tongue body is raised | 1 | PanPhon; the chart for vowels |
+| 16 | `lo` | low: the tongue body is lowered | 1 | PanPhon; the chart for vowels |
+| 17 | `back` | back: the tongue body is retracted | 1 | PanPhon; the chart for vowels |
+| 18 | `round` | round: the lips are rounded | 1 | PanPhon; the chart for vowels |
+| 19 | `tense` | tense: a consonant feature in PanPhon; 0 on the chart vowels, whose height the step features give | 1 | PanPhon |
+| 20 | `long` | long: the length mark `ː` | 1 | PanPhon |
+| 21 | `velaric` | velaric airstream: clicks | 1 | PanPhon |
+| 22 | `front` | front: the tongue body is pushed forward | 1 | Hayes; the chart for vowels |
+| 23 | `tap` | tap: one fast contact, as in `ɾ` | 1 | Hayes |
+| 24 | `trill` | trill: repeated contacts, as in `r` and `ʀ` | 1 | Hayes |
+| 25 | `atr` | advanced tongue root: + for `◌̘`, − for `◌̙` and `◌ˤ`, otherwise 0 | 1 | Casali (2007) |
+| 26–31 | `h1` … `h6` | vowel height steps: on a chart vowel, + for each row it lies below close and − for the rest; 0 on other segments | 1/6 each | the chart |
+| 32 | `palatalized` | a secondary raising of the tongue body toward the palate: `◌ʲ`, `◌ᶣ` | 1 | Clements and Hume (1995) |
+| 33 | `velarized` | a secondary raising of the tongue body toward the velum: `◌ˠ`; 0 for `◌̴` | 1 | Clements and Hume (1995) |
+| 34 | `labialized` | a secondary rounding of the lips: `◌ʷ`, `◌ᶣ` | 1 | Clements and Hume (1995) |
+| 35 | `pharyngealized` | a secondary constriction in the upper pharynx: `◌ˤ`; 0 for `◌̴` | 1 | McCarthy (1994); Hermes et al. (2017) |
 
 `front` and `back` together give three positions. A front vowel is [+front, −back]. A central vowel is [−front, −back]. A back vowel is [−front, +back].
 
@@ -175,7 +175,20 @@ Other ties raise `ValueError`. Two vowels are two segments: `a͡i` is not read, 
 
 The total is divided by the sum of all weights, so the result is from 0 to 1. A segment that cannot be read is at distance 1 from all other segments.
 
-The weights of features 0 to 21 are PanPhon's. Two chart vowels are always nearer to each other than a vowel is to a stop or a fricative. The weights are not tuned to one language. A variant pair can thus be farther apart than a contrast: `ʁ`/`ʀ` is 0.158 but `ʁ`/`k` is 0.118, because a trill and a fricative differ in manner.
+Every feature weighs 1, except two groups. The six height steps share the weight of one feature, because together they encode one scale. The major-class features `syl`, `son` and `cons` weigh 2.75. This is the least weight at which two chart vowels stay nearer each other than a vowel and an obstruent.
+
+The rule comes from measurement, not from hand tuning. `scripts/fit_weights.py` scores a weighting on data it was not fitted on:
+
+| Held-out data | Previous weights | This rule |
+|---|---|---|
+| PHOIBLE 2.0 allophones, about 11,700 pairs from about 1,300 inventories: an allophone is nearer its phoneme than the inventory's other phonemes are | 0.938 | 0.942 |
+| Mandarin consonant confusions (Yu and Do 2023), Spearman | 0.293 | 0.343 |
+| English consonant confusions (Miller and Nicely 1955), Spearman | 0.350 | 0.416 |
+| English vowel identifications (Hillenbrand et al. 1995), Spearman | 0.561 | 0.569 |
+
+The previous weights were PanPhon's for features 0 to 21 and 0.125 to 0.25 for the features this table adds. A free fit of all 36 weights does not carry over: fitted on the consonant sets, it scores 0.639 on the vowels, but fitted with the vowels, it scores 0.298 on Miller and Nicely. A weighting fitted to listener confusions in noise makes voicing about ten times heavier, and it scores lower on the allophones. Thus one weighting serves both uses here.
+
+The weights are not tuned to one language. A variant pair can thus be farther apart than a contrast: `ʁ`/`ʀ` is 0.145 but `ʁ`/`k` is 0.124, because a trill and a fricative differ in manner.
 
 ## Tone
 

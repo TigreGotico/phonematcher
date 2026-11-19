@@ -17,10 +17,10 @@ phonematcher has no runtime dependencies.
 ```python
 from phonematcher import phonetic_distance, ipa_distance, segments
 
-phonetic_distance("ʁ", "χ")       # 0.013: uvular fricatives that differ only in voice
-phonetic_distance("ʁ", "k")       # 0.118: a different manner and place
+phonetic_distance("ʁ", "χ")       # 0.028: uvular fricatives that differ only in voice
+phonetic_distance("ʁ", "k")       # 0.124: a different manner and place
 segments("ˈt͡ʃɐ̃w̃")              # ['t͡ʃ', 'ɐ̃', 'w̃']
-ipa_distance("ˈpojʃ", "ˈpojs")   # 0.039: one near substitution
+ipa_distance("ˈpojʃ", "ˈpojs")   # 0.055: one near substitution
 ```
 
 `phonetic_distance` compares two segments, from 0 to 1. `ipa_distance` compares two IPA strings: an edit distance where a substitution costs the feature distance and an insertion or deletion costs 1.
@@ -37,7 +37,7 @@ for word in ["pois", "retirada", "carro", "caro", "casa", "dia"]:
 
 query = transcribe("carro", "pt-BR-x-rj")   # 'ˈkaχu'
 best = search.search(query)[0]
-best.id, best.term, round(best.score, 3)   # ('carro', ('ˈkaʁu',), 0.013)
+best.id, best.term, round(best.score, 3)   # ('carro', ('ˈkaʁu',), 0.028)
 ```
 
 A term may have several readings: `search.add_term(["ˈpojʃ", "ˈpojs"], "pois")`.
