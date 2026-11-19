@@ -1,0 +1,29 @@
+[build-system]
+requires = ["setuptools>=69"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "phonematcher"
+dynamic = ["version"]
+description = "Distinctive-feature distances between IPA phones, and phonetic fuzzy search over IPA"
+readme = "README.md"
+requires-python = ">=3.11"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [{ name = "JarbasAi", email = "jarbasai@mailfence.com" }]
+dependencies = []
+
+[project.optional-dependencies]
+test = ["pytest>=8"]
+
+[project.urls]
+Source = "https://github.com/TigreGotico/phonematcher"
+
+[tool.setuptools.dynamic]
+version = { attr = "phonematcher.version.VERSION_STR" }
+
+[tool.setuptools.package-data]
+phonematcher = ["data/*.json"]
+
+[tool.setuptools.packages.find]
+include = ["phonematcher*"]

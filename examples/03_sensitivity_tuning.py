@@ -1,34 +1,17 @@
-"""Example — how cluster_sensitivity trades precision for recall.
+"""What cluster_sensitivity controls: which sounds share a search cluster.
+
+A higher value puts more sounds in one cluster, so a search finds more candidates. Ranking by
+edit distance then orders them.
 
 Run::
 
     python examples/03_sensitivity_tuning.py
 """
-from phonematcher.clustering import PhoneticFuzzySearch, PT_MAPPING
+from phonematcher.clustering import phone_clusters
 
+PAIRS = [("p", "b"), ("ʁ", "χ"), ("s", "ʃ"), ("e", "ɛ"), ("a", "ɐ"), ("p", "t"), ("ʁ", "k"), ("e", "o")]
 
-def cluster_count(ffs: PhoneticFuzzySearch) -> int:
-    return len(set(ffs.clusters.values()))
-
-
-def main() -> None:
-    terms = ["sapo na lagoa", "casa amarela", "zona azul"]
-    query = "zapo na lagoa"
-
-    for sensitivity in (0.3, 0.5, 0.6):
-        ffs = PhoneticFuzzySearch(PT_MAPPING, cluster_sensitivity=sensitivity)
-        for i, term in enumerate(terms):
-            ffs.add_term(term, i)
-        results = ffs.search(query)
-        top = results[0].term if results else "no match"
-        print(
-            f"sensitivity={sensitivity}: "
-            f"{cluster_count(ffs)} phone clusters, "
-            f"{query!r} -> {top!r}"
-        )
-
-    print("\nlower = tighter clusters (precision); higher = broader (recall)")
-
-
-if __name__ == "__main__":
-    main()
+for sensitivity in (0.02, 0.1, 0.2):
+    clusters = phone_clusters(sensitivity)
+    shared = [f"{a}{b}" for a, b in PAIRS if clusters[a] == clusters[b]]
+    print(f"{sensitivity}: {len(set(clusters.values()))} clusters; together: {' '.join(shared)}")

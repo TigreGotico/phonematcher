@@ -1,0 +1,53 @@
+{
+  "source": "Changes to the feature values built from PanPhon and Hayes, each with the source that decides it. A value marked 'derived' follows a convention of the cited table, applied to a segment the table does not list.",
+  "overrides": [
+    {
+      "phone": "ɹ",
+      "feature": "hi",
+      "panphon": "+",
+      "value": "0",
+      "source": "Hayes (2009), Introductory Phonology, feature tables of ch. 4, as converted to CSV by Gorman (github.com/kylebgorman/hayes2009, dataprep/Features.csv)",
+      "reason": "Hayes gives the alveolar approximant no tongue-body value; PanPhon's [+high] describes the English bunched r, not the symbol."
+    },
+    {
+      "phone": "ɹ",
+      "feature": "round",
+      "panphon": "+",
+      "value": "-",
+      "source": "Hayes (2009), Introductory Phonology, feature tables of ch. 4, as converted to CSV by Gorman (github.com/kylebgorman/hayes2009, dataprep/Features.csv)",
+      "reason": "Hayes gives [ɹ] [-round]; the IPA chart symbol carries no lip rounding."
+    },
+    {
+      "phone": "ɐ",
+      "feature": "lo",
+      "panphon": "-",
+      "value": "+",
+      "source": "PHOIBLE segment features (Moran & McCloy, github.com/phoible/dev, raw-data/FEATURES/phoible-segments-features.tsv)",
+      "reason": "[ɐ] is the near-open central vowel; PHOIBLE gives it [+low, -front, -back], like Hayes's near-open [æ] [+low]."
+    },
+    {
+      "phone": "ɐ",
+      "feature": "front",
+      "panphon": "0",
+      "value": "-",
+      "source": "PHOIBLE segment features (Moran & McCloy, github.com/phoible/dev, raw-data/FEATURES/phoible-segments-features.tsv)",
+      "reason": "Hayes does not list [ɐ]; PHOIBLE gives the near-open central vowel [-front, -back]."
+    },
+    {
+      "phone": "ɜ",
+      "feature": "front",
+      "panphon": "0",
+      "value": "-",
+      "source": "PHOIBLE segment features (Moran & McCloy, github.com/phoible/dev, raw-data/FEATURES/phoible-segments-features.tsv)",
+      "reason": "Hayes does not list [ɜ]; PHOIBLE gives the open-mid central vowel [-front, -back]."
+    },
+    {
+      "phone": "ɜ",
+      "feature": "back",
+      "panphon": "+",
+      "value": "-",
+      "source": "PHOIBLE segment features (Moran & McCloy, github.com/phoible/dev, raw-data/FEATURES/phoible-segments-features.tsv)",
+      "reason": "[ɜ] is the open-mid central vowel; PHOIBLE gives it [-back]. PanPhon's [+back] makes it identical to the open-mid back [ʌ]."
+    }
+  ]
+}

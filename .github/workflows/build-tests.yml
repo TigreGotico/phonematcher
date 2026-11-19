@@ -11,7 +11,7 @@ jobs:
   build:
     uses: OpenVoiceOS/gh-automations/.github/workflows/build-tests.yml@dev
     with:
-      python_versions: '["3.10", "3.11", "3.12", "3.13", "3.14"]'
+      python_versions: '["3.11", "3.12", "3.13", "3.14"]'
       test_path: 'tests'
       # tests/ is a package and the repository root holds the flat-layout
       # phonematcher/ package, so pytest's default prepend import mode puts

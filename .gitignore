@@ -1,2 +1,6 @@
-TODO.md
+build/
+dist/
+*.egg-info/
+__pycache__/
 ROADMAP.md
+TODO.md
