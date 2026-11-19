@@ -36,7 +36,12 @@ _DIACRITICS: Dict[Tuple[str, str], dict] = {
 }
 #: Diacritics written after their base.
 POST_DIACRITICS = {marker for marker, position in _DIACRITICS if position == "post"}
-_PRE = {marker for marker, position in _DIACRITICS if position == "pre"}
+#: Marks written before a stop: prenasalization takes PanPhon's rule for ◌ⁿ (the nasal's place
+#: is the stop's), preaspiration its rule for ◌ʰ.
+PRE_DIACRITICS = {
+    **{marker: (marker, "pre") for marker, position in _DIACRITICS if position == "pre"},
+    "ⁿ": ("ⁿ", "post"), "ᵐ": ("ⁿ", "post"), "ᵑ": ("ⁿ", "post"), "ʰ": ("ʰ", "post"),
+}
 _TIES = ("͡", "͜")
 
 
@@ -70,14 +75,14 @@ def vectorize_phones(segment: str) -> Vector:
         return phone_features[untied]
 
     start = 0
-    while start < len(seg) and seg[start] in _PRE:
+    while start < len(seg) and seg[start] in PRE_DIACRITICS:
         start += 1
     for end in range(len(seg), start, -1):
         base = seg[start:end]
         if base in phone_features and all(m in POST_DIACRITICS for m in seg[end:]):
             vec = phone_features[base]
             for marker in seg[:start]:
-                vec = _apply_if(_DIACRITICS[marker, "pre"], vec, segment)
+                vec = _apply_if(_DIACRITICS[PRE_DIACRITICS[marker]], vec, segment)
             for marker in seg[end:]:
                 vec = _apply_if(_DIACRITICS[marker, "post"], vec, segment)
             return vec

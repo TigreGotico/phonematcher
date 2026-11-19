@@ -2,7 +2,7 @@
 import unicodedata
 from typing import List, Sequence
 
-from phonematcher.features import POST_DIACRITICS, phonetic_distance
+from phonematcher.features import POST_DIACRITICS, PRE_DIACRITICS, is_vowel_phone, phonetic_distance
 
 #: Stress, syllable and boundary marks: they carry no segment of their own.
 SUPRASEGMENTALS = frozenset("ˈˌ.‿|‖")
@@ -19,6 +19,7 @@ def segments(ipa: str) -> List[str]:
     """
     out: List[str] = []
     join_next = False
+    pending = ""  # marks written before the base they belong to
     for ch in unicodedata.normalize("NFD", ipa):
         if ch in SUPRASEGMENTALS:
             continue
@@ -31,12 +32,19 @@ def segments(ipa: str) -> List[str]:
             if join_next:
                 out[-1] += ch
             continue
+        starts_word = not out or out[-1] == " "
+        if ch in PRE_DIACRITICS and (starts_word or is_vowel_phone(out[-1])) and not join_next:
+            pending += ch
+            continue
         attaches = unicodedata.combining(ch) or ch in POST_DIACRITICS
-        if out and out[-1] != " " and (attaches or join_next):
+        if not pending and out and out[-1] != " " and (attaches or join_next):
             out[-1] += ch
         else:
-            out.append(ch)
+            out.append(pending + ch)
+            pending = ""
         join_next = False
+    if pending:
+        out.append(pending)
     if out and out[-1] == " ":
         out.pop()
     return [unicodedata.normalize("NFC", s) for s in out]

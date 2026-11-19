@@ -6,7 +6,7 @@ International Phonetic Association, 1999) and the feature definitions of PanPhon
 """
 import json
 import unicodedata
-from pathlib import Path
+from importlib.resources import files
 
 import pytest
 
@@ -19,7 +19,6 @@ from phonematcher.features import (
     vectorize_phones,
 )
 
-DATA = Path(__file__).resolve().parent.parent / "phonematcher" / "data"
 
 
 def feature(segment, name):
@@ -35,7 +34,8 @@ def test_the_table_names_its_source():
 
 
 def test_every_override_names_a_source_and_is_applied():
-    overrides = json.loads((DATA / "overrides.json").read_text(encoding="utf-8"))["overrides"]
+    data = files("phonematcher") / "data" / "overrides.json"
+    overrides = json.loads(data.read_text(encoding="utf-8"))["overrides"]
     assert overrides
     for o in overrides:
         assert o["source"] and o["reason"], o
@@ -137,3 +137,30 @@ def test_near_open_vowels_are_low():
     """[æ] and [ɐ] are near-open (IPA chart); Hayes and PHOIBLE mark near-open vowels [+low]."""
     assert feature("æ", "lo") is True and feature("ɐ", "lo") is True
     assert phonetic_distance("ɐ", "a") < phonetic_distance("ɐ", "e")
+
+
+def test_a_listed_diacritic_keeps_its_effect_on_a_hayes_vowel():
+    """PanPhon's rule for ◌ˤ adds [+low, +back]; the Hayes vowel values must not erase it."""
+    assert feature("ɤˤ", "lo") is True and feature("ɤ", "lo") is False
+    assert vectorize_phones("ɤˤ") != vectorize_phones("ɤ")
+
+
+def test_atr_diacritic_makes_a_vowel_tense():
+    """PanPhon's rule for ◌̘ (advanced tongue root) sets [+tense]."""
+    assert feature("ɛ̘", "tense") is True and feature("ɛ", "tense") is False
+
+
+def test_centralized_vowel_is_neither_front_nor_back():
+    """◌̈ marks a centralized vowel (IPA Handbook 1999)."""
+    assert feature("ë", "front") is False and feature("ë", "back") is False
+    assert vectorize_phones("ë") != vectorize_phones("e")
+
+
+@pytest.mark.parametrize("segment, stop", [("ⁿd", "d"), ("ᵐb", "b"), ("ᵑɡ", "ɡ")])
+def test_prenasalized_stop_is_a_nasal_stop(segment, stop):
+    assert feature(segment, "nas") is True and feature(segment, "cont") is False
+    assert phonetic_distance(segment, stop) < phonetic_distance(segment, "a")
+
+
+def test_preaspirated_stop_has_spread_glottis():
+    assert feature("ʰt", "sg") is True

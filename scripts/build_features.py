@@ -51,34 +51,60 @@ def main() -> None:
     weights = [float(w) for w in rows[1]] + list(ADDED.values())
     hayes = read_hayes()
 
-    phones = {}
     with open(DATA / "ipa_all.csv", encoding="utf-8") as fh:
-        for row in csv.DictReader(fh):
-            seg = unicodedata.normalize("NFD", row["ipa"])
-            vec = {f: row[f] for f in panphon_features}
-            h = hayes.get(base_letter(seg))
-            vec.update({f: (h[HAYES_NAMES[f]] if h else "0" if f == "front" else "-")
-                        for f in ADDED})
-            if h and h["syllabic"] == "+" and row["syl"] == "+":
-                vec.update({f: h[HAYES_NAMES[f]] for f in VOWEL_FEATURES})
-            phones[seg] = "".join(vec[f] for f in features)
-    n_in = len(phones)
+        panphon = {unicodedata.normalize("NFD", row["ipa"]): {f: row[f] for f in panphon_features}
+                   for row in csv.DictReader(fh)}
+    n_in = len(panphon)
 
-    overrides = json.loads((HERE / "overrides.json").read_text(encoding="utf-8"))["overrides"]
-    for o in overrides:
-        key = unicodedata.normalize("NFD", o["phone"])
-        i = features.index(o["feature"])
-        vec = phones[key]
-        if vec[i] != o["panphon"]:
-            raise SystemExit(f"{o['phone']} {o['feature']}: PanPhon has {vec[i]}, "
-                             f"the override expects {o['panphon']}")
-        phones[key] = vec[:i] + o["value"] + vec[i + 1:]
+    changes = json.loads((HERE / "overrides.json").read_text(encoding="utf-8"))
+    overrides = changes["overrides"]
+    unknown = {o["phone"] for o in overrides} - set(panphon)
+    if unknown:
+        raise SystemExit(f"overrides name segments PanPhon does not list: {sorted(unknown)}")
+
+    def bare(letter: str) -> dict:
+        """A bare letter: PanPhon's values, with Hayes's added features and vowel values."""
+        vec = dict(panphon[letter])
+        h = hayes.get(letter)
+        vec.update({f: (h[HAYES_NAMES[f]] if h else "0" if f == "front" else "-")
+                    for f in ADDED})
+        if h and h["syllabic"] == "+" and vec["syl"] == "+":
+            vec.update({f: h[HAYES_NAMES[f]] for f in VOWEL_FEATURES})
+        for o in overrides:
+            if unicodedata.normalize("NFD", o["phone"]) == letter:
+                if vec[o["feature"]] != o["panphon"]:
+                    raise SystemExit(f"{o['phone']} {o['feature']}: the table has "
+                                     f"{vec[o['feature']]}, the override expects {o['panphon']}")
+                vec[o["feature"]] = o["value"]
+        return vec
+
+    # A segment with diacritics is its base letter plus the difference PanPhon records between
+    # the two, so a diacritic's effect survives the Hayes values of its base.
+    phones = {}
+    for seg, row in panphon.items():
+        base = base_letter(seg)
+        if base not in panphon:
+            vec = bare(seg)
+        else:
+            vec = bare(base)
+            vec.update({f: row[f] for f in panphon_features if row[f] != panphon[base][f]})
+        phones[seg] = vec
 
     diacritics = yaml.safe_load((DATA / "diacritic_definitions.yml").read_text(encoding="utf-8"))
+    for change in changes["diacritics"]:
+        marker = unicodedata.normalize("NFD", change["marker"])
+        for d in diacritics["diacritics"]:
+            if unicodedata.normalize("NFD", d["marker"]) == marker:
+                d["content"] = {**d.get("content", {}), **change["content"]}
+        for seg, vec in phones.items():
+            if marker in seg and vec["syl"] == "+":
+                vec.update(change["content"])
+    phones = {seg: "".join(vec[f] for f in features) for seg, vec in phones.items()}
     out = {
         "source": f"PanPhon {importlib.metadata.version('panphon')} (Mortensen et al. 2016, MIT); "
                   "vowel features, [front], [tap] and [trill] from Hayes (2009, Introductory "
-                  f"Phonology); {len(overrides)} changes from overrides.json",
+                  f"Phonology); {len(overrides)} value and {len(changes['diacritics'])} diacritic "
+                  "changes from overrides.json",
         "features": features,
         "weights": weights,
         "phones": phones,

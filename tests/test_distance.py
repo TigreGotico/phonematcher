@@ -41,3 +41,7 @@ def test_a_near_sound_is_nearer_than_a_far_one():
 
 def test_distance_is_symmetric():
     assert ipa_distance("ˈfɔɡɐ̃w̃", "fuˈɡɐ̃w̃") == ipa_distance("fuˈɡɐ̃w̃", "ˈfɔɡɐ̃w̃")
+
+
+def test_a_prenasalization_or_preaspiration_mark_joins_the_following_stop():
+    assert segments("ⁿdaʰta") == ["ⁿd", "a", "ʰt", "a"]
