@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.1.0a1](https://github.com/TigreGotico/phonematcher/tree/0.1.0a1) (2026-11-19)
+
+[Full Changelog](https://github.com/TigreGotico/phonematcher/compare/0.0.0a2...0.1.0a1)
+
+**Merged pull requests:**
+
+- feat: read tone as pitch-level segments [\#10](https://github.com/TigreGotico/phonematcher/pull/10) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
+
 ## [0.0.0a2](https://github.com/TigreGotico/phonematcher/tree/0.0.0a2) (2026-11-19)
 
 [Full Changelog](https://github.com/TigreGotico/phonematcher/compare/fd33c5b3b4cc760519be5fb376a6299f5c710a26...0.0.0a2)
