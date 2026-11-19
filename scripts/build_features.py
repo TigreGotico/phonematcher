@@ -74,6 +74,17 @@ def base_letter(segment: str) -> str:
     return letters[0] if len(letters) == 1 else ""
 
 
+#: Marks whose PanPhon rule adds [+high] or [+low] to the tongue body.
+RAISING = set("ʷʲᶣˠ\u0334˞")
+
+
+def _later_mark(segment: str) -> str:
+    """With no height on the base, the later of a raising and a lowering mark wins; returns the
+    feature to set to -."""
+    last_raise = max((i for i, ch in enumerate(segment) if ch in RAISING), default=-1)
+    return "lo" if last_raise > segment.rfind("ˤ") else "hi"
+
+
 def main() -> None:
     with open(DATA / "feature_weights.csv", encoding="utf-8") as fh:
         rows = list(csv.reader(fh))
@@ -152,6 +163,12 @@ def main() -> None:
             if marker in seg and (vec["syl"] == "+" or not change.get("vowels_only")):
                 vec.update({f: bases.get(seg, vec)[f] for f in change.get("restore", [])})
                 vec.update(change["content"])
+    # [+high, +low] is impossible (Chomsky and Halle 1968). When a secondary articulation adds
+    # one to a base that has the other, the base's primary articulation keeps its value.
+    for seg, vec in phones.items():
+        if vec["hi"] == vec["lo"] == "+":
+            base = bases.get(seg, vec)
+            vec["lo" if base["hi"] == "+" else "hi" if base["lo"] == "+" else _later_mark(seg)] = "-"
     both = sorted(s for s, v in phones.items() if v["hi"] == "+" and v["lo"] == "+")
     if both:
         raise SystemExit(f"[+high, +low] in {len(both)} segments: {both}")

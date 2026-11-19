@@ -214,3 +214,21 @@ def test_lowered_and_raised_marks_move_a_vowel_one_chart_row():
     is, and raised [ɛ̝] is nearer [e] than [ɛ] is."""
     assert phonetic_distance("e̞", "ɛ") < phonetic_distance("e", "ɛ")
     assert phonetic_distance("ɛ̝", "e") < phonetic_distance("ɛ", "e")
+
+
+@pytest.mark.parametrize("segment, base", [("kˤ", "k"), ("iˤ", "i"), ("ɠˤ", "ɠ")])
+def test_pharyngealization_keeps_a_high_base_high(segment, base):
+    """A secondary articulation does not undo the primary one: a pharyngealized velar is still a
+    velar, and a pharyngealized [i] is still close."""
+    assert feature(segment, "hi") is True and feature(segment, "lo") is False
+    assert feature(segment, "back") is True
+    assert vectorize_phones(segment) != vectorize_phones(base)
+
+
+@pytest.mark.parametrize("segment", ["ħʷ", "ʕʲ", "a˞"])
+def test_raising_marks_keep_a_low_base_low(segment):
+    assert feature(segment, "lo") is True and feature(segment, "hi") is False
+
+
+def test_implosives_stay_apart_when_pharyngealized():
+    assert vectorize_phones("ʛˤ") != vectorize_phones("ɠˤ")

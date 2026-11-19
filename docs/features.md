@@ -73,6 +73,8 @@ The 28 vowel letters take their values from their place on the IPA chart, not fr
 | near-open | `æ ɐ` | + + + + + − |
 | open | `a ɶ ɑ ɒ` | + + + + + + |
 
+The chart has five columns, and the features give three. Near-front `ɪ ʏ` count as front and near-back `ʊ` as back. Their lower height keeps them apart from `i y u`.
+
 The chart places `a` open front and `ɐ` near-open central. Both are unrounded. Many descriptions write the open central vowel as `a`. A transcription that means open central can write `ä`.
 
 PanPhon gives 6 of the 28 vowels `delrel` 0 and the rest `delrel` −. A vowel has no release, so all 28 take −.
@@ -83,12 +85,13 @@ PanPhon gives 6 of the 28 vowels `delrel` 0 and the rest `delrel` −. A vowel h
 |---|---|---|---|
 | `◌̈` centralized | no change | `front` −, `back` − | IPA Handbook (1999) |
 | `◌̝` raised, `◌̞` lowered | no change | one chart row up or down | IPA Handbook (1999) |
-| `◌̘` advanced tongue root | `tense` + | `atr` +, `tense` kept | Lindau (1978), "Vowel features", *Language* 54 |
+| `◌̘` advanced tongue root | `tense` + | `atr` +, `tense` kept | Lindau (1978), "Vowel features", *Language* 54, who names the feature [expanded] |
 | `◌̙` retracted tongue root | `tense` − | `atr` −, `tense` kept | Lindau (1978) |
-| `◌ˤ` pharyngealized | adds `lo` +, keeps `hi` + | also sets `hi` − | Chomsky and Halle (1968), *The Sound Pattern of English* |
-| `◌ˠ ◌ʷ ◌ʲ ◌ᶣ ◌̴ ◌˞` | add `hi` +, keep `lo` + | also set `lo` − | Chomsky and Halle (1968) |
+| `◌ˤ` pharyngealized | `lo` +, `back` + | also `atr` − and `back` + on every base | McCarthy (1994), "The phonetics and phonology of Semitic pharyngeals", *Papers in Laboratory Phonology III* |
 
-The tongue body cannot be high and low at once, so no segment is [+high, +low]. The build stops if one is.
+Pharyngealization retracts the tongue root, so it sets `atr` −. Thus `kˤ` differs from `k`, although `k` is already [+back].
+
+The tongue body cannot be high and low at once (Chomsky and Halle 1968, *The Sound Pattern of English*). Some marks add [+high] (`◌ʷ ◌ʲ ◌ᶣ ◌ˠ ◌̴ ◌˞`) or [+low] (`◌ˤ`). When the base has the other value, the base keeps it, because the mark is a secondary articulation. A pharyngealized velar is still [+high], and a labialized pharyngeal is still [+low]. When the base has neither, the later mark wins. The build stops if a segment is [+high, +low], and `vectorize_phones` applies the same rule.
 
 ## Letters PanPhon does not list
 

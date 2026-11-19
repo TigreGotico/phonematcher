@@ -61,70 +61,11 @@
       "name": "Pharyngealized",
       "vowels_only": false,
       "content": {
-        "hi": "-"
+        "atr": "-",
+        "back": "+"
       },
-      "source": "Chomsky and Halle (1968), The Sound Pattern of English, ch. 7: [+high, +low] is impossible, because the tongue body cannot be raised and lowered at once",
-      "reason": "PanPhon's rule adds [+low, +back] and keeps [+high] on a high base, so iˤ and kˤ came out [+high, +low]. Pharyngealization lowers the tongue body, so [high] becomes -."
-    },
-    {
-      "marker": "ˠ",
-      "name": "Velarized",
-      "vowels_only": false,
-      "content": {
-        "lo": "-"
-      },
-      "source": "Chomsky and Halle (1968), The Sound Pattern of English, ch. 7: [+high, +low] is impossible, because the tongue body cannot be raised and lowered at once",
-      "reason": "PanPhon's rule adds [+high, +back] and keeps [+low] on a low base. Velarization raises the tongue body, so [low] becomes -."
-    },
-    {
-      "marker": "ʷ",
-      "name": "Labialized",
-      "vowels_only": false,
-      "content": {
-        "lo": "-"
-      },
-      "source": "Chomsky and Halle (1968), The Sound Pattern of English, ch. 7: [+high, +low] is impossible, because the tongue body cannot be raised and lowered at once",
-      "reason": "PanPhon's rule adds [+high] and keeps [+low] on a low base. The mark's [+high] wins and [low] becomes -, as for ◌ˠ."
-    },
-    {
-      "marker": "ʲ",
-      "name": "Palatalized",
-      "vowels_only": false,
-      "content": {
-        "lo": "-"
-      },
-      "source": "Chomsky and Halle (1968), The Sound Pattern of English, ch. 7: [+high, +low] is impossible, because the tongue body cannot be raised and lowered at once",
-      "reason": "PanPhon's rule adds [+high] and keeps [+low] on a low base. The mark's [+high] wins and [low] becomes -, as for ◌ˠ."
-    },
-    {
-      "marker": "ᶣ",
-      "name": "Labio-palatalized",
-      "vowels_only": false,
-      "content": {
-        "lo": "-"
-      },
-      "source": "Chomsky and Halle (1968), The Sound Pattern of English, ch. 7: [+high, +low] is impossible, because the tongue body cannot be raised and lowered at once",
-      "reason": "PanPhon's rule adds [+high] and keeps [+low] on a low base. The mark's [+high] wins and [low] becomes -, as for ◌ˠ."
-    },
-    {
-      "marker": "̴",
-      "name": "Velarized or pharyngealized",
-      "vowels_only": false,
-      "content": {
-        "lo": "-"
-      },
-      "source": "Chomsky and Halle (1968), The Sound Pattern of English, ch. 7: [+high, +low] is impossible, because the tongue body cannot be raised and lowered at once",
-      "reason": "PanPhon's rule adds [+high] and keeps [+low] on a low base. The mark's [+high] wins and [low] becomes -, as for ◌ˠ."
-    },
-    {
-      "marker": "˞",
-      "name": "Rhoticity",
-      "vowels_only": false,
-      "content": {
-        "lo": "-"
-      },
-      "source": "Chomsky and Halle (1968), The Sound Pattern of English, ch. 7: [+high, +low] is impossible, because the tongue body cannot be raised and lowered at once",
-      "reason": "PanPhon's rule adds [+high] and keeps [+low] on a low base. The mark's [+high] wins and [low] becomes -, as for ◌ˠ."
+      "source": "McCarthy (1994), 'The phonetics and phonology of Semitic pharyngeals', in Keating (ed.), Papers in Laboratory Phonology III: pharyngealization is a retraction of the tongue root",
+      "reason": "PanPhon's rule gives [+low, +back], but a high base keeps [+high], so [+low] cannot mark the retraction and kˤ equalled k. Pharyngealization sets [-atr] and [+back] on every base."
     }
   ],
   "segments": [

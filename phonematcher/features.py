@@ -92,7 +92,13 @@ def vectorize_phones(segment: str) -> Vector:
 def _apply_if(diacritic: dict, vec: Vector, segment: str) -> Vector:
     if not _applies(diacritic, vec):
         raise ValueError(f"{diacritic['marker']!r} does not apply to the base of {segment!r}")
-    return _apply(diacritic, vec)
+    out = _apply(diacritic, vec)
+    hi, lo = FEATURES.index("hi"), FEATURES.index("lo")
+    if out[hi] is True and out[lo] is True:
+        # [+high, +low] is impossible: the base keeps its height, else the latest mark wins.
+        drop = lo if vec[hi] is True else hi if vec[lo] is True else (hi if diacritic["content"].get("lo") == "+" else lo)
+        out = out[:drop] + (False,) + out[drop + 1:]
+    return out
 
 
 def is_vowel_phone(segment: str) -> bool:
