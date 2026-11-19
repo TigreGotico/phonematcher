@@ -131,8 +131,6 @@ Every IPA letter has its own vector, and a test checks this. To add a change, ad
 
 PanPhon lists 6,367 segments, many with diacritics, such as `ɐ̃` and `kʷʰ`. The build reads each listed segment in the same way: its longest listed base, then the rules of its marks. A listed stack thus has the same vector as an unlisted one, and a test checks this for every listed stack. A mark that has no rule takes the difference that PanPhon records between the segment and its base letter.
 
-The raised and lowered marks move a vowel only in segments that the table lists.
-
 Some marks come before their base. `ⁿ`, `ᵐ` and `ᵑ` before a stop make a prenasalized stop, as in `ⁿd`. `ʰ` before a stop makes a preaspirated stop, as in `ʰt`. Each takes the rule of the same mark after a base.
 
 A tie bar joins two symbols into one segment. `t͡ʃ` and `t͜ʃ` are the same affricate. Without a tie bar, `tʃ` is two segments.

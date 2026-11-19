@@ -260,8 +260,6 @@ def test_a_listed_stack_equals_the_same_stack_read_by_the_rules():
         for end in range(len(seg) - 1, 0, -1):
             base, marks = seg[:end], seg[end:]
             if base in phone_features and all((m, "post") in f._DIACRITICS for m in marks):
-                if {"\u031d", "\u031e"} & set(marks):
-                    break
                 try:
                     vec = phone_features[base]
                     for m in marks:
@@ -300,3 +298,9 @@ def test_rhoticity_keeps_the_vowel_height_and_rounding(rhotic, vowel):
 def test_precomposed_rhotic_vowels_equal_their_decomposed_forms():
     assert vectorize_phones("ɚ") == vectorize_phones("ə˞")
     assert vectorize_phones("ɝ") == vectorize_phones("ɜ˞")
+
+
+def test_raised_and_lowered_marks_work_in_any_order():
+    """The run-time rule moves a vowel one chart row, as the build does for listed stacks."""
+    assert vectorize_phones("eː̞") == vectorize_phones("e̞ː")
+    assert vectorize_phones("ɛ̝̃") != vectorize_phones("ɛ̃")
