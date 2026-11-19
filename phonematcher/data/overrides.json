@@ -301,7 +301,7 @@
       "set": {
         "trill": "+"
       },
-      "source": "Hassan, Esling, Moisik and Crevier-Buchman (2011), 'Aryepiglottic trilled variants of /ʕ, ħ/ in Iraqi Arabic', Proceedings of ICPhS XVII, Hong Kong, pp. 831-834: 'both pharyngeals and epiglottals occur at the aryepiglottic sphincter point of stricture', and sounds described as epiglottal 'are associated either with AE trilled varieties'; Esling (1996), 'Pharyngeal consonants and the aryepiglottic sphincter', Journal of the International Phonetic Association 26(2), pp. 65-88: the categories 'share a common place of articulation' and differ 'in manner of articulation'",
+      "source": "Hassan, Esling, Moisik and Crevier-Buchman (2011), 'Aryepiglottic trilled variants of /ʕ, ħ/ in Iraqi Arabic', Proceedings of ICPhS XVII, Hong Kong, pp. 831-834: 'both pharyngeals and epiglottals occur at the aryepiglottic sphincter point of stricture', and sounds described as epiglottal 'are associated either with AE trilled varieties'",
       "reason": "PanPhon does not list the symbol. It is the pharyngeal fricative [ħ] made by the aryepiglottic folds, with trilling."
     },
     {
@@ -311,7 +311,7 @@
       "set": {
         "trill": "+"
       },
-      "source": "Hassan, Esling, Moisik and Crevier-Buchman (2011), 'Aryepiglottic trilled variants of /ʕ, ħ/ in Iraqi Arabic', Proceedings of ICPhS XVII, Hong Kong, pp. 831-834: 'both pharyngeals and epiglottals occur at the aryepiglottic sphincter point of stricture', and sounds described as epiglottal 'are associated either with AE trilled varieties'; Esling (1996), 'Pharyngeal consonants and the aryepiglottic sphincter', Journal of the International Phonetic Association 26(2), pp. 65-88: the categories 'share a common place of articulation' and differ 'in manner of articulation'",
+      "source": "Hassan, Esling, Moisik and Crevier-Buchman (2011), 'Aryepiglottic trilled variants of /ʕ, ħ/ in Iraqi Arabic', Proceedings of ICPhS XVII, Hong Kong, pp. 831-834: 'both pharyngeals and epiglottals occur at the aryepiglottic sphincter point of stricture', and sounds described as epiglottal 'are associated either with AE trilled varieties'",
       "reason": "PanPhon does not list the symbol. It is the voiced counterpart of [ʜ]."
     },
     {
@@ -322,7 +322,7 @@
         "cont": "-",
         "voi": "-"
       },
-      "source": "Hassan, Esling, Moisik and Crevier-Buchman (2011), 'Aryepiglottic trilled variants of /ʕ, ħ/ in Iraqi Arabic', Proceedings of ICPhS XVII, Hong Kong, pp. 831-834: 'both pharyngeals and epiglottals occur at the aryepiglottic sphincter point of stricture', and sounds described as epiglottal 'are associated either with AE trilled varieties'; Esling (1996), 'Pharyngeal consonants and the aryepiglottic sphincter', Journal of the International Phonetic Association 26(2), pp. 65-88: the categories 'share a common place of articulation' and differ 'in manner of articulation'",
+      "source": "International Phonetic Association, The IPA Chart (revised to 2015), Other Symbols: 'Epiglottal plosive'; Hassan, Esling, Moisik and Crevier-Buchman (2011), 'Aryepiglottic trilled variants of /ʕ, ħ/ in Iraqi Arabic', Proceedings of ICPhS XVII, Hong Kong, pp. 831-834: 'both pharyngeals and epiglottals occur at the aryepiglottic sphincter point of stricture', and sounds described as epiglottal 'are associated either with AE trilled varieties'",
       "reason": "PanPhon does not list the symbol. The chart lists it under Other Symbols as 'Epiglottal plosive'. It is built as a voiceless stop at the pharyngeal place."
     }
   ]

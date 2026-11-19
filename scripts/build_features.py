@@ -12,11 +12,10 @@ Run after changing any input:
 """
 import csv
 import importlib.metadata
+import importlib.util
 import json
 import unicodedata
 from pathlib import Path
-
-import importlib.util
 
 import panphon
 import yaml
@@ -39,7 +38,7 @@ VOWEL_FEATURES = ("hi", "lo", "front", "back", "round", "tense", "lab")
 HEIGHTS = ("close", "near-close", "close-mid", "mid", "open-mid", "near-open", "open")
 #: [h1] ... [h6]: a vowel is + for each step its height lies below close, so the number of
 #: differing step features equals the number of chart rows between two vowels.
-STEPS = tuple(f"h{k}" for k in range(1, len(HEIGHTS)))
+STEPS = scales.STEPS
 #: Secondary articulations, each a feature of its own beside the primary place (Clements and
 #: Hume 1995, section 3.5.1).
 SECONDARY = ("palatalized", "velarized", "labialized", "pharyngealized")
@@ -47,11 +46,6 @@ ADDED = {"front": 0.25, "tap": 0.25, "trill": 0.25, "atr": 0.25, **{s: 0.125 for
          **{s: 0.125 for s in SECONDARY}}
 
 
-def height_values(index: int) -> dict:
-    """[hi], [lo] and the step features of chart row ``index`` (0 close, 6 open)."""
-    index = max(0, min(len(HEIGHTS) - 1, index))
-    return {"hi": "+" if index <= 1 else "-", "lo": "+" if index >= 5 else "-", "tense": "0",
-            **{s: "+" if index >= k else "-" for k, s in enumerate(STEPS, 1)}}
 BACKNESS = {"front": "+-", "central": "--", "back": "-+"}
 #: Place of articulation, copied by a segment built "with the place of" another.
 PLACE = ("ant", "cor", "distr", "lab", "hi", "lo", "back", "round", "front")
@@ -65,7 +59,9 @@ def read_chart() -> dict:
         front, back = BACKNESS[r["backness"]]
         # PanPhon gives 22 of the 28 vowels [-delrel] and six of them 0; a vowel has no release,
         # so all take the majority value.
-        chart[r["symbol"]] = {**height_values(HEIGHTS.index(r["height"])), "front": front,
+        height = {"tense": "0"}
+        scales.set_height(height, HEIGHTS.index(r["height"]))
+        chart[r["symbol"]] = {**height, "front": front,
                               "back": back, "round": r["rounded"], "lab": r["rounded"],
                               "delrel": "-", "index": HEIGHTS.index(r["height"])}
     return chart
@@ -94,8 +90,9 @@ def main() -> None:
     chart = read_chart()
 
     with open(DATA / "ipa_all.csv", encoding="utf-8") as fh:
+        # vectorize_phones reads ɫ as l̴, built by the rules, so PanPhon's ɫ rows are not taken.
         panphon = {unicodedata.normalize("NFD", row["ipa"]): {f: row[f] for f in panphon_features}
-                   for row in csv.DictReader(fh)}
+                   for row in csv.DictReader(fh) if "ɫ" not in row["ipa"]}
     n_in = len(panphon)
 
     changes = json.loads((HERE / "overrides.json").read_text(encoding="utf-8"))
@@ -153,9 +150,8 @@ def main() -> None:
 
     def apply_rules(vec: dict, marks: str) -> dict:
         """The marks' rules in order, as vectorize_phones applies them; None if one does not
-        apply. [+high, +low] is impossible, because the tongue body cannot be raised and lowered at
-        once: a mark that adds one keeps
-        the other as the base has it."""
+        apply. [+high, +low] is impossible, because the tongue body cannot be raised and lowered
+        at once: a mark that adds one keeps the other as the base has it."""
         vec = dict(vec)
         for ch in marks:
             rule = rules[ch]

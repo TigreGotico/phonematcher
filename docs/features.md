@@ -32,7 +32,7 @@ Each IPA segment has a vector of 36 distinctive features. A value is `True` (+),
 | 23 | `tap` | tap: one fast contact, as in `ɾ` | 0.25 | Hayes |
 | 24 | `trill` | trill: repeated contacts, as in `r` and `ʀ` | 0.25 | Hayes |
 | 25 | `atr` | advanced tongue root: + for `◌̘`, − for `◌̙` and `◌ˤ`, otherwise 0 | 0.25 | Casali (2007) |
-| 26–31 | `h1` … `h6` | vowel height steps: + for each chart row the vowel lies below close, otherwise 0 | 0.125 each | the chart |
+| 26–31 | `h1` … `h6` | vowel height steps: on a chart vowel, + for each row it lies below close and − for the rest; 0 on other segments | 0.125 each | the chart |
 | 32 | `palatalized` | a secondary raising of the tongue body toward the palate: `◌ʲ`, `◌ᶣ` | 0.125 | Clements and Hume (1995) |
 | 33 | `velarized` | a secondary raising of the tongue body toward the velum: `◌ˠ`; 0 for `◌̴` | 0.125 | Clements and Hume (1995) |
 | 34 | `labialized` | a secondary rounding of the lips: `◌ʷ`, `◌ᶣ` | 0.125 | Clements and Hume (1995) |
@@ -125,11 +125,11 @@ The chart's vowel quadrilateral gives three ordered scales: seven heights, three
 | Letter | Name | Built as | Source |
 |---|---|---|---|
 | `ⱱ` | labiodental flap | the manner of `ɾ` with the place of `v` | the IPA chart |
-| `ʜ` | voiceless epiglottal fricative | `ħ` with `trill` + | Hassan et al. (2011); Esling (1996) |
-| `ʢ` | voiced epiglottal fricative | `ʕ` with `trill` + | Hassan et al. (2011); Esling (1996) |
+| `ʜ` | voiceless epiglottal fricative | `ħ` with `trill` + | Hassan et al. (2011) |
+| `ʢ` | voiced epiglottal fricative | `ʕ` with `trill` + | Hassan et al. (2011) |
 | `ʡ` | epiglottal plosive | `ħ` with `cont` −, `voi` − | the IPA chart (Other Symbols) |
 
-The pharyngeals and the epiglottals have one place of articulation and differ in manner. Hassan, Esling, Moisik and Crevier-Buchman (2011, "Aryepiglottic trilled variants of /ʕ, ħ/ in Iraqi Arabic", ICPhS XVII, pp. 831–834) write that "both pharyngeals and epiglottals occur at the aryepiglottic sphincter point of stricture". Sounds heard as epiglottal "are associated either with AE trilled varieties" of the pharyngeals. Esling (1996, *Journal of the International Phonetic Association* 26(2), pp. 65–88) suggests that the pharyngeal categories "share a common place of articulation" and differ "in manner of articulation".
+The pharyngeals and the epiglottals have one place of articulation and differ in manner. Hassan, Esling, Moisik and Crevier-Buchman (2011, "Aryepiglottic trilled variants of /ʕ, ħ/ in Iraqi Arabic", ICPhS XVII, pp. 831–834) write that "both pharyngeals and epiglottals occur at the aryepiglottic sphincter point of stricture". Sounds heard as epiglottal "are associated either with AE trilled varieties" of the pharyngeals.
 
 ## Other changes
 
@@ -144,7 +144,7 @@ Every IPA letter has its own vector, and a test checks this. To add a change, ad
 
 `vectorize_phones` reads a segment that the table does not list as its longest listed base plus the diacritics after it. Each diacritic sets the features of its rule, in order, if the base meets the rule's conditions. For example, `ɐ̥` is `ɐ` with `voi` −.
 
-PanPhon lists 6,367 segments, many with diacritics, such as `ɐ̃` and `kʷʰ`. The build reads each listed segment in the same way: its longest listed base, then the rules of its marks. A listed stack thus has the same vector as an unlisted one, and a test checks this for every listed stack. A mark that has no rule takes the difference that PanPhon records between the segment and its base letter.
+PanPhon lists 6,367 segments, many with diacritics, such as `ɐ̃` and `kʷʰ`. The table takes all of them except the 50 stacks on `ɫ`, which `vectorize_phones` reads as `l̴` with the same marks, and adds the four letters above: 6,321 segments. The build reads each listed segment in the same way: its longest listed base, then the rules of its marks. A listed stack thus has the same vector as an unlisted one, and a test checks this for every listed stack. A mark that has no rule takes the difference that PanPhon records between the segment and its base letter.
 
 Some marks come before their base. `ⁿ`, `ᵐ` and `ᵑ` before a stop make a prenasalized stop, as in `ⁿd`. `ʰ` before a stop makes a preaspirated stop, as in `ʰt`. Each takes the rule of the same mark after a base.
 

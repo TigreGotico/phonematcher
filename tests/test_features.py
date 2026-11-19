@@ -197,7 +197,7 @@ def test_no_segment_is_both_high_and_low():
     ("ⱱ", "ɾ", "tap"), ("ʜ", "ħ", "trill"), ("ʢ", "ʕ", "trill"), ("ʡ", "ħ", "cont"),
 ])
 def test_chart_letters_panphon_lacks(letter, near, feat):
-    """Labiodental flap (IPA chart) and the epiglottals (Hassan et al. 2011; Esling 1996)."""
+    """Labiodental flap (IPA chart) and the epiglottals (Hassan et al. 2011)."""
     assert vectorize_phones(letter) != vectorize_phones(near)
     assert phonetic_distance(letter, near) < phonetic_distance(letter, "a")
     expected = {"tap": True, "trill": True, "cont": False}[feat]
@@ -252,7 +252,7 @@ def test_pharyngealization_keeps_the_base_column(a, b):
 
 def test_a_listed_stack_equals_the_same_stack_read_by_the_rules():
     """A sound has one vector whether the table lists its exact stack or vectorize_phones builds
-    it from a shorter base. Raised and lowered marks move a vowel only in listed stacks."""
+    it from a shorter base."""
     from phonematcher import features as f
     checked = 0
     for seg, listed in phone_features.items():
@@ -351,3 +351,10 @@ def test_mid_centralized_moves_to_the_centre_and_toward_mid():
     """IPA chart: ◌̽ mid-centralized. [e̽] is central and one row nearer mid than [e]."""
     assert feature("e̽", "front") is False and feature("e̽", "back") is False
     assert phonetic_distance("e̽", "ə") < phonetic_distance("ë", "ə")
+
+
+def test_vectorize_phones_returns_the_table_row_for_every_listed_segment():
+    """No listed segment is read differently from its table row, for example by a letter
+    translation."""
+    differ = [s for s, vec in phone_features.items() if vectorize_phones(s) != vec]
+    assert differ == []
