@@ -1,28 +1,13 @@
-"""Example — articulatory distance between IPA phones.
+"""Distances between IPA segments and between IPA strings.
 
 Run::
 
     python examples/01_phonetic_distance.py
 """
-from phonematcher.distance import phonetic_distance, is_vowel_phone
+from phonematcher import ipa_distance, phonetic_distance, segments
 
+for a, b in [("ʁ", "χ"), ("ʁ", "k"), ("e", "ɛ"), ("e", "o"), ("ɐ", "a"), ("t", "t͡ʃ")]:
+    print(f"{a} {b} {phonetic_distance(a, b):.3f}")
 
-def main() -> None:
-    pairs = [
-        ("b", "p"),   # same place, voicing only
-        ("p", "k"),   # both stops, different place
-        ("m", "n"),   # two nasals
-        ("ʃ", "s"),   # two sibilants
-        ("a", "k"),   # vowel vs consonant -> maximal
-    ]
-    print("phone-pair distances (0.0 = same, 1.0 = maximal):")
-    for a, b in pairs:
-        print(f"  {a!r} vs {b!r}: {phonetic_distance(a, b):.3f}")
-
-    print("\nvowel check:")
-    for ph in ("a", "i", "k", "ʃ"):
-        print(f"  is_vowel_phone({ph!r}) = {is_vowel_phone(ph)}")
-
-
-if __name__ == "__main__":
-    main()
+print(segments("ˈt͡ʃɐ̃w̃"))
+print(f"{ipa_distance('ˈpojʃ', 'ˈpojs'):.3f}")

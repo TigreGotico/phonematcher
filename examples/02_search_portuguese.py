@@ -1,40 +1,21 @@
-"""Example — sound-alike search over Portuguese phrases despite misspellings.
+"""Find words from readings of another variety.
+
+The index holds European Portuguese readings; the queries are Rio de Janeiro readings.
+This example needs orthography2ipa (``uv pip install orthography2ipa``).
 
 Run::
 
     python examples/02_search_portuguese.py
 """
-from phonematcher.clustering import PhoneticFuzzySearch, PT_MAPPING
+from orthography2ipa import transcribe
 
+from phonematcher import PhoneticFuzzySearch
 
-def main() -> None:
-    terms = [
-        "pão com queijo",
-        "coração batendo",
-        "cachorro corre",
-        "chocolate quente",
-        "peixe no mar",
-    ]
-    ffs = PhoneticFuzzySearch(PT_MAPPING)
-    for i, term in enumerate(terms):
-        ffs.add_term(term, i)
+search = PhoneticFuzzySearch()
+for word in ["pois", "retirada", "carro", "caro", "casa", "dia"]:
+    search.add_term(transcribe(word, "pt-PT"), word)
 
-    queries = [
-        "pao com keijo",
-        "corasao batendo",
-        "kashoro kore",
-        "shocolate kente",
-        "peishe no mar",
-    ]
-    print("Portuguese phonetic search (query -> best match, score):")
-    for q in queries:
-        results = ffs.search(q)
-        if results:
-            top = results[0]
-            print(f"  {q!r:24} -> {top.term!r} (score={top.score})")
-        else:
-            print(f"  {q!r:24} -> no match")
-
-
-if __name__ == "__main__":
-    main()
+for word in ["pois", "carro", "dia"]:
+    ipa = transcribe(word, "pt-BR-x-rj")
+    best = search.search(ipa)[0]
+    print(f"{word:6} {ipa:8} -> {best.id} ({best.score:.3f})")

@@ -1,145 +1,53 @@
-# Phonematcher
+# phonematcher
 
-Phonematcher is a Python library for phonetic fuzzy search and segment-to-segment distance computation. It finds words that sound like a query by analyzing International Phonetic Alphabet (IPA) features instead of comparing raw text.
+phonematcher measures how far apart two IPA sounds are, and finds terms that sound like a query. It works on IPA only. To get IPA from text, use a grapheme-to-IPA library such as [orthography2ipa](https://github.com/TigreGotico/orthography2ipa).
 
-The library uses distinctive feature theory to calculate the articulatory distance between sounds. For example, it recognizes that "p" and "b" are more similar than "p" and "k". It clusters similar sounds to improve search recall.
+Every distance comes from distinctive features. The feature table starts from PanPhon (Mortensen et al. 2016), takes the vowels from the IPA chart, and lists every other change with its source. [docs/features.md](docs/features.md) explains the table.
 
-## Features
+## Install
 
-* **Distinctive feature matrix**: maps IPA phones to 21 articulatory features (nasality, voicing, place of articulation, and more).
-* **Weighted phonetic distance**: calculates similarity based on linguistic importance. Major class features, such as "syllabic," carry more weight than fine-grained features, such as "strident."
-* **UPGMA clustering**: groups similar sounds into clusters, based on a configurable sensitivity threshold.
-* **Fuzzy phonetic index**: uses a "Phonex" algorithm to generate phonetic variants, including deletions, for high-recall indexing.
-* **Hybrid scoring**: combines phonetic candidate retrieval with Levenshtein edit-distance ranking.
-
-## Installation
-
-Install the required dependency, then install the library:
-
-```bash
-pip install rapidfuzz
-pip install -e .
+```
+uv pip install phonematcher
 ```
 
-## Usage
+phonematcher has no runtime dependencies.
 
-### Phonetic distance
-
-Compare two IPA symbols to see how linguistically similar they are:
+## Distance between sounds
 
 ```python
-from phonematcher.distance import phonetic_distance
+from phonematcher import phonetic_distance, ipa_distance, segments
 
-# Voiced vs. voiceless bilabial stops (very similar)
-print(phonetic_distance('b', 'p'))  # ~0.043
-
-# Bilabial vs. velar stops (less similar)
-print(phonetic_distance('p', 'k'))  # ~0.348
-
-# Vowel vs. consonant (maximal distance)
-print(phonetic_distance('a', 'k'))  # 1.0
+phonetic_distance("ʁ", "χ")       # 0.013: uvular fricatives that differ only in voice
+phonetic_distance("ʁ", "k")       # 0.118: a different manner and place
+segments("ˈt͡ʃɐ̃w̃")              # ['t͡ʃ', 'ɐ̃', 'w̃']
+ipa_distance("ˈpojʃ", "ˈpojs")   # 0.039: one near substitution
 ```
 
-### Phonetic fuzzy search
+`phonetic_distance` compares two segments, from 0 to 1. `ipa_distance` compares two IPA strings: an edit distance where a substitution costs the feature distance and an insertion or deletion costs 1.
 
-The `PhoneticFuzzySearch` class indexes terms by their phonetic clusters:
+## Search by sound
 
 ```python
-from phonematcher.clustering import PhoneticFuzzySearch, EN_MAPPING
+from orthography2ipa import transcribe
+from phonematcher import PhoneticFuzzySearch
 
-# Initialize with a grapheme-to-phoneme mapping
-ffs = PhoneticFuzzySearch(EN_MAPPING, cluster_sensitivity=0.5)
+search = PhoneticFuzzySearch()
+for word in ["pois", "retirada", "carro", "caro", "casa", "dia"]:
+    search.add_term(transcribe(word, "pt-PT"), word)
 
-# Add terms to the index (id, term)
-ffs.add_term('hello world', 0)
-ffs.add_term('greetings', 1)
-ffs.add_term('friendship', 2)
-
-# Search with typos or phonetic variations
-results = ffs.search('helo wrld')
-for match in results:
-    print(f"ID: {match.id}, Term: {match.term}, Score: {match.score}")
+query = transcribe("carro", "pt-BR-x-rj")   # 'ˈkaχu'
+best = search.search(query)[0]
+best.id, best.term, round(best.score, 3)   # ('carro', ('ˈkaʁu',), 0.013)
 ```
 
-## How it works
-
-### Feature vectorization
-
-Every phone resolves to a vector of boolean or null values. For example, the phone `c` (voiceless palatal stop) has these feature values:
-
-* **Consonantal**: `True`
-* **Voice**: `False`
-* **High**: `True`
-* **Back**: `False`
-
-### The search pipeline
-
-1. **Phoneticization**: the library expands a word into all possible IPA sequences, based on the mapping.
-2. **Clustering**: phones group into numeric cluster IDs. For example, `s`, `z`, and `ʃ` might fall into the same cluster.
-3. **Variant generation**: to handle misspellings, the indexer generates "deletes" — versions of the phonetic sequence with one or two sounds removed.
-4. **Retrieval**: the query converts to clusters and matches against the index.
-5. **Ranking**: the resulting candidates rank by the Levenshtein distance of the original orthographic strings.
-
-## Configuration
-
-Tune the `cluster_sensitivity` parameter (default `0.5`):
-
-* **Lower values**: create more specific clusters. Fewer matches, higher precision.
-* **Higher values**: create broader clusters. More matches, higher recall.
-
-## Understanding phonetic mappings
-
-Orthography (spelling) varies across languages, so the library uses grapheme-to-IPA mappings to translate written words into spoken phonetic vectors.
-
-Without a mapping, the library treats letters as arbitrary symbols. Mapping them to IPA (International Phonetic Alphabet) symbols lets the system use distinctive feature theory:
-
-* **Linguistic accuracy**: the engine knows that "p" and "b" are both bilabial stops that differ only in voicing.
-* **Weighted distance**: mappings let the algorithm compute distance based on articulatory features, such as nasality or place of articulation, instead of simple character replacement.
-* **Cluster precision**: a word converts into a sequence of cluster IDs. Accurate mappings ensure that words which sound similar (for example, "frend" and "friend") produce the same or highly similar cluster sequences, which increases search recall.
-
-A mapping is a Python dictionary. Its keys are graphemes (single letters or digraphs) and its values are lists of possible IPA realizations:
-
-```python
-# Example: mapping 'x' to its multiple sounds
-"x": ["ʃ", "ks", "z", "s"]
-```
-
-The `PhoneticFuzzySearch` class uses a breadth-first search (BFS) substitution traversal to expand a single word into all possible phonetic sequences. For example, a word containing "x" generates several phonetic variants, so the index can find a match regardless of how the user perceives the sound.
-
-### How to support a new language
-
-To add support for a new language, follow these steps:
-
-1. Create a dictionary that covers the phonology of the language. Inherit from `BASE_LATIN` to reuse the standard characters.
-
-```python
-MY_LANG_MAPPING = {
-    **BASE_LATIN,
-    "sh": ["ʃ"],  # digraph
-    "aa": ["aː"], # long vowel
-}
-```
-
-2. If a letter has multiple sounds (for example, "c" in English), include all of them in the list. The variant generator indexes every possibility, which produces a fuzzy phonetic match.
-3. Pass the custom mapping into the `PhoneticFuzzySearch` constructor.
-
-```python
-from phonematcher.clustering import PhoneticFuzzySearch
-
-ffs = PhoneticFuzzySearch(mapping=MY_LANG_MAPPING, cluster_sensitivity=0.4)
-```
-
-For a highly phonetic language (such as Spanish or Italian), keep `cluster_sensitivity` low (around 0.3). For a language with complex spelling-to-sound rules (such as English or French), a higher sensitivity (0.5-0.6) helps group divergent spellings into the same cluster.
+A term may have several readings: `search.add_term(["ˈpojʃ", "ˈpojs"], "pois")`.
 
 ## Documentation
 
-See the [docs](docs/quickstart.md) directory for a quickstart guide, the API reference, advanced usage recipes, and the distinctive-feature matrix.
+- [docs/quickstart.md](docs/quickstart.md): first steps.
+- [docs/features.md](docs/features.md): the feature table, its sources and the distance.
+- [docs/api.md](docs/api.md): every public name.
 
-## Related projects
+## Licence
 
-- [orthography2ipa](https://github.com/TigreGotico/orthography2ipa) — grapheme-to-IPA phonemization engine.
-- [silabificador](https://github.com/TigreGotico/silabificador) — syllabification library.
-
-## License
-
-This project is adapted from `pyphone` and `fast_fuzzy_search` by [lingz](https://github.com/lingz), and is released under the MIT License.
+MIT. The feature table derives from PanPhon (MIT) and from Hayes (2009) through the CSV conversion by Kyle Gorman (Apache-2.0).
