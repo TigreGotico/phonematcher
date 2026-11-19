@@ -92,34 +92,48 @@ def vectorize_phones(segment: str) -> Vector:
                 vec = _apply_if(_DIACRITICS[marker, "post"], vec, segment)
             return vec
     if _TIES[0] in untied:
-        return compose_tie([vectorize_phones(part) for part in untied.split(_TIES[0])])
+        try:
+            return compose_tie([vectorize_phones(part) for part in untied.split(_TIES[0])])
+        except ValueError:
+            pass
     raise ValueError(f"Unrecognized phone {segment!r}")
 
 
-_NAS, _SON, _CONT, _DELREL = (FEATURES.index(f) for f in ("nas", "son", "cont", "delrel"))
+_NAS, _SON, _CONT, _DELREL, _SG, _CG = (
+    FEATURES.index(f) for f in ("nas", "son", "cont", "delrel", "sg", "cg"))
 #: Articulators: in a double articulation each one the parts use is used.
 _ARTICULATORS = {FEATURES.index(f) for f in ("lab", "cor", "hi", "back")}
 
 
 def _tie(first: Vector, second: Vector) -> Vector:
+    def stop(v: Vector) -> bool:
+        return v[_SON] is False and v[_CONT] is False
+
+    def nasal(v: Vector) -> bool:
+        return v[_NAS] is True and v[_CONT] is False
+
     out = list(second)
-    if first[_NAS] is True and second[_SON] is False:
+    if nasal(first) and second[_SON] is False:
         out[_NAS] = True  # prenasalized, as ᵐb
-    elif first[_SON] is False and first[_CONT] is False and second[_SON] is False \
-            and second[_CONT] is True:
+    elif stop(first) and second[_SON] is False and second[_CONT] is True:
         out[_CONT], out[_DELREL] = False, True  # affricate: the fricative with a stop onset
-    else:  # double articulation, as k͡p
-        out = [x if x == y else y if x is None else x if y is None
+        for i in (_SG, _CG):
+            out[i] = True if True in (first[i], second[i]) else second[i]
+    elif (stop(first) and stop(second)) or (nasal(first) and nasal(second)):
+        out = [x if x == y else y if x is None else x if y is None  # double, as k͡p
                else True if i in _ARTICULATORS else None
                for i, (x, y) in enumerate(zip(first, second))]
+    else:
+        raise ValueError("a tie of these parts has no reading")
     return tuple(out)
 
 
 def compose_tie(parts: List[Vector]) -> Vector:
     """The vector of tied segments, from the vectors of the parts, right to left: a nasal before
-    an obstruent prenasalizes it, a stop before a fricative makes an affricate, and other parts
-    make a double articulation: a feature one part leaves at 0 takes the other's value, an articulator
-    either part uses is +, and other features the parts set apart are 0."""
+    an obstruent prenasalizes it, a stop before a fricative makes an affricate with the glottal
+    features of both, and two stops or two nasals make a double articulation: a feature one part
+    leaves at 0 takes the other's value, an articulator either part uses is +, and other features
+    the parts set apart are 0. Other ties, such as two vowels, raise ``ValueError``."""
     vec = parts[-1]
     for part in reversed(parts[:-1]):
         vec = _tie(part, vec)

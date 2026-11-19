@@ -373,7 +373,8 @@ def test_every_listed_tie_is_one_the_rule_rebuilds():
     wrong = [s for s in TIED_BASES
              if compose_tie([vectorize_phones(p) for p in s.split("͡")]) != phone_features[s]]
     # PanPhon's rows for these leave hi and lo at 0, although the fricative's are -, and make
-    # ɟ͡ʝ coronal, although ʝ is not; the rule follows the fricative.
+    # ɟ͡ʝ coronal and distributed with front 0, although ʝ is none of these; the rule follows the
+    # fricative.
     assert wrong == ["b͡β", "p͡ɸ", "ɖ͡ʐ", "ɟ͡ʝ", "ʈ͡ʂ"]
 
 
@@ -389,3 +390,15 @@ def test_a_nasal_tied_to_an_affricate_prenasalizes_it():
 
 def test_breathy_release_reads_as_breathy_voice():
     assert vectorize_phones("bʱ") == vectorize_phones("b̤") == vectorize_phones("bʰ")
+
+
+@pytest.mark.parametrize("tied", ["a͡i", "i͡a", "l͡j", "m͡l", "s͡t"])
+def test_a_tie_the_rule_does_not_cover_raises(tied):
+    """A vowel sequence is two segments, and a tie of two sonorants or a fricative before a stop
+    has no reading here: it raises, it does not blend the parts."""
+    with pytest.raises(ValueError):
+        vectorize_phones(tied)
+
+
+def test_an_affricate_keeps_the_glottal_features_of_its_stop():
+    assert feature("tʼ͡s", "cg") is True and feature("tʰ͡s", "sg") is True

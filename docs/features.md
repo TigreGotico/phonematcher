@@ -156,10 +156,12 @@ PanPhon lists 23 tied pairs, such as `t͡ʃ`, `k͡p` and `ɡ͡b`, each with its 
 | Parts | Result | Example |
 |---|---|---|
 | a nasal, then an obstruent | the obstruent with `nas` +, as `ᵐb` | `m͡b` equals `ᵐb` |
-| a stop, then a fricative | the fricative with `cont` −, `delrel` + | `t̠͡ʃ` equals `t͡ʃ` |
-| any other two | a double articulation: a feature one part leaves at 0 takes the other's value, an articulator (`lab`, `cor`, `hi`, `back`) either part uses is +, and other features the parts set apart are 0 | `ŋ͡m͡ɡ͡b` equals `ᵑɡ͡b` |
+| a stop, then a fricative | the fricative with `cont` −, `delrel` +, and `sg` or `cg` + if either part has it | `t̠͡ʃ` equals `t͡ʃ` |
+| two stops or two nasals | a double articulation: a feature one part leaves at 0 takes the other's value, an articulator (`lab`, `cor`, `hi`, `back`) either part uses is +, and other features the parts set apart are 0 | `ŋ͡m͡ɡ͡b` equals `ᵑɡ͡b` |
 
-The rule gives the listed vector for 18 of PanPhon's 23 pairs. For `b͡β`, `p͡ɸ`, `ɖ͡ʐ` and `ʈ͡ʂ`, PanPhon sets `hi` and `lo` to 0, but its fricatives have −. For `ɟ͡ʝ`, PanPhon sets `cor` +, but `ʝ` has `cor` −. The listed rows of these five stay as PanPhon has them.
+The rule gives the listed vector for 18 of PanPhon's 23 pairs. For `b͡β`, `p͡ɸ`, `ɖ͡ʐ` and `ʈ͡ʂ`, PanPhon sets `hi` and `lo` to 0, but its fricatives have −. For `ɟ͡ʝ`, PanPhon sets `cor` + and `distr` +, and `front` 0, but `ʝ` has `cor` −, `distr` 0 and `front` +. The listed rows of these five stay as PanPhon has them.
+
+Other ties raise `ValueError`. Two vowels are two segments: `a͡i` is not read, because one vector cannot keep the order of `a` and `i`. Two sonorants, such as `l͡j`, and a fricative before a stop have no reading here.
 
 ## Distance
 
