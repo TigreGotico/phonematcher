@@ -1,8 +1,8 @@
 # The feature table
 
-Each IPA segment has a vector of 32 distinctive features. A value is `True` (+), `False` (−) or `None` (0, the feature does not apply). The table is in `phonematcher/data/features.json`. The script `scripts/build_features.py` builds it from PanPhon, Hayes (2009), the IPA vowel chart and a file of cited changes.
+Each IPA segment has a vector of 35 distinctive features. A value is `True` (+), `False` (−) or `None` (0, the feature does not apply). The table is in `phonematcher/data/features.json`. The script `scripts/build_features.py` builds it from PanPhon, Hayes (2009), the IPA vowel chart and a file of cited changes.
 
-## The 32 features, in order
+## The 35 features, in order
 
 | # | Feature | Meaning | Weight | Source |
 |---|---|---|---|---|
@@ -33,6 +33,9 @@ Each IPA segment has a vector of 32 distinctive features. A value is `True` (+),
 | 24 | `trill` | trill: repeated contacts, as in `r` and `ʀ` | 0.25 | Hayes |
 | 25 | `atr` | advanced tongue root: + for `◌̘`, − for `◌̙`, otherwise 0 | 0.25 | Lindau (1978) |
 | 26–31 | `h1` … `h6` | vowel height steps: + for each chart row the vowel lies below close, otherwise 0 | 0.125 each | the chart |
+| 32 | `palatalized` | a secondary raising of the tongue body toward the palate: `◌ʲ`, `◌ᶣ` | 0.125 | Sagey (1986) |
+| 33 | `velarized` | a secondary raising of the tongue body toward the velum: `◌ˠ`, `◌̴` | 0.125 | Sagey (1986) |
+| 34 | `labialized` | a secondary rounding of the lips: `◌ʷ`, `◌ᶣ` | 0.125 | Sagey (1986) |
 
 `front` and `back` together give three positions. A front vowel is [+front, −back]. A central vowel is [−front, −back]. A back vowel is [−front, +back].
 
@@ -87,11 +90,17 @@ PanPhon gives 6 of the 28 vowels `delrel` 0 and the rest `delrel` −. A vowel h
 | `◌̝` raised, `◌̞` lowered | no change | one chart row up or down | IPA Handbook (1999) |
 | `◌̘` advanced tongue root | `tense` + | `atr` +, `tense` kept | Lindau (1978), "Vowel features", *Language* 54, who names the feature [expanded] |
 | `◌̙` retracted tongue root | `tense` − | `atr` −, `tense` kept | Lindau (1978) |
-| `◌ˤ` pharyngealized | `lo` +, `back` + | also `atr` − and `back` + on every base | McCarthy (1994), "The phonetics and phonology of Semitic pharyngeals", *Papers in Laboratory Phonology III* |
+| `◌ʲ` palatalized | `hi` +, `back` − | `palatalized` + | Sagey (1986); Clements and Hume (1995) |
+| `◌ᶣ` labio-palatalized | `hi` +, `back` −, `round` + | `palatalized` +, `labialized` + | Sagey (1986) |
+| `◌ʷ` labialized | `hi` +, `back` +, `round` + | `labialized` + | Sagey (1986) |
+| `◌ˠ` `◌̴` velarized | `hi` +, `back` + | `velarized` + | Sagey (1986) |
+| `◌ˤ` pharyngealized | `lo` +, `back` + | `atr` − | McCarthy (1994) |
 
-Pharyngealization retracts the tongue root, so it sets `atr` −. Thus `kˤ` differs from `k`, although `k` is already [+back].
+PanPhon writes a secondary articulation with the features of primary place. The mark then overwrites the place of its base: `kʲ`, `cʲ` and `qʲ` get one vector, and `ħʲ` equals `ħ`. In feature geometry a secondary articulation is a feature of its own, beside the primary place (Sagey 1986, *The Representation of Features and Relations in Non-linear Phonology*, MIT dissertation; Clements and Hume 1995, "The internal organization of speech sounds", in *The Handbook of Phonological Theory*). Here each mark sets its own feature, and the base keeps its place. Thus `kʲ` has the place of `k`, and differs from `k` only in `palatalized`.
 
-The tongue body cannot be high and low at once (Chomsky and Halle 1968, *The Sound Pattern of English*). Some marks add [+high] (`◌ʷ ◌ʲ ◌ᶣ ◌ˠ ◌̴ ◌˞`) or [+low] (`◌ˤ`). When the base has the other value, the base keeps it, because the mark is a secondary articulation. A pharyngealized velar is still [+high], and a labialized pharyngeal is still [+low]. When the base has neither, the later mark wins. The build stops if a segment is [+high, +low], and `vectorize_phones` applies the same rule.
+Pharyngealization is a retraction of the tongue root (McCarthy 1994, "The phonetics and phonology of Semitic pharyngeals", in Keating (ed.), *Phonological Structure and Phonetic Form: Papers in Laboratory Phonology III*, pp. 191–233). McCarthy writes it as a Pharyngeal place feature. This table writes it as `atr` −, so `kˤ`, `tˤ` and `sˤ` keep their place and differ from `k`, `t` and `s` in the tongue root.
+
+The tongue body cannot be high and low at once (Chomsky and Halle 1968, *The Sound Pattern of English*). One mark still adds [+high]: rhoticity `◌˞`. On a [+low] vowel it keeps the base's [+low], and `hi` stays −. No segment is [+high, +low]. The build stops if one is.
 
 ## Letters PanPhon does not list
 
@@ -115,9 +124,11 @@ Every IPA letter has its own vector, and a test checks this. To add a change, ad
 
 ## Diacritics
 
-PanPhon lists many segments with diacritics, such as `ɐ̃` and `ɤˤ`. The build gives each one the vector of its base letter, with the chart values and the changes. Then it adds each feature where PanPhon's row for the segment differs from PanPhon's row for the base. Thus `ɐ̃` is the chart's `ɐ` with `nas` +.
+`vectorize_phones` reads a segment that the table does not list as its longest listed base plus the diacritics after it. Each diacritic sets the features of its rule, in order, if the base meets the rule's conditions. For example, `ɐ̥` is `ɐ` with `voi` −.
 
-`vectorize_phones` reads a segment that the table does not list as its longest listed base plus the diacritics after it. Each diacritic sets the features of its rule, if the base meets the rule's conditions. For example, `ɐ̥` is `ɐ` with `voi` −. The raised and lowered marks move a vowel only in segments that the table lists.
+PanPhon lists 6,367 segments, many with diacritics, such as `ɐ̃` and `kʷʰ`. The build reads each listed segment in the same way: its longest listed base, then the rules of its marks. A listed stack thus has the same vector as an unlisted one, and a test checks this for every listed stack. A mark that has no rule takes the difference that PanPhon records between the segment and its base letter.
+
+The raised and lowered marks move a vowel only in segments that the table lists.
 
 Some marks come before their base. `ⁿ`, `ᵐ` and `ᵑ` before a stop make a prenasalized stop, as in `ⁿd`. `ʰ` before a stop makes a preaspirated stop, as in `ʰt`. Each takes the rule of the same mark after a base.
 
@@ -135,7 +146,7 @@ A tie bar joins two symbols into one segment. `t͡ʃ` and `t͜ʃ` are the same a
 
 The total is divided by the sum of all weights, so the result is from 0 to 1. A segment that cannot be read is at distance 1 from all other segments.
 
-The weights of features 0 to 21 are PanPhon's. Two chart vowels are always nearer to each other than a vowel is to a stop or a fricative. The weights are not tuned to one language. A variant pair can thus be farther apart than a contrast: `ʁ`/`ʀ` is 0.167 but `ʁ`/`k` is 0.125, because a trill and a fricative differ in manner.
+The weights of features 0 to 21 are PanPhon's. Two chart vowels are always nearer to each other than a vowel is to a stop or a fricative. The weights are not tuned to one language. A variant pair can thus be farther apart than a contrast: `ʁ`/`ʀ` is 0.160 but `ʁ`/`k` is 0.120, because a trill and a fricative differ in manner.
 
 ## Tone
 

@@ -33,7 +33,10 @@ HEIGHTS = ("close", "near-close", "close-mid", "mid", "open-mid", "near-open", "
 #: [h1] ... [h6]: a vowel is + for each step its height lies below close, so the number of
 #: differing step features equals the number of chart rows between two vowels.
 STEPS = tuple(f"h{k}" for k in range(1, len(HEIGHTS)))
-ADDED = {"front": 0.25, "tap": 0.25, "trill": 0.25, "atr": 0.25, **{s: 0.125 for s in STEPS}}
+#: Secondary articulations, each a feature of its own (Sagey 1986).
+SECONDARY = ("palatalized", "velarized", "labialized")
+ADDED = {"front": 0.25, "tap": 0.25, "trill": 0.25, "atr": 0.25, **{s: 0.125 for s in STEPS},
+         **{s: 0.125 for s in SECONDARY}}
 RAISED, LOWERED = "\u031d", "\u031e"
 
 
@@ -74,17 +77,6 @@ def base_letter(segment: str) -> str:
     return letters[0] if len(letters) == 1 else ""
 
 
-#: Marks whose PanPhon rule adds [+high] or [+low] to the tongue body.
-RAISING = set("ʷʲᶣˠ\u0334˞")
-
-
-def _later_mark(segment: str) -> str:
-    """With no height on the base, the later of a raising and a lowering mark wins; returns the
-    feature to set to -."""
-    last_raise = max((i for i, ch in enumerate(segment) if ch in RAISING), default=-1)
-    return "lo" if last_raise > segment.rfind("ˤ") else "hi"
-
-
 def main() -> None:
     with open(DATA / "feature_weights.csv", encoding="utf-8") as fh:
         rows = list(csv.reader(fh))
@@ -116,7 +108,7 @@ def main() -> None:
         h = hayes.get(letter)
         vec.update({f: (h[HAYES_NAMES[f]] if h else "0" if f == "front" else "-")
                     for f in ("front", "tap", "trill")})
-        vec.update({"atr": "0", **{s: "0" for s in STEPS}})
+        vec.update({"atr": "0", **{s: "0" for s in STEPS}, **{s: "-" for s in SECONDARY}})
         if letter in chart:
             vec.update({f: v for f, v in chart[letter].items() if f != "index"})
         elif h and h["syllabic"] == "+" and vec["syl"] == "+":
@@ -132,26 +124,8 @@ def main() -> None:
                 vec[o["feature"]] = o["value"]
         return vec
 
-    # A segment with diacritics is its base letter plus the difference PanPhon records between
-    # the two, so a diacritic's effect survives the Hayes values of its base.
-    phones, bases = {}, {}
-    for seg, row in panphon.items():
-        base = base_letter(seg)
-        if base not in panphon:
-            vec = bare(seg)
-        else:
-            vec = bare(base)
-            vec.update({f: row[f] for f in panphon_features if row[f] != panphon[base][f]})
-            bases[seg] = bare(base)
-            if base in chart and vec["syl"] == "+":
-                # Raised and lowered move a vowel one chart row per mark.
-                shift = seg.count(LOWERED) - seg.count(RAISED)
-                if shift:
-                    vec.update(height_values(chart[base]["index"] + shift))
-        phones[seg] = vec
-
     # A diacritic change replaces PanPhon's rule for that mark: the features PanPhon's rule set
-    # return to the base's values, then the change's own values apply.
+    # stay as the base has them, then the change's own values apply.
     diacritics = yaml.safe_load((DATA / "diacritic_definitions.yml").read_text(encoding="utf-8"))
     for change in changes["diacritics"]:
         marker = unicodedata.normalize("NFD", change["marker"])
@@ -159,16 +133,51 @@ def main() -> None:
             if unicodedata.normalize("NFD", d["marker"]) == marker:
                 d["content"] = {**{f: v for f, v in d.get("content", {}).items()
                                    if f not in change.get("restore", [])}, **change["content"]}
-        for seg, vec in phones.items():
-            if marker in seg and (vec["syl"] == "+" or not change.get("vowels_only")):
-                vec.update({f: bases.get(seg, vec)[f] for f in change.get("restore", [])})
-                vec.update(change["content"])
-    # [+high, +low] is impossible (Chomsky and Halle 1968). When a secondary articulation adds
-    # one to a base that has the other, the base's primary articulation keeps its value.
-    for seg, vec in phones.items():
-        if vec["hi"] == vec["lo"] == "+":
-            base = bases.get(seg, vec)
-            vec["lo" if base["hi"] == "+" else "hi" if base["lo"] == "+" else _later_mark(seg)] = "-"
+    rules = {unicodedata.normalize("NFD", d["marker"]): d
+             for d in diacritics["diacritics"] if d.get("position", "post") == "post"}
+
+    def apply_rules(vec: dict, marks: str) -> dict:
+        """The marks' rules in order, as vectorize_phones applies them; None if one does not
+        apply. [+high, +low] is impossible (Chomsky and Halle 1968): a mark that adds one keeps
+        the other as the base has it."""
+        vec = dict(vec)
+        for ch in marks:
+            rule = rules[ch]
+            if rule.get("conditions") and not any(
+                    all(vec[f] == v for f, v in cond.items()) for cond in rule["conditions"]):
+                return None
+            before = dict(vec)
+            vec.update(rule.get("content", {}))
+            if vec["hi"] == vec["lo"] == "+":
+                vec["lo" if before["hi"] == "+" else "hi"] = "-"
+        return vec
+
+    # A segment with diacritics is its base letter with each mark's rule applied in order, so a
+    # listed stack equals the same stack read by vectorize_phones. A mark without a rule takes
+    # the difference PanPhon records between the segment and its base.
+    # The base is the longest listed prefix, as in vectorize_phones; shorter segments are built
+    # first, so the base's own vector is final when a longer segment uses it.
+    phones = {}
+    for seg in sorted(panphon, key=len):
+        row = panphon[seg]
+        vec = None
+        for end in range(len(seg) - 1, 0, -1):
+            prefix, marks = seg[:end], seg[end:]
+            if prefix in phones and all(ch in rules for ch in marks):
+                vec = apply_rules(phones[prefix], marks)
+                break
+        base = base_letter(seg)
+        if vec is None and base in panphon and base != seg:
+            vec = bare(base)
+            vec.update({f: row[f] for f in panphon_features if row[f] != panphon[base][f]})
+        if vec is None:
+            vec = bare(seg)
+        if base in chart and vec["syl"] == "+":
+            # Raised and lowered move a vowel one chart row per mark.
+            shift = seg.count(LOWERED) - seg.count(RAISED)
+            if shift:
+                vec.update(height_values(chart[base]["index"] + shift))
+        phones[seg] = vec
     both = sorted(s for s, v in phones.items() if v["hi"] == "+" and v["lo"] == "+")
     if both:
         raise SystemExit(f"[+high, +low] in {len(both)} segments: {both}")

@@ -57,15 +57,91 @@
       "reason": "PanPhon writes RTR as [-tense]. RTR sets [-atr] and leaves [tense] as the base has it."
     },
     {
+      "marker": "ʲ",
+      "name": "Palatalized",
+      "vowels_only": false,
+      "restore": [
+        "hi",
+        "back"
+      ],
+      "content": {
+        "palatalized": "+"
+      },
+      "source": "Sagey (1986), The Representation of Features and Relations in Non-linear Phonology, MIT dissertation; Clements and Hume (1995), 'The internal organization of speech sounds', in Goldsmith (ed.), The Handbook of Phonological Theory: a secondary articulation is a feature of its own, separate from the primary place",
+      "reason": "PanPhon writes the mark with the primary place features ['hi', 'back'], so it overwrote the base's place: kʲ, cʲ and qʲ came out alike, and ħʲ equalled ħ. The mark sets its own feature and leaves the primary place as the base has it."
+    },
+    {
+      "marker": "ᶣ",
+      "name": "Labio-palatalized",
+      "vowels_only": false,
+      "restore": [
+        "hi",
+        "back",
+        "round"
+      ],
+      "content": {
+        "palatalized": "+",
+        "labialized": "+"
+      },
+      "source": "Sagey (1986), The Representation of Features and Relations in Non-linear Phonology, MIT dissertation; Clements and Hume (1995), 'The internal organization of speech sounds', in Goldsmith (ed.), The Handbook of Phonological Theory: a secondary articulation is a feature of its own, separate from the primary place",
+      "reason": "PanPhon writes the mark with the primary place features ['hi', 'back', 'round'], so it overwrote the base's place: kʲ, cʲ and qʲ came out alike, and ħʲ equalled ħ. The mark sets its own feature and leaves the primary place as the base has it."
+    },
+    {
+      "marker": "ʷ",
+      "name": "Labialized",
+      "vowels_only": false,
+      "restore": [
+        "hi",
+        "back",
+        "round"
+      ],
+      "content": {
+        "labialized": "+"
+      },
+      "source": "Sagey (1986), The Representation of Features and Relations in Non-linear Phonology, MIT dissertation; Clements and Hume (1995), 'The internal organization of speech sounds', in Goldsmith (ed.), The Handbook of Phonological Theory: a secondary articulation is a feature of its own, separate from the primary place",
+      "reason": "PanPhon writes the mark with the primary place features ['hi', 'back', 'round'], so it overwrote the base's place: kʲ, cʲ and qʲ came out alike, and ħʲ equalled ħ. The mark sets its own feature and leaves the primary place as the base has it."
+    },
+    {
+      "marker": "ˠ",
+      "name": "Velarized",
+      "vowels_only": false,
+      "restore": [
+        "hi",
+        "back"
+      ],
+      "content": {
+        "velarized": "+"
+      },
+      "source": "Sagey (1986), The Representation of Features and Relations in Non-linear Phonology, MIT dissertation; Clements and Hume (1995), 'The internal organization of speech sounds', in Goldsmith (ed.), The Handbook of Phonological Theory: a secondary articulation is a feature of its own, separate from the primary place",
+      "reason": "PanPhon writes the mark with the primary place features ['hi', 'back'], so it overwrote the base's place: kʲ, cʲ and qʲ came out alike, and ħʲ equalled ħ. The mark sets its own feature and leaves the primary place as the base has it."
+    },
+    {
+      "marker": "̴",
+      "name": "Velarized or pharyngealized",
+      "vowels_only": false,
+      "restore": [
+        "hi",
+        "back"
+      ],
+      "content": {
+        "velarized": "+"
+      },
+      "source": "Sagey (1986), The Representation of Features and Relations in Non-linear Phonology, MIT dissertation; Clements and Hume (1995), 'The internal organization of speech sounds', in Goldsmith (ed.), The Handbook of Phonological Theory: a secondary articulation is a feature of its own, separate from the primary place",
+      "reason": "PanPhon writes the mark with the primary place features ['hi', 'back'], so it overwrote the base's place: kʲ, cʲ and qʲ came out alike, and ħʲ equalled ħ. The mark sets its own feature and leaves the primary place as the base has it."
+    },
+    {
       "marker": "ˤ",
       "name": "Pharyngealized",
       "vowels_only": false,
+      "restore": [
+        "lo",
+        "back"
+      ],
       "content": {
-        "atr": "-",
-        "back": "+"
+        "atr": "-"
       },
-      "source": "McCarthy (1994), 'The phonetics and phonology of Semitic pharyngeals', in Keating (ed.), Papers in Laboratory Phonology III: pharyngealization is a retraction of the tongue root",
-      "reason": "PanPhon's rule gives [+low, +back], but a high base keeps [+high], so [+low] cannot mark the retraction and kˤ equalled k. Pharyngealization sets [-atr] and [+back] on every base."
+      "source": "McCarthy (1994), 'The phonetics and phonology of Semitic pharyngeals', in Keating (ed.), Phonological Structure and Phonetic Form: Papers in Laboratory Phonology III, Cambridge University Press, pp. 191-233. McCarthy writes pharyngealization as a Pharyngeal place feature; this table writes it as [-atr], its retracted tongue root",
+      "reason": "PanPhon writes the mark as [+low, +back], which overwrote the base's place. Pharyngealization sets [-atr] and leaves the primary place as the base has it."
     }
   ],
   "segments": [

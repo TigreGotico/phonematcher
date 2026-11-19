@@ -134,10 +134,11 @@ def test_near_open_vowels_are_low():
     assert phonetic_distance("ɐ", "a") < phonetic_distance("ɐ", "e")
 
 
-def test_a_listed_diacritic_keeps_its_effect_on_a_hayes_vowel():
-    """PanPhon's rule for ◌ˤ adds [+low, +back]; the Hayes vowel values must not erase it."""
-    assert feature("ɤˤ", "lo") is True and feature("ɤ", "lo") is False
-    assert vectorize_phones("ɤˤ") != vectorize_phones("ɤ")
+def test_a_listed_diacritic_keeps_its_effect_on_a_chart_vowel():
+    """A listed segment keeps its mark: pharyngealized [ɤˤ] has a retracted root, nasal [ɤ̃] is
+    nasal, and both differ from [ɤ]."""
+    assert feature("ɤˤ", "atr") is False and feature("ɤ̃", "nas") is True
+    assert vectorize_phones("ɤˤ") != vectorize_phones("ɤ") != vectorize_phones("ɤ̃")
 
 
 def test_tongue_root_is_its_own_feature():
@@ -221,7 +222,7 @@ def test_pharyngealization_keeps_a_high_base_high(segment, base):
     """A secondary articulation does not undo the primary one: a pharyngealized velar is still a
     velar, and a pharyngealized [i] is still close."""
     assert feature(segment, "hi") is True and feature(segment, "lo") is False
-    assert feature(segment, "back") is True
+    assert feature(segment, "back") is feature(base, "back")
     assert vectorize_phones(segment) != vectorize_phones(base)
 
 
@@ -232,3 +233,56 @@ def test_raising_marks_keep_a_low_base_low(segment):
 
 def test_implosives_stay_apart_when_pharyngealized():
     assert vectorize_phones("ʛˤ") != vectorize_phones("ɠˤ")
+
+
+@pytest.mark.parametrize("segment, base", [
+    ("ħʲ", "ħ"), ("ʕʲ", "ʕ"), ("aˠ", "a"), ("æˠ", "æ"), ("ɐˠ", "ɐ"),
+])
+def test_a_secondary_mark_changes_its_base(segment, base):
+    """A palatalized or velarized sound differs from its plain base, even when the base's height
+    blocks the mark's [+high]: the mark still moves the tongue body front or back."""
+    assert vectorize_phones(segment) != vectorize_phones(base)
+
+
+@pytest.mark.parametrize("a, b", [("ɡˤ", "ɟˤ"), ("ɠˤ", "ʄˤ"), ("ɘˤ", "ɤˤ"), ("ʉˤ", "uˤ")])
+def test_pharyngealization_keeps_the_base_column(a, b):
+    """ˤ retracts the root; it does not turn a palatal into a velar or a central vowel into a back
+    one."""
+    assert vectorize_phones(a) != vectorize_phones(b)
+
+
+def test_a_listed_stack_equals_the_same_stack_read_by_the_rules():
+    """A sound has one vector whether the table lists its exact stack or vectorize_phones builds
+    it from a shorter base. Raised and lowered marks move a vowel only in listed stacks."""
+    from phonematcher import features as f
+    checked = 0
+    for seg, listed in phone_features.items():
+        for end in range(len(seg) - 1, 0, -1):
+            base, marks = seg[:end], seg[end:]
+            if base in phone_features and all((m, "post") in f._DIACRITICS for m in marks):
+                if {"\u031d", "\u031e"} & set(marks):
+                    break
+                try:
+                    vec = phone_features[base]
+                    for m in marks:
+                        vec = f._apply_if(f._DIACRITICS[m, "post"], vec, seg)
+                except ValueError:
+                    break
+                checked += 1
+                assert vec == listed, seg
+                break
+    assert checked > 5000
+
+
+@pytest.mark.parametrize("a, b", [("kʲ", "cʲ"), ("kʲ", "qʲ"), ("kʷ", "qʷ"), ("ɡʲ", "ɟ"), ("ŋʲ", "ɲ")])
+def test_a_secondary_mark_keeps_the_primary_place(a, b):
+    """Sagey (1986): a secondary articulation does not replace the primary one, so a palatalized
+    velar is not a palatal and a labialized velar is not a labialized uvular."""
+    assert vectorize_phones(a) != vectorize_phones(b)
+
+
+@pytest.mark.parametrize("segment, base", [("kʲ", "k"), ("qʷ", "q"), ("ħʲ", "ħ"), ("sˠ", "s"), ("tˤ", "t")])
+def test_a_secondary_mark_leaves_the_primary_place_as_it_is(segment, base):
+    for f in ("hi", "lo", "back", "front", "ant", "cor"):
+        assert feature(segment, f) is feature(base, f), f
+
