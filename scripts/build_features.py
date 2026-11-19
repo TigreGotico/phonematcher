@@ -91,8 +91,10 @@ def main() -> None:
 
     with open(DATA / "ipa_all.csv", encoding="utf-8") as fh:
         # vectorize_phones reads ɫ as l̴, built by the rules, so PanPhon's ɫ rows are not taken.
+        # Tone letters are tones, read by phonematcher.tone, not phones.
         panphon = {unicodedata.normalize("NFD", row["ipa"]): {f: row[f] for f in panphon_features}
-                   for row in csv.DictReader(fh) if "ɫ" not in row["ipa"]}
+                   for row in csv.DictReader(fh)
+                   if "ɫ" not in row["ipa"] and not set(row["ipa"]) & set("˩˨˧˦˥")}
     n_in = len(panphon)
 
     changes = json.loads((HERE / "overrides.json").read_text(encoding="utf-8"))

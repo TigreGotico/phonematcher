@@ -20,6 +20,7 @@ from typing import Dict, Hashable, Iterable, List, Sequence, Set, Tuple, Union
 from phonematcher.distance import edit_distance, segments
 from phonematcher.features import phone_features, phonetic_distance
 from phonematcher.phonex import phonex
+from phonematcher.tone import is_tone
 
 #: A search result: the term's id, its readings, and its edit distance to the query.
 Match = namedtuple("Match", ["id", "term", "score"])
@@ -90,7 +91,7 @@ class PhoneticFuzzySearch:
         for seg in segments(ipa):
             if seg == " ":
                 words.append([])
-            else:
+            elif not is_tone(seg):
                 words[-1].append(seg)
         return [w for w in words if w]
 
