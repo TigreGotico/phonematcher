@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.2.0a1](https://github.com/TigreGotico/phonematcher/tree/0.2.0a1) (2026-11-19)
+
+[Full Changelog](https://github.com/TigreGotico/phonematcher/compare/0.1.0a1...0.2.0a1)
+
+**Merged pull requests:**
+
+- feat: read unlisted tied segments by rule, and breathy release [\#12](https://github.com/TigreGotico/phonematcher/pull/12) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
+
 ## [0.1.0a1](https://github.com/TigreGotico/phonematcher/tree/0.1.0a1) (2026-11-19)
 
 [Full Changelog](https://github.com/TigreGotico/phonematcher/compare/0.0.0a2...0.1.0a1)
