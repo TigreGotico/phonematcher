@@ -95,12 +95,15 @@ PanPhon gives 6 of the 28 vowels `delrel` 0 and the rest `delrel` −. A vowel h
 | `◌ʷ` labialized | `hi` +, `back` +, `round` + | `labialized` + | Sagey (1986) |
 | `◌ˠ` `◌̴` velarized | `hi` +, `back` + | `velarized` + | Sagey (1986) |
 | `◌ˤ` pharyngealized | `lo` +, `back` + | `atr` − | McCarthy (1994) |
+| `◌˞` rhoticity | `hi` +, `round` +, `ant` − | `ant` − only | IPA Handbook (1999); Ladefoged and Maddieson (1996) |
 
-PanPhon writes a secondary articulation with the features of primary place. The mark then overwrites the place of its base: `kʲ`, `cʲ` and `qʲ` get one vector, and `ħʲ` equals `ħ`. In feature geometry a secondary articulation is a feature of its own, beside the primary place (Sagey 1986, *The Representation of Features and Relations in Non-linear Phonology*, MIT dissertation; Clements and Hume 1995, "The internal organization of speech sounds", in *The Handbook of Phonological Theory*). Here each mark sets its own feature, and the base keeps its place. Thus `kʲ` has the place of `k`, and differs from `k` only in `palatalized`.
+PanPhon writes a secondary articulation with the features of primary place. The mark then overwrites the place of its base: in PanPhon, `kʲ` and `qʲ` share a vector. In feature geometry a secondary articulation is a feature of its own, beside the primary place (Sagey 1986, *The Representation of Features and Relations in Non-linear Phonology*, MIT dissertation; Clements and Hume 1995, "The internal organization of speech sounds", in *The Handbook of Phonological Theory*). Here each mark sets its own feature, and the base keeps its place. The names `palatalized`, `velarized` and `labialized` belong to this table. Neither work uses them. Thus `kʲ` has the place of `k`, and differs from `k` only in `palatalized`.
 
-Pharyngealization is a retraction of the tongue root (McCarthy 1994, "The phonetics and phonology of Semitic pharyngeals", in Keating (ed.), *Phonological Structure and Phonetic Form: Papers in Laboratory Phonology III*, pp. 191–233). McCarthy writes it as a Pharyngeal place feature. This table writes it as `atr` −, so `kˤ`, `tˤ` and `sˤ` keep their place and differ from `k`, `t` and `s` in the tongue root.
+Pharyngealization is a retraction of the tongue root (McCarthy 1994, "The phonetics and phonology of Semitic pharyngeals", in Keating (ed.), *Phonological Structure and Phonetic Form: Papers in Laboratory Phonology III*, pp. 191–233). McCarthy writes it as a Pharyngeal place feature. This table writes it as `atr` −, so `kˤ`, `tˤ` and `sˤ` keep their place and differ from `k`, `t` and `s` in the tongue root. On a vowel, pharyngealization and retracted tongue root are thus one articulation: `iˤ` equals `i̙`.
 
-The tongue body cannot be high and low at once (Chomsky and Halle 1968, *The Sound Pattern of English*). One mark still adds [+high]: rhoticity `◌˞`. On a [+low] vowel it keeps the base's [+low], and `hi` stays −. No segment is [+high, +low]. The build stops if one is.
+Rhoticity `◌˞` colours a vowel without moving it on the chart. PanPhon's rule made `ɚ` high and rounded. Here the mark keeps the vowel's height and rounding and sets only `ant` −, for the retroflex or bunched tongue. The precomposed letters `ɚ` and `ɝ` read as `ə˞` and `ɜ˞`.
+
+The tongue body cannot be high and low at once (Chomsky and Halle 1968, *The Sound Pattern of English*). No segment is [+high, +low], and the build stops if one is.
 
 ## Letters PanPhon does not list
 

@@ -142,6 +142,18 @@
       },
       "source": "McCarthy (1994), 'The phonetics and phonology of Semitic pharyngeals', in Keating (ed.), Phonological Structure and Phonetic Form: Papers in Laboratory Phonology III, Cambridge University Press, pp. 191-233. McCarthy writes pharyngealization as a Pharyngeal place feature; this table writes it as [-atr], its retracted tongue root",
       "reason": "PanPhon writes the mark as [+low, +back], which overwrote the base's place. Pharyngealization sets [-atr] and leaves the primary place as the base has it."
+    },
+    {
+      "marker": "˞",
+      "name": "Rhoticity",
+      "vowels_only": false,
+      "restore": [
+        "hi",
+        "round"
+      ],
+      "content": {},
+      "source": "International Phonetic Association (1999), Handbook of the International Phonetic Association: ◌˞ marks r-colouring of a vowel, with no change of its chart place; Ladefoged and Maddieson (1996), The Sounds of the World's Languages, on rhotacized vowels made by retroflexion or bunching",
+      "reason": "PanPhon's rule gives [+high, +round, -anterior], so [ɚ] came out high and rounded. The mark keeps the vowel's height and rounding; PanPhon's [-anterior] remains and marks the retroflex or bunched tongue."
     }
   ],
   "segments": [

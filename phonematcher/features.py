@@ -43,6 +43,8 @@ PRE_DIACRITICS = {
     "ⁿ": ("ⁿ", "post"), "ᵐ": ("ⁿ", "post"), "ᵑ": ("ⁿ", "post"), "ʰ": ("ʰ", "post"),
 }
 _TIES = ("͡", "͜")
+#: The precomposed rhotic vowels, which Unicode does not decompose.
+_RHOTIC_LETTERS = str.maketrans({"ɚ": "ə˞", "ɝ": "ɜ˞"})
 
 
 def _applies(diacritic: dict, vec: Vector) -> bool:
@@ -67,7 +69,7 @@ def vectorize_phones(segment: str) -> Vector:
     diacritics around it, each by PanPhon's rule for that diacritic, as long as the rule's
     conditions hold. Raises ``ValueError`` for a segment it cannot read.
     """
-    seg = unicodedata.normalize("NFD", segment)
+    seg = unicodedata.normalize("NFD", segment).translate(_RHOTIC_LETTERS)
     if seg in phone_features:
         return phone_features[seg]
     untied = seg.replace(_TIES[1], _TIES[0])

@@ -286,3 +286,17 @@ def test_a_secondary_mark_leaves_the_primary_place_as_it_is(segment, base):
     for f in ("hi", "lo", "back", "front", "ant", "cor"):
         assert feature(segment, f) is feature(base, f), f
 
+
+
+@pytest.mark.parametrize("rhotic, vowel", [("ə˞", "ə"), ("a˞", "a"), ("ɚ", "ə"), ("ɝ", "ɜ")])
+def test_rhoticity_keeps_the_vowel_height_and_rounding(rhotic, vowel):
+    """[ɚ] is a mid central unrounded vowel with r-colouring (IPA chart): the mark changes neither
+    the height nor the rounding of its vowel, but the vowel is still a different sound."""
+    for f in ("hi", "lo", "round", "front", "back", "h3", "h4"):
+        assert feature(rhotic, f) is feature(vowel, f), f
+    assert vectorize_phones(rhotic) != vectorize_phones(vowel)
+
+
+def test_precomposed_rhotic_vowels_equal_their_decomposed_forms():
+    assert vectorize_phones("ɚ") == vectorize_phones("ə˞")
+    assert vectorize_phones("ɝ") == vectorize_phones("ɜ˞")
