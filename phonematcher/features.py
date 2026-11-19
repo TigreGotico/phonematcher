@@ -11,7 +11,7 @@ import json
 import unicodedata
 from functools import lru_cache
 from pathlib import Path
-from typing import Dict, Optional, Tuple
+from typing import Dict, List, Optional, Tuple
 
 from phonematcher.scales import shift
 
@@ -91,7 +91,39 @@ def vectorize_phones(segment: str) -> Vector:
             for marker in seg[end:]:
                 vec = _apply_if(_DIACRITICS[marker, "post"], vec, segment)
             return vec
+    if _TIES[0] in untied:
+        return compose_tie([vectorize_phones(part) for part in untied.split(_TIES[0])])
     raise ValueError(f"Unrecognized phone {segment!r}")
+
+
+_NAS, _SON, _CONT, _DELREL = (FEATURES.index(f) for f in ("nas", "son", "cont", "delrel"))
+#: Articulators: in a double articulation each one the parts use is used.
+_ARTICULATORS = {FEATURES.index(f) for f in ("lab", "cor", "hi", "back")}
+
+
+def _tie(first: Vector, second: Vector) -> Vector:
+    out = list(second)
+    if first[_NAS] is True and second[_SON] is False:
+        out[_NAS] = True  # prenasalized, as ᵐb
+    elif first[_SON] is False and first[_CONT] is False and second[_SON] is False \
+            and second[_CONT] is True:
+        out[_CONT], out[_DELREL] = False, True  # affricate: the fricative with a stop onset
+    else:  # double articulation, as k͡p
+        out = [x if x == y else y if x is None else x if y is None
+               else True if i in _ARTICULATORS else None
+               for i, (x, y) in enumerate(zip(first, second))]
+    return tuple(out)
+
+
+def compose_tie(parts: List[Vector]) -> Vector:
+    """The vector of tied segments, from the vectors of the parts, right to left: a nasal before
+    an obstruent prenasalizes it, a stop before a fricative makes an affricate, and other parts
+    make a double articulation: a feature one part leaves at 0 takes the other's value, an articulator
+    either part uses is +, and other features the parts set apart are 0."""
+    vec = parts[-1]
+    for part in reversed(parts[:-1]):
+        vec = _tie(part, vec)
+    return vec
 
 
 _HI, _LO = FEATURES.index("hi"), FEATURES.index("lo")

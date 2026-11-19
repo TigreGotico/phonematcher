@@ -96,6 +96,7 @@ PanPhon gives 6 of the 28 vowels `delrel` 0 and the rest `delrel` −. A vowel h
 | `◌̬` voiced | no rule | `voi` + on any base | the IPA chart |
 | `◌ˑ` half-long | no rule | `long` 0, between short and long | the IPA chart names it; the reading is this table's |
 | `◌̚` no audible release | no rule | read; no change | the IPA chart |
+| `◌ʱ` breathy-voiced release | no rule | on a voiced base, `sg` +, as `◌̤`: `bʱ` equals `b̤` and `bʰ` | this table's reading; the chart lists `ʰ` and `◌̤` only |
 | `◌̘` advanced tongue root | `tense` + | `atr` +, `tense` kept | Casali (2007) |
 | `◌̙` retracted tongue root | `tense` − | `atr` −, `tense` kept | Casali (2007) |
 | `◌ʲ` palatalized | `hi` +, `back` − | `palatalized` + | Clements and Hume (1995) |
@@ -149,6 +150,16 @@ PanPhon lists 6,367 segments, many with diacritics, such as `ɐ̃` and `kʷʰ`. 
 Some marks come before their base. `ⁿ`, `ᵐ` and `ᵑ` before a stop make a prenasalized stop, as in `ⁿd`. `ʰ` before a stop makes a preaspirated stop, as in `ʰt`. Each takes the rule of the same mark after a base.
 
 A tie bar joins two symbols into one segment. `t͡ʃ` and `t͜ʃ` are the same affricate. Without a tie bar, `tʃ` is two segments.
+
+PanPhon lists 23 tied pairs, such as `t͡ʃ`, `k͡p` and `ɡ͡b`, each with its diacritic stacks. A tied segment that is not listed is built from its parts, right to left:
+
+| Parts | Result | Example |
+|---|---|---|
+| a nasal, then an obstruent | the obstruent with `nas` +, as `ᵐb` | `m͡b` equals `ᵐb` |
+| a stop, then a fricative | the fricative with `cont` −, `delrel` + | `t̠͡ʃ` equals `t͡ʃ` |
+| any other two | a double articulation: a feature one part leaves at 0 takes the other's value, an articulator (`lab`, `cor`, `hi`, `back`) either part uses is +, and other features the parts set apart are 0 | `ŋ͡m͡ɡ͡b` equals `ᵑɡ͡b` |
+
+The rule gives the listed vector for 18 of PanPhon's 23 pairs. For `b͡β`, `p͡ɸ`, `ɖ͡ʐ` and `ʈ͡ʂ`, PanPhon sets `hi` and `lo` to 0, but its fricatives have −. For `ɟ͡ʝ`, PanPhon sets `cor` +, but `ʝ` has `cor` −. The listed rows of these five stay as PanPhon has them.
 
 ## Distance
 

@@ -358,3 +358,34 @@ def test_vectorize_phones_returns_the_table_row_for_every_listed_segment():
     translation."""
     differ = [s for s, vec in phone_features.items() if vectorize_phones(s) != vec]
     assert differ == []
+
+
+TIED_BASES = sorted({s for s in phone_features if "͡" in s
+                     and not any(unicodedata.combining(c) for c in s.replace("͡", ""))
+                     and all(c not in s for c in "ʰʲʷˠˤᶣːˀʼⁿˡ")})
+
+
+def test_every_listed_tie_is_one_the_rule_rebuilds():
+    """The rule for unlisted ties reproduces PanPhon's 23 bare ties, so it is checked against
+    data it did not write."""
+    from phonematcher.features import compose_tie
+    assert len(TIED_BASES) == 23
+    wrong = [s for s in TIED_BASES
+             if compose_tie([vectorize_phones(p) for p in s.split("͡")]) != phone_features[s]]
+    # PanPhon's rows for these leave hi and lo at 0, although the fricative's are -, and make
+    # ɟ͡ʝ coronal, although ʝ is not; the rule follows the fricative.
+    assert wrong == ["b͡β", "p͡ɸ", "ɖ͡ʐ", "ɟ͡ʝ", "ʈ͡ʂ"]
+
+
+@pytest.mark.parametrize("tied, like", [("t̠͡ʃ", "t͡ʃ"), ("t̠͡ʃʰ", "t͡ʃʰ"), ("m͡b", "ᵐb"),
+                                        ("ŋ͡m͡ɡ͡b", "ᵑɡ͡b")])
+def test_an_unlisted_tie_reads_by_the_rule(tied, like):
+    assert phonetic_distance(tied, like) < 0.05
+
+
+def test_a_nasal_tied_to_an_affricate_prenasalizes_it():
+    assert feature("n̠͡d̠͡ʒ", "nas") is True and feature("n̠͡d̠͡ʒ", "delrel") is True
+
+
+def test_breathy_release_reads_as_breathy_voice():
+    assert vectorize_phones("bʱ") == vectorize_phones("b̤") == vectorize_phones("bʰ")

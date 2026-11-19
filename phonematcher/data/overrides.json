@@ -279,6 +279,21 @@
       "source": "International Phonetic Association, The IPA Chart (revised to 2015), internationalphoneticassociation.org: the diacritic is named 'Half-long'",
       "reason": "PanPhon has no rule for the mark. It sets [long] to 0, between short and long.",
       "conditions": []
+    },
+    {
+      "marker": "ʱ",
+      "name": "Breathy-voiced release",
+      "vowels_only": false,
+      "conditions": [
+        {
+          "voi": "+"
+        }
+      ],
+      "content": {
+        "sg": "+"
+      },
+      "source": "This table's reading: the 2015 IPA chart lists 'ʰ Aspirated' and '◌̤ Breathy voiced' but not ʱ",
+      "reason": "PanPhon has no rule for ʱ, which inventories such as PHOIBLE write for voiced aspirates (bʱ, ɡʱ). It reads as ◌̤ on a voiced base: voiced, with spread glottis, as bʰ and b̤ already are."
     }
   ],
   "segments": [
