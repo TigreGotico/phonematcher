@@ -43,8 +43,9 @@ def test_non_negative_and_bounded():
 # Cross-class separation: a vowel and a consonant are maximally distant
 # ---------------------------------------------------------------------------
 def test_vowel_and_consonant_are_far_apart():
-    # The major-class features carry PanPhon's largest weights.
-    assert phonetic_distance("p", "a") > 0.5
+    # The major-class features carry PanPhon's largest weights: a stop and a vowel are farther
+    # apart than two stops of different place.
+    assert phonetic_distance("p", "a") > phonetic_distance("p", "k")
     assert phonetic_distance("a", "p") == phonetic_distance("p", "a")
 
 

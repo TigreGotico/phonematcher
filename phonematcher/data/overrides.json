@@ -27,8 +27,8 @@
         "front": "-",
         "back": "-"
       },
-      "source": "International Phonetic Association (1999), Handbook of the International Phonetic Association, the IPA chart (diacritics)",
-      "reason": "The chart defines ◌̈ as centralized: the vowel moves to the central column, which is [-front, -back]. PanPhon's rule for it changes no feature."
+      "source": "International Phonetic Association, The IPA Chart (revised to 2015), internationalphoneticassociation.org: the diacritic is named 'Centralized'",
+      "reason": "This table reads 'centralized' as a move to the central column of the chart, which is [-front, -back]. PanPhon's rule for it changes no feature."
     },
     {
       "marker": "̘",
@@ -40,8 +40,8 @@
       "content": {
         "atr": "+"
       },
-      "source": "Lindau (1978), 'Vowel features', Language 54(3): advanced tongue root is a feature of its own, not the tense/lax distinction",
-      "reason": "PanPhon writes ATR as [+tense]. Here [tense] marks vowel height, so ATR sets [+atr] and leaves [tense] as the base has it."
+      "source": "Casali (2007), 'Some observations on the phonetics of [ATR] contrasts', lecture, University of Education, Winneba (research.canil.ca/ATRLecture/Phonetics of ATR.pdf), section 2: [ATR] is an expansion or contraction of the pharyngeal cavity, after Lindau (1979), 'The feature expanded', Journal of Phonetics 7",
+      "reason": "PanPhon writes ATR as [+tense] and RTR as [-tense]. Here [tense] has no part in vowel height, and ATR is a contrast in the size of the pharyngeal cavity, so the mark sets [atr] and keeps [tense] as the base has it."
     },
     {
       "marker": "̙",
@@ -53,8 +53,8 @@
       "content": {
         "atr": "-"
       },
-      "source": "Lindau (1978), 'Vowel features', Language 54(3): advanced tongue root is a feature of its own, not the tense/lax distinction",
-      "reason": "PanPhon writes RTR as [-tense]. RTR sets [-atr] and leaves [tense] as the base has it."
+      "source": "Casali (2007), 'Some observations on the phonetics of [ATR] contrasts', lecture, University of Education, Winneba (research.canil.ca/ATRLecture/Phonetics of ATR.pdf), section 2: [ATR] is an expansion or contraction of the pharyngeal cavity, after Lindau (1979), 'The feature expanded', Journal of Phonetics 7",
+      "reason": "PanPhon writes ATR as [+tense] and RTR as [-tense]. Here [tense] has no part in vowel height, and ATR is a contrast in the size of the pharyngeal cavity, so the mark sets [atr] and keeps [tense] as the base has it."
     },
     {
       "marker": "ʲ",
@@ -67,8 +67,8 @@
       "content": {
         "palatalized": "+"
       },
-      "source": "Sagey (1986), The Representation of Features and Relations in Non-linear Phonology, MIT dissertation; Clements and Hume (1995), 'The internal organization of speech sounds', in Goldsmith (ed.), The Handbook of Phonological Theory: a secondary articulation is a feature of its own, separate from the primary place",
-      "reason": "PanPhon writes the mark with the primary place features ['hi', 'back'], so it overwrote the base's place: kʲ, cʲ and qʲ came out alike, and ħʲ equalled ħ. The mark sets its own feature and leaves the primary place as the base has it."
+      "source": "Clements and Hume (1995), 'The internal organization of speech sounds', in Goldsmith (ed.), The Handbook of Phonological Theory, Blackwell, ch. 7, sections 3.5 and 3.5.1: a secondary articulation is a minor articulation linked under the C-place node beside the primary one",
+      "reason": "PanPhon writes the mark with the primary place features ['hi', 'back'], so it overwrote the base's place: in PanPhon kʲ and qʲ share a vector. The secondary articulation adds to the primary place and does not replace it, so the mark sets a feature of its own and the base keeps its place. The feature names are this table's."
     },
     {
       "marker": "ᶣ",
@@ -83,8 +83,8 @@
         "palatalized": "+",
         "labialized": "+"
       },
-      "source": "Sagey (1986), The Representation of Features and Relations in Non-linear Phonology, MIT dissertation; Clements and Hume (1995), 'The internal organization of speech sounds', in Goldsmith (ed.), The Handbook of Phonological Theory: a secondary articulation is a feature of its own, separate from the primary place",
-      "reason": "PanPhon writes the mark with the primary place features ['hi', 'back', 'round'], so it overwrote the base's place: kʲ, cʲ and qʲ came out alike, and ħʲ equalled ħ. The mark sets its own feature and leaves the primary place as the base has it."
+      "source": "Clements and Hume (1995), 'The internal organization of speech sounds', in Goldsmith (ed.), The Handbook of Phonological Theory, Blackwell, ch. 7, sections 3.5 and 3.5.1: a secondary articulation is a minor articulation linked under the C-place node beside the primary one",
+      "reason": "PanPhon writes the mark with the primary place features ['hi', 'back', 'round'], so it overwrote the base's place: in PanPhon kʲ and qʲ share a vector. The secondary articulation adds to the primary place and does not replace it, so the mark sets a feature of its own and the base keeps its place. The feature names are this table's."
     },
     {
       "marker": "ʷ",
@@ -98,8 +98,8 @@
       "content": {
         "labialized": "+"
       },
-      "source": "Sagey (1986), The Representation of Features and Relations in Non-linear Phonology, MIT dissertation; Clements and Hume (1995), 'The internal organization of speech sounds', in Goldsmith (ed.), The Handbook of Phonological Theory: a secondary articulation is a feature of its own, separate from the primary place",
-      "reason": "PanPhon writes the mark with the primary place features ['hi', 'back', 'round'], so it overwrote the base's place: kʲ, cʲ and qʲ came out alike, and ħʲ equalled ħ. The mark sets its own feature and leaves the primary place as the base has it."
+      "source": "Clements and Hume (1995), 'The internal organization of speech sounds', in Goldsmith (ed.), The Handbook of Phonological Theory, Blackwell, ch. 7, sections 3.5 and 3.5.1: a secondary articulation is a minor articulation linked under the C-place node beside the primary one",
+      "reason": "PanPhon writes the mark with the primary place features ['hi', 'back', 'round'], so it overwrote the base's place: in PanPhon kʲ and qʲ share a vector. The secondary articulation adds to the primary place and does not replace it, so the mark sets a feature of its own and the base keeps its place. The feature names are this table's."
     },
     {
       "marker": "ˠ",
@@ -112,8 +112,8 @@
       "content": {
         "velarized": "+"
       },
-      "source": "Sagey (1986), The Representation of Features and Relations in Non-linear Phonology, MIT dissertation; Clements and Hume (1995), 'The internal organization of speech sounds', in Goldsmith (ed.), The Handbook of Phonological Theory: a secondary articulation is a feature of its own, separate from the primary place",
-      "reason": "PanPhon writes the mark with the primary place features ['hi', 'back'], so it overwrote the base's place: kʲ, cʲ and qʲ came out alike, and ħʲ equalled ħ. The mark sets its own feature and leaves the primary place as the base has it."
+      "source": "Clements and Hume (1995), 'The internal organization of speech sounds', in Goldsmith (ed.), The Handbook of Phonological Theory, Blackwell, ch. 7, sections 3.5 and 3.5.1: a secondary articulation is a minor articulation linked under the C-place node beside the primary one",
+      "reason": "PanPhon writes the mark with the primary place features ['hi', 'back'], so it overwrote the base's place: in PanPhon kʲ and qʲ share a vector. The secondary articulation adds to the primary place and does not replace it, so the mark sets a feature of its own and the base keeps its place. The feature names are this table's."
     },
     {
       "marker": "̴",
@@ -124,10 +124,11 @@
         "back"
       ],
       "content": {
-        "velarized": "+"
+        "velarized": "0",
+        "pharyngealized": "0"
       },
-      "source": "Sagey (1986), The Representation of Features and Relations in Non-linear Phonology, MIT dissertation; Clements and Hume (1995), 'The internal organization of speech sounds', in Goldsmith (ed.), The Handbook of Phonological Theory: a secondary articulation is a feature of its own, separate from the primary place",
-      "reason": "PanPhon writes the mark with the primary place features ['hi', 'back'], so it overwrote the base's place: kʲ, cʲ and qʲ came out alike, and ħʲ equalled ħ. The mark sets its own feature and leaves the primary place as the base has it."
+      "source": "International Phonetic Association, The IPA Chart (revised to 2015), internationalphoneticassociation.org: the diacritic is named 'Velarized or pharyngealized'",
+      "reason": "The chart leaves the place open, so the mark sets both [velarized] and [pharyngealized] to 0: one of the two, not known which. The base keeps its place."
     },
     {
       "marker": "ˤ",
@@ -138,10 +139,11 @@
         "back"
       ],
       "content": {
+        "pharyngealized": "+",
         "atr": "-"
       },
-      "source": "McCarthy (1994), 'The phonetics and phonology of Semitic pharyngeals', in Keating (ed.), Phonological Structure and Phonetic Form: Papers in Laboratory Phonology III, Cambridge University Press, pp. 191-233. McCarthy writes pharyngealization as a Pharyngeal place feature; this table writes it as [-atr], its retracted tongue root",
-      "reason": "PanPhon writes the mark as [+low, +back], which overwrote the base's place. Pharyngealization sets [-atr] and leaves the primary place as the base has it."
+      "source": "McCarthy (1994), 'The phonetics and phonology of Semitic pharyngeals', in Keating (ed.), Phonological Structure and Phonetic Form: Papers in Laboratory Phonology III, Cambridge University Press, pp. 218-219: the emphatics have 'a constriction in the upper pharynx' and 'should really be called uvularized'; Hermes, Barlaz, Shosted, Liang and Sutton (2017), Interspeech 2017, pp. 201-205; Al-Solami (2017), Canadian Acoustics 45(1), pp. 25-35: emphatics show 'tongue root and tongue dorsum retraction with inconsistent tongue root retraction'; Clements and Hume (1995), section 3.5: 'pharyngealization, involving the retraction of the tongue root'",
+      "reason": "PanPhon writes the mark as [+low, +back], which overwrote the base's place. Pharyngealized (emphatic) sounds constrict the upper pharynx with the tongue dorsum, at a different place from the pharyngeals (Hermes et al. 2017), and retract the tongue root inconsistently (Al-Solami 2017). The mark sets its own feature, [+pharyngealized], plus [-atr] for the tongue-root part, and keeps the base's place."
     },
     {
       "marker": "˞",
@@ -152,8 +154,8 @@
         "round"
       ],
       "content": {},
-      "source": "International Phonetic Association (1999), Handbook of the International Phonetic Association: ◌˞ marks r-colouring of a vowel, with no change of its chart place; Ladefoged and Maddieson (1996), The Sounds of the World's Languages, on rhotacized vowels made by retroflexion or bunching",
-      "reason": "PanPhon's rule gives [+high, +round, -anterior], so [ɚ] came out high and rounded. The mark keeps the vowel's height and rounding; PanPhon's [-anterior] remains and marks the retroflex or bunched tongue."
+      "source": "International Phonetic Association, The IPA Chart (revised to 2015), internationalphoneticassociation.org: the diacritic is named 'Rhoticity'",
+      "reason": "PanPhon's rule gives [+high, +round, -anterior], so [ɚ] came out high and rounded. The chart names the mark only. This table reads it as a colouring that keeps the vowel's height and rounding, and keeps PanPhon's [-anterior]."
     }
   ],
   "segments": [
@@ -166,7 +168,7 @@
         "tap": "+",
         "trill": "-"
       },
-      "source": "International Phonetic Association, the IPA chart (2005 and later revisions), pulmonic consonants",
+      "source": "International Phonetic Association, The IPA Chart (revised to 2015), internationalphoneticassociation.org: pulmonic consonants, Tap or Flap row, Labiodental column",
       "reason": "PanPhon does not list the symbol. It is a tap at the labiodental place: the manner of [ɾ] with the place of [v]."
     },
     {
@@ -176,7 +178,7 @@
       "set": {
         "trill": "+"
       },
-      "source": "Esling (2005), 'There are no back vowels: the laryngeal articulator model', Canadian Journal of Linguistics 50: the epiglottal (aryepiglottic) sounds share the pharyngeal place; the fricatives are often trilled",
+      "source": "Hassan, Esling, Moisik and Crevier-Buchman (2011), 'Aryepiglottic trilled variants of /ʕ, ħ/ in Iraqi Arabic', Proceedings of ICPhS XVII, Hong Kong, pp. 831-834: 'both pharyngeals and epiglottals occur at the aryepiglottic sphincter point of stricture', and sounds described as epiglottal 'are associated either with AE trilled varieties'; Esling (1996), 'Pharyngeal consonants and the aryepiglottic sphincter', Journal of the International Phonetic Association 26(2), pp. 65-88: the categories 'share a common place of articulation' and differ 'in manner of articulation'",
       "reason": "PanPhon does not list the symbol. It is the pharyngeal fricative [ħ] made by the aryepiglottic folds, with trilling."
     },
     {
@@ -186,7 +188,7 @@
       "set": {
         "trill": "+"
       },
-      "source": "Esling (2005), 'There are no back vowels: the laryngeal articulator model', Canadian Journal of Linguistics 50: the epiglottal (aryepiglottic) sounds share the pharyngeal place; the fricatives are often trilled",
+      "source": "Hassan, Esling, Moisik and Crevier-Buchman (2011), 'Aryepiglottic trilled variants of /ʕ, ħ/ in Iraqi Arabic', Proceedings of ICPhS XVII, Hong Kong, pp. 831-834: 'both pharyngeals and epiglottals occur at the aryepiglottic sphincter point of stricture', and sounds described as epiglottal 'are associated either with AE trilled varieties'; Esling (1996), 'Pharyngeal consonants and the aryepiglottic sphincter', Journal of the International Phonetic Association 26(2), pp. 65-88: the categories 'share a common place of articulation' and differ 'in manner of articulation'",
       "reason": "PanPhon does not list the symbol. It is the voiced counterpart of [ʜ]."
     },
     {
@@ -197,8 +199,8 @@
         "cont": "-",
         "voi": "-"
       },
-      "source": "Esling (2005), 'There are no back vowels: the laryngeal articulator model', Canadian Journal of Linguistics 50: the epiglottal (aryepiglottic) sounds share the pharyngeal place; the fricatives are often trilled",
-      "reason": "PanPhon does not list the symbol. It is a stop at the pharyngeal place, the only stop the IPA chart gives there."
+      "source": "Hassan, Esling, Moisik and Crevier-Buchman (2011), 'Aryepiglottic trilled variants of /ʕ, ħ/ in Iraqi Arabic', Proceedings of ICPhS XVII, Hong Kong, pp. 831-834: 'both pharyngeals and epiglottals occur at the aryepiglottic sphincter point of stricture', and sounds described as epiglottal 'are associated either with AE trilled varieties'; Esling (1996), 'Pharyngeal consonants and the aryepiglottic sphincter', Journal of the International Phonetic Association 26(2), pp. 65-88: the categories 'share a common place of articulation' and differ 'in manner of articulation'",
+      "reason": "PanPhon does not list the symbol. The chart lists it under Other Symbols as 'Epiglottal plosive'. It is built as a voiceless stop at the pharyngeal place."
     }
   ]
 }

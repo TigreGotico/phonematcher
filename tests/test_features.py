@@ -1,7 +1,6 @@
 """The feature table and the segment distance.
 
-Expected values follow the IPA chart (International Phonetic Association, Handbook of the
-International Phonetic Association, 1999) and the feature definitions of PanPhon (Mortensen et al.
+Expected values follow the IPA chart (International Phonetic Association, revised to 2015) and the feature definitions of PanPhon (Mortensen et al.
 2016), never values read back from the table under test.
 """
 import json
@@ -142,13 +141,13 @@ def test_a_listed_diacritic_keeps_its_effect_on_a_chart_vowel():
 
 
 def test_tongue_root_is_its_own_feature():
-    """Lindau (1978): advanced tongue root is not the tense/lax distinction."""
+    """Casali (2007), after Lindau (1979): [ATR] is a pharyngeal-cavity contrast, not vowel height."""
     assert feature("ɛ̘", "atr") is True and feature("ɛ̘", "tense") is feature("ɛ", "tense")
     assert feature("u̙", "atr") is False and vectorize_phones("u̙") != vectorize_phones("ʊ")
 
 
 def test_centralized_vowel_is_neither_front_nor_back():
-    """◌̈ marks a centralized vowel (IPA Handbook 1999)."""
+    """The IPA chart names ◌̈ 'Centralized'; this table reads it as the central column."""
     assert feature("ë", "front") is False and feature("ë", "back") is False
     assert vectorize_phones("ë") != vectorize_phones("e")
 
@@ -188,7 +187,7 @@ def test_open_a_is_front_and_near_open_a_is_central():
 
 
 def test_no_segment_is_both_high_and_low():
-    """Chomsky and Halle (1968): [+high, +low] is impossible."""
+    """The tongue body cannot be raised and lowered at once."""
     hi, lo = FEATURES.index("hi"), FEATURES.index("lo")
     both = [s for s, v in phone_features.items() if v[hi] is True and v[lo] is True]
     assert both == []
@@ -198,7 +197,7 @@ def test_no_segment_is_both_high_and_low():
     ("ⱱ", "ɾ", "tap"), ("ʜ", "ħ", "trill"), ("ʢ", "ʕ", "trill"), ("ʡ", "ħ", "cont"),
 ])
 def test_chart_letters_panphon_lacks(letter, near, feat):
-    """Labiodental flap (IPA chart) and the epiglottals (Esling 2005)."""
+    """Labiodental flap (IPA chart) and the epiglottals (Hassan et al. 2011; Esling 1996)."""
     assert vectorize_phones(letter) != vectorize_phones(near)
     assert phonetic_distance(letter, near) < phonetic_distance(letter, "a")
     expected = {"tap": True, "trill": True, "cont": False}[feat]
@@ -274,7 +273,7 @@ def test_a_listed_stack_equals_the_same_stack_read_by_the_rules():
 
 @pytest.mark.parametrize("a, b", [("kʲ", "cʲ"), ("kʲ", "qʲ"), ("kʷ", "qʷ"), ("ɡʲ", "ɟ"), ("ŋʲ", "ɲ")])
 def test_a_secondary_mark_keeps_the_primary_place(a, b):
-    """Sagey (1986): a secondary articulation does not replace the primary one, so a palatalized
+    """Clements and Hume (1995): a secondary articulation adds to the primary one and does not replace it, so a palatalized
     velar is not a palatal and a labialized velar is not a labialized uvular."""
     assert vectorize_phones(a) != vectorize_phones(b)
 
@@ -304,3 +303,18 @@ def test_raised_and_lowered_marks_work_in_any_order():
     """The run-time rule moves a vowel one chart row, as the build does for listed stacks."""
     assert vectorize_phones("eː̞") == vectorize_phones("e̞ː")
     assert vectorize_phones("ɛ̝̃") != vectorize_phones("ɛ̃")
+
+
+def test_pharyngealization_and_retracted_tongue_root_are_distinct():
+    """Hermes et al. (2017, rt-MRI) and Al-Solami (2017, ultrasound): emphatics constrict the upper
+    pharynx with the tongue dorsum, with inconsistent tongue-root retraction, so [iˤ] is not [i̙];
+    both still retract the root."""
+    assert vectorize_phones("iˤ") != vectorize_phones("i̙")
+    assert feature("iˤ", "pharyngealized") is True and feature("i̙", "pharyngealized") is False
+    assert feature("iˤ", "atr") is False and feature("i̙", "atr") is False
+
+
+def test_velarized_or_pharyngealized_mark_leaves_the_choice_open():
+    """The IPA chart names ◌̴ 'Velarized or pharyngealized': one of the two, not known which."""
+    assert feature("l̴", "velarized") is None and feature("l̴", "pharyngealized") is None
+    assert vectorize_phones("ɫ") == vectorize_phones("l̴")

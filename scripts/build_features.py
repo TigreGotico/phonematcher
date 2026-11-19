@@ -3,8 +3,8 @@
 PanPhon (Mortensen et al. 2016, MIT) supplies the segments, the feature weights and the diacritic
 rules. Hayes (2009, Introductory Phonology; the CSV conversion by Gorman, Apache-2.0, vendored in
 ``scripts/sources/``) adds [front], [tap] and [trill]. The vowel letters take their height,
-backness and rounding from the IPA chart (``scripts/sources/ipa-vowel-chart.csv``). Lindau (1978)
-adds [atr]. ``phonematcher/data/overrides.json`` holds the other changes, each with its source.
+backness and rounding from the IPA chart (``scripts/sources/ipa-vowel-chart.csv``). [atr], the
+secondary articulations and the epiglottals are local features. ``phonematcher/data/overrides.json`` holds the other changes, each with its source.
 Run after changing any input:
 
     uv pip install panphon==0.22.2 pyyaml
@@ -33,8 +33,9 @@ HEIGHTS = ("close", "near-close", "close-mid", "mid", "open-mid", "near-open", "
 #: [h1] ... [h6]: a vowel is + for each step its height lies below close, so the number of
 #: differing step features equals the number of chart rows between two vowels.
 STEPS = tuple(f"h{k}" for k in range(1, len(HEIGHTS)))
-#: Secondary articulations, each a feature of its own (Sagey 1986).
-SECONDARY = ("palatalized", "velarized", "labialized")
+#: Secondary articulations, each a feature of its own beside the primary place (Clements and
+#: Hume 1995, section 3.5.1).
+SECONDARY = ("palatalized", "velarized", "labialized", "pharyngealized")
 ADDED = {"front": 0.25, "tap": 0.25, "trill": 0.25, "atr": 0.25, **{s: 0.125 for s in STEPS},
          **{s: 0.125 for s in SECONDARY}}
 RAISED, LOWERED = "\u031d", "\u031e"
@@ -138,7 +139,8 @@ def main() -> None:
 
     def apply_rules(vec: dict, marks: str) -> dict:
         """The marks' rules in order, as vectorize_phones applies them; None if one does not
-        apply. [+high, +low] is impossible (Chomsky and Halle 1968): a mark that adds one keeps
+        apply. [+high, +low] is impossible, because the tongue body cannot be raised and lowered at
+        once: a mark that adds one keeps
         the other as the base has it."""
         vec = dict(vec)
         for ch in marks:
@@ -185,7 +187,7 @@ def main() -> None:
     out = {
         "source": f"PanPhon {importlib.metadata.version('panphon')} (Mortensen et al. 2016, MIT); "
                   "[front], [tap] and [trill] from Hayes (2009, Introductory Phonology); vowel "
-                  "letters from the IPA chart; [atr] from Lindau (1978); "
+                  "letters from the IPA chart; "
                   f"{len(overrides)} value, {len(changes['diacritics'])} diacritic and "
                   f"{len(changes['segments'])} segment changes from overrides.json",
         "features": features,

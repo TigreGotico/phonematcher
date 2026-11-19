@@ -25,7 +25,7 @@ transcribe("carro", "pt-BR-x-rj")   # 'ˈkaχu'
 from phonematcher import phonetic_distance
 
 phonetic_distance("ʁ", "χ")   # 0.013
-phonetic_distance("ʁ", "k")   # 0.120
+phonetic_distance("ʁ", "k")   # 0.118
 ```
 
 The uvular fricatives differ in voice only, so they are near. The velar stop differs in manner and place, so it is farther.
@@ -36,7 +36,7 @@ The uvular fricatives differ in voice only, so they are near. The velar stop dif
 from phonematcher import ipa_distance, segments
 
 segments("ˈt͡ʃɐ̃w̃")              # ['t͡ʃ', 'ɐ̃', 'w̃']
-ipa_distance("ˈpojʃ", "ˈpojs")   # 0.040
+ipa_distance("ˈpojʃ", "ˈpojs")   # 0.039
 ```
 
 `segments` keeps a diacritic with its base and joins tied symbols into one affricate. Stress and syllable marks are dropped.
