@@ -42,11 +42,6 @@ def test_every_override_names_a_source_and_is_applied():
         assert feature(o["phone"], o["feature"]) is {"+": True, "-": False, "0": None}[o["value"]]
 
 
-#: Letters that share a vector because no published feature table separates them: PHOIBLE gives
-#: mid central [ə] and open-mid central [ɜ] identical values, and Hayes (2009) lists no [ɜ].
-SHARED = {("ə", "ɜ")}
-
-
 def test_every_ipa_letter_has_its_own_vector():
     """Two letters of the IPA chart are two sounds, so their vectors must differ."""
     letters = [k for k in phone_features
@@ -58,7 +53,7 @@ def test_every_ipa_letter_has_its_own_vector():
         if vec in seen:
             shared.append((seen[vec], letter))
         seen.setdefault(vec, letter)
-    assert {tuple(sorted(pair)) for pair in shared} == SHARED
+    assert shared == []
 
 
 @pytest.mark.parametrize("affricate, stop, fricative", [
@@ -124,7 +119,7 @@ def test_unrounded_vowels_are_not_labial(vowel):
 
 
 def test_central_vowels_are_neither_front_nor_back():
-    for vowel in ["ɨ", "ə", "ɐ", "a", "ɜ"]:
+    for vowel in ["ɨ", "ʉ", "ɘ", "ɵ", "ə", "ɜ", "ɞ", "ɐ"]:
         assert feature(vowel, "front") is False and feature(vowel, "back") is False, vowel
 
 
@@ -145,9 +140,10 @@ def test_a_listed_diacritic_keeps_its_effect_on_a_hayes_vowel():
     assert vectorize_phones("ɤˤ") != vectorize_phones("ɤ")
 
 
-def test_atr_diacritic_makes_a_vowel_tense():
-    """PanPhon's rule for ◌̘ (advanced tongue root) sets [+tense]."""
-    assert feature("ɛ̘", "tense") is True and feature("ɛ", "tense") is False
+def test_tongue_root_is_its_own_feature():
+    """Lindau (1978): advanced tongue root is not the tense/lax distinction."""
+    assert feature("ɛ̘", "atr") is True and feature("ɛ̘", "tense") is feature("ɛ", "tense")
+    assert feature("u̙", "atr") is False and vectorize_phones("u̙") != vectorize_phones("ʊ")
 
 
 def test_centralized_vowel_is_neither_front_nor_back():
@@ -164,3 +160,57 @@ def test_prenasalized_stop_is_a_nasal_stop(segment, stop):
 
 def test_preaspirated_stop_has_spread_glottis():
     assert feature("ʰt", "sg") is True
+
+
+#: Height of each front vowel on the chart, from close (0) to open (6); the front column has no
+#: mid (3) letter.
+CHART_HEIGHT = {"i": 0, "ɪ": 1, "e": 2, "ɛ": 4, "æ": 5, "a": 6}
+
+
+def test_vowel_distance_grows_with_chart_height_difference():
+    """Down the front column of the chart, each step away from [i] is farther than the last."""
+    rows = sorted(CHART_HEIGHT, key=CHART_HEIGHT.get)
+    steps = [phonetic_distance("i", v) for v in rows]
+    assert steps == sorted(steps) and len(set(steps)) == len(steps)
+
+
+def test_mid_central_vowel_sits_between_close_mid_and_open_mid():
+    """[ə] is mid on the chart, halfway between [ɘ] and [ɜ]."""
+    assert phonetic_distance("ə", "ɘ") == pytest.approx(phonetic_distance("ə", "ɜ"))
+    assert phonetic_distance("ə", "ɘ") < phonetic_distance("ɘ", "ɜ")
+
+
+def test_open_a_is_front_and_near_open_a_is_central():
+    """The chart places [a] open front and [ɐ] near-open central."""
+    assert feature("a", "front") is True and feature("ɐ", "front") is False
+    assert feature("ɐ", "round") is False
+
+
+def test_no_segment_is_both_high_and_low():
+    """Chomsky and Halle (1968): [+high, +low] is impossible."""
+    hi, lo = FEATURES.index("hi"), FEATURES.index("lo")
+    both = [s for s, v in phone_features.items() if v[hi] is True and v[lo] is True]
+    assert both == []
+
+
+@pytest.mark.parametrize("letter, near, feat", [
+    ("ⱱ", "ɾ", "tap"), ("ʜ", "ħ", "trill"), ("ʢ", "ʕ", "trill"), ("ʡ", "ħ", "cont"),
+])
+def test_chart_letters_panphon_lacks(letter, near, feat):
+    """Labiodental flap (IPA chart) and the epiglottals (Esling 2005)."""
+    assert vectorize_phones(letter) != vectorize_phones(near)
+    assert phonetic_distance(letter, near) < phonetic_distance(letter, "a")
+    expected = {"tap": True, "trill": True, "cont": False}[feat]
+    assert feature(letter, feat) is expected
+
+
+def test_labiodental_flap_has_the_place_of_v():
+    for f in ("lab", "ant", "cor"):
+        assert feature("ⱱ", f) is feature("v", f)
+
+
+def test_lowered_and_raised_marks_move_a_vowel_one_chart_row():
+    """◌̞ lowers and ◌̝ raises (IPA chart): lowered close-mid [e̞] is nearer open-mid [ɛ] than [e]
+    is, and raised [ɛ̝] is nearer [e] than [ɛ] is."""
+    assert phonetic_distance("e̞", "ɛ") < phonetic_distance("e", "ɛ")
+    assert phonetic_distance("ɛ̝", "e") < phonetic_distance("ɛ", "e")

@@ -46,7 +46,16 @@ def test_vowel_and_consonant_are_far_apart():
     # The major-class features carry PanPhon's largest weights.
     assert phonetic_distance("p", "a") > 0.5
     assert phonetic_distance("a", "p") == phonetic_distance("p", "a")
-    assert phonetic_distance("i", "k") > 0.5
+
+
+def test_any_vowel_is_nearer_to_a_vowel_than_to_an_obstruent():
+    """Major class outweighs vowel quality: two chart vowels are nearer than a vowel and a stop or
+    fricative."""
+    vowels = "iyɨʉɯuɪʏʊeøɘɵɤoəɛœɜɞʌɔæɐaɶɑɒ"
+    obstruents = "pbtdkɡqʔfvszʃʒxχh"
+    widest_vowel_pair = max(phonetic_distance(a, b) for a in vowels for b in vowels)
+    nearest_obstruent = min(phonetic_distance(a, b) for a in vowels for b in obstruents)
+    assert widest_vowel_pair < nearest_obstruent
 
 
 def test_cross_class_farther_than_within_class():

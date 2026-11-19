@@ -2,7 +2,7 @@
 
 phonematcher measures how far apart two IPA sounds are, and finds terms that sound like a query. It works on IPA only. To get IPA from text, use a grapheme-to-IPA library such as [orthography2ipa](https://github.com/TigreGotico/orthography2ipa).
 
-Every distance comes from distinctive features. The feature table is built from PanPhon (Mortensen et al. 2016) and Hayes (2009), with each local change listed with its source. [docs/features.md](docs/features.md) explains the table.
+Every distance comes from distinctive features. The feature table starts from PanPhon (Mortensen et al. 2016), takes the vowels from the IPA chart, and lists every other change with its source. [docs/features.md](docs/features.md) explains the table.
 
 ## Install
 
@@ -17,10 +17,10 @@ phonematcher has no runtime dependencies.
 ```python
 from phonematcher import phonetic_distance, ipa_distance, segments
 
-phonetic_distance("ʁ", "χ")       # 0.016: uvular fricatives that differ only in voice
-phonetic_distance("ʁ", "k")       # 0.141: a different manner and place
+phonetic_distance("ʁ", "χ")       # 0.014: uvular fricatives that differ only in voice
+phonetic_distance("ʁ", "k")       # 0.125: a different manner and place
 segments("ˈt͡ʃɐ̃w̃")              # ['t͡ʃ', 'ɐ̃', 'w̃']
-ipa_distance("ˈpojʃ", "ˈpojs")   # 0.047: one near substitution
+ipa_distance("ˈpojʃ", "ˈpojs")   # 0.042: one near substitution
 ```
 
 `phonetic_distance` compares two segments, from 0 to 1. `ipa_distance` compares two IPA strings: an edit distance where a substitution costs the feature distance and an insertion or deletion costs 1.
@@ -36,8 +36,8 @@ for word in ["pois", "retirada", "carro", "caro", "casa", "dia"]:
     search.add_term(transcribe(word, "pt-PT"), word)
 
 query = transcribe("carro", "pt-BR-x-rj")   # 'ˈkaχu'
-search.search(query)[0]
-# Match(id='carro', term=('ˈkaʁu',), score=0.016)
+best = search.search(query)[0]
+best.id, best.term, round(best.score, 3)   # ('carro', ('ˈkaʁu',), 0.014)
 ```
 
 A term may have several readings: `search.add_term(["ˈpojʃ", "ˈpojs"], "pois")`.
