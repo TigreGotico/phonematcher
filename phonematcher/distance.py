@@ -1,6 +1,7 @@
 """Distances between IPA strings, built on the segment distance in :mod:`phonematcher.features`."""
+import math
 import unicodedata
-from typing import List, Sequence
+from typing import List, Optional, Sequence, Tuple
 
 from phonematcher.features import POST_DIACRITICS, PRE_DIACRITICS, is_vowel_phone, phonetic_distance
 from phonematcher.tone import DIACRITIC_TONES, LEVELS, NUMERALS, PHRASE_MARKS, is_tone, tone_distance
@@ -115,6 +116,53 @@ def edit_distance(a: Sequence[str], b: Sequence[str]) -> float:
     return row[-1]
 
 
-def ipa_distance(a: str, b: str) -> float:
-    """:func:`edit_distance` between two IPA strings."""
-    return edit_distance(segments(a), segments(b))
+def align(a: Sequence[str], b: Sequence[str]) -> List[Tuple[Optional[str], Optional[str]]]:
+    """One least-cost alignment of two segment sequences, as pairs ``(left, right)``.
+
+    ``None`` marks a gap. The costs are those of :func:`edit_distance`. The traceback starts at
+    the end and prefers a substitution, then a deletion (a gap in *b*), then an insertion, so the
+    result is deterministic.
+    """
+    n, m = len(a), len(b)
+    cost = [[0.0] * (m + 1) for _ in range(n + 1)]
+    for i in range(1, n + 1):
+        cost[i][0] = float(i)
+    for j in range(1, m + 1):
+        cost[0][j] = float(j)
+    for i in range(1, n + 1):
+        for j in range(1, m + 1):
+            cost[i][j] = min(
+                cost[i - 1][j] + 1.0,
+                cost[i][j - 1] + 1.0,
+                cost[i - 1][j - 1] + substitution_cost(a[i - 1], b[j - 1]),
+            )
+    pairs: List[Tuple[Optional[str], Optional[str]]] = []
+    i, j = n, m
+    while i or j:
+        if i and j and math.isclose(
+            cost[i][j], cost[i - 1][j - 1] + substitution_cost(a[i - 1], b[j - 1]), abs_tol=1e-9
+        ):
+            pairs.append((a[i - 1], b[j - 1]))
+            i, j = i - 1, j - 1
+        elif i and math.isclose(cost[i][j], cost[i - 1][j] + 1.0, abs_tol=1e-9):
+            pairs.append((a[i - 1], None))
+            i -= 1
+        else:
+            pairs.append((None, b[j - 1]))
+            j -= 1
+    pairs.reverse()
+    return pairs
+
+
+def ipa_distance(a: str, b: str, normalized: bool = False) -> float:
+    """:func:`edit_distance` between two IPA strings.
+
+    With *normalized*, the distance is divided by the segment count of the longer string, so it
+    falls between 0 and 1. Two empty strings are at distance 0.
+    """
+    sa, sb = segments(a), segments(b)
+    dist = edit_distance(sa, sb)
+    if not normalized:
+        return dist
+    longest = max(len(sa), len(sb))
+    return dist / longest if longest else 0.0
