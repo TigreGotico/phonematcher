@@ -109,6 +109,8 @@ PanPhon gives 6 of the 28 vowels `delrel` 0 and the rest `delrel` −. A vowel h
 | `◌̴` velarized or pharyngealized | `hi` +, `back` + | `velarized` 0, `pharyngealized` 0 | the IPA chart |
 | `◌ˤ` pharyngealized | `lo` +, `back` + | `pharyngealized` +, `atr` − | the IPA chart names it, and McCarthy (1994), Hermes et al. (2017) and Al-Solami (2017) describe it |
 | `◌˞` rhoticity | `hi` +, `round` +, `ant` − | `ant` − only | the IPA chart names it; the reading is this table's |
+| `◌̩` syllabic | `syl` +, only on a continuant without delayed release or on a sonorant | the same, and on any fricative | the Unicode chart (U0250): `ɿ` is "IPA spelling - 007A z 0329" |
+| `◌̃` nasalized | `nas` +, only on a voiced base | `nas` + on a voiced base or on a vowel, voiced or not | the IPA chart prints it on the vowel in `ẽ` and ties it to no voicing |
 | `◌̊` ring above | no rule | `voi` − on any base, as `◌̥` | the IPA chart prints `ŋ̊`, the ring of "Voiceless" above a descender |
 | `◌̪` dental | no rule | `distr` + on a coronal | the IPA chart and the Unicode chart ("IPA: dental"); PanPhon's eight dental segments differ from their letters in `distr` alone |
 | `◌̢` retroflexion | no rule | `ant` − on a coronal | the Unicode chart ("IPA: retroflexion"); the reading is this table's |
@@ -137,6 +139,28 @@ A mark reads only if a chart states its meaning. These marks occur in PHOIBLE, W
 | `◌̍` | "this is not the Greek tonos", "Marshallese". The IPA chart marks a syllabic consonant with `◌̩`. |
 | `◌̵` `◌͓` `◌͠` | The Unicode chart gives no annotation. |
 | `↓` | The extIPA chart prints "ingressive airflow", which no feature of the table encodes. |
+
+### Marks that a base refuses
+
+A rule applies a mark only to the bases a chart prints it on. A base outside that class makes `vectorize_phones` raise `ValueError`, and the segment is at distance 1 from every other. A rule widens when a chart prints the mark on the new class of base, as the IPA chart does for `◌̃` on a vowel. The Unicode chart gives a mark a name and no base, so a name alone does not widen a rule.
+
+| Mark | What the charts print | Bases that stay refused |
+|---|---|---|
+| `◌̃` | `ẽ`, a vowel | consonants: `k̃ f̃ h̃`; a nasal: `m̃` |
+| `◌ʰ` | `tʰ dʰ` (IPA chart), `ʰp` (extIPA chart) | vowels `aʰ`, nasals `m̥ʰ`, liquids `lʰ`, glides `jʰ`, `ʔʰ` |
+| `◌ⁿ` | `dⁿ` | vowels `aⁿ`, fricatives `ⁿs`, liquids and glides `ⁿl ⁿw` |
+| `◌ʷ` `◌ʲ` | `tʷ dʷ`, `tʲ dʲ` | vowels `uʷ ʊʷ`, `iʲ` |
+| `◌ˡ` | `dˡ`, a coronal stop | `nˡ`, `pˡ` |
+| `◌̰` | `b̰ a̰`, both voiced | voiceless bases `p̰ k̰ t̰` |
+| `◌̩` | `n̩`, a nasal; the Unicode chart spells `ɿ` as `z̩`, so a fricative takes it too | vowels `a̩`, stops `ɟ̰̩` |
+| `◌̆` | `ĕ`, a vowel | `ɭ̆`, `ĭ̯` |
+| `◌̞` | `β̞`, a fricative | stops `ɡ̞ k̞ʰ` |
+| `◌ʱ` | a name only (Unicode chart: "breathy voiced, murmured") | voiceless clicks `ǃʱ ǀʱ` |
+| `◌̼` `◌̻` | `t̼ d̼`, `t̻ d̻` | labial bases `m̼ p̼`, `m̻` |
+| `◌ˀ` `◌ː` `◌̈` `◌ʼ` | `ː` once, `ë`, `p’ t’ k’ s’` | `ɑ̰ˀ`, `kːː`, `ẅ`, `ʎʼ` |
+| `ᵡ` | "≈ superscript" of `χ` | after an affricate: `ʦᵡ ʣᵡʼ` |
+
+The marks `◌̟ ◌̠ ◌̝ ◌̞ ◌̭ ˖ ˗ ˔ ˕` move a chart vowel along a scale. On a consonant that the rule accepts they read and change nothing: `ṱ` reads as `t`, and `r˔` reads as `r`. `◌̝ ◌̞ ˔ ˕` accept only a continuant.
 
 PanPhon writes a secondary articulation with the features of primary place. The mark then overwrites the place of its base: in PanPhon, `kʲ` and `qʲ` share a vector. Here each mark sets a feature of its own, and the base keeps its place. Thus `kʲ` has the place of `k` and differs from `k` only in `palatalized`. The four feature names belong to this table.
 
