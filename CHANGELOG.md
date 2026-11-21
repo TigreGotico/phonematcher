@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.7.0a1](https://github.com/TigreGotico/phonematcher/tree/0.7.0a1) (2026-11-21)
+
+[Full Changelog](https://github.com/TigreGotico/phonematcher/compare/0.6.0a1...0.7.0a1)
+
+**Merged pull requests:**
+
+- feat: read the strong and weak articulation marks and the other marks a chart names [\#31](https://github.com/TigreGotico/phonematcher/pull/31) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
+
 ## [0.6.0a1](https://github.com/TigreGotico/phonematcher/tree/0.6.0a1) (2026-11-21)
 
 [Full Changelog](https://github.com/TigreGotico/phonematcher/compare/0.5.0a3...0.6.0a1)
