@@ -131,6 +131,16 @@ The chart's vowel quadrilateral gives three ordered scales: the seven height row
 | `ʜ` | voiceless epiglottal fricative | `ħ` with `trill` + | the IPA chart (Other Symbols) and Hassan et al. (2011) |
 | `ʢ` | voiced epiglottal fricative | `ʕ` with `trill` + | the IPA chart (Other Symbols) and Hassan et al. (2011) |
 | `ʡ` | epiglottal plosive | `ħ` with `cont` −, `voi` − | the IPA chart (Other Symbols) |
+| `ȵ` | alveolo-palatal nasal | the manner of `n` with the place of `ɕ` | Unicode chart U+0235 (name), Wikipedia (sound), PHOIBLE 2.0 row |
+| `ȶ` | alveolo-palatal plosive | the manner of `t` with the place of `ɕ` | Unicode chart U+0236 (name), Wikipedia (sound), PHOIBLE 2.0 row |
+| `ȴ` | alveolo-palatal lateral | the manner of `l` with the place of `ɕ` | Unicode chart U+0234 (name), Wikipedia (sound), PHOIBLE 2.0 row |
+| `ᶑ` | retroflex implosive | the manner of `ɗ` with the place of `ɖ` | Unicode chart U+1D91 (name), Wikipedia (sound), PHOIBLE 2.0 row |
+| `ɿ` | apical dental vowel | the vector of `z̩` | Unicode chart U+027F: "IPA spelling - 007A z 0329" |
+| `ʮ` | labialized apical dental vowel | `ɿ` with `round` + and `lab` +, as `y` has them | Unicode chart U+02AE |
+
+The curl letters `ȵ ȶ ȴ` are Sinological symbols that the IPA does not contain. The Unicode chart gives only their names, under "Additions for Sinology", and Wikipedia states the sound. Their name says "WITH CURL", and the curl is the one of `ɕ` and `ʑ`. The place of `ɕ` is `ant` −, `cor` +, `distr` +, `hi` +, `lo` −, `back` − and `front` +. PHOIBLE 2.0 gives the same letters `anterior` +, where PanPhon's `ɕ` has `ant` −. The table keeps `ant` − so that `ȵ` and `ɕ` share one place, as `ɲ` and `ɕ` do in PanPhon. PHOIBLE agrees on every other place feature. For `ᶑ`, PHOIBLE gives `cg` −, because it codes the implosive with its own feature. PanPhon's `ɗ` has `cg` +, and the table keeps it, so `ᶑ` and `ɗ` differ only in place.
+
+`ᴇ` (U+1D07) and `ᵻ` (U+1D7B) do not read. The Unicode chart gives no meaning for `ᴇ`. For `ᵻ` it says "used with different meanings by Americanists and Oxford dictionaries".
 
 The IPA chart lists `ʜ`, `ʢ` and `ʡ` as the voiceless epiglottal fricative, the voiced epiglottal fricative and the epiglottal plosive. Hassan, Esling, Moisik and Crevier-Buchman (2011, "Aryepiglottic trilled variants of /ʕ, ħ/ in Iraqi Arabic", ICPhS XVII, pp. 831–834) write that "both pharyngeals and epiglottals occur at the aryepiglottic sphincter point of stricture" (p. 831, reporting Esling). They add that sounds heard as epiglottal "are associated either with AE trilled varieties of the simple fricative or approximant or with the default raised-larynx posture of the laryngeal sphincter" (p. 831). This table takes the first reading: `ʜ` and `ʢ` are `ħ` and `ʕ` with `trill` +.
 
@@ -163,7 +173,7 @@ Every IPA letter has its own vector, and a test checks this. To add a change, ad
 
 `vectorize_phones` reads a segment that the table does not list as its longest listed base plus the diacritics after it. Each diacritic sets the features of its rule, in order, if the base meets the rule's conditions. For example, `ɐ̥` is `ɐ` with `voi` −.
 
-PanPhon lists 6,367 segments, many with diacritics, such as `ɐ̃` and `kʷʰ`. The table takes all of them except the 50 stacks on `ɫ`, which `vectorize_phones` reads as `l̴` with the same marks, and the 10 tone rows (the five tone letters `˩ ˨ ˧ ˦ ˥`, each also with `ˤ`), which `phonematcher.tone` reads. It adds the four letters above: 6,311 segments. The build reads each listed segment in the same way: its longest listed base, then the rules of its marks. A listed stack thus has the same vector as an unlisted one, and a test checks this for every listed stack. A mark that has no rule takes the difference that PanPhon records between the segment and its base letter.
+PanPhon lists 6,367 segments, many with diacritics, such as `ɐ̃` and `kʷʰ`. The table takes all of them except the 50 stacks on `ɫ`, which `vectorize_phones` reads as `l̴` with the same marks, and the 10 tone rows (the five tone letters `˩ ˨ ˧ ˦ ˥`, each also with `ˤ`), which `phonematcher.tone` reads. It adds the ten letters above: 6,317 segments. The build reads each listed segment in the same way: its longest listed base, then the rules of its marks. A listed stack thus has the same vector as an unlisted one, and a test checks this for every listed stack. A mark that has no rule takes the difference that PanPhon records between the segment and its base letter.
 
 Some marks come before their base. `ⁿ`, `ᵐ` and `ᵑ` before a stop make a prenasalized stop, as in `ⁿd`. `ʰ` before a stop makes a preaspirated stop, as in `ʰt`. Each takes the rule of the same mark after a base.
 

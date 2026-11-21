@@ -339,6 +339,70 @@
       },
       "source": "International Phonetic Association, The IPA Chart, IPA_Kiel.pdf at internationalphoneticassociation.org (footer 'IPA Chart revised to 2015/2005'), Other Symbols: 'Epiglottal plosive'; Hassan, Esling, Moisik and Crevier-Buchman (2011), 'Aryepiglottic trilled variants of /ʕ, ħ/ in Iraqi Arabic', Proceedings of ICPhS XVII, Hong Kong, pp. 831-834, p. 831: 'both pharyngeals and epiglottals occur at the aryepiglottic sphincter point of stricture', and sounds described as epiglottal 'are associated either with AE trilled varieties of the simple fricative or approximant or with the default raised-larynx posture of the laryngeal sphincter'; this table takes the trilled reading",
       "reason": "PanPhon does not list the symbol. The chart lists it under Other Symbols as 'Epiglottal plosive'. It is built as a voiceless stop at the pharyngeal place."
+    },
+    {
+      "segment": "ȵ",
+      "name": "voiced alveolo-palatal nasal",
+      "from": "n",
+      "place_of": "ɕ",
+      "set": {
+        "front": "+"
+      },
+      "source": "Unicode Standard 18.0 code chart U0180 (Latin Extended-B), PDF p. 8, heading 'Additions for Sinology': '0235 LATIN SMALL LETTER N WITH CURL'; the chart U0250 (IPA Extensions), PDF p. 3, annotates ɕ 'LATIN SMALL LETTER C WITH CURL' as 'voiceless alveolo-palatal laminal fricative', and the curl is that of ɕ and ʑ; Wikipedia, 'Voiced palatal nasal': 'There is a non-IPA letter, ⟨ȵ⟩ (i.e. ⟨n⟩, plus the curl found in the symbols for alveolo-palatal sibilant fricatives ⟨ɕ, ʑ⟩), which is used especially in Sinological circles' (the sound is the voiced alveolo-palatal nasal); PHOIBLE 2.0 lists ȵ with [+coronal, +dorsal, +high, -low, +front, -back, +distributed]. Wikipedia states the sound; the chart gives the name; PHOIBLE's row supports it",
+      "reason": "PanPhon does not list the letter. It is built with the manner of [n] and the place of [ɕ]: the table's ɕ is the alveolo-palatal place, and [n] gives every other feature."
+    },
+    {
+      "segment": "ȶ",
+      "name": "voiceless alveolo-palatal plosive",
+      "from": "t",
+      "place_of": "ɕ",
+      "set": {
+        "front": "+"
+      },
+      "source": "Unicode Standard 18.0 code chart U0180 (Latin Extended-B), PDF p. 8, heading 'Additions for Sinology': '0236 LATIN SMALL LETTER T WITH CURL'; the chart U0250 (IPA Extensions), PDF p. 3, annotates ɕ 'LATIN SMALL LETTER C WITH CURL' as 'voiceless alveolo-palatal laminal fricative', and the curl is that of ɕ and ʑ; Wikipedia, 'Alveolo-palatal consonant': 'Symbols for alveolo-palatal consonants are sometimes used in Sinological circles', and 'Voiceless palatal plosive': 'a voiceless alveolo-palatal plosive ... There is also a para-IPA letter ⟨ȶ⟩ that is used primarily in Sinological phonetic notation'; PHOIBLE 2.0 lists ȶ with [+coronal, +dorsal, +high, -low, +front, -back, +distributed]. Wikipedia states the sound; the chart gives the name; PHOIBLE's row supports it",
+      "reason": "PanPhon does not list the letter. It is built with the manner of [t] and the place of [ɕ]: the table's ɕ is the alveolo-palatal place, and [t] gives every other feature."
+    },
+    {
+      "segment": "ȴ",
+      "name": "voiced alveolo-palatal lateral approximant",
+      "from": "l",
+      "place_of": "ɕ",
+      "set": {
+        "front": "+"
+      },
+      "source": "Unicode Standard 18.0 code chart U0180 (Latin Extended-B), PDF p. 8, heading 'Additions for Sinology': '0234 LATIN SMALL LETTER L WITH CURL'; the chart U0250 (IPA Extensions), PDF p. 3, annotates ɕ 'LATIN SMALL LETTER C WITH CURL' as 'voiceless alveolo-palatal laminal fricative', and the curl is that of ɕ and ʑ; Wikipedia, 'Voiced palatal lateral approximant': 'There is a non-IPA letter, U+0234 ȴ LATIN SMALL LETTER L WITH CURL; ⟨ȴ⟩ (⟨l⟩, plus the curl found in the symbols for alveolo-palatal sibilant fricatives ⟨ɕ, ʑ⟩), which is used especially in Sinological circles'; PHOIBLE 2.0 lists ȴ with [+coronal, +dorsal, +high, -low, +front, -back, +distributed]. Wikipedia states the sound; the chart gives the name; PHOIBLE's row supports it",
+      "reason": "PanPhon does not list the letter. It is built with the manner of [l] and the place of [ɕ]: the table's ɕ is the alveolo-palatal place, and [l] gives every other feature."
+    },
+    {
+      "segment": "ᶑ",
+      "name": "voiced retroflex implosive",
+      "from": "ɗ",
+      "place_of": "ɖ",
+      "set": {},
+      "source": "Unicode Standard 18.0 code chart U1D80 (Latin Extensions Supplement), PDF p. 3: '1D91 ᶑ LATIN SMALL LETTER D WITH HOOK AND TAIL', in the block 'Latin letters with retroflex hook'; Wikipedia, 'Voiced retroflex implosive': 'The implicit symbol in the International Phonetic Alphabet is ⟨ᶑ⟩ (a D with a tail for retroflex and a hook-top for implosive)'; PHOIBLE 2.0 lists ᶑ with [+coronal, -anterior, -distributed, +periodicGlottalSource, +loweredLarynxImplosive]. Wikipedia states the sound; the chart gives the name; PHOIBLE's row supports it",
+      "reason": "PanPhon does not list the letter. It is built with the manner of [ɗ], the alveolar implosive, and the place of [ɖ], the retroflex stop."
+    },
+    {
+      "segment": "ɿ",
+      "name": "apical dental vowel",
+      "from": "z",
+      "set": {
+        "syl": "+"
+      },
+      "source": "Unicode Standard 18.0 code chart U0250 (IPA Extensions), PDF p. 5, under 'Sinological extension': '027F ɿ LATIN SMALL LETTER REVERSED R WITH FISHHOOK ... apical dental vowel ... IPA spelling - 007A z 0329' (z with U+0329, the syllabic mark)",
+      "reason": "PanPhon does not list the letter. The chart gives its IPA spelling as a syllabic [z], so it has the vector of [z̩]: [z] with [syl] +."
+    },
+    {
+      "segment": "ʮ",
+      "name": "labialized apical dental vowel",
+      "from": "z",
+      "set": {
+        "syl": "+",
+        "round": "+",
+        "lab": "+"
+      },
+      "source": "Unicode Standard 18.0 code chart U0250 (IPA Extensions), PDF p. 6, under 'Sinological extensions': '02AE ʮ LATIN SMALL LETTER TURNED H WITH FISHHOOK ... labialized apical dental vowel'; the apical dental vowel is ɿ, which the chart (page 5) spells 'z' with U+0329",
+      "reason": "PanPhon does not list the letter. Labialized on a syllabic segment is lip rounding, which the table codes as [round] + and [lab] + (as in [y]). So it is [ɿ], that is [z̩], with those two values."
     }
   ]
 }
