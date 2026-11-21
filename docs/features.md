@@ -132,6 +132,22 @@ The chart's vowel quadrilateral gives three ordered scales: seven heights, three
 
 The pharyngeals and the epiglottals have one place of articulation and differ in manner. Hassan, Esling, Moisik and Crevier-Buchman (2011, "Aryepiglottic trilled variants of /ʕ, ħ/ in Iraqi Arabic", ICPhS XVII, pp. 831–834) write that "both pharyngeals and epiglottals occur at the aryepiglottic sphincter point of stricture". Sounds heard as epiglottal "are associated either with AE trilled varieties" of the pharyngeals.
 
+## Spellings that are not IPA
+
+Some transcriptions use a symbol that the IPA chart does not contain. The reader treats each one as the IPA letter it stands for, before it looks up any feature. `vectorize_phones("ʤ")` returns the vector of `d͡ʒ`, and `segments("ʤ")` returns `["d͡ʒ"]`. So `ipa_distance("ɡato", "gato")` is 0.0.
+
+| Spelling | Reads as | Unicode chart annotation |
+|---|---|---|
+| `g` (U+0067) | `ɡ` | cross reference "→ 0261 ɡ latin small letter script g"; U+0261 is "voiced velar stop" |
+| `ʦ` (U+02A6) | `t͡s` | "voiceless dental affricate" |
+| `ʣ` (U+02A3) | `d͡z` | "voiced dental affricate" |
+| `ʧ` (U+02A7) | `t͡ʃ` | "voiceless postalveolar affricate" |
+| `ʤ` (U+02A4) | `d͡ʒ` | "voiced postalveolar affricate" |
+| `ʨ` (U+02A8) | `t͡ɕ` | "voiceless alveolo-palatal affricate" |
+| `ʥ` (U+02A5) | `d͡ʑ` | "voiced alveolo-palatal affricate" |
+
+The annotations come from the Unicode code charts for U+0000 and U+0250. Chapter 7 of the Unicode Standard says that `ʦ` "is a transcription for the sound that could also be transcribed in IPA as [ t͜s ] ... or [ t͡s ]". The chart calls `ʦ` and `ʣ` dental, and the table's `s` and `z` are alveolar. The reading follows the common IPA pairing, not the place word. The full rows, with their sources, are in `phonematcher/data/spellings.json`. To add a spelling, add a row there with the chart annotation as its source, and add its pair to `tests/test_spellings.py`.
+
 ## Other changes
 
 | Segment | Feature | Value | Source |
