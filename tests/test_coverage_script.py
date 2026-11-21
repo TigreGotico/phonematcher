@@ -3,8 +3,8 @@
 The fixture is hand-counted: ``p``, ``aː``, ``ɡ`` and ``t͡ʃ`` are on the IPA chart (a consonant, a
 long vowel, the voiced velar plosive and the voiceless postalveolar affricate), so they read. ``H``
 is a capital Latin letter and ``#`` is a punctuation mark: neither is an IPA segment, so neither
-reads. ``tʃ`` is two letters with no tie bar: it fails as written and reads only when a tie bar is
-put between its two parts.
+reads. ``ⁿdʐ`` is a prenasal mark before two letters with no tie bar: it fails as written and reads only
+when a tie bar is put between its two ``segments`` parts, ``ⁿd`` and ``ʐ``.
 """
 import importlib.util
 from pathlib import Path
@@ -28,11 +28,11 @@ def test_census_counts_read_and_unread_segments():
 
 
 def test_a_tie_bar_between_the_parts_reads_a_segment_that_fails_as_written():
-    counts = {**FIXTURE, "tʃ": 7}
+    counts = {**FIXTURE, "ⁿdʐ": 7}
     plain = coverage.census(counts)
-    assert plain.unread == {"H": 4, "#": 1, "tʃ": 7}
+    assert plain.unread == {"H": 4, "#": 1, "ⁿdʐ": 7}
     retried = coverage.census(counts, tie_retry=True)
-    # tʃ becomes t͡ʃ and reads: 4 read as written, 1 read after the tie bar, 2 unread.
+    # ⁿdʐ becomes ⁿd͡ʐ and reads: 4 read as written, 1 read after the tie bar, 2 unread.
     assert (retried.distinct, retried.read, retried.read_by_tie) == (7, 4, 1)
     assert retried.unread == {"H": 4, "#": 1}
     assert (retried.tokens, retried.tokens_read) == (32, 27)
