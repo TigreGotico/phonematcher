@@ -473,6 +473,52 @@
       },
       "source": "The Unicode Standard 18.0 code chart U02B0, https://www.unicode.org/charts/PDF/U02B0.pdf (footer 'The Unicode Standard, Version 18.0, Copyright © 1991-2026 Unicode, Inc.'), PDF p. 4: '02D7 MODIFIER LETTER MINUS SIGN • retracted or backed articulation → 0320 combining minus sign below'",
       "reason": "The chart names ˗ the spacing form of ◌̠, so it takes the rule of ◌̠."
+    },
+    {
+      "marker": "̃",
+      "name": "Nasalized",
+      "vowels_only": false,
+      "conditions": [
+        {
+          "voi": "+",
+          "nas": "-"
+        },
+        {
+          "syl": "+",
+          "nas": "-"
+        }
+      ],
+      "content": {
+        "nas": "+"
+      },
+      "source": "International Phonetic Association, The IPA Chart, IPA_Kiel.pdf at internationalphoneticassociation.org (footer 'IPA Chart revised to 2015/2005'): the diacritic is named 'Nasalized' and the chart prints it on the vowel e, as ẽ",
+      "reason": "PanPhon applies the mark only to voiced bases. The chart prints it on a vowel and ties it to no voicing, so a voiceless vowel such as [ɐ̥̃] is nasalized. The other voiceless bases stay refused: the chart prints no consonant with the mark."
+    },
+    {
+      "marker": "\u0329",
+      "name": "Syllabic",
+      "vowels_only": false,
+      "conditions": [
+        {
+          "syl": "-",
+          "cont": "+",
+          "delrel": "-"
+        },
+        {
+          "syl": "-",
+          "son": "+"
+        },
+        {
+          "syl": "-",
+          "son": "-",
+          "cont": "+"
+        }
+      ],
+      "content": {
+        "syl": "+"
+      },
+      "source": "The Unicode Standard 18.0 code chart U0250 (IPA Extensions), PDF p. 5, under 'Sinological extension': '027F \u027f ... apical dental vowel ... IPA spelling - 007A z 0329', the mark on a fricative; International Phonetic Association, The IPA Chart (footer 'IPA Chart revised to 2015/2005'): the diacritic is named 'Syllabic'",
+      "reason": "PanPhon applies the mark to a continuant only if it has no delayed release, so [\u026e\u0329] could not be read. The Unicode chart spells a syllabic fricative with the mark, so it applies to any fricative. Syllabic vowels and stops stay refused."
     }
   ],
   "segments": [
