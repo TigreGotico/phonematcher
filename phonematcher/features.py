@@ -69,6 +69,15 @@ def _apply(diacritic: dict, vec: Vector) -> Vector:
     return tuple(out)
 
 
+def _is_diphthong(seg: str) -> bool:
+    plain = seg.replace(_TIES[0], "").replace(_TIES[1], "").replace("\u032f", "")
+    return any(_is_listed_vowel(plain[:i]) and _is_listed_vowel(plain[i:]) for i in range(1, len(plain)))
+
+
+def _is_listed_vowel(seg: str) -> bool:
+    return seg in phone_features and phone_features[seg][0] is True
+
+
 @lru_cache(maxsize=4096)
 def vectorize_phones(segment: str) -> Vector:
     """The feature vector of one IPA *segment*.
@@ -101,7 +110,7 @@ def vectorize_phones(segment: str) -> Vector:
             return compose_tie([vectorize_phones(part) for part in untied.split(_TIES[0])])
         except ValueError:
             pass
-    raise ValueError(f"Unrecognized phone {segment!r}")
+    raise ValueError(f"Unrecognized phone {segment!r}" + (": a diphthong is two segments" if _is_diphthong(seg) else ""))
 
 
 _NAS, _SON, _CONT, _DELREL, _SG, _CG = (

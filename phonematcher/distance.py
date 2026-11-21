@@ -10,13 +10,15 @@ from phonematcher.tone import DIACRITIC_TONES, LEVELS, NUMERALS, PHRASE_MARKS, i
 SUPRASEGMENTALS = frozenset("ˈˌ.‿|‖") | PHRASE_MARKS
 
 _TIES = ("͡", "͜")
+NON_SYLLABIC = "\u032f"
 
 
 def segments(ipa: str) -> List[str]:
     """Split *ipa* into segments.
 
     A segment is a base symbol with the diacritics and modifier letters that follow it. A tie bar
-    joins the symbols on both sides into one segment, so ``t͡ʃ`` is one affricate. Spaces become a
+    joins the symbols on both sides into one segment, so ``t͡ʃ`` is one affricate, unless both are
+    vowels: a diphthong is two segments, so ``a͡i`` gives ``a`` and ``i``. Spaces become a
     ``" "`` segment between words; stress, syllable and phrase-tone marks are dropped. A tone is
     one segment of tone letters after its syllable: a tone diacritic or a tone numeral is written
     as tone letters after the segment that carries it.
@@ -74,6 +76,9 @@ def segments(ipa: str) -> List[str]:
             if join_next:
                 out[-1] += ch
             continue
+        if join_next and out[-1][-1] in _TIES and is_vowel_phone(out[-1][:-1].replace(NON_SYLLABIC, "")) and is_vowel_phone(ch):
+            out[-1] = out[-1][:-1]
+            join_next = False
         starts_word = not out or out[-1] == " "
         if ch in PRE_DIACRITICS and (starts_word or is_vowel_phone(out[-1])) and not join_next:
             pending += ch
