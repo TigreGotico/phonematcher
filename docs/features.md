@@ -47,6 +47,7 @@ Each IPA segment has a vector of 36 distinctive features. A value is `True` (+),
 | PanPhon (Mortensen, Littell, Bharadwaj, Goyal, Dyer and Levin 2016, "PanPhon: A Resource for Mapping IPA Segments to Articulatory Feature Vectors", *Proceedings of COLING 2016*, pp. 3475–3484, MIT licence) | 6,367 segments, features 0 to 21, their weights and the rules for diacritics. Its two tone features are not used. |
 | The CSV conversion by Kyle Gorman (github.com/kylebgorman/hayes2009, Apache-2.0, in `scripts/sources/`) of the feature tables of Hayes (2009, *Introductory Phonology*, Wiley-Blackwell). Gorman's `hayes2009.py` names them as tables 4.7 to 4.9, section 4.10. | `front`, `tap` and `trill` for consonants |
 | The IPA chart (International Phonetic Association; the footer reads "IPA Chart revised to 2015/2005"), whose vowel quadrilateral is in `scripts/sources/ipa-vowel-chart.csv` | the height, backness and rounding of the 28 vowel letters |
+| The extIPA chart (International Clinical Phonetics and Linguistics Association; "Revised to 2015"), the Unicode Standard 18.0 code charts U0300 and U02B0, and Chang (2007) | the meaning of the marks in `◌͈ ◌͉ ◌̪ ◌̢ ◌͇ ◌̣ ◌̭ ◌̊` and `˔ ˕ ˖ ˗` |
 | `phonematcher/data/overrides.json` | every other change, each with its source and reason |
 
 The works cited on this page are in `docs/references.bib`, with their pages.
@@ -108,6 +109,34 @@ PanPhon gives 6 of the 28 vowels `delrel` 0 and the rest `delrel` −. A vowel h
 | `◌̴` velarized or pharyngealized | `hi` +, `back` + | `velarized` 0, `pharyngealized` 0 | the IPA chart |
 | `◌ˤ` pharyngealized | `lo` +, `back` + | `pharyngealized` +, `atr` − | the IPA chart names it, and McCarthy (1994), Hermes et al. (2017) and Al-Solami (2017) describe it |
 | `◌˞` rhoticity | `hi` +, `round` +, `ant` − | `ant` − only | the IPA chart names it; the reading is this table's |
+| `◌̊` ring above | no rule | `voi` − on any base, as `◌̥` | the IPA chart prints `ŋ̊`, the ring of "Voiceless" above a descender |
+| `◌̪` dental | no rule | `distr` + on a coronal | the IPA chart and the Unicode chart ("IPA: dental"); PanPhon's eight dental segments differ from their letters in `distr` alone |
+| `◌̢` retroflexion | no rule | `ant` − on a coronal | the Unicode chart ("IPA: retroflexion"); the reading is this table's |
+| `◌͇` equals sign below | no rule | `ant` + on a coronal | the Unicode chart ("IPA: alveolar"); the reading is this table's |
+| `◌̣` dot below | no rule | on a vowel, one chart row closer | the Unicode chart ("IPA: closer variety of vowel"); the one-row step is this table's |
+| `◌̭` circumflex below | no rule | as `◌̟` | the Unicode chart gives both "fronted articulation" |
+| `◌͈` strong articulation | no rule | read; no change | the extIPA chart |
+| `◌͉` weak articulation | no rule | read; no change | the extIPA chart |
+| `˔` `˕` `˖` `˗` | no rule | as `◌̝` `◌̞` `◌̟` `◌̠` | the Unicode chart names each as the spacing form of its combining mark |
+
+The extIPA chart (revised to 2015) prints `◌͈` as "strong articulation" and `◌͉` as "weak articulation", and gives neither a feature. Both marks read and change no feature.
+
+Korean fortis obstruents are written with `◌͈`, as `k͈ s͈ t͈`. Chang (2007, *UC Berkeley PhonLab Annual Report* 3(3), pp. 1 and 3) writes that the fortis series is "associated with glottal adduction and stiffening". The chart does not link the mark to that setting, and other languages write the mark too (Ewe `f͈` and `v͈`). So `k͈ s͈ t͈` read the same as `k s t`, and the fortis contrast is lost.
+
+### Marks that stay unread
+
+A mark reads only if a chart states its meaning. These marks occur in PHOIBLE, WikiPron or orthography2ipa and have no statement, so they do not read.
+
+| Mark | What the charts say |
+|---|---|
+| `ˁ` | The Unicode chart calls it a "typographical alternate for 02BF ʿ", the transliteration of Arabic ain. It does not name `ˤ`. |
+| `ʳ` `ʶ` | "r-coloring or r-offglides": the chart does not say which of the two a transcription means. |
+| `ˢ` `ˣ` `ᵡ` `ᶲ` `ᵏ` `ᵍ` | Only "≈ superscript" of the letter. A note under `ˠ` says that such modifier letters are "occasionally used in transcription of affricates". The reading is a tied affricate, which needs a reader change and not a diacritic rule, and in Finnish `eˣ` follows a vowel. |
+| `ᵊ` `ᵝ` `ᵘ` `ᶢ` | Only "≈ superscript" of the letter. |
+| `ᶬ` `ᶮ` `ᶯ` `ᶰ` `ᵑ` | Only "≈ superscript" of the nasal letter. `ᵐ`, `ⁿ` and `ᵑ` read as prenasalization by the rule of `◌ⁿ`; the others have no such statement. |
+| `◌̍` | "this is not the Greek tonos", "Marshallese". The IPA chart marks a syllabic consonant with `◌̩`. |
+| `◌̵` `◌͓` `◌͠` | The Unicode chart gives no annotation. |
+| `↓` | The extIPA chart prints "ingressive airflow", which no feature of the table encodes. |
 
 PanPhon writes a secondary articulation with the features of primary place. The mark then overwrites the place of its base: in PanPhon, `kʲ` and `qʲ` share a vector. Here each mark sets a feature of its own, and the base keeps its place. Thus `kʲ` has the place of `k` and differs from `k` only in `palatalized`. The four feature names belong to this table.
 
