@@ -1,5 +1,5 @@
 """Tone: the IPA chart's tone letters and tone diacritics (International Phonetic Association,
-The IPA Chart, revised to 2015, "Tones and word accents")."""
+The IPA Chart, footer "IPA Chart revised to 2015/2005", "Tones and word accents")."""
 import pytest
 
 from phonematcher import ipa_distance, segments
@@ -19,7 +19,7 @@ def test_tone_letters_give_levels_five_high_to_one_low():
     assert tone_levels("˥") == (5,) and tone_levels("˩") == (1,) and tone_levels("˨˩˦") == (2, 1, 4)
 
 
-def test_chao_numerals_read_as_tone_letters():
+def test_tone_numerals_read_as_tone_letters():
     assert segments("ma²¹⁴") == segments("ma˨˩˦")
 
 
