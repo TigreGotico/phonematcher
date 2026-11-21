@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.6.0a1](https://github.com/TigreGotico/phonematcher/tree/0.6.0a1) (2026-11-21)
+
+[Full Changelog](https://github.com/TigreGotico/phonematcher/compare/0.5.0a3...0.6.0a1)
+
+**Merged pull requests:**
+
+- feat: read the curl letters, ᶑ, ɿ and ʮ [\#26](https://github.com/TigreGotico/phonematcher/pull/26) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
+
 ## [0.5.0a3](https://github.com/TigreGotico/phonematcher/tree/0.5.0a3) (2026-11-21)
 
 [Full Changelog](https://github.com/TigreGotico/phonematcher/compare/0.5.0a2...0.5.0a3)
