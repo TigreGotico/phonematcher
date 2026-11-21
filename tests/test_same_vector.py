@@ -25,7 +25,7 @@ def test_the_groups_of_letters_with_one_vector_are_the_expected_ones():
 
 def test_no_two_base_letters_are_at_distance_zero():
     letters = same_vector.base_letters()
-    assert len(letters) == 129
+    assert len(letters) == 135
     zero = [(a, b) for a, b in combinations(letters, 2) if phonetic_distance(a, b) == 0]
     assert zero == [pair for group in EXPECTED_GROUPS for pair in combinations(group, 2)]
 
