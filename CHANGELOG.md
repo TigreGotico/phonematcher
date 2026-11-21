@@ -1,8 +1,21 @@
 # Changelog
 
+## [0.5.0a1](https://github.com/TigreGotico/phonematcher/tree/0.5.0a1) (2026-11-21)
+
+[Full Changelog](https://github.com/TigreGotico/phonematcher/compare/0.4.0a2...0.5.0a1)
+
+**Merged pull requests:**
+
+- test: hold the distances to metric properties [\#21](https://github.com/TigreGotico/phonematcher/pull/21) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
+- feat: read non-IPA spellings as the IPA letter they stand for [\#20](https://github.com/TigreGotico/phonematcher/pull/20) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
+
 ## [0.4.0a2](https://github.com/TigreGotico/phonematcher/tree/0.4.0a2) (2026-11-21)
 
-[Full Changelog](https://github.com/TigreGotico/phonematcher/compare/0.3.0a2...0.4.0a2)
+[Full Changelog](https://github.com/TigreGotico/phonematcher/compare/0.4.0a1...0.4.0a2)
+
+## [0.4.0a1](https://github.com/TigreGotico/phonematcher/tree/0.4.0a1) (2026-11-21)
+
+[Full Changelog](https://github.com/TigreGotico/phonematcher/compare/0.3.0a2...0.4.0a1)
 
 **Merged pull requests:**
 
