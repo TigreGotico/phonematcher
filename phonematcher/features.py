@@ -45,9 +45,14 @@ PRE_DIACRITICS = {
     "ⁿ": ("ⁿ", "post"), "ᵐ": ("ⁿ", "post"), "ᵑ": ("ⁿ", "post"), "ʰ": ("ʰ", "post"),
 }
 _TIES = ("͡", "͜")
+#: Non-IPA spellings (``data/spellings.json``) -> the IPA they read as.
+SPELLINGS: Dict[int, str] = str.maketrans({
+    row["spelling"]: row["reads_as"] for row in json.loads(
+        (Path(__file__).parent / "data" / "spellings.json").read_text(encoding="utf-8"))
+})
 #: Letters that Unicode does not decompose into a base and its mark: the rhotic vowels, and [ɫ],
-#: the IPA chart's example of ◌̴ (velarized or pharyngealized).
-_COMPOSED_LETTERS = str.maketrans({"ɚ": "ə˞", "ɝ": "ɜ˞", "ɫ": "l\u0334"})
+#: the IPA chart's example of ◌̴ (velarized or pharyngealized). Spellings read as their IPA.
+_COMPOSED_LETTERS = {**SPELLINGS, **str.maketrans({"ɚ": "ə˞", "ɝ": "ɜ˞", "ɫ": "l\u0334"})}
 
 
 def _applies(diacritic: dict, vec: Vector) -> bool:

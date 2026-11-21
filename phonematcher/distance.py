@@ -2,7 +2,7 @@
 import unicodedata
 from typing import List, Sequence
 
-from phonematcher.features import POST_DIACRITICS, PRE_DIACRITICS, is_vowel_phone, phonetic_distance
+from phonematcher.features import POST_DIACRITICS, PRE_DIACRITICS, SPELLINGS, is_vowel_phone, phonetic_distance
 from phonematcher.tone import DIACRITIC_TONES, LEVELS, NUMERALS, PHRASE_MARKS, is_tone, tone_distance
 
 #: Stress, syllable and boundary marks: they carry no segment of their own.
@@ -42,7 +42,7 @@ def segments(ipa: str) -> List[str]:
             out.append(tone)
             tone = ""
 
-    for ch in unicodedata.normalize("NFD", ipa):
+    for ch in unicodedata.normalize("NFD", ipa).translate(SPELLINGS):
         ch = NUMERALS.get(ch, ch)
         if ch in SUPRASEGMENTALS:
             continue
