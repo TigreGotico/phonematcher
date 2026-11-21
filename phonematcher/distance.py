@@ -18,7 +18,7 @@ def segments(ipa: str) -> List[str]:
     A segment is a base symbol with the diacritics and modifier letters that follow it. A tie bar
     joins the symbols on both sides into one segment, so ``t͡ʃ`` is one affricate. Spaces become a
     ``" "`` segment between words; stress, syllable and phrase-tone marks are dropped. A tone is
-    one segment of tone letters after its syllable: a tone diacritic or a Chao numeral is written
+    one segment of tone letters after its syllable: a tone diacritic or a tone numeral is written
     as tone letters after the segment that carries it.
     """
     out: List[str] = []

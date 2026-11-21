@@ -1,6 +1,6 @@
 """The feature table and the segment distance.
 
-Expected values follow the IPA chart (International Phonetic Association, revised to 2015) and the feature definitions of PanPhon (Mortensen et al.
+Expected values follow the IPA chart (International Phonetic Association; footer "IPA Chart revised to 2015/2005") and the feature definitions of PanPhon (Mortensen et al.
 2016), never values read back from the table under test.
 """
 import json
@@ -108,7 +108,7 @@ def test_unknown_symbol_is_far_from_everything():
 
 @pytest.mark.parametrize("vowel", ["u", "ʊ", "o", "ɔ", "y", "ø", "ɒ"])
 def test_rounded_vowels_are_labial(vowel):
-    """Hayes (2009) gives every rounded vowel [+LABIAL, +round]."""
+    """The Hayes (2009) CSV gives every rounded vowel [+LABIAL, +round]."""
     assert feature(vowel, "lab") is True and feature(vowel, "round") is True
 
 
@@ -128,7 +128,8 @@ def test_trill_and_tap_differ():
 
 
 def test_near_open_vowels_are_low():
-    """[æ] and [ɐ] are near-open (IPA chart); Hayes and PHOIBLE mark near-open vowels [+low]."""
+    """[æ] and [ɐ] are near-open (IPA chart); PHOIBLE 2.0 marks both [+low] in every inventory row.
+    The Hayes CSV marks [æ] [+low] and lists no [ɐ]."""
     assert feature("æ", "lo") is True and feature("ɐ", "lo") is True
     assert phonetic_distance("ɐ", "a") < phonetic_distance("ɐ", "e")
 
@@ -141,7 +142,8 @@ def test_a_listed_diacritic_keeps_its_effect_on_a_chart_vowel():
 
 
 def test_tongue_root_is_its_own_feature():
-    """Casali (2007), after Lindau (1979): [ATR] is a pharyngeal-cavity contrast, not vowel height."""
+    """Casali (2007): pharyngeal-cavity expansion measures the [ATR] contrast better than tongue
+    root position alone, so this table gives [ATR] its own feature and not a vowel height."""
     assert feature("ɛ̘", "atr") is True and feature("ɛ̘", "tense") is feature("ɛ", "tense")
     assert feature("u̙", "atr") is False and vectorize_phones("u̙") != vectorize_phones("ʊ")
 
@@ -162,8 +164,8 @@ def test_preaspirated_stop_has_spread_glottis():
     assert feature("ʰt", "sg") is True
 
 
-#: Height of each front vowel on the chart, from close (0) to open (6); the front column has no
-#: mid (3) letter.
+#: Height row of each front vowel in this table's seven rows, from close (0) to open (6); the
+#: front column has no mid (3) letter.
 CHART_HEIGHT = {"i": 0, "ɪ": 1, "e": 2, "ɛ": 4, "æ": 5, "a": 6}
 
 
@@ -181,7 +183,7 @@ def test_mid_central_vowel_sits_between_close_mid_and_open_mid():
 
 
 def test_open_a_is_front_and_near_open_a_is_central():
-    """The chart places [a] open front and [ɐ] near-open central."""
+    """The chart draws [a] at the open front corner and [ɐ] in the central column, between open-mid and open."""
     assert feature("a", "front") is True and feature("ɐ", "front") is False
     assert feature("ɐ", "round") is False
 
@@ -273,7 +275,7 @@ def test_a_listed_stack_equals_the_same_stack_read_by_the_rules():
 
 @pytest.mark.parametrize("a, b", [("kʲ", "cʲ"), ("kʲ", "qʲ"), ("kʷ", "qʷ"), ("ɡʲ", "ɟ"), ("ŋʲ", "ɲ")])
 def test_a_secondary_mark_keeps_the_primary_place(a, b):
-    """Clements and Hume (1995): a secondary articulation adds to the primary one and does not replace it, so a palatalized
+    """A secondary articulation adds to the primary one and does not replace it, so a palatalized
     velar is not a palatal and a labialized velar is not a labialized uvular."""
     assert vectorize_phones(a) != vectorize_phones(b)
 
@@ -308,7 +310,7 @@ def test_raised_and_lowered_marks_work_in_any_order():
 def test_pharyngealization_and_retracted_tongue_root_are_distinct():
     """Hermes et al. (2017, rt-MRI) and Al-Solami (2017, ultrasound): emphatics constrict the upper
     pharynx with the tongue dorsum, with inconsistent tongue-root retraction, so [iˤ] is not [i̙];
-    both still retract the root."""
+    this table gives both [-atr]."""
     assert vectorize_phones("iˤ") != vectorize_phones("i̙")
     assert feature("iˤ", "pharyngealized") is True and feature("i̙", "pharyngealized") is False
     assert feature("iˤ", "atr") is False and feature("i̙", "atr") is False

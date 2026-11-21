@@ -1,0 +1,44 @@
+cff-version: 1.2.0
+message: "If you use phonematcher in research, please cite it as below."
+title: "phonematcher"
+type: software
+abstract: >-
+  phonematcher measures distinctive-feature distances between IPA segments and
+  between IPA strings, compares tones, and runs a phonetic fuzzy search over
+  IPA. Its feature table starts from PanPhon and lists every change with its
+  source.
+authors:
+  - name: "JarbasAi"
+    email: "jarbasai@mailfence.com"
+license: MIT
+repository-code: "https://github.com/TigreGotico/phonematcher"
+keywords:
+  - phonetics
+  - IPA
+  - distinctive features
+  - phonetic distance
+  - fuzzy search
+references:
+  - type: conference-paper
+    title: "PanPhon: A Resource for Mapping IPA Segments to Articulatory Feature Vectors"
+    authors:
+      - family-names: Mortensen
+        given-names: David R.
+      - family-names: Littell
+        given-names: Patrick
+      - family-names: Bharadwaj
+        given-names: Akash
+      - family-names: Goyal
+        given-names: Kartik
+      - family-names: Dyer
+        given-names: Chris
+      - family-names: Levin
+        given-names: Lori
+    collection-title: "Proceedings of COLING 2016, the 26th International Conference on Computational Linguistics: Technical Papers"
+    conference:
+      name: "COLING 2016"
+      city: Osaka
+      country: JP
+    year: 2016
+    pages: "3475-3484"
+    url: "https://aclanthology.org/C16-1328/"

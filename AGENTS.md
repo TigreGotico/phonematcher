@@ -25,7 +25,7 @@ pytest --import-mode=importlib tests/
 
 ## Rules
 
-- Every feature value comes from PanPhon, Hayes (2009), the IPA chart or a cited change in `overrides.json`. A change to a value needs a source in `overrides.json` and a test that fails without it.
+- Every feature value comes from PanPhon, the Hayes (2009) CSV, the IPA chart or a cited change in `overrides.json`. A change to a value needs a source in `overrides.json` and a test that fails without it.
 - Branches: `dev` (work) and `master` (stable).
 - Never edit `version.py`. Releases bump it from conventional-commit prefixes.
 - Commit identity: JarbasAi <jarbasai@mailfence.com>.

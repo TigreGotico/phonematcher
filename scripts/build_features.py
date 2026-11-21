@@ -1,8 +1,8 @@
 """Build phonematcher/data/features.json.
 
 PanPhon (Mortensen et al. 2016, MIT) supplies the segments, the feature weights and the diacritic
-rules. Hayes (2009, Introductory Phonology; the CSV conversion by Gorman, Apache-2.0, vendored in
-``scripts/sources/``) adds [front], [tap] and [trill]. The vowel letters take their height,
+rules. the Hayes (2009) feature tables as converted to CSV by Gorman (Apache-2.0, vendored in
+``scripts/sources/``; tables 4.7 to 4.9 per Gorman) adds [front], [tap] and [trill]. The vowel letters take their height,
 backness and rounding from the IPA chart (``scripts/sources/ipa-vowel-chart.csv``). [atr], the
 secondary articulations and the epiglottals are local features. ``phonematcher/data/overrides.json`` holds the other changes, each with its source.
 Run after changing any input:
@@ -37,13 +37,12 @@ CHART = Path(__file__).resolve().parent / "sources" / "ipa-vowel-chart.csv"
 HAYES_NAMES = {"hi": "high", "lo": "low", "front": "front", "back": "back", "round": "round",
                "tense": "tense", "lab": "LABIAL", "tap": "tap", "trill": "trill"}
 VOWEL_FEATURES = ("hi", "lo", "front", "back", "round", "tense", "lab")
-#: The seven heights of the chart, close to open.
+#: The seven height rows, close to open.
 HEIGHTS = ("close", "near-close", "close-mid", "mid", "open-mid", "near-open", "open")
 #: [h1] ... [h6]: a vowel is + for each step its height lies below close, so the number of
-#: differing step features equals the number of chart rows between two vowels.
+#: differing step features equals the number of height rows between two vowels.
 STEPS = scales.STEPS
-#: Secondary articulations, each a feature of its own beside the primary place (Clements and
-#: Hume 1995, section 3.5.1).
+#: Secondary articulations, each a feature of its own beside the primary place.
 SECONDARY = ("palatalized", "velarized", "labialized", "pharyngealized")
 ADDED = {"front": 0.25, "tap": 0.25, "trill": 0.25, "atr": 0.25, **{s: 0.125 for s in STEPS},
          **{s: 0.125 for s in SECONDARY}}
@@ -197,7 +196,7 @@ def main(out_path: Path) -> None:
     phones = {seg: "".join(vec[f] for f in features) for seg, vec in phones.items()}
     out = {
         "source": f"PanPhon {importlib.metadata.version('panphon')} (Mortensen et al. 2016, MIT); "
-                  "[front], [tap] and [trill] from Hayes (2009, Introductory Phonology); vowel "
+                  "[front], [tap] and [trill] from the Hayes (2009) tables as converted to CSV by Gorman; vowel "
                   "letters from the IPA chart; "
                   f"{len(overrides)} value, {len(changes['diacritics'])} diacritic and "
                   f"{len(changes['segments'])} segment changes from overrides.json",
