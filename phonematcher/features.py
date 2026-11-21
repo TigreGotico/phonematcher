@@ -1,0 +1,191 @@
+"""Distinctive features of IPA segments, and the weighted distance between two segments.
+
+The table is PanPhon's (Mortensen et al. 2016, "PanPhon: A Resource for Mapping IPA Segments to
+Articulatory Feature Vectors", COLING; MIT License), with the changes listed in
+``data/overrides.json``, each of which names its source. ``scripts/build_features.py`` builds
+``data/features.json`` from both.
+
+A feature value is ``True`` (+), ``False`` (−) or ``None`` (0: the feature does not apply).
+"""
+import json
+import unicodedata
+from functools import lru_cache
+from pathlib import Path
+from typing import Dict, List, Optional, Tuple
+
+from phonematcher.scales import shift
+
+_DATA = json.loads((Path(__file__).parent / "data" / "features.json").read_text(encoding="utf-8"))
+
+#: Feature names, in vector order.
+FEATURES: Tuple[str, ...] = tuple(_DATA["features"])
+#: PanPhon's weight for each feature.
+WEIGHTS: Tuple[float, ...] = tuple(_DATA["weights"])
+NUM_FEATURES = len(FEATURES)
+SOURCE: str = _DATA["source"]
+
+Vector = Tuple[Optional[bool], ...]
+
+_VALUE = {"+": True, "-": False, "0": None}
+
+#: Segment (NFD) -> feature vector.
+phone_features: Dict[str, Vector] = {
+    seg: tuple(_VALUE[c] for c in vec) for seg, vec in _DATA["phones"].items()
+}
+
+_DIACRITICS: Dict[Tuple[str, str], dict] = {
+    (d["marker"], d["position"]): d for d in _DATA["diacritics"]
+}
+#: Diacritics written after their base.
+POST_DIACRITICS = {marker for marker, position in _DIACRITICS if position == "post"}
+#: Marks written before a stop: prenasalization takes PanPhon's rule for ◌ⁿ (the nasal's place
+#: is the stop's), preaspiration its rule for ◌ʰ.
+PRE_DIACRITICS = {
+    **{marker: (marker, "pre") for marker, position in _DIACRITICS if position == "pre"},
+    "ⁿ": ("ⁿ", "post"), "ᵐ": ("ⁿ", "post"), "ᵑ": ("ⁿ", "post"), "ʰ": ("ʰ", "post"),
+}
+_TIES = ("͡", "͜")
+#: Letters that Unicode does not decompose into a base and its mark: the rhotic vowels, and [ɫ],
+#: the IPA chart's example of ◌̴ (velarized or pharyngealized).
+_COMPOSED_LETTERS = str.maketrans({"ɚ": "ə˞", "ɝ": "ɜ˞", "ɫ": "l\u0334"})
+
+
+def _applies(diacritic: dict, vec: Vector) -> bool:
+    conditions = diacritic["conditions"]
+    return not conditions or any(
+        all(vec[FEATURES.index(f)] is _VALUE[v] for f, v in cond.items()) for cond in conditions
+    )
+
+
+def _apply(diacritic: dict, vec: Vector) -> Vector:
+    out = list(vec)
+    for f, v in diacritic["content"].items():
+        out[FEATURES.index(f)] = _VALUE[v]
+    return tuple(out)
+
+
+@lru_cache(maxsize=4096)
+def vectorize_phones(segment: str) -> Vector:
+    """The feature vector of one IPA *segment*.
+
+    A segment in the table is read as listed. Otherwise the longest listed base in it takes the
+    diacritics around it, each by PanPhon's rule for that diacritic, as long as the rule's
+    conditions hold. Raises ``ValueError`` for a segment it cannot read.
+    """
+    seg = unicodedata.normalize("NFD", segment).translate(_COMPOSED_LETTERS)
+    if seg in phone_features:
+        return phone_features[seg]
+    untied = seg.replace(_TIES[1], _TIES[0])
+    if untied in phone_features:
+        return phone_features[untied]
+
+    start = 0
+    while start < len(seg) and seg[start] in PRE_DIACRITICS:
+        start += 1
+    for end in range(len(seg), start, -1):
+        base = seg[start:end]
+        if base in phone_features and all(m in POST_DIACRITICS for m in seg[end:]):
+            vec = phone_features[base]
+            for marker in seg[:start]:
+                vec = _apply_if(_DIACRITICS[PRE_DIACRITICS[marker]], vec, segment)
+            for marker in seg[end:]:
+                vec = _apply_if(_DIACRITICS[marker, "post"], vec, segment)
+            return vec
+    if _TIES[0] in untied:
+        try:
+            return compose_tie([vectorize_phones(part) for part in untied.split(_TIES[0])])
+        except ValueError:
+            pass
+    raise ValueError(f"Unrecognized phone {segment!r}")
+
+
+_NAS, _SON, _CONT, _DELREL, _SG, _CG = (
+    FEATURES.index(f) for f in ("nas", "son", "cont", "delrel", "sg", "cg"))
+#: Articulators: in a double articulation each one the parts use is used.
+_ARTICULATORS = {FEATURES.index(f) for f in ("lab", "cor", "hi", "back")}
+
+
+def _tie(first: Vector, second: Vector) -> Vector:
+    def stop(v: Vector) -> bool:
+        return v[_SON] is False and v[_CONT] is False
+
+    def nasal(v: Vector) -> bool:
+        return v[_NAS] is True and v[_CONT] is False
+
+    out = list(second)
+    if nasal(first) and second[_SON] is False:
+        out[_NAS] = True  # prenasalized, as ᵐb
+    elif stop(first) and second[_SON] is False and second[_CONT] is True:
+        out[_CONT], out[_DELREL] = False, True  # affricate: the fricative with a stop onset
+        for i in (_SG, _CG):
+            out[i] = True if True in (first[i], second[i]) else second[i]
+    elif (stop(first) and stop(second)) or (nasal(first) and nasal(second)):
+        out = [x if x == y else y if x is None else x if y is None  # double, as k͡p
+               else True if i in _ARTICULATORS else None
+               for i, (x, y) in enumerate(zip(first, second))]
+    else:
+        raise ValueError("a tie of these parts has no reading")
+    return tuple(out)
+
+
+def compose_tie(parts: List[Vector]) -> Vector:
+    """The vector of tied segments, from the vectors of the parts, right to left: a nasal before
+    an obstruent prenasalizes it, a stop before a fricative makes an affricate with the glottal
+    features of both, and two stops or two nasals make a double articulation: a feature one part
+    leaves at 0 takes the other's value, an articulator either part uses is +, and other features
+    the parts set apart are 0. Other ties, such as two vowels, raise ``ValueError``."""
+    vec = parts[-1]
+    for part in reversed(parts[:-1]):
+        vec = _tie(part, vec)
+    return vec
+
+
+_HI, _LO = FEATURES.index("hi"), FEATURES.index("lo")
+_SIGN = {True: "+", False: "-", None: "0"}
+
+
+def _apply_if(diacritic: dict, vec: Vector, segment: str) -> Vector:
+    """Apply one diacritic. [+high, +low] is impossible, so a mark that adds one keeps the
+    other as the base has it."""
+    if not _applies(diacritic, vec):
+        raise ValueError(f"{diacritic['marker']!r} does not apply to the base of {segment!r}")
+    out = list(_apply(diacritic, vec))
+    if "shift" in diacritic:
+        signs = {f: _SIGN[v] for f, v in zip(FEATURES, out)}
+        shift(signs, diacritic["shift"])
+        out = [_VALUE[signs[f]] for f in FEATURES]
+    if out[_HI] is True and out[_LO] is True:
+        out[_LO if vec[_HI] is True else _HI] = False
+    return tuple(out)
+
+
+def is_vowel_phone(segment: str) -> bool:
+    """True for a syllabic segment."""
+    try:
+        return vectorize_phones(segment)[0] is True
+    except ValueError:
+        return False
+
+
+def _number(value: Optional[bool]) -> int:
+    return 1 if value is True else -1 if value is False else 0
+
+
+def phonetic_distance(a: str, b: str) -> float:
+    """Weighted feature distance between two segments, from 0 (same features) to 1.
+
+    Each feature contributes its PanPhon weight times half the difference of its values, with
+    + = 1, 0 = 0 and − = −1, so a +/− mismatch costs the full weight and a 0 against + or − costs
+    half. The sum is divided by the total weight. A segment that cannot be read is at distance 1
+    from every other segment. A space matches only a space.
+    """
+    if a == b:
+        return 0.0
+    if a == " " or b == " ":
+        return 1.0
+    try:
+        va, vb = vectorize_phones(a), vectorize_phones(b)
+    except ValueError:
+        return 1.0
+    diff = sum(w * abs(_number(x) - _number(y)) / 2 for w, x, y in zip(WEIGHTS, va, vb))
+    return diff / sum(WEIGHTS)

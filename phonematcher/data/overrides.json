@@ -1,0 +1,344 @@
+{
+  "source": "Changes to the feature values built from PanPhon, Hayes (2009) and the IPA vowel chart, each with the source that decides it.",
+  "overrides": [
+    {
+      "phone": "ɹ",
+      "feature": "hi",
+      "panphon": "+",
+      "value": "0",
+      "source": "Hayes (2009), Introductory Phonology, as converted to CSV by Gorman (github.com/kylebgorman/hayes2009, dataprep/Features.csv)",
+      "reason": "Hayes gives the alveolar approximant no tongue-body value; PanPhon's [+high] describes the English bunched r, not the symbol."
+    },
+    {
+      "phone": "ɹ",
+      "feature": "round",
+      "panphon": "+",
+      "value": "-",
+      "source": "Hayes (2009), Introductory Phonology, as converted to CSV by Gorman (github.com/kylebgorman/hayes2009, dataprep/Features.csv)",
+      "reason": "Hayes gives [ɹ] [-round]; the IPA chart symbol carries no lip rounding."
+    }
+  ],
+  "diacritics": [
+    {
+      "marker": "̈",
+      "name": "Centralized",
+      "vowels_only": true,
+      "content": {
+        "front": "-",
+        "back": "-"
+      },
+      "source": "International Phonetic Association, The IPA Chart (revised to 2015), internationalphoneticassociation.org: the diacritic is named 'Centralized'",
+      "reason": "This table reads 'centralized' as a move to the central column of the chart, which is [-front, -back]. PanPhon's rule for it changes no feature."
+    },
+    {
+      "marker": "̘",
+      "name": "Advanced tongue root",
+      "vowels_only": false,
+      "restore": [
+        "tense"
+      ],
+      "content": {
+        "atr": "+"
+      },
+      "source": "Casali (2007), 'Some observations on the phonetics of [ATR] contrasts', lecture, University of Education, Winneba (research.canil.ca/ATRLecture/Phonetics of ATR.pdf), section 2: [ATR] is an expansion or contraction of the pharyngeal cavity, after Lindau (1979), 'The feature expanded', Journal of Phonetics 7",
+      "reason": "PanPhon writes ATR as [+tense] and RTR as [-tense]. Here [tense] has no part in vowel height, and ATR is a contrast in the size of the pharyngeal cavity, so the mark sets [atr] and keeps [tense] as the base has it."
+    },
+    {
+      "marker": "̙",
+      "name": "Retracted tongue root",
+      "vowels_only": false,
+      "restore": [
+        "tense"
+      ],
+      "content": {
+        "atr": "-"
+      },
+      "source": "Casali (2007), 'Some observations on the phonetics of [ATR] contrasts', lecture, University of Education, Winneba (research.canil.ca/ATRLecture/Phonetics of ATR.pdf), section 2: [ATR] is an expansion or contraction of the pharyngeal cavity, after Lindau (1979), 'The feature expanded', Journal of Phonetics 7",
+      "reason": "PanPhon writes ATR as [+tense] and RTR as [-tense]. Here [tense] has no part in vowel height, and ATR is a contrast in the size of the pharyngeal cavity, so the mark sets [atr] and keeps [tense] as the base has it."
+    },
+    {
+      "marker": "ʲ",
+      "name": "Palatalized",
+      "vowels_only": false,
+      "restore": [
+        "hi",
+        "back"
+      ],
+      "content": {
+        "palatalized": "+"
+      },
+      "source": "Clements and Hume (1995), 'The internal organization of speech sounds', in Goldsmith (ed.), The Handbook of Phonological Theory, Blackwell, ch. 7, sections 3.5 and 3.5.1: a secondary articulation is a minor articulation linked under the C-place node beside the primary one",
+      "reason": "PanPhon writes the mark with the primary place features ['hi', 'back'], so it overwrote the base's place: in PanPhon kʲ and qʲ share a vector. The secondary articulation adds to the primary place and does not replace it, so the mark sets a feature of its own and the base keeps its place. The feature names are this table's."
+    },
+    {
+      "marker": "ᶣ",
+      "name": "Labio-palatalized",
+      "vowels_only": false,
+      "restore": [
+        "hi",
+        "back",
+        "round"
+      ],
+      "content": {
+        "palatalized": "+",
+        "labialized": "+"
+      },
+      "source": "Clements and Hume (1995), 'The internal organization of speech sounds', in Goldsmith (ed.), The Handbook of Phonological Theory, Blackwell, ch. 7, sections 3.5 and 3.5.1: a secondary articulation is a minor articulation linked under the C-place node beside the primary one",
+      "reason": "PanPhon writes the mark with the primary place features ['hi', 'back', 'round'], so it overwrote the base's place: in PanPhon kʲ and qʲ share a vector. The secondary articulation adds to the primary place and does not replace it, so the mark sets a feature of its own and the base keeps its place. The feature names are this table's."
+    },
+    {
+      "marker": "ʷ",
+      "name": "Labialized",
+      "vowels_only": false,
+      "restore": [
+        "hi",
+        "back",
+        "round"
+      ],
+      "content": {
+        "labialized": "+"
+      },
+      "source": "Clements and Hume (1995), 'The internal organization of speech sounds', in Goldsmith (ed.), The Handbook of Phonological Theory, Blackwell, ch. 7, sections 3.5 and 3.5.1: a secondary articulation is a minor articulation linked under the C-place node beside the primary one",
+      "reason": "PanPhon writes the mark with the primary place features ['hi', 'back', 'round'], so it overwrote the base's place: in PanPhon kʲ and qʲ share a vector. The secondary articulation adds to the primary place and does not replace it, so the mark sets a feature of its own and the base keeps its place. The feature names are this table's."
+    },
+    {
+      "marker": "ˠ",
+      "name": "Velarized",
+      "vowels_only": false,
+      "restore": [
+        "hi",
+        "back"
+      ],
+      "content": {
+        "velarized": "+"
+      },
+      "source": "Clements and Hume (1995), 'The internal organization of speech sounds', in Goldsmith (ed.), The Handbook of Phonological Theory, Blackwell, ch. 7, sections 3.5 and 3.5.1: a secondary articulation is a minor articulation linked under the C-place node beside the primary one",
+      "reason": "PanPhon writes the mark with the primary place features ['hi', 'back'], so it overwrote the base's place: in PanPhon kʲ and qʲ share a vector. The secondary articulation adds to the primary place and does not replace it, so the mark sets a feature of its own and the base keeps its place. The feature names are this table's."
+    },
+    {
+      "marker": "̴",
+      "name": "Velarized or pharyngealized",
+      "vowels_only": false,
+      "restore": [
+        "hi",
+        "back"
+      ],
+      "content": {
+        "velarized": "0",
+        "pharyngealized": "0"
+      },
+      "source": "International Phonetic Association, The IPA Chart (revised to 2015), internationalphoneticassociation.org: the diacritic is named 'Velarized or pharyngealized'",
+      "reason": "The chart leaves the place open, so the mark sets both [velarized] and [pharyngealized] to 0: one of the two, not known which. The base keeps its place."
+    },
+    {
+      "marker": "ˤ",
+      "name": "Pharyngealized",
+      "vowels_only": false,
+      "restore": [
+        "lo",
+        "back"
+      ],
+      "content": {
+        "pharyngealized": "+",
+        "atr": "-"
+      },
+      "source": "McCarthy (1994), 'The phonetics and phonology of Semitic pharyngeals', in Keating (ed.), Phonological Structure and Phonetic Form: Papers in Laboratory Phonology III, Cambridge University Press, pp. 218-219: the emphatics have 'a constriction in the upper pharynx' and 'should really be called uvularized'; Hermes, Barlaz, Shosted, Liang and Sutton (2017), Interspeech 2017, pp. 201-205; Al-Solami (2017), Canadian Acoustics 45(1), pp. 25-35: emphatics show 'tongue root and tongue dorsum retraction with inconsistent tongue root retraction'; Clements and Hume (1995), section 3.5: 'pharyngealization, involving the retraction of the tongue root'",
+      "reason": "PanPhon writes the mark as [+low, +back], which overwrote the base's place. Pharyngealized (emphatic) sounds constrict the upper pharynx with the tongue dorsum, at a different place from the pharyngeals (Hermes et al. 2017), and retract the tongue root inconsistently (Al-Solami 2017). The mark sets its own feature, [+pharyngealized], plus [-atr] for the tongue-root part, and keeps the base's place."
+    },
+    {
+      "marker": "˞",
+      "name": "Rhoticity",
+      "vowels_only": false,
+      "restore": [
+        "hi",
+        "round"
+      ],
+      "content": {},
+      "source": "International Phonetic Association, The IPA Chart (revised to 2015), internationalphoneticassociation.org: the diacritic is named 'Rhoticity'",
+      "reason": "PanPhon's rule gives [+high, +round, -anterior], so [ɚ] came out high and rounded. The chart names the mark only. This table reads it as a colouring that keeps the vowel's height and rounding, and keeps PanPhon's [-anterior]."
+    },
+    {
+      "marker": "̥",
+      "name": "Voiceless",
+      "vowels_only": false,
+      "content": {
+        "voi": "-"
+      },
+      "source": "International Phonetic Association, The IPA Chart (revised to 2015), internationalphoneticassociation.org: the diacritic is named 'Voiceless'",
+      "reason": "PanPhon applies the mark only to voiced sonorants, so [d̥] could not be read. It devoices any base.",
+      "conditions": []
+    },
+    {
+      "marker": "̬",
+      "name": "Voiced",
+      "vowels_only": false,
+      "content": {
+        "voi": "+"
+      },
+      "source": "International Phonetic Association, The IPA Chart (revised to 2015), internationalphoneticassociation.org: the diacritic is named 'Voiced'",
+      "reason": "PanPhon has no rule for the mark. It voices any base.",
+      "conditions": []
+    },
+    {
+      "marker": "̝",
+      "name": "Raised",
+      "vowels_only": false,
+      "content": {},
+      "source": "International Phonetic Association, The IPA Chart (revised to 2015), internationalphoneticassociation.org: the diacritic is named 'Raised'",
+      "reason": "PanPhon's rule changes no feature. This table reads the mark as one chart row closer.",
+      "shift": {
+        "height": -1
+      }
+    },
+    {
+      "marker": "̞",
+      "name": "Lowered",
+      "vowels_only": false,
+      "content": {},
+      "source": "International Phonetic Association, The IPA Chart (revised to 2015), internationalphoneticassociation.org: the diacritic is named 'Lowered'",
+      "reason": "PanPhon's rule changes no feature. This table reads the mark as one chart row more open.",
+      "shift": {
+        "height": 1
+      }
+    },
+    {
+      "marker": "̟",
+      "name": "Advanced",
+      "vowels_only": false,
+      "content": {},
+      "source": "International Phonetic Association, The IPA Chart (revised to 2015), internationalphoneticassociation.org: the diacritic is named 'Advanced'",
+      "reason": "PanPhon's rule changes no feature. On a vowel this table reads the mark as one chart column further front.",
+      "shift": {
+        "column": -1
+      }
+    },
+    {
+      "marker": "̠",
+      "name": "Retracted",
+      "vowels_only": false,
+      "content": {},
+      "source": "International Phonetic Association, The IPA Chart (revised to 2015), internationalphoneticassociation.org: the diacritic is named 'Retracted'",
+      "reason": "PanPhon's rule changes no feature. On a vowel this table reads the mark as one chart column further back.",
+      "shift": {
+        "column": 1
+      }
+    },
+    {
+      "marker": "̹",
+      "name": "More rounded",
+      "vowels_only": false,
+      "content": {},
+      "source": "International Phonetic Association, The IPA Chart (revised to 2015), internationalphoneticassociation.org: the diacritic is named 'More rounded'",
+      "reason": "PanPhon has no rule for the mark. On a vowel this table reads it as one step up the rounding scale -, 0, +.",
+      "shift": {
+        "round": 1
+      },
+      "conditions": []
+    },
+    {
+      "marker": "̜",
+      "name": "Less rounded",
+      "vowels_only": false,
+      "content": {},
+      "source": "International Phonetic Association, The IPA Chart (revised to 2015), internationalphoneticassociation.org: the diacritic is named 'Less rounded'",
+      "reason": "PanPhon has no rule for the mark. On a vowel this table reads it as one step down the rounding scale -, 0, +.",
+      "shift": {
+        "round": -1
+      },
+      "conditions": []
+    },
+    {
+      "marker": "̽",
+      "name": "Mid-centralized",
+      "vowels_only": false,
+      "content": {},
+      "source": "International Phonetic Association, The IPA Chart (revised to 2015), internationalphoneticassociation.org: the diacritic is named 'Mid-centralized'",
+      "reason": "PanPhon has no rule for the mark. On a vowel this table reads it as the central column, one row nearer mid.",
+      "shift": {
+        "central": 1,
+        "toward_mid": 1
+      },
+      "conditions": []
+    },
+    {
+      "marker": "̚",
+      "name": "No audible release",
+      "vowels_only": false,
+      "content": {},
+      "source": "International Phonetic Association, The IPA Chart (revised to 2015), internationalphoneticassociation.org: the diacritic is named 'No audible release'",
+      "reason": "PanPhon has no rule for the mark. No feature of this table encodes release, so the mark is read and changes nothing.",
+      "conditions": []
+    },
+    {
+      "marker": "ˑ",
+      "name": "Half-long",
+      "vowels_only": false,
+      "content": {
+        "long": "0"
+      },
+      "source": "International Phonetic Association, The IPA Chart (revised to 2015), internationalphoneticassociation.org: the diacritic is named 'Half-long'",
+      "reason": "PanPhon has no rule for the mark. It sets [long] to 0, between short and long.",
+      "conditions": []
+    },
+    {
+      "marker": "ʱ",
+      "name": "Breathy-voiced release",
+      "vowels_only": false,
+      "conditions": [
+        {
+          "voi": "+"
+        }
+      ],
+      "content": {
+        "sg": "+"
+      },
+      "source": "This table's reading: the 2015 IPA chart lists 'ʰ Aspirated' and '◌̤ Breathy voiced' but not ʱ",
+      "reason": "PanPhon has no rule for ʱ, which inventories such as PHOIBLE write for voiced aspirates (bʱ, ɡʱ). It reads as ◌̤ on a voiced base: voiced, with spread glottis, as bʰ and b̤ already are."
+    }
+  ],
+  "segments": [
+    {
+      "segment": "ⱱ",
+      "name": "voiced labiodental flap",
+      "from": "ɾ",
+      "place_of": "v",
+      "set": {
+        "tap": "+",
+        "trill": "-"
+      },
+      "source": "International Phonetic Association, The IPA Chart (revised to 2015), internationalphoneticassociation.org: pulmonic consonants, Tap or Flap row, Labiodental column",
+      "reason": "PanPhon does not list the symbol. It is a tap at the labiodental place: the manner of [ɾ] with the place of [v]."
+    },
+    {
+      "segment": "ʜ",
+      "name": "voiceless epiglottal fricative",
+      "from": "ħ",
+      "set": {
+        "trill": "+"
+      },
+      "source": "Hassan, Esling, Moisik and Crevier-Buchman (2011), 'Aryepiglottic trilled variants of /ʕ, ħ/ in Iraqi Arabic', Proceedings of ICPhS XVII, Hong Kong, pp. 831-834: 'both pharyngeals and epiglottals occur at the aryepiglottic sphincter point of stricture', and sounds described as epiglottal 'are associated either with AE trilled varieties'",
+      "reason": "PanPhon does not list the symbol. It is the pharyngeal fricative [ħ] made by the aryepiglottic folds, with trilling."
+    },
+    {
+      "segment": "ʢ",
+      "name": "voiced epiglottal fricative",
+      "from": "ʕ",
+      "set": {
+        "trill": "+"
+      },
+      "source": "Hassan, Esling, Moisik and Crevier-Buchman (2011), 'Aryepiglottic trilled variants of /ʕ, ħ/ in Iraqi Arabic', Proceedings of ICPhS XVII, Hong Kong, pp. 831-834: 'both pharyngeals and epiglottals occur at the aryepiglottic sphincter point of stricture', and sounds described as epiglottal 'are associated either with AE trilled varieties'",
+      "reason": "PanPhon does not list the symbol. It is the voiced counterpart of [ʜ]."
+    },
+    {
+      "segment": "ʡ",
+      "name": "epiglottal plosive",
+      "from": "ħ",
+      "set": {
+        "cont": "-",
+        "voi": "-"
+      },
+      "source": "International Phonetic Association, The IPA Chart (revised to 2015), Other Symbols: 'Epiglottal plosive'; Hassan, Esling, Moisik and Crevier-Buchman (2011), 'Aryepiglottic trilled variants of /ʕ, ħ/ in Iraqi Arabic', Proceedings of ICPhS XVII, Hong Kong, pp. 831-834: 'both pharyngeals and epiglottals occur at the aryepiglottic sphincter point of stricture', and sounds described as epiglottal 'are associated either with AE trilled varieties'",
+      "reason": "PanPhon does not list the symbol. The chart lists it under Other Symbols as 'Epiglottal plosive'. It is built as a voiceless stop at the pharyngeal place."
+    }
+  ]
+}
