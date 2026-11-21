@@ -42,9 +42,8 @@ STEPS = scales.STEPS
 #: Secondary articulations, each a feature of its own beside the primary place (Clements and
 #: Hume 1995, section 3.5.1).
 SECONDARY = ("palatalized", "velarized", "labialized", "pharyngealized")
-MAJOR_CLASS_WEIGHT = 2.75
-#: Features this table adds after PanPhon's.
-ADDED = ("front", "tap", "trill", "atr", *STEPS, *SECONDARY)
+ADDED = {"front": 0.25, "tap": 0.25, "trill": 0.25, "atr": 0.25, **{s: 0.125 for s in STEPS},
+         **{s: 0.125 for s in SECONDARY}}
 
 
 BACKNESS = {"front": "+-", "central": "--", "back": "-+"}
@@ -86,12 +85,7 @@ def main() -> None:
         rows = list(csv.reader(fh))
     panphon_features = rows[0]
     features = panphon_features + list(ADDED)
-    # Every feature weighs 1, except two groups. The six height steps share the weight of one
-    # feature, because together they encode one scale. The major-class features weigh 2.75, the
-    # least weight at which two chart vowels stay nearer each other than a vowel and an obstruent.
-    # On held-out data this beats PanPhon's weights on every set (scripts/fit_weights.py).
-    weights = [MAJOR_CLASS_WEIGHT if f in ("syl", "son", "cons") else 1 / len(STEPS)
-               if f in STEPS else 1.0 for f in features]
+    weights = [float(w) for w in rows[1]] + list(ADDED.values())
     hayes = read_hayes()
     chart = read_chart()
 

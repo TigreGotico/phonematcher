@@ -153,25 +153,3 @@ def test_space_only_matches_space():
 def test_is_vowel_classification():
     assert is_vowel_phone("a") is True
     assert is_vowel_phone("p") is False
-
-
-def test_the_major_class_weight_is_the_least_that_keeps_vowels_together():
-    """At 2.75 two chart vowels are nearer each other than a vowel and an obstruent; one step
-    lower, at 2.5, some are not."""
-    from phonematcher.features import FEATURES, WEIGHTS, vectorize_phones
-
-    def distance(a, b, weights):
-        num = sum(w * abs((x is True) - (x is False) - (y is True) + (y is False)) / 2
-                  for w, x, y in zip(weights, vectorize_phones(a), vectorize_phones(b)))
-        return num / sum(weights)
-
-    vowels = "iyɨʉɯuɪʏʊeøɘɵɤoəɛœɜɞʌɔæɐaɶɑɒ"
-    obstruents = "pbtdkɡqʔfvszʃʒxχh"
-    major = [FEATURES.index(f) for f in ("syl", "son", "cons")]
-    assert [WEIGHTS[i] for i in major] == [2.75] * 3
-    for weight, holds in ((2.75, True), (2.5, False)):
-        w = [weight if i in major else x for i, x in enumerate(WEIGHTS)]
-        widest = max(distance(a, b, w) for a in vowels for b in vowels)
-        nearest = min(distance(a, o, w) for a in vowels for o in obstruents)
-        assert (widest < nearest) is holds
-    assert distance("ʁ", "χ", WEIGHTS) == pytest.approx(phonetic_distance("ʁ", "χ"))
