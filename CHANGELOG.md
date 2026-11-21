@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.3.0a2](https://github.com/TigreGotico/phonematcher/tree/0.3.0a2) (2026-11-21)
+
+[Full Changelog](https://github.com/TigreGotico/phonematcher/compare/0.3.0a1...0.3.0a2)
+
+**Merged pull requests:**
+
+- feat: align, normalized ipa\_distance, py.typed and \_\_all\_\_ [\#19](https://github.com/TigreGotico/phonematcher/pull/19) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
+- test: list letters that share one feature vector [\#18](https://github.com/TigreGotico/phonematcher/pull/18) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
+
 ## [0.3.0a1](https://github.com/TigreGotico/phonematcher/tree/0.3.0a1) (2026-11-21)
 
 [Full Changelog](https://github.com/TigreGotico/phonematcher/compare/0.2.0a1...0.3.0a1)
