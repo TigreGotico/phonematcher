@@ -23,7 +23,7 @@ Source = "https://github.com/TigreGotico/phonematcher"
 version = { attr = "phonematcher.version.VERSION_STR" }
 
 [tool.setuptools.package-data]
-phonematcher = ["data/*.json"]
+phonematcher = ["data/*.json", "py.typed"]
 
 [tool.setuptools.packages.find]
 include = ["phonematcher*"]
