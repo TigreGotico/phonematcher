@@ -218,7 +218,17 @@ PanPhon lists 23 tied pairs, such as `t͡ʃ`, `k͡p` and `ɡ͡b`, each with its 
 
 The rule gives the listed vector for 18 of PanPhon's 23 pairs. For `b͡β`, `p͡ɸ`, `ɖ͡ʐ` and `ʈ͡ʂ`, PanPhon sets `hi` and `lo` to 0, but its fricatives have −. For `ɟ͡ʝ`, PanPhon sets `cor` + and `distr` +, and `front` 0, but `ʝ` has `cor` −, `distr` 0 and `front` +. The listed rows of these five stay as PanPhon has them.
 
-Other ties raise `ValueError`. Two vowels are two segments: `a͡i` is not read, because one vector cannot keep the order of `a` and `i`. Two sonorants, such as `l͡j`, and a fricative before a stop have no reading here.
+Other ties raise `ValueError`. Two sonorants, such as `l͡j`, and a fricative before a stop have no reading here.
+
+### Diphthongs
+
+`segments` splits a tie between two vowels into the two vowels: `a͡i` gives `a` and `i`, and `ei̯` gives `e` and `i̯`. A tie between two consonants still joins them, so `t͡ʃa͡i` gives `t͡ʃ`, `a` and `i`. A diphthong thus costs as two segments in a word distance, and `ai` and `a͡i` are at distance 0. Against `a` the distance is 1, one deletion of `i`.
+
+Nerbonne and Heeringa (1997, pp. 11-13) compared one-symbol and two-symbol diphthongs on 40 Dutch dialects with feature vectors. The two-symbol form gave the better dialect distances. Anderson et al. (2018, p. 33) define a diphthong in CLTS as two vowels: "Diphthongs are thus defined by two vowels". A diphthong has no vector of its own, so `vectorize_phones` raises `ValueError` for `ai`, `a͡i` and `ei̯`:
+
+| Input | Result | Reason |
+|---|---|---|
+| `a͡i`, `ai`, `ei̯` as one segment | `ValueError` | a diphthong is two segments; read `a` and `i` alone |
 
 ## Distance
 
