@@ -51,3 +51,5 @@ A term may have several readings: `search.add_term(["ˈpojʃ", "ˈpojs"], "pois"
 ## Licence
 
 MIT. The feature table derives from PanPhon (MIT) and from Hayes (2009) through the CSV conversion by Kyle Gorman (Apache-2.0).
+
+To cite phonematcher, use [CITATION.cff](CITATION.cff).

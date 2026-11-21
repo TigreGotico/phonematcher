@@ -1,6 +1,6 @@
 # The feature table
 
-Each IPA segment has a vector of 36 distinctive features. A value is `True` (+), `False` (−) or `None` (0, the feature does not apply). The table is in `phonematcher/data/features.json`. The script `scripts/build_features.py` builds it from PanPhon, Hayes (2009), the IPA vowel chart and a file of cited changes.
+Each IPA segment has a vector of 36 distinctive features. A value is `True` (+), `False` (−) or `None` (0, the feature does not apply). The table is in `phonematcher/data/features.json`. The script `scripts/build_features.py` builds it from PanPhon, the Hayes (2009) feature tables as converted to CSV by Gorman, the IPA vowel chart and a file of cited changes.
 
 ## The 36 features, in order
 
@@ -28,14 +28,14 @@ Each IPA segment has a vector of 36 distinctive features. A value is `True` (+),
 | 19 | `tense` | tense: a consonant feature in PanPhon; 0 on the chart vowels, whose height the step features give | 0.25 | PanPhon |
 | 20 | `long` | long: the length mark `ː` | 0.125 | PanPhon |
 | 21 | `velaric` | velaric airstream: clicks | 0.25 | PanPhon |
-| 22 | `front` | front: the tongue body is pushed forward | 0.25 | Hayes; the chart for vowels |
-| 23 | `tap` | tap: one fast contact, as in `ɾ` | 0.25 | Hayes |
-| 24 | `trill` | trill: repeated contacts, as in `r` and `ʀ` | 0.25 | Hayes |
-| 25 | `atr` | advanced tongue root: + for `◌̘`, − for `◌̙` and `◌ˤ`, otherwise 0 | 0.25 | Casali (2007) |
+| 22 | `front` | front: the tongue body is pushed forward | 0.25 | Hayes (2009) CSV and the chart for vowels |
+| 23 | `tap` | tap: one fast contact, as in `ɾ` | 0.25 | Hayes (2009) CSV |
+| 24 | `trill` | trill: repeated contacts, as in `r` and `ʀ` | 0.25 | Hayes (2009) CSV |
+| 25 | `atr` | advanced tongue root: + for `◌̘`, − for `◌̙` and `◌ˤ`, otherwise 0 | 0.25 | the IPA chart names the marks, and Casali (2007) |
 | 26–31 | `h1` … `h6` | vowel height steps: on a chart vowel, + for each row it lies below close and − for the rest; 0 on other segments | 0.125 each | the chart |
-| 32 | `palatalized` | a secondary raising of the tongue body toward the palate: `◌ʲ`, `◌ᶣ` | 0.125 | Clements and Hume (1995) |
-| 33 | `velarized` | a secondary raising of the tongue body toward the velum: `◌ˠ`; 0 for `◌̴` | 0.125 | Clements and Hume (1995) |
-| 34 | `labialized` | a secondary rounding of the lips: `◌ʷ`, `◌ᶣ` | 0.125 | Clements and Hume (1995) |
+| 32 | `palatalized` | a secondary raising of the tongue body toward the palate: `◌ʲ`, `◌ᶣ` | 0.125 | the IPA chart names `◌ʲ`, and the feature is this table's |
+| 33 | `velarized` | a secondary raising of the tongue body toward the velum: `◌ˠ`; 0 for `◌̴` | 0.125 | the IPA chart names `◌ˠ`, and the feature is this table's |
+| 34 | `labialized` | a secondary rounding of the lips: `◌ʷ`, `◌ᶣ` | 0.125 | the IPA chart names `◌ʷ`, and the feature is this table's |
 | 35 | `pharyngealized` | a secondary constriction in the upper pharynx: `◌ˤ`; 0 for `◌̴` | 0.125 | McCarthy (1994); Hermes et al. (2017) |
 
 `front` and `back` together give three positions. A front vowel is [+front, −back]. A central vowel is [−front, −back]. A back vowel is [−front, +back].
@@ -45,9 +45,11 @@ Each IPA segment has a vector of 36 distinctive features. A value is `True` (+),
 | Source | What it gives |
 |---|---|
 | PanPhon (Mortensen, Littell, Bharadwaj, Goyal, Dyer and Levin 2016, "PanPhon: A Resource for Mapping IPA Segments to Articulatory Feature Vectors", *Proceedings of COLING 2016*, pp. 3475–3484, MIT licence) | 6,367 segments, features 0 to 21, their weights and the rules for diacritics. Its two tone features are not used. |
-| Hayes (2009, *Introductory Phonology*, Wiley-Blackwell), through the CSV conversion by Kyle Gorman (github.com/kylebgorman/hayes2009, Apache-2.0), in `scripts/sources/` | `front`, `tap` and `trill` for consonants |
-| The IPA chart (International Phonetic Association, revised to 2015), whose vowel quadrilateral is in `scripts/sources/ipa-vowel-chart.csv` | the height, backness and rounding of the 28 vowel letters |
+| The CSV conversion by Kyle Gorman (github.com/kylebgorman/hayes2009, Apache-2.0, in `scripts/sources/`) of the feature tables of Hayes (2009, *Introductory Phonology*, Wiley-Blackwell). Gorman's `hayes2009.py` names them as tables 4.7 to 4.9, section 4.10. | `front`, `tap` and `trill` for consonants |
+| The IPA chart (International Phonetic Association; the footer reads "IPA Chart revised to 2015/2005"), whose vowel quadrilateral is in `scripts/sources/ipa-vowel-chart.csv` | the height, backness and rounding of the 28 vowel letters |
 | `phonematcher/data/overrides.json` | every other change, each with its source and reason |
+
+The works cited on this page are in `docs/references.bib`, with their pages.
 
 A segment that no source gives a value for gets `front` 0, `tap` −, `trill` −, `atr` 0 and the step features 0.
 
@@ -55,7 +57,7 @@ A segment that no source gives a value for gets `front` 0, `tap` −, `trill` �
 
 The 28 vowel letters take their values from their place on the IPA chart, not from a feature table. The chart defines what each symbol means, so it is the first authority.
 
-| Chart value | Features |
+| Row or column | Features |
 |---|---|
 | close, near-close | `hi` + |
 | close-mid, mid, open-mid | `hi` −, `lo` − |
@@ -65,7 +67,7 @@ The 28 vowel letters take their values from their place on the IPA chart, not fr
 | back | `front` −, `back` + |
 | rounded | `round` +, `lab` + |
 
-`hi` and `lo` give only three heights, but the chart has seven. The step features `h1` to `h6` give all seven in order. A vowel is + on `h1` if it is below close, + on `h2` if it is below near-close, and so on. Two vowels thus differ on as many step features as there are chart rows between them, and the distance between vowels grows with every row.
+`hi` and `lo` give only three heights. The chart prints four height labels (close, close-mid, open-mid, open) and draws `ɪ ʏ ʊ`, `ə` and `æ ɐ` between them. This table counts these seven rows and names the three between the labels near-close, mid and near-open. The step features `h1` to `h6` give all seven in order. A vowel is + on `h1` if it is below close, + on `h2` if it is below near-close, and so on. Two vowels thus differ on as many step features as there are chart rows between them, and the distance between vowels grows with every row.
 
 | Height | Letters | `h1` … `h6` |
 |---|---|---|
@@ -77,9 +79,9 @@ The 28 vowel letters take their values from their place on the IPA chart, not fr
 | near-open | `æ ɐ` | + + + + + − |
 | open | `a ɶ ɑ ɒ` | + + + + + + |
 
-The chart has five columns, and the features give three. Near-front `ɪ ʏ` count as front and near-back `ʊ` as back. Their lower height keeps them apart from `i y u`.
+The chart prints three column labels: front, central and back. It draws `ɪ ʏ` between the front and central columns and `ʊ` between the central and back columns. The features give three columns, so `ɪ ʏ` count as front and `ʊ` as back. Their lower height keeps them apart from `i y u`.
 
-The chart places `a` open front and `ɐ` near-open central. Both are unrounded. Many descriptions write the open central vowel as `a`. A transcription that means open central can write `ä`.
+The chart draws `a` at the open front corner and `ɐ` in the central column, between open-mid and open. The chart states that of a pair of symbols, the one to the right is rounded, so `a`, drawn left of `ɶ`, is unrounded. The chart draws `ɐ` alone, so this table reads it as unrounded without a source. A transcription that means open central can write `ä`, `a` with the mark the chart names "Centralized".
 
 PanPhon gives 6 of the 28 vowels `delrel` 0 and the rest `delrel` −. A vowel has no release, so all 28 take −.
 
@@ -97,21 +99,21 @@ PanPhon gives 6 of the 28 vowels `delrel` 0 and the rest `delrel` −. A vowel h
 | `◌ˑ` half-long | no rule | `long` 0, between short and long | the IPA chart names it; the reading is this table's |
 | `◌̚` no audible release | no rule | read; no change | the IPA chart |
 | `◌ʱ` breathy-voiced release | no rule | on a voiced base, `sg` +, as `◌̤`: `bʱ` equals `b̤` and `bʰ` | this table's reading; the chart lists `ʰ` and `◌̤` only |
-| `◌̘` advanced tongue root | `tense` + | `atr` +, `tense` kept | Casali (2007) |
-| `◌̙` retracted tongue root | `tense` − | `atr` −, `tense` kept | Casali (2007) |
-| `◌ʲ` palatalized | `hi` +, `back` − | `palatalized` + | Clements and Hume (1995) |
-| `◌ᶣ` labio-palatalized | `hi` +, `back` −, `round` + | `palatalized` +, `labialized` + | Clements and Hume (1995) |
-| `◌ʷ` labialized | `hi` +, `back` +, `round` + | `labialized` + | Clements and Hume (1995) |
-| `◌ˠ` velarized | `hi` +, `back` + | `velarized` + | Clements and Hume (1995) |
+| `◌̘` advanced tongue root | `tense` + | `atr` +, `tense` kept | the IPA chart names it, and Casali (2007) |
+| `◌̙` retracted tongue root | `tense` − | `atr` −, `tense` kept | the IPA chart names it, and Casali (2007) |
+| `◌ʲ` palatalized | `hi` +, `back` − | `palatalized` + | the IPA chart names it, and the feature is this table's |
+| `◌ᶣ` labio-palatalized | `hi` +, `back` −, `round` + | `palatalized` +, `labialized` + | the IPA chart names `◌ʷ` and `◌ʲ`, and the combined mark and the features are this table's |
+| `◌ʷ` labialized | `hi` +, `back` +, `round` + | `labialized` + | the IPA chart names it, and the feature is this table's |
+| `◌ˠ` velarized | `hi` +, `back` + | `velarized` + | the IPA chart names it, and the feature is this table's |
 | `◌̴` velarized or pharyngealized | `hi` +, `back` + | `velarized` 0, `pharyngealized` 0 | the IPA chart |
-| `◌ˤ` pharyngealized | `lo` +, `back` + | `pharyngealized` +, `atr` − | McCarthy (1994); Hermes et al. (2017); Al-Solami (2017) |
+| `◌ˤ` pharyngealized | `lo` +, `back` + | `pharyngealized` +, `atr` − | the IPA chart names it, and McCarthy (1994), Hermes et al. (2017) and Al-Solami (2017) describe it |
 | `◌˞` rhoticity | `hi` +, `round` +, `ant` − | `ant` − only | the IPA chart names it; the reading is this table's |
 
-PanPhon writes a secondary articulation with the features of primary place. The mark then overwrites the place of its base: in PanPhon, `kʲ` and `qʲ` share a vector. Clements and Hume (1995, "The internal organization of speech sounds", in Goldsmith (ed.), *The Handbook of Phonological Theory*, Blackwell, ch. 7, section 3.5.1) treat a secondary articulation as a set of minor features linked under the C-place node. It adds to the primary place and does not replace it. Here each mark sets a feature of its own, and the base keeps its place. Thus `kʲ` has the place of `k` and differs from `k` only in `palatalized`. The four feature names belong to this table.
+PanPhon writes a secondary articulation with the features of primary place. The mark then overwrites the place of its base: in PanPhon, `kʲ` and `qʲ` share a vector. Here each mark sets a feature of its own, and the base keeps its place. Thus `kʲ` has the place of `k` and differs from `k` only in `palatalized`. The four feature names belong to this table.
 
-Pharyngealized consonants, such as the Arabic emphatics, have a second constriction high in the pharynx. McCarthy (1994, "The phonetics and phonology of Semitic pharyngeals", in Keating (ed.), *Phonological Structure and Phonetic Form: Papers in Laboratory Phonology III*, Cambridge University Press, pp. 218–219) reports "a constriction in the upper pharynx" and writes that these sounds "should really be called uvularized". Real-time MRI shows that this constriction is at a different place from that of the pharyngeals `ħ ʕ` (Hermes, Barlaz, Shosted, Liang and Sutton 2017, Interspeech, pp. 201–205). Ultrasound shows "tongue root and tongue dorsum retraction with inconsistent tongue root retraction" (Al-Solami 2017, *Canadian Acoustics* 45(1), pp. 25–35). Thus `◌ˤ` sets `pharyngealized` + for the upper-pharynx constriction, and `atr` − for the part of it that retracts the tongue root. A pharyngealized vowel and a vowel with retracted tongue root share `atr` −, but differ in `pharyngealized`: `iˤ` is not `i̙`.
+Pharyngealized consonants, such as the Arabic emphatics, have a second constriction high in the pharynx. McCarthy (1994, "The phonetics and phonology of Semitic pharyngeals", in Keating (ed.), *Phonological Structure and Phonetic Form: Papers in Laboratory Phonology III*, Cambridge University Press, pp. 218–219) reports that emphatics "have a constriction in the upper pharynx". He writes: "The so-called pharyngealized consonants of Arabic should really be called uvularized." Real-time MRI shows that this constriction is at a different place from that of the pharyngeals `ħ ʕ` (Hermes, Barlaz, Shosted, Liang and Sutton 2017, Interspeech, pp. 201–205). Ultrasound shows "tongue root and tongue dorsum retraction with inconsistent tongue root retraction" (Al-Solami 2017, *Canadian Acoustics* 45(1), pp. 25–35). Thus `◌ˤ` sets `pharyngealized` + for the upper-pharynx constriction, and `atr` − for the part of it that retracts the tongue root. A pharyngealized vowel and a vowel with retracted tongue root share `atr` −, but differ in `pharyngealized`: `iˤ` is not `i̙`.
 
-`◌̘` and `◌̙` set `atr`. Advanced tongue root is a contrast in the size of the pharyngeal cavity, not in vowel height (Casali 2007, "Some observations on the phonetics of [ATR] contrasts", lecture, University of Education, Winneba, section 2, after Lindau 1979, "The feature expanded", *Journal of Phonetics* 7). Thus the mark keeps `tense` as the base has it.
+`◌̘` and `◌̙` set `atr`. Casali (2007, "Some observations on the phonetics of [ATR] contrasts", lecture, University of Education, Winneba, section 2, p. 2) writes that expansion or contraction of the pharyngeal cavity is a better measure of the [ATR] contrast than tongue root position alone, at least in languages such as Akan. He also writes that it is "probably not possible to give a single invariant articulatory definition of [ATR] that applies to all ATR harmony languages". This table gives [ATR] a feature of its own and does not read it as vowel height, so the mark keeps `tense` as the base has it.
 
 Rhoticity `◌˞` colours a vowel. The IPA chart gives the mark a name and no features. PanPhon's rule made `ɚ` high and rounded. This table reads the mark as a colouring that keeps the vowel's height and rounding, and keeps PanPhon's `ant` −. The precomposed letters `ɚ` and `ɝ` read as `ə˞` and `ɜ˞`, and `ɫ`, the chart's example for `◌̴`, reads as `l̴`.
 
@@ -119,18 +121,18 @@ Rhoticity `◌˞` colours a vowel. The IPA chart gives the mark a name and no fe
 
 ### Scales and their ends
 
-The chart's vowel quadrilateral gives three ordered scales: seven heights, three columns, and the rounding steps −, 0, +. A mark moves a vowel one step on its scale, so `e̞` lies between `e` and `ɛ`, and `ɔ̜` between `ɔ` and `ʌ`. A mark at the end of its scale changes nothing: `ɔ̹` equals `ɔ`, because `ɔ` is already rounded, and `ĕ` equals `e`, because `e` is already short. Two other marks also change nothing. `t̺` equals `t`, because PanPhon's `t` is already apical. `d̚` equals `d`, because no feature of the table encodes the release of a stop.
+The chart's vowel quadrilateral gives three ordered scales: the seven height rows of this table, the three columns, and the rounding steps −, 0, +. A mark moves a vowel one step on its scale, so `e̞` lies between `e` and `ɛ`, and `ɔ̜` between `ɔ` and `ʌ`. A mark at the end of its scale changes nothing: `ɔ̹` equals `ɔ`, because `ɔ` is already rounded, and `ĕ` equals `e`, because `e` is already short. Two other marks also change nothing. `t̺` equals `t`, because PanPhon's `t` is already apical. `d̚` equals `d`, because no feature of the table encodes the release of a stop.
 
 ## Letters PanPhon does not list
 
 | Letter | Name | Built as | Source |
 |---|---|---|---|
 | `ⱱ` | labiodental flap | the manner of `ɾ` with the place of `v` | the IPA chart |
-| `ʜ` | voiceless epiglottal fricative | `ħ` with `trill` + | Hassan et al. (2011) |
-| `ʢ` | voiced epiglottal fricative | `ʕ` with `trill` + | Hassan et al. (2011) |
+| `ʜ` | voiceless epiglottal fricative | `ħ` with `trill` + | the IPA chart (Other Symbols) and Hassan et al. (2011) |
+| `ʢ` | voiced epiglottal fricative | `ʕ` with `trill` + | the IPA chart (Other Symbols) and Hassan et al. (2011) |
 | `ʡ` | epiglottal plosive | `ħ` with `cont` −, `voi` − | the IPA chart (Other Symbols) |
 
-The pharyngeals and the epiglottals have one place of articulation and differ in manner. Hassan, Esling, Moisik and Crevier-Buchman (2011, "Aryepiglottic trilled variants of /ʕ, ħ/ in Iraqi Arabic", ICPhS XVII, pp. 831–834) write that "both pharyngeals and epiglottals occur at the aryepiglottic sphincter point of stricture". Sounds heard as epiglottal "are associated either with AE trilled varieties" of the pharyngeals.
+The IPA chart lists `ʜ`, `ʢ` and `ʡ` as the voiceless epiglottal fricative, the voiced epiglottal fricative and the epiglottal plosive. Hassan, Esling, Moisik and Crevier-Buchman (2011, "Aryepiglottic trilled variants of /ʕ, ħ/ in Iraqi Arabic", ICPhS XVII, pp. 831–834) write that "both pharyngeals and epiglottals occur at the aryepiglottic sphincter point of stricture" (p. 831, reporting Esling). They add that sounds heard as epiglottal "are associated either with AE trilled varieties of the simple fricative or approximant or with the default raised-larynx posture of the laryngeal sphincter" (p. 831). This table takes the first reading: `ʜ` and `ʢ` are `ħ` and `ʕ` with `trill` +.
 
 ## Spellings that are not IPA
 
@@ -152,8 +154,8 @@ The annotations come from the Unicode code charts for U+0000 and U+0250. Chapter
 
 | Segment | Feature | Value | Source |
 |---|---|---|---|
-| `ɹ` | `hi` | 0 | Hayes (2009) |
-| `ɹ` | `round` | − | Hayes (2009) |
+| `ɹ` | `hi` | 0 | Hayes (2009) CSV |
+| `ɹ` | `round` | − | Hayes (2009) CSV |
 
 Every IPA letter has its own vector, and a test checks this. To add a change, add an entry to `overrides.json` and run the build. Then add a test that fails without the entry.
 
@@ -161,7 +163,7 @@ Every IPA letter has its own vector, and a test checks this. To add a change, ad
 
 `vectorize_phones` reads a segment that the table does not list as its longest listed base plus the diacritics after it. Each diacritic sets the features of its rule, in order, if the base meets the rule's conditions. For example, `ɐ̥` is `ɐ` with `voi` −.
 
-PanPhon lists 6,367 segments, many with diacritics, such as `ɐ̃` and `kʷʰ`. The table takes all of them except the 50 stacks on `ɫ`, which `vectorize_phones` reads as `l̴` with the same marks, and adds the four letters above: 6,321 segments. The build reads each listed segment in the same way: its longest listed base, then the rules of its marks. A listed stack thus has the same vector as an unlisted one, and a test checks this for every listed stack. A mark that has no rule takes the difference that PanPhon records between the segment and its base letter.
+PanPhon lists 6,367 segments, many with diacritics, such as `ɐ̃` and `kʷʰ`. The table takes all of them except the 50 stacks on `ɫ`, which `vectorize_phones` reads as `l̴` with the same marks, and the 10 tone rows (the five tone letters `˩ ˨ ˧ ˦ ˥`, each also with `ˤ`), which `phonematcher.tone` reads. It adds the four letters above: 6,311 segments. The build reads each listed segment in the same way: its longest listed base, then the rules of its marks. A listed stack thus has the same vector as an unlisted one, and a test checks this for every listed stack. A mark that has no rule takes the difference that PanPhon records between the segment and its base letter.
 
 Some marks come before their base. `ⁿ`, `ᵐ` and `ᵑ` before a stop make a prenasalized stop, as in `ⁿd`. `ʰ` before a stop makes a preaspirated stop, as in `ʰt`. Each takes the rule of the same mark after a base.
 
@@ -203,7 +205,7 @@ segments("ma˦")      # ['m', 'a', '˦']
 segments("ma²¹⁴")    # ['m', 'a', '˨˩˦']
 ```
 
-The IPA chart gives the tone letters and the tone diacritics side by side, and each diacritic reads as the letters beside it:
+The IPA chart prints each tone diacritic beside a drawing of a tone letter or a contour. This table reads each diacritic as the tone letters that match the drawing:
 
 | Diacritic | Tone letters | Chart name |
 |---|---|---|
@@ -218,7 +220,7 @@ The IPA chart gives the tone letters and the tone diacritics side by side, and e
 | `◌᷅` | `˩˧` | Low rising |
 | `◌᷈` | `˧˦˨` | Rising-falling |
 
-Superscript digits are Chao tone numerals: the digit is the level, so `²¹⁴` is `˨˩˦`. The left-stem tone letters `꜒` to `꜖` have the levels of `˥` to `˩`. A run of tone letters is one tone, also after a tone diacritic: `má˥` has the tone `˦˥`.
+Superscript digits are tone numerals: the digit is the level, so `²¹⁴` is `˨˩˦`. The left-stem tone letters `꜒` to `꜖` have the levels of `˥` to `˩`. A run of tone letters is one tone, also after a tone diacritic: `má˥` has the tone `˦˥`.
 
 Some marks are not read and are dropped like stress marks. The chart lists downstep `ꜜ` and upstep `ꜛ` with the level tones, but they change the pitch of the tones after them, and a tone here is the contour of one syllable only. Global rise `↗` and global fall `↘` belong to the intonation of a phrase. The neutral-tone numeral `⁰` has no level.
 
