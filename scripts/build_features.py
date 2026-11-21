@@ -7,12 +7,15 @@ backness and rounding from the IPA chart (``scripts/sources/ipa-vowel-chart.csv`
 secondary articulations and the epiglottals are local features. ``phonematcher/data/overrides.json`` holds the other changes, each with its source.
 Run after changing any input:
 
-    uv pip install panphon==0.22.2 pyyaml
-    python scripts/build_features.py
+    uv pip install -e '.[build]'
+    python scripts/build_features.py [--out PATH]
+
+Without ``--out`` the script overwrites ``phonematcher/data/features.json``.
 """
 import csv
 import importlib.metadata
 import importlib.util
+import argparse
 import json
 import unicodedata
 from pathlib import Path
@@ -80,7 +83,7 @@ def base_letter(segment: str) -> str:
     return letters[0] if len(letters) == 1 else ""
 
 
-def main() -> None:
+def main(out_path: Path) -> None:
     with open(DATA / "feature_weights.csv", encoding="utf-8") as fh:
         rows = list(csv.reader(fh))
     panphon_features = rows[0]
@@ -210,7 +213,7 @@ def main() -> None:
             for d in diacritics["diacritics"]
         ],
     }
-    (HERE / "features.json").write_text(json.dumps(out, ensure_ascii=False, indent=0) + "\n",
+    out_path.write_text(json.dumps(out, ensure_ascii=False, indent=0) + "\n",
                                         encoding="utf-8")
     print(f"phones in {n_in} + {len(changes['segments'])} added, out {len(phones)}; "
           f"overrides {len(overrides)}; "
@@ -218,4 +221,7 @@ def main() -> None:
 
 
 if __name__ == "__main__":
-    main()
+    parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
+    parser.add_argument("--out", type=Path, default=HERE / "features.json",
+                        help="where to write the table")
+    main(parser.parse_args().out)

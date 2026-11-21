@@ -13,6 +13,7 @@ jobs:
     with:
       python_versions: '["3.11", "3.12", "3.13", "3.14"]'
       test_path: 'tests'
+      install_extras: '[test,build]'
       # tests/ is a package and the repository root holds the flat-layout
       # phonematcher/ package, so pytest's default prepend import mode puts
       # the root back on sys.path and the run imports the source tree, not
