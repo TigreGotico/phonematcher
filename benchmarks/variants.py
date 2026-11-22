@@ -117,7 +117,8 @@ def reread(module, shifts: bool) -> int:
                     break
                 table[segment] = vector
                 break
-    module.vectorize_phones.cache_clear()
+    for cached in (module.vectorize_phones, module._signs, module.feature_distance):
+        cached.cache_clear()
     return sum(table[s] != before[s] for s in before)
 
 

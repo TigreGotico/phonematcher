@@ -369,17 +369,21 @@ Weights and gap cost after the test: P5.
 
 ## Speed
 
-Median of 3 runs on 11th Gen Intel(R) Core(TM) i9-11900H @ 2.50GHz, 16 cores, Python 3.14.6; load average at the start of each run: 6.80, 7.44, 6.55. Commit `c8828233a358`.
+Median of 3 runs on 11th Gen Intel(R) Core(TM) i9-11900H @ 2.50GHz, 16 cores, Python 3.14.6. Both columns start from commit `1e96d646e55c`. The After column adds the change under test. Load average at the start of each run: 7.37, 11.23, 13.96 before; 16.64, 16.90, 10.16 after.
 
-The distance matrix of 18225 ordered letter pairs has sha256 `44c7d449fc5d31f74b289e50ed0994c9741936e25a60944e08a31c400dfe14a9`.
+The distance matrix of 18225 ordered letter pairs has sha256 `44c7d449fc5d31f74b289e50ed0994c9741936e25a60944e08a31c400dfe14a9`, before and after.
 
-| Measure | Median |
-|---|---|
-| build_seconds_0.05 | 8.41378 |
-| build_seconds_0.1 | 6.96556 |
-| ipa_distance_per_second | 1776.77 |
-| queries_per_second_0.05 | 8.69841 |
-| queries_per_second_0.1 | 2.97286 |
-| segment_per_second | 131530 |
+A cold figure is the first pass over its input from empty caches. A warm figure is a second pass over the same input.
+
+| Measure | Before | After |
+|---|---|---|
+| build_seconds_0.05 | 9.51517 | 10.1139 |
+| build_seconds_0.1 | 9.48411 | 8.83491 |
+| ipa_distance_per_second | 1729.29 | 7877.31 |
+| ipa_distance_warm_per_second | 1754.87 | 9206.22 |
+| queries_per_second_0.05 | 7.58784 | 40.4005 |
+| queries_per_second_0.1 | 2.96049 | 15.4937 |
+| segment_per_second | 150739 | 126549 |
+| segment_warm_per_second | 153081 | 6.82811e+06 |
 
 [Index](index.md) · Previous: [API reference](api.md)

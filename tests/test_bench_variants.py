@@ -220,3 +220,13 @@ def test_control_on_a_tiny_inventory(tmp_path):
     assert result["identical_vector_pairs_differing"] == 0
     assert result["segments_with_vector_difference_list"] == {"a": ["back", "tense"]}
     assert result["pairs_differing"] == 3
+
+
+def test_reread_leaves_no_stale_distance_in_the_module_caches():
+    module = variants.fresh_features()
+    assert "pʰ" in module.phone_features
+    module.phone_features["pʰ"] = module.phone_features["k"]
+    stale = module.feature_distance("pʰ", "p")
+    assert stale != feature_distance("pʰ", "p")
+    variants.reread(module, shifts=True)
+    assert module.feature_distance("pʰ", "p") == feature_distance("pʰ", "p")

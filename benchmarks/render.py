@@ -192,14 +192,30 @@ def decision_section(tests: Dict[str, dict]) -> List[str]:
     return ["### Decision", "", *[f"- {reason}" for reason in outcome["reasons"]], "", f"Weights and gap cost after the test: {outcome['winner']}.", ""]
 
 
+def load_list(block: dict) -> str:
+    return ", ".join(run["load_at_start"] for run in block["runs"])
+
+
 def speed_section(payload: dict) -> List[str]:
     machine = payload["machine"]
-    loads = ", ".join(run["load_at_start"] for run in payload["runs"])
-    rows = [f"| {name} | {value:.6g} |" for name, value in sorted(flatten(payload["median"]).items())]
-    return ["## Speed", "", f"Median of {len(payload['runs'])} runs on {machine['cpu']}, {machine['cores']} cores, "
-            f"Python {machine['python']}; load average at the start of each run: {loads}. {provenance(payload)}", "",
-            f"The distance matrix of {payload['pair_count']} ordered letter pairs has sha256 `{payload['matrix_sha256']}`.", "",
-            "| Measure | Median |", "|---|---|", *rows, ""]
+    after = flatten(payload["median"])
+    before = flatten(payload["before"]["median"]) if "before" in payload else {}
+    intro = f"Median of {len(payload['runs'])} runs on {machine['cpu']}, {machine['cores']} cores, Python {machine['python']}. "
+    if before:
+        intro += (f"Both columns start from commit `{payload['before']['head'][:12]}`. The After column adds the change under test. "
+                  f"Load average at the start of each run: {load_list(payload['before'])} before; {load_list(payload)} after.")
+        header = ["| Measure | Before | After |", "|---|---|---|"]
+        rows = [f"| {name} | {before[name]:.6g} | {value:.6g} |" for name, value in sorted(after.items())]
+    else:
+        intro += f"{provenance(payload)} Load average at the start of each run: {load_list(payload)}."
+        header = ["| Measure | Median |", "|---|---|"]
+        rows = [f"| {name} | {value:.6g} |" for name, value in sorted(after.items())]
+    same = before and payload["before"]["matrix_sha256"] == payload["matrix_sha256"]
+    return ["## Speed", "", intro, "",
+            f"The distance matrix of {payload['pair_count']} ordered letter pairs has sha256 `{payload['matrix_sha256']}`"
+            + (", before and after." if same else "."), "",
+            "A cold figure is the first pass over its input from empty caches. A warm figure is a second pass over the same input.", "",
+            *header, *rows, ""]
 
 
 def flatten(tree: dict, prefix: str = "") -> Dict[str, float]:

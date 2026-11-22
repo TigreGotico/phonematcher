@@ -226,6 +226,13 @@ def is_vowel_phone(segment: str) -> bool:
         return False
 
 
+@lru_cache(maxsize=4096)
+def _signs(segment: str) -> Tuple[int, ...]:
+    """The vector of *segment* with + = 1, 0 = 0 and − = −1."""
+    return tuple(_NUMBER[value] for value in vectorize_phones(segment))
+
+
+@lru_cache(maxsize=65536)
 def feature_distance(a: str, b: str) -> float:
     """Weighted feature distance between two segments, from 0 (same features) to 1.
 
@@ -239,10 +246,10 @@ def feature_distance(a: str, b: str) -> float:
     if a == " " or b == " ":
         return 1.0
     try:
-        va, vb = vectorize_phones(a), vectorize_phones(b)
+        va, vb = _signs(a), _signs(b)
     except ValueError:
         return 1.0
-    diff = sum(w * abs(_NUMBER[x] - _NUMBER[y]) / 2 for w, x, y in zip(WEIGHTS, va, vb))
+    diff = sum(w * abs(x - y) / 2 for w, x, y in zip(WEIGHTS, va, vb))
     return diff / _TOTAL_WEIGHT
 
 
