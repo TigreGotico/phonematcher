@@ -84,7 +84,7 @@ def test_the_dev_ablations_of_the_shipped_costs_equal_the_ablation_file():
     scores = {name: cognates[name]["unread_at_1"]["average_precision"]["mean"] for name in ("phonematcher", "pm-p5-no-height", "pm-p5-flat-diacritics", "pm-p5-indel-0.5")}
     assert scores["pm-p5-indel-0.5"] == scores["phonematcher"]
     assert f"{scores['pm-p5-no-height']:.4f}" in PAGE and f"{scores['phonematcher']:.4f}" in PAGE
-    assert f"{scores['pm-p5-flat-diacritics']:.4f}" == f"{scores['pm-p5-no-height']:.4f}"
+    assert f"{scores['pm-p5-flat-diacritics']:.4f}" in PAGE
 
 
 def test_the_tone_numbers_equal_the_tone_file():

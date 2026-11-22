@@ -121,11 +121,11 @@ The development split holds the items that `benchmarks/split.py` assigns to dev.
 
 ### cognates
 
-Commit `fe3944f052dd`.
+Commit `99383979599a`.
 
 | System | AP, unread at 1 | F, unread at 1 | AP, common words | F, common words | Words skipped |
 |---|---|---|---|---|---|
-| phonematcher | 0.7717 | 0.8265 | 0.8542 | 0.8841 | 590 |
+| phonematcher | 0.7727 | 0.8262 | 0.8542 | 0.8841 | 437 |
 | levenshtein | 0.7514 | 0.8165 | 0.8362 | 0.8757 | 0 |
 | panphon-weighted | 0.5833 | 0.7714 | 0.8057 | 0.8505 | 5129 |
 | panphon-hamming | 0.5847 | 0.6624 | 0.7715 | 0.8358 | 5129 |
@@ -135,11 +135,11 @@ Commit `fe3944f052dd`.
 
 ### cognates-toneless
 
-Commit `fe3944f052dd`.
+Commit `99383979599a`.
 
 | System | AP, unread at 1 | F, unread at 1 | AP, common words | F, common words | Words skipped |
 |---|---|---|---|---|---|
-| phonematcher | 0.7843 | 0.8383 | 0.8350 | 0.8780 | 550 |
+| phonematcher | 0.7853 | 0.8383 | 0.8350 | 0.8780 | 397 |
 | levenshtein | 0.7515 | 0.8117 | 0.8007 | 0.8641 | 0 |
 | panphon-weighted | 0.6403 | 0.7842 | 0.7874 | 0.8409 | 2773 |
 | panphon-hamming | 0.6505 | 0.7328 | 0.7486 | 0.8260 | 2773 |
@@ -205,7 +205,7 @@ Fuzzy search of phonematcher:
 
 ### ablations
 
-Commit `9c0f5bfe24fe`.
+Commit `99383979599a`.
 
 Cost rule: the shipped P5 costs, gap 0.5 and substitutions at the square root of the feature distance. `phonematcher` is the shipped library, and each `pm-p5-` row changes one thing in it. `pm-p5-indel-0.5` is the shipped costs again and serves as a control.
 
@@ -213,25 +213,25 @@ Cost rule: the shipped P5 costs, gap 0.5 and substitutions at the square root of
 
 | System | AP, unread at 1 | F, unread at 1 | AP, common words | F, common words | Words skipped |
 |---|---|---|---|---|---|
-| phonematcher | 0.7717 | 0.8265 | 0.7910 | 0.8337 | 590 |
-| pm-p5-panphon22 | 0.7734 | 0.8280 | 0.7930 | 0.8355 | 590 |
-| pm-p5-no-height | 0.7716 | 0.8268 | 0.7909 | 0.8340 | 590 |
-| pm-p5-flat-diacritics | 0.7716 | 0.8265 | 0.7909 | 0.8336 | 590 |
-| pm-p5-uniform | 0.7686 | 0.8226 | 0.7877 | 0.8300 | 590 |
-| pm-p5-indel-0.5 | 0.7717 | 0.8265 | 0.7910 | 0.8337 | 590 |
-| pm-p5-indel-1.5 | 0.7118 | 0.7669 | 0.7306 | 0.7740 | 590 |
+| phonematcher | 0.7727 | 0.8262 | 0.7897 | 0.8336 | 437 |
+| pm-p5-panphon22 | 0.7742 | 0.8277 | 0.7916 | 0.8352 | 437 |
+| pm-p5-no-height | 0.7725 | 0.8264 | 0.7895 | 0.8338 | 437 |
+| pm-p5-flat-diacritics | 0.7726 | 0.8261 | 0.7896 | 0.8335 | 437 |
+| pm-p5-uniform | 0.7695 | 0.8222 | 0.7864 | 0.8297 | 437 |
+| pm-p5-indel-0.5 | 0.7727 | 0.8262 | 0.7897 | 0.8336 | 437 |
+| pm-p5-indel-1.5 | 0.7119 | 0.7666 | 0.7292 | 0.7739 | 437 |
 
 #### cognates-toneless
 
 | System | AP, unread at 1 | F, unread at 1 | AP, common words | F, common words | Words skipped |
 |---|---|---|---|---|---|
-| phonematcher | 0.7843 | 0.8383 | 0.8077 | 0.8446 | 550 |
-| pm-p5-panphon22 | 0.7853 | 0.8391 | 0.8090 | 0.8453 | 550 |
-| pm-p5-no-height | 0.7842 | 0.8378 | 0.8077 | 0.8443 | 550 |
-| pm-p5-flat-diacritics | 0.7842 | 0.8382 | 0.8076 | 0.8445 | 550 |
-| pm-p5-uniform | 0.7808 | 0.8317 | 0.8040 | 0.8377 | 550 |
-| pm-p5-indel-0.5 | 0.7843 | 0.8383 | 0.8077 | 0.8446 | 550 |
-| pm-p5-indel-1.5 | 0.7120 | 0.7707 | 0.7315 | 0.7784 | 550 |
+| phonematcher | 0.7853 | 0.8383 | 0.8064 | 0.8445 | 397 |
+| pm-p5-panphon22 | 0.7862 | 0.8387 | 0.8075 | 0.8448 | 397 |
+| pm-p5-no-height | 0.7851 | 0.8376 | 0.8063 | 0.8440 | 397 |
+| pm-p5-flat-diacritics | 0.7852 | 0.8382 | 0.8063 | 0.8444 | 397 |
+| pm-p5-uniform | 0.7817 | 0.8313 | 0.8026 | 0.8374 | 397 |
+| pm-p5-indel-0.5 | 0.7853 | 0.8383 | 0.8064 | 0.8445 | 397 |
+| pm-p5-indel-1.5 | 0.7120 | 0.7706 | 0.7301 | 0.7784 | 397 |
 
 #### alignment
 
