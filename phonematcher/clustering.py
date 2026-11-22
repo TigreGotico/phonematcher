@@ -88,8 +88,11 @@ def phone_clusters(share: float) -> Dict[str, int]:
     return upgma(letters, merge_threshold(share), costs)
 
 
-def _as_readings(term: Readings) -> Tuple[str, ...]:
-    return (term,) if isinstance(term, str) else tuple(term)
+def _as_readings(term: Readings, function: str, argument: str) -> Tuple[str, ...]:
+    readings = (term,) if isinstance(term, str) else tuple(term) if isinstance(term, (list, tuple)) else None
+    if readings is None or not all(isinstance(r, str) for r in readings):
+        raise TypeError(f"{function}() argument {argument} must be str or a list of str, not {type(term).__name__}")
+    return readings
 
 
 class PhoneticFuzzySearch:
@@ -105,6 +108,8 @@ class PhoneticFuzzySearch:
     """
 
     def __init__(self, cluster_sensitivity: float = 0.08, *, strict: bool = False):
+        if isinstance(cluster_sensitivity, bool) or not isinstance(cluster_sensitivity, (int, float)):
+            raise TypeError(f"cluster_sensitivity must be a number from 0 to 1, not {type(cluster_sensitivity).__name__}")
         self.cluster_sensitivity = cluster_sensitivity
         self.strict = strict
         self.clusters = phone_clusters(cluster_sensitivity)
@@ -144,11 +149,25 @@ class PhoneticFuzzySearch:
         return {k for k in {key} | one | two if k}
 
     def add_term(self, term: Readings, id: Hashable) -> None:
-        """Index *term*, an IPA string or a list of IPA readings, under *id*."""
-        readings = _as_readings(term)
+        """Index *term*, an IPA string or a list of IPA readings, under *id*.
+
+        *id* must not be ``None``, and it must be hashable. Adding an id again replaces it: the old
+        readings leave the library and the index. A term with no reading, or a reading with no sound, is stored and never found.
+        """
+        readings = _as_readings(term, "add_term", "term")
+        if id is None:
+            raise ValueError("add_term() argument id must not be None")
         if self.strict:
             for reading in readings:
                 self._segments(reading)
+        for reading in self.library.pop(id, ()):
+            for word in self._words(reading):
+                for key in self._keys(word):
+                    ids = self.index.get(key)
+                    if ids is not None:
+                        ids.discard(id)
+                        if not ids:
+                            del self.index[key]
         self.library[id] = readings
         for reading in readings:
             for word in self._words(reading):
@@ -159,9 +178,12 @@ class PhoneticFuzzySearch:
         """Terms that sound like *query*, nearest first.
 
         A candidate must match every word of at least one query reading. Its score is the smallest
-        feature-weighted edit distance between a query reading and a term reading.
+        feature-weighted edit distance between a query reading and a term reading. *n_results* is a
+        count of at least 1, or ``None`` for every match.
         """
-        queries = _as_readings(query)
+        if n_results is not None and n_results < 1:
+            raise ValueError(f"search() argument n_results must be at least 1, not {n_results!r}")
+        queries = _as_readings(query, "search", "query")
         candidates: Set[Hashable] = set()
         for q in queries:
             words = self._words(q)

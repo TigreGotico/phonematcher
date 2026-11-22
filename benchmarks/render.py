@@ -275,7 +275,7 @@ def readme_table(directory: Path = RESULTS) -> str:
     if any(len(size) != 1 for size in sizes.values()):
         raise SystemExit(f"retrieval sample sizes differ between pairs: {sizes}")
     (sca_sample,), (aline_sample,) = sizes["sca"], sizes["aline"]
-    caption = ("Test split, run once under `benchmarks/prereg-2.md`. Each cell is the estimate with its 95% interval. "
+    caption = ("Test split, run once under [`benchmarks/prereg-2.md`](https://github.com/TigreGotico/phonematcher/blob/dev/benchmarks/prereg-2.md). Each cell is the estimate with its 95% interval. "
                "The best value in each column is in bold. A dash means that the system does not run the task. "
                f"SCA ran retrieval on a sample of {sca_sample} queries per pair and ALINE on the first {aline_sample} of those, "
                "so these two retrieval cells are not on the same queries as the other rows. "

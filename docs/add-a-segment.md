@@ -23,7 +23,7 @@ except ValueError as error:
 ```
 
 ```text
-Unrecognized phone 'ʞ'
+Unrecognized phone 'ʞ' (U+029E). A word distance or a search takes strict=True to raise on such a segment instead of costing it 1
 ```
 
 The table reads `ⱱ`, because its entry is already in `overrides.json`. The next steps show that entry.

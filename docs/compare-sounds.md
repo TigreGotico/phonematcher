@@ -83,7 +83,7 @@ feature_distance("p", "ʞ")   # 1.0
 ```
 
 ```text
-Unrecognized phone 'ʞ'
+Unrecognized phone 'ʞ' (U+029E). A word distance or a search takes strict=True to raise on such a segment instead of costing it 1
 ```
 
 ## Next

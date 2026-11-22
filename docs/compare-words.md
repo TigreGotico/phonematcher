@@ -96,8 +96,25 @@ ipa_distance("", "", normalized=True)           # 0.0
 
 Two empty strings are at distance 0.
 
+## 6. Split long input
+
+The cost of a distance grows with the product of the two segment counts, so doubling both inputs makes it four times as slow. Two inputs of the same length took this long on one machine (one run each, `ka` repeated against `ke` repeated):
+
+| Segments in each input | Time of `ipa_distance` |
+|---|---|
+| 100 | 0.06 s |
+| 400 | 1.0 s |
+| 1,000 | 7.1 s |
+
+Compare a word with a word, or a phrase with a phrase of a few words. To compare a long text, split it into words first and compare the words.
+
+```python
+len(segments("ka" * 50))                          # 100
+ipa_distance("ka" * 50, "ke" * 50)                # 14.049
+```
+
 ## Where the costs come from
 
-The insertion and deletion cost of 0.5 and the square root of the feature distance for a substitution are the values that a pre-registered test chose. The test is `benchmarks/prereg-2.md`. Its results are in [Benchmarks](benchmarks.md).
+The insertion and deletion cost of 0.5 and the square root of the feature distance for a substitution are the values that a pre-registered test chose. The test is [`benchmarks/prereg-2.md`](https://github.com/TigreGotico/phonematcher/blob/dev/benchmarks/prereg-2.md). Its results are in [Benchmarks](benchmarks.md).
 
 [Index](index.md) · Previous: [Compare two sounds](compare-sounds.md) · Next: [Tones](tones.md)
