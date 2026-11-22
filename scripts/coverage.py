@@ -138,10 +138,6 @@ def orthography2ipa_inventories() -> Tuple[Dict[str, int], Dict[str, str], int]:
     return dict(counts), examples, len(codes)
 
 
-def codepoints(segment: str) -> str:
-    return " ".join(f"U+{ord(c):04X}" for c in segment)
-
-
 def report(name: str, counts: Mapping[str, int], examples: Mapping[str, str], cache: Path,
            unit: str, tie_retry: bool = False) -> Census:
     result = census(counts, tie_retry)
@@ -166,8 +162,8 @@ def report(name: str, counts: Mapping[str, int], examples: Mapping[str, str], ca
     with open(out, "w", encoding="utf-8") as fh:
         fh.write("segment\tcodepoints\ttokens\texample\n")
         for segment, n in sorted(result.unread.items(), key=lambda kv: (-kv[1], kv[0])):
-            fh.write(f"{segment}\t{codepoints(unicodedata.normalize('NFD', segment))}\t{n}\t"
-                     f"{examples[segment]}\n")
+            codepoints = " ".join(f"U+{ord(c):04X}" for c in unicodedata.normalize("NFD", segment))
+            fh.write(f"{segment}\t{codepoints}\t{n}\t{examples[segment]}\n")
     print(f"  wrote {unread} rows to {out}")
     return result
 

@@ -21,12 +21,15 @@ _DATA = json.loads((Path(__file__).parent / "data" / "features.json").read_text(
 FEATURES: Tuple[str, ...] = tuple(_DATA["features"])
 #: PanPhon's weight for each feature.
 WEIGHTS: Tuple[float, ...] = tuple(_DATA["weights"])
+_TOTAL_WEIGHT = sum(WEIGHTS)
 NUM_FEATURES = len(FEATURES)
+_INDEX = {name: i for i, name in enumerate(FEATURES)}
 SOURCE: str = _DATA["source"]
 
 Vector = Tuple[Optional[bool], ...]
 
 _VALUE = {"+": True, "-": False, "0": None}
+_NUMBER = {True: 1, False: -1, None: 0}
 
 #: Segment (NFD) -> feature vector.
 phone_features: Dict[str, Vector] = {
@@ -58,20 +61,6 @@ SPELLINGS: Dict[int, str] = str.maketrans({
 #: Letters that Unicode does not decompose into a base and its mark: the rhotic vowels, and [ɫ],
 #: the IPA chart's example of ◌̴ (velarized or pharyngealized). Spellings read as their IPA.
 _COMPOSED_LETTERS = {**SPELLINGS, **str.maketrans({"ɚ": "ə˞", "ɝ": "ɜ˞", "ɫ": "l\u0334"})}
-
-
-def _applies(diacritic: dict, vec: Vector) -> bool:
-    conditions = diacritic["conditions"]
-    return not conditions or any(
-        all(vec[FEATURES.index(f)] is _VALUE[v] for f, v in cond.items()) for cond in conditions
-    )
-
-
-def _apply(diacritic: dict, vec: Vector) -> Vector:
-    out = list(vec)
-    for f, v in diacritic["content"].items():
-        out[FEATURES.index(f)] = _VALUE[v]
-    return tuple(out)
 
 
 def _is_diphthong(seg: str) -> bool:
@@ -146,10 +135,9 @@ def vectorize_phones(segment: str) -> Vector:
     raise ValueError(f"Unrecognized phone {segment!r}" + (": a diphthong is two segments" if _is_diphthong(seg) else ""))
 
 
-_NAS, _SON, _CONT, _DELREL, _SG, _CG = (
-    FEATURES.index(f) for f in ("nas", "son", "cont", "delrel", "sg", "cg"))
+_NAS, _SON, _CONT, _DELREL, _SG, _CG = (_INDEX[f] for f in ("nas", "son", "cont", "delrel", "sg", "cg"))
 #: Articulators: in a double articulation each one the parts use is used.
-_ARTICULATORS = {FEATURES.index(f) for f in ("lab", "cor", "hi", "back")}
+_ARTICULATORS = {_INDEX[f] for f in ("lab", "cor", "hi", "back")}
 
 
 def _tie(first: Vector, second: Vector) -> Vector:
@@ -187,16 +175,21 @@ def compose_tie(parts: List[Vector]) -> Vector:
     return vec
 
 
-_HI, _LO = FEATURES.index("hi"), FEATURES.index("lo")
+_HI, _LO = _INDEX["hi"], _INDEX["lo"]
 _SIGN = {True: "+", False: "-", None: "0"}
 
 
 def _apply_if(diacritic: dict, vec: Vector, segment: str) -> Vector:
     """Apply one diacritic. [+high, +low] is impossible, so a mark that adds one keeps the
     other as the base has it."""
-    if not _applies(diacritic, vec):
+    conditions = diacritic["conditions"]
+    if conditions and not any(
+        all(vec[_INDEX[f]] is _VALUE[v] for f, v in cond.items()) for cond in conditions
+    ):
         raise ValueError(f"{diacritic['marker']!r} does not apply to the base of {segment!r}")
-    out = list(_apply(diacritic, vec))
+    out = list(vec)
+    for f, v in diacritic["content"].items():
+        out[_INDEX[f]] = _VALUE[v]
     if "shift" in diacritic:
         signs = {f: _SIGN[v] for f, v in zip(FEATURES, out)}
         shift(signs, diacritic["shift"])
@@ -212,10 +205,6 @@ def is_vowel_phone(segment: str) -> bool:
         return vectorize_phones(segment)[0] is True
     except ValueError:
         return False
-
-
-def _number(value: Optional[bool]) -> int:
-    return 1 if value is True else -1 if value is False else 0
 
 
 def phonetic_distance(a: str, b: str) -> float:
@@ -234,5 +223,5 @@ def phonetic_distance(a: str, b: str) -> float:
         va, vb = vectorize_phones(a), vectorize_phones(b)
     except ValueError:
         return 1.0
-    diff = sum(w * abs(_number(x) - _number(y)) / 2 for w, x, y in zip(WEIGHTS, va, vb))
-    return diff / sum(WEIGHTS)
+    diff = sum(w * abs(_NUMBER[x] - _NUMBER[y]) / 2 for w, x, y in zip(WEIGHTS, va, vb))
+    return diff / _TOTAL_WEIGHT

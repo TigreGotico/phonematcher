@@ -10,11 +10,11 @@ import json
 import subprocess
 import sys
 from pathlib import Path
-from typing import Callable, Dict, List, Optional
+from typing import Dict, List, Optional
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
-from systems import NAMES, System, UnreadSegment, build  # noqa: E402
+from systems import NAMES, System, build  # noqa: E402
 from variants import NAMES as VARIANTS  # noqa: E402
 import final  # noqa: E402
 from tasks import ablations, alignment, allophones, cognates, cognates_toneless, confusions, coverage, retrieval, tone  # noqa: E402
@@ -72,6 +72,8 @@ SUITE_TASKS = {
     "ablations": ablations,
 }
 RESULTS = ROOT / "benchmarks" / "results"
+#: ``--system`` values that stand for several systems
+GROUPS = {"all": NAMES, "variants": ["phonematcher", *VARIANTS]}
 
 
 def write_result(path: Path, payload: dict, task: str, system: str, split: str, commit: Optional[str]) -> None:
@@ -139,7 +141,7 @@ def main(argv: Optional[List[str]] = None, repo: Path = ROOT) -> int:
         print(f"wrote {out}")
         return 0
     if args.task in SUITE_TASKS:
-        names = {"all": NAMES, "variants": ["phonematcher", *VARIANTS]}.get(args.system, [args.system])
+        names = GROUPS.get(args.system, [args.system])
         return run_suite(SUITE_TASKS[args.task], args, names, commit, repo)
     task, splits = TASKS[args.task]
     if args.split not in splits:
@@ -152,7 +154,7 @@ def main(argv: Optional[List[str]] = None, repo: Path = ROOT) -> int:
         write_result(out, payload, args.task, ",".join(names), args.split, commit or head)
         print(f"wrote {out}")
         return 0
-    names = {"all": NAMES, "variants": ["phonematcher", *VARIANTS]}.get(args.system, [args.system])
+    names = GROUPS.get(args.system, [args.system])
     failed = 0
     for name in names:
         try:

@@ -16,7 +16,7 @@ from typing import Callable, Dict, List, Optional, Sequence
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 import final  # noqa: E402
-from tasks import ablations, allophones, confusions, coverage, retrieval, tone  # noqa: E402
+from tasks import ablations, allophones, confusions, coverage, tone  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent
 RESULTS = ROOT / "benchmarks" / "results"

@@ -76,11 +76,14 @@ class System:
     def _word_distance(self, a: Word, b: Word, normalized: bool) -> float:
         raise NotImplementedError
 
-    def word_distance(self, a: List[str], b: List[str], normalized: bool = False) -> float:
-        """Distance between two words. Raises ``UnreadSegment`` for a segment the system cannot read."""
+    def _require_read(self, a: Word, b: Word) -> None:
         for segment in (*a, *b):
             if not self.reads(segment):
                 raise UnreadSegment(f"{self.name} cannot read {segment!r}")
+
+    def word_distance(self, a: List[str], b: List[str], normalized: bool = False) -> float:
+        """Distance between two words. Raises ``UnreadSegment`` for a segment the system cannot read."""
+        self._require_read(a, b)
         return self._word_distance(a, b, normalized)
 
     def _align(self, a: Word, b: Word) -> Pairs:
@@ -89,9 +92,7 @@ class System:
     def align(self, a: List[str], b: List[str]) -> Pairs:
         """One alignment of two words as pairs ``(left, right)``, ``None`` for a gap. Raises
         ``UnreadSegment`` for a segment the system cannot read."""
-        for segment in (*a, *b):
-            if not self.reads(segment):
-                raise UnreadSegment(f"{self.name} cannot read {segment!r}")
+        self._require_read(a, b)
         return self._align(a, b)
 
     def word_distance_or_one(self, a: List[str], b: List[str], normalized: bool = False) -> float:
@@ -108,6 +109,16 @@ class System:
         if not (self.reads(a) and self.reads(b)):
             return 1.0
         return self.segment_distance(a, b)
+
+
+def restore(a: Word, b: Word, mapped: Pairs) -> Pairs:
+    """The alignment *mapped*, of words that went in changed, with the segments of *a* and *b* as they came in."""
+    i = j = 0
+    pairs: Pairs = []
+    for left, right in mapped:
+        pairs.append((a[i] if left is not None else None, b[j] if right is not None else None))
+        i, j = i + (left is not None), j + (right is not None)
+    return pairs
 
 
 def per_length(raw: float, a: Word, b: Word, normalized: bool) -> float:
@@ -178,12 +189,7 @@ class PhoneMatcher(System):
         return self._align(a, b)
 
     def _align(self, a: Word, b: Word) -> Pairs:
-        i = j = 0
-        pairs: Pairs = []
-        for left, right in self._align_pairs([self._letters(s) for s in a], [self._letters(s) for s in b]):
-            pairs.append((a[i] if left is not None else None, b[j] if right is not None else None))
-            i, j = i + (left is not None), j + (right is not None)
-        return pairs
+        return restore(a, b, self._align_pairs([self._letters(s) for s in a], [self._letters(s) for s in b]))
 
 
 class Levenshtein(System):
@@ -312,12 +318,7 @@ class Aline(System):
 
     def _align(self, a: Word, b: Word) -> Pairs:
         """The alignment of the mapped segments, with the segments given back as they came in."""
-        i = j = 0
-        pairs: Pairs = []
-        for left, right in self._align_mapped([self.INPUT.get(s, s) for s in a], [self.INPUT.get(s, s) for s in b]):
-            pairs.append((a[i] if left is not None else None, b[j] if right is not None else None))
-            i, j = i + (left is not None), j + (right is not None)
-        return pairs
+        return restore(a, b, self._align_mapped([self.INPUT.get(s, s) for s in a], [self.INPUT.get(s, s) for s in b]))
 
     def _align_mapped(self, a: Word, b: Word) -> Pairs:
         """The first local alignment of ``aline.align``, made global. ALINE leaves the ends of a
