@@ -83,6 +83,16 @@ python benchmarks/run.py --task confusions --system all --split seen
 
 Each run downloads its data into `~/.cache/phonematcher-bench/C1`, `C2` or `C3` and writes `benchmarks/results/<task>-seen.json`. The scripts print one line per system. Pass `--out FILE` to write the result elsewhere. A task scores all its systems in one run, because the common subset needs every system.
 
+## Cognate detection
+
+The `cognates` task uses the word lists of List, Greenhill and Gray (2017), Zenodo record 192607 (CC BY 4.0). It downloads the archive to `CACHE/cognates` and checks its md5. The six training sets are the `dev` split. The six test sets are the `test` split.
+
+```bash
+python benchmarks/run.py --task cognates --system all --split dev
+```
+
+The run scores all systems together and writes `benchmarks/results/cognates-dev.json`. Each system gets two scores per data set, once on the words that every system reads and once on all words with unread pairs at distance 1. The first score is the average precision of the negative normalized distance for "same cognate set", over all word pairs of one concept. The second is the B-cubed F-score of a flat UPGMA cut at the threshold that is best on average over the six training sets. The B-cubed score uses LingPy's counting, as the paper's figures do, and the `per_word` entry holds the score with every word counted. A `control` entry holds the levenshtein system under LingPy's B-cubed counting next to the paper's Table 6. The task `cognates-toneless` runs the same with tone tokens removed from every word.
+
 ## The splits
 
 `split.is_test(key)` is true for one key in five, by the SHA-1 of the key. Each task names its key.
