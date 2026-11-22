@@ -50,6 +50,11 @@ def _contour(levels: Tuple[int, ...]) -> Tuple[float, ...]:
 
 def tone_distance(a: str, b: str) -> float:
     """The mean pitch difference of two tones at the start, middle and end of the syllable,
-    divided by the range of four steps, so the result is from 0 to 1."""
+    divided by the range of four steps, so the result is from 0 to 1.
+
+    Experimental. On 15 Cantonese tone pairs it correlates with listener confusion at Spearman
+    0.2475, against 0.7817 for a baseline that compares only the direction of the contour (issue
+    #68, https://github.com/TigreGotico/phonematcher/issues/68).
+    """
     pa, pb = _contour(tone_levels(a)), _contour(tone_levels(b))
     return sum(abs(x - y) for x, y in zip(pa, pb)) / (4 * _POINTS)

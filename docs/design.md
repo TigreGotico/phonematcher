@@ -21,6 +21,12 @@ The alternatives are `hi` and `lo` alone, or one numeric height. Steps keep ever
 
 The evidence is thin. On the Hillenbrand vowel confusions, the weighted table scores 0.5610. The same table with zero weight on the steps scores 0.5340. The PanPhon 22 features score 0.4153. The intervals of the three overlap, and the data was seen during the work. On the six cognate test sets, under the C0 word costs (gap 1, linear substitutions), the variant with zero weight on the steps differs from the shipped table by -0.0002, with an interval from -0.0013 to +0.0008. The shipped word costs were not ablated. The steps are kept because the chart has seven rows, not because a test showed that they help cognate detection.
 
+The table keeps both codings, a trade-off that was measured. A form with one encoding sets `hi` and `lo` to 0 on every vowel, so the steps alone carry height and the distance stays a weighted L1 over fixed vectors. It is a metric. On the development split it changed the paired cognate AP by -0.0006, with an interval from -0.0012 to -0.0001, and the alignment PAS by +0.0039, with an interval from +0.0011 to +0.0066. On the Hillenbrand confusions it lowered the Spearman correlation from 0.5610 to 0.5474. The rule for changes made after the test run refuses a change when the interval of any development task lies wholly below 0, and the cognate interval does.
+
+A second form drops `hi` and `lo` only when both segments are vowels. It breaks the triangle inequality on 875 of the 400,995 triples of table base letters. For `b`, `e` and `ɪ`, the feature distance of `b` and `ɪ` is 0.486842, and the way through `e` costs 0.460526 + 0.013158 = 0.473684, which is 0.013158 less. The cause is that `hi` still separates `b` from `ɪ`, and the two vowels no longer differ on it. A cost that is not a metric is not used.
+
+The cognate, alignment and Hillenbrand numbers are in `benchmarks/results/ablations/vowel-height-dev.json` and `vowel-height-seen.json`, and `tests/test_design.py` ties this page to them. The triple count and the distances of the second form are not in a result file. They come from a run of the check on the development tree of version 1.0.0a3 (commit `ecde385`) over every unordered triple of the 135 base letters.
+
 ### Pharyngealization is its own feature
 
 The mark `◌ˤ` and the mark `◌̙` (retracted tongue root) both involve the tongue root. One alternative reads them as one articulation, so `iˤ` equals `i̙`. The other adds a feature `pharyngealized`, and `◌ˤ` sets it, besides `atr` −. The table takes the second. `iˤ` and `i̙` share `atr` − and differ in `pharyngealized` alone.
@@ -53,6 +59,8 @@ A tone and a phone have no feature in common, so no feature distance exists. The
 
 ### The tone distance
 
+The tone distance is experimental. On the one tone data set that exists for it, it does not beat a baseline that compares only direction (issue [#68](https://github.com/TigreGotico/phonematcher/issues/68)). A word distance that holds tones uses it, so treat the cost of a tone against a tone as a first model and not as a measured one.
+
 Two tones are compared by their pitch at the start, the middle and the end of the syllable. The distance is the mean difference divided by four, the range of the five levels, and the substitution cost is its square root.
 
 This is a limit, not a result. The benchmark has 15 tone pairs of Cantonese. It correlates the negative distance with the rate at which listeners confuse the two tones. The tone distance scores a Spearman 0.2475, with an interval from -0.3167 to 0.7396. A baseline that compares only the direction of the contour (rising, falling or level) scores 0.7817, with an interval from 0.4554 to 0.8860. With the alternative Chao values, the tone distance scores 0.3579. The intervals overlap, so 15 pairs do not show that the baseline is better. They show that the tone distance does not beat it. The two most confused pairs, T3 with T6 and T1 with T3, are level tones one or two steps apart. The data was seen, and no other tone data was tested.
@@ -70,6 +78,23 @@ PanPhon's weight file names `tense 0.25`, `long 0.125` and `velaric 0.25`. PanPh
 A segment that cannot be read is at distance 1 from every other segment, and a word that holds one has no feature cost for it. The benchmarks score the unread pairs at distance 1 as the main view, and report a second view on the items that every system reads. The alternative is to drop the unread items. Dropping them would let a system that reads little score well on what it reads, so the main view charges for what a system cannot read.
 
 The two views differ. On 12716 allophone items, the main view scores 0.8959. The view that skips the 224 items with an unread segment scores 0.9097 on the remaining 12492.
+
+An unread segment costs as much as a missing one: its substitution against any other segment costs 1, the price of a deletion plus an insertion, and its insertion or deletion costs 0.5. Nothing signals that a segment went unread. Pass `strict=True` to `ipa_distance`, `edit_distance`, `align` or `PhoneticFuzzySearch` to get a `ValueError` that names the segment and the input:
+
+```python
+from phonematcher import ipa_distance
+
+ipa_distance("ma", "maʅ")                  # 0.5
+ipa_distance("ʅ", "a")                     # 1.0
+try:
+    ipa_distance("ma", "maʅ", strict=True)
+except ValueError as error:
+    print(error)
+```
+
+```text
+cannot read the segment 'ʅ' in 'maʅ'
+```
 
 ### The word costs
 
