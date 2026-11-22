@@ -102,6 +102,9 @@ def main(out_path: Path) -> None:
     changes = json.loads((HERE / "overrides.json").read_text(encoding="utf-8"))
     overrides = changes["overrides"]
     for s in changes["segments"]:
+        missing = [s[k] for k in ("from", "place_of") if k in s and s[k] not in panphon]
+        if missing:
+            raise SystemExit(f"segments entry {s['segment']} names segments PanPhon does not list: {missing}")
         row = dict(panphon[s["from"]])
         row.update({f: panphon[s["place_of"]][f] for f in PLACE if f in row} if "place_of" in s else {})
         row.update({f: v for f, v in s["set"].items() if f in row})

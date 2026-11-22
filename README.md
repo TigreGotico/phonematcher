@@ -1,4 +1,11 @@
 # phonematcher
+<!-- agent-hint
+covers: what phonematcher is, how to install it, and one distance and one search example
+source: phonematcher/__init__.py, phonematcher/features.py, phonematcher/distance.py, phonematcher/clustering.py
+generated: no
+verify: pytest --import-mode=importlib tests/test_docs.py -k README.md
+see: docs/index.md, docs/quickstart.md
+-->
 
 phonematcher measures how far apart two IPA sounds are, and finds terms that sound like a query. It works on IPA only. To get IPA from text, use a grapheme-to-IPA library such as [orthography2ipa](https://github.com/TigreGotico/orthography2ipa).
 
@@ -18,7 +25,7 @@ phonematcher has no runtime dependencies.
 from phonematcher import phonetic_distance, ipa_distance, segments
 
 phonetic_distance("ʁ", "χ")       # 0.013: uvular fricatives that differ only in voice
-phonetic_distance("ʁ", "k")       # 0.118: a different manner and place
+phonetic_distance("ʁ", "k")       # 0.118: a different manner, place and voice
 segments("ˈt͡ʃɐ̃w̃")              # ['t͡ʃ', 'ɐ̃', 'w̃']
 ipa_distance("ˈpojʃ", "ˈpojs")   # 0.199: one near substitution
 ```
@@ -37,13 +44,14 @@ for word in ["pois", "retirada", "carro", "caro", "casa", "dia"]:
 
 query = transcribe("carro", "pt-BR-x-rj")   # 'ˈkaχu'
 best = search.search(query)[0]
-best.id, best.term, round(best.score, 3)   # ('carro', ('ˈkaʁu',), 0.013)
+best.id, best.term, round(best.score, 3)   # ('carro', ('ˈkaʁu',), 0.115)
 ```
 
 A term may have several readings: `search.add_term(["ˈpojʃ", "ˈpojs"], "pois")`.
 
 ## Documentation
 
+- [docs/index.md](docs/index.md): every page, in reading order.
 - [docs/quickstart.md](docs/quickstart.md): first steps.
 - [docs/features.md](docs/features.md): the feature table, its sources and the distance.
 - [docs/api.md](docs/api.md): every public name.
