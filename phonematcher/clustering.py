@@ -18,7 +18,7 @@ from collections import namedtuple
 from functools import lru_cache
 from typing import Dict, Hashable, List, Sequence, Set, Tuple, Union
 
-from phonematcher.distance import edit_distance, segments, substitution_cost
+from phonematcher.distance import check_readable, edit_distance, segments, substitution_cost
 from phonematcher.features import phone_features
 from phonematcher.phonex import phonex
 from phonematcher.tone import is_tone
@@ -99,10 +99,14 @@ class PhoneticFuzzySearch:
     *cluster_sensitivity* is a share from 0 to 1. The UPGMA merge threshold is that quantile of the
     segment costs over all pairs of letters, so a higher share puts more phones in one cluster,
     which finds more candidates.
+
+    A segment that the feature table cannot read costs as much as a missing one. With *strict*,
+    :meth:`add_term` and :meth:`search` raise ``ValueError`` for a term or query that holds one.
     """
 
-    def __init__(self, cluster_sensitivity: float = 0.08):
+    def __init__(self, cluster_sensitivity: float = 0.08, *, strict: bool = False):
         self.cluster_sensitivity = cluster_sensitivity
+        self.strict = strict
         self.clusters = phone_clusters(cluster_sensitivity)
         self.index: Dict[Tuple[int, ...], Set[Hashable]] = {}
         self.library: Dict[Hashable, Tuple[str, ...]] = {}
@@ -118,9 +122,15 @@ class PhoneticFuzzySearch:
             cid = self._cluster_memo[segment] = self.clusters[nearest]
         return cid
 
+    def _segments(self, ipa: str) -> List[str]:
+        segs = segments(ipa)
+        if self.strict:
+            check_readable(segs, ipa)
+        return segs
+
     def _words(self, ipa: str) -> List[List[str]]:
         words: List[List[str]] = [[]]
-        for seg in segments(ipa):
+        for seg in self._segments(ipa):
             if seg == " ":
                 words.append([])
             elif not is_tone(seg):
@@ -136,6 +146,9 @@ class PhoneticFuzzySearch:
     def add_term(self, term: Readings, id: Hashable) -> None:
         """Index *term*, an IPA string or a list of IPA readings, under *id*."""
         readings = _as_readings(term)
+        if self.strict:
+            for reading in readings:
+                self._segments(reading)
         self.library[id] = readings
         for reading in readings:
             for word in self._words(reading):
@@ -155,7 +168,7 @@ class PhoneticFuzzySearch:
             if words:
                 per_word = [set().union(*(self.index.get(key, ()) for key in self._keys(w))) for w in words]
                 candidates |= set.intersection(*per_word)
-        q_segs = [segments(q) for q in queries]
+        q_segs = [self._segments(q) for q in queries]
         matches = []
         for id in candidates:
             score = min(edit_distance(q, segments(t)) for q in q_segs for t in self.library[id])

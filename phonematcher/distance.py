@@ -3,7 +3,7 @@ import math
 import unicodedata
 from typing import List, Optional, Sequence, Tuple
 
-from phonematcher.features import POST_DIACRITICS, PRE_DIACRITICS, SPELLINGS, feature_distance, is_vowel_phone, phonetic_distance  # noqa: F401 (deprecated path)
+from phonematcher.features import POST_DIACRITICS, PRE_DIACRITICS, SPELLINGS, feature_distance, is_vowel_phone, phonetic_distance, vectorize_phones  # noqa: F401 (deprecated path)
 from phonematcher.tone import DIACRITIC_TONES, LEVELS, NUMERALS, PHRASE_MARKS, is_tone, tone_distance
 
 #: Stress, syllable and boundary marks: they carry no segment of their own.
@@ -117,13 +117,30 @@ def substitution_cost(a: str, b: str) -> float:
     return math.sqrt(feature_distance(a, b))
 
 
-def edit_distance(a: Sequence[str], b: Sequence[str]) -> float:
+def check_readable(segs: Sequence[str], source: str) -> None:
+    """Raise ``ValueError`` naming the first segment of *segs* that the feature table cannot read.
+    A space and a tone are always readable. *source* is the input the segments came from."""
+    for seg in segs:
+        if seg != " " and not is_tone(seg):
+            try:
+                vectorize_phones(seg)
+            except ValueError:
+                raise ValueError(f"cannot read the segment {seg!r} in {source!r}") from None
+
+
+def edit_distance(a: Sequence[str], b: Sequence[str], *, strict: bool = False) -> float:
     """Levenshtein distance between two segment sequences, with feature-weighted substitutions.
 
     Deletion and insertion cost 0.5, the value that the pre-registered test of
     ``benchmarks/prereg-2.md`` selected (``docs/benchmarks.md``). Pass the output of :func:`segments`, or call
     :func:`ipa_distance` on strings.
+
+    An unread segment is at distance 1 from every other segment, so it costs as much as a missing
+    one. With *strict*, an unread segment raises ``ValueError`` instead.
     """
+    if strict:
+        check_readable(a, " ".join(a))
+        check_readable(b, " ".join(b))
     row = [j * GAP_COST for j in range(len(b) + 1)]
     for i, seg in enumerate(a, start=1):
         prev, row[0] = row[0], i * GAP_COST
@@ -133,13 +150,17 @@ def edit_distance(a: Sequence[str], b: Sequence[str]) -> float:
     return row[-1]
 
 
-def align(a: Sequence[str], b: Sequence[str]) -> List[Tuple[Optional[str], Optional[str]]]:
+def align(a: Sequence[str], b: Sequence[str], *, strict: bool = False) -> List[Tuple[Optional[str], Optional[str]]]:
     """One least-cost alignment of two segment sequences, as pairs ``(left, right)``.
 
     ``None`` marks a gap. The costs are those of :func:`edit_distance`. The traceback starts at
     the end and prefers a substitution, then a deletion (a gap in *b*), then an insertion, so the
-    result is deterministic.
+    result is deterministic. With *strict*, an unread segment raises ``ValueError``, as in
+    :func:`edit_distance`.
     """
+    if strict:
+        check_readable(a, " ".join(a))
+        check_readable(b, " ".join(b))
     n, m = len(a), len(b)
     cost = [[0.0] * (m + 1) for _ in range(n + 1)]
     for i in range(1, n + 1):
@@ -171,13 +192,19 @@ def align(a: Sequence[str], b: Sequence[str]) -> List[Tuple[Optional[str], Optio
     return pairs
 
 
-def ipa_distance(a: str, b: str, normalized: bool = False) -> float:
+def ipa_distance(a: str, b: str, normalized: bool = False, *, strict: bool = False) -> float:
     """:func:`edit_distance` between two IPA strings.
 
     With *normalized*, the distance is divided by the segment count of the longer string, so it
     falls between 0 and 1. Two empty strings are at distance 0.
+
+    A segment that the feature table cannot read costs as much as a missing one. With *strict*,
+    it raises ``ValueError`` that names the segment and the string.
     """
     sa, sb = segments(a), segments(b)
+    if strict:
+        check_readable(sa, a)
+        check_readable(sb, b)
     dist = edit_distance(sa, sb)
     if not normalized:
         return dist

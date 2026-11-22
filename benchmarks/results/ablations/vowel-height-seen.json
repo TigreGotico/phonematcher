@@ -1,0 +1,522 @@
+{
+ "tasks.confusions": {
+  "data": {
+   "mandarin": {
+    "url": "https://osf.io/download/k9qzg/",
+    "sha256": "f7627d366c0239a3d16eaa2647b48071e4c01dced66094ce6b41e68f61efc1a4"
+   },
+   "miller_nicely": {
+    "url": "https://cran.r-project.org/src/contrib/Archive/clue/clue_0.3-55.tar.gz",
+    "sha256": "cc92aa08e1b430a23ef60b5f767ff0c611401e53afb5c75ccd2e9698da87f942",
+    "version": "clue 0.3-55"
+   },
+   "hillenbrand": {
+    "url": "https://github.com/santiagobarreda/hillenbrand_et_al_1995/raw/main/h95-alldata.zip",
+    "sha256": "2560548591e3a726c88549b6dc9d226995616c26874d601c69fee8b9eee9d730"
+   },
+   "spanish": {
+    "url": "https://zenodo.org/api/records/3521449/files/SpanishConfusionsCorpus.zip/content",
+    "md5": "c9367123ebc2d6e290b7bc97f526a274",
+    "sha256": "6499915e1c9ee4420b36dcd176588ab01d0da75ddc2a0b4acf8aa144d5ff4dd3",
+    "version": "Zenodo 3521449 v1"
+   }
+  },
+  "pairs": {
+   "mandarin": 253,
+   "miller_nicely": 120,
+   "hillenbrand": 66,
+   "spanish": 465
+  },
+  "systems": {
+   "phonematcher": {
+    "mandarin": {
+     "pairs_in": 253,
+     "skipped": 0,
+     "unread_at_1": {
+      "score": 0.29271665868876645,
+      "interval": {
+       "low": 0.1768259162847497,
+       "high": 0.40208913453044837,
+       "undefined": 0
+      },
+      "pairs_out": 253,
+      "distance_range": [
+       0.11470786693528089,
+       0.7117435966472906
+      ]
+     },
+     "common_subset": {
+      "score": 0.29271665868876645,
+      "interval": {
+       "low": 0.1768259162847497,
+       "high": 0.40208913453044837,
+       "undefined": 0
+      },
+      "pairs_out": 253,
+      "distance_range": [
+       0.11470786693528089,
+       0.7117435966472906
+      ]
+     }
+    },
+    "miller_nicely": {
+     "pairs_in": 120,
+     "skipped": 0,
+     "unread_at_1": {
+      "score": 0.34949636526380945,
+      "interval": {
+       "low": 0.17681315668957834,
+       "high": 0.486340388584563,
+       "undefined": 0
+      },
+      "pairs_out": 120,
+      "distance_range": [
+       0.11470786693528089,
+       0.5441071875825088
+      ]
+     },
+     "common_subset": {
+      "score": 0.34949636526380945,
+      "interval": {
+       "low": 0.17681315668957834,
+       "high": 0.486340388584563,
+       "undefined": 0
+      },
+      "pairs_out": 120,
+      "distance_range": [
+       0.11470786693528089,
+       0.5441071875825088
+      ]
+     }
+    },
+    "hillenbrand": {
+     "pairs_in": 66,
+     "skipped": 0,
+     "unread_at_1": {
+      "score": 0.5609720454572342,
+      "interval": {
+       "low": 0.38003248043261173,
+       "high": 0.7125698729440751,
+       "undefined": 0
+      },
+      "pairs_out": 66,
+      "distance_range": [
+       0.11470786693528089,
+       0.47295265146345866
+      ]
+     },
+     "common_subset": {
+      "score": 0.5609720454572342,
+      "interval": {
+       "low": 0.38003248043261173,
+       "high": 0.7125698729440751,
+       "undefined": 0
+      },
+      "pairs_out": 66,
+      "distance_range": [
+       0.11470786693528089,
+       0.47295265146345866
+      ]
+     }
+    },
+    "spanish": {
+     "pairs_in": 465,
+     "skipped": 0,
+     "unread_at_1": {
+      "score": 0.07704697767552594,
+      "interval": {
+       "low": -0.01494652249067225,
+       "high": 0.1696809830934477,
+       "undefined": 0
+      },
+      "pairs_out": 465,
+      "distance_range": [
+       0.0,
+       0.7905694150420949
+      ]
+     },
+     "common_subset": {
+      "score": 0.07704697767552594,
+      "interval": {
+       "low": -0.01494652249067225,
+       "high": 0.1696809830934477,
+       "undefined": 0
+      },
+      "pairs_out": 465,
+      "distance_range": [
+       0.0,
+       0.7905694150420949
+      ]
+     }
+    }
+   },
+   "pm-F1-segment": {
+    "mandarin": {
+     "pairs_in": 253,
+     "skipped": 0,
+     "unread_at_1": {
+      "score": 0.29271665868876645,
+      "interval": {
+       "low": 0.1768259162847497,
+       "high": 0.40208913453044837,
+       "undefined": 0
+      },
+      "pairs_out": 253,
+      "distance_range": [
+       0.11470786693528089,
+       0.7117435966472906
+      ]
+     },
+     "common_subset": {
+      "score": 0.29271665868876645,
+      "interval": {
+       "low": 0.1768259162847497,
+       "high": 0.40208913453044837,
+       "undefined": 0
+      },
+      "pairs_out": 253,
+      "distance_range": [
+       0.11470786693528089,
+       0.7117435966472906
+      ]
+     }
+    },
+    "miller_nicely": {
+     "pairs_in": 120,
+     "skipped": 0,
+     "unread_at_1": {
+      "score": 0.34949636526380945,
+      "interval": {
+       "low": 0.17681315668957834,
+       "high": 0.486340388584563,
+       "undefined": 0
+      },
+      "pairs_out": 120,
+      "distance_range": [
+       0.11470786693528089,
+       0.5441071875825088
+      ]
+     },
+     "common_subset": {
+      "score": 0.34949636526380945,
+      "interval": {
+       "low": 0.17681315668957834,
+       "high": 0.486340388584563,
+       "undefined": 0
+      },
+      "pairs_out": 120,
+      "distance_range": [
+       0.11470786693528089,
+       0.5441071875825088
+      ]
+     }
+    },
+    "hillenbrand": {
+     "pairs_in": 66,
+     "skipped": 0,
+     "unread_at_1": {
+      "score": 0.5473824948220267,
+      "interval": {
+       "low": 0.35874417926271357,
+       "high": 0.7059800521501842,
+       "undefined": 0
+      },
+      "pairs_out": 66,
+      "distance_range": [
+       0.11470786693528089,
+       0.4135850959342556
+      ]
+     },
+     "common_subset": {
+      "score": 0.5473824948220267,
+      "interval": {
+       "low": 0.35874417926271357,
+       "high": 0.7059800521501842,
+       "undefined": 0
+      },
+      "pairs_out": 66,
+      "distance_range": [
+       0.11470786693528089,
+       0.4135850959342556
+      ]
+     }
+    },
+    "spanish": {
+     "pairs_in": 465,
+     "skipped": 0,
+     "unread_at_1": {
+      "score": 0.08299704815498161,
+      "interval": {
+       "low": -0.009905375137039004,
+       "high": 0.17523269037048997,
+       "undefined": 0
+      },
+      "pairs_out": 465,
+      "distance_range": [
+       0.0,
+       0.7905694150420949
+      ]
+     },
+     "common_subset": {
+      "score": 0.08299704815498161,
+      "interval": {
+       "low": -0.009905375137039004,
+       "high": 0.17523269037048997,
+       "undefined": 0
+      },
+      "pairs_out": 465,
+      "distance_range": [
+       0.0,
+       0.7905694150420949
+      ]
+     }
+    }
+   }
+  },
+  "common_subset_pairs": {
+   "mandarin": 253,
+   "miller_nicely": 120,
+   "hillenbrand": 66,
+   "spanish": 465
+  }
+ },
+ "tasks.allophones": {
+  "data": {
+   "phoible": {
+    "url": "https://raw.githubusercontent.com/phoible/dev/master/data/phoible.csv",
+    "sha256": "0816e698563b68ec6a309bab404a06dfb221d4334aa5ffcbc0c18f2bd01844b8",
+    "items": 12716
+   }
+  },
+  "systems": {
+   "phonematcher": {
+    "direct": {
+     "all": {
+      "items_in": 12716,
+      "read_only": {
+       "score": 0.9097211567900764,
+       "items_out": 12492,
+       "skipped": 224
+      },
+      "common_subset": {
+       "score": 0.9097211567900764,
+       "items_out": 12492,
+       "skipped": 224
+      },
+      "unread_at_1": {
+       "score": 0.8959003197130851,
+       "items_out": 12716,
+       "skipped": 0
+      }
+     },
+     "odd": {
+      "items_in": 6011,
+      "read_only": {
+       "score": 0.9038356646959654,
+       "items_out": 5929,
+       "skipped": 82
+      },
+      "common_subset": {
+       "score": 0.9038356646959654,
+       "items_out": 5929,
+       "skipped": 82
+      },
+      "unread_at_1": {
+       "score": 0.8932738467415079,
+       "items_out": 6011,
+       "skipped": 0
+      }
+     },
+     "even": {
+      "items_in": 6705,
+      "read_only": {
+       "score": 0.9150380976137826,
+       "items_out": 6563,
+       "skipped": 142
+      },
+      "common_subset": {
+       "score": 0.9150380976137826,
+       "items_out": 6563,
+       "skipped": 142
+      },
+      "unread_at_1": {
+       "score": 0.8982549400012507,
+       "items_out": 6705,
+       "skipped": 0
+      }
+     }
+    },
+    "tie_retry": {
+     "all": {
+      "items_in": 12716,
+      "read_only": {
+       "score": 0.9097211567900764,
+       "items_out": 12492,
+       "skipped": 224
+      },
+      "common_subset": {
+       "score": 0.9097211567900764,
+       "items_out": 12492,
+       "skipped": 224
+      },
+      "unread_at_1": {
+       "score": 0.8959003197130851,
+       "items_out": 12716,
+       "skipped": 0
+      }
+     },
+     "odd": {
+      "items_in": 6011,
+      "read_only": {
+       "score": 0.9038356646959654,
+       "items_out": 5929,
+       "skipped": 82
+      },
+      "common_subset": {
+       "score": 0.9038356646959654,
+       "items_out": 5929,
+       "skipped": 82
+      },
+      "unread_at_1": {
+       "score": 0.8932738467415079,
+       "items_out": 6011,
+       "skipped": 0
+      }
+     },
+     "even": {
+      "items_in": 6705,
+      "read_only": {
+       "score": 0.9150380976137826,
+       "items_out": 6563,
+       "skipped": 142
+      },
+      "common_subset": {
+       "score": 0.9150380976137826,
+       "items_out": 6563,
+       "skipped": 142
+      },
+      "unread_at_1": {
+       "score": 0.8982549400012507,
+       "items_out": 6705,
+       "skipped": 0
+      }
+     }
+    }
+   },
+   "pm-F1-segment": {
+    "direct": {
+     "all": {
+      "items_in": 12716,
+      "read_only": {
+       "score": 0.907720102528567,
+       "items_out": 12492,
+       "skipped": 224
+      },
+      "common_subset": {
+       "score": 0.907720102528567,
+       "items_out": 12492,
+       "skipped": 224
+      },
+      "unread_at_1": {
+       "score": 0.893941443731485,
+       "items_out": 12716,
+       "skipped": 0
+      }
+     },
+     "odd": {
+      "items_in": 6011,
+      "read_only": {
+       "score": 0.9017189842248934,
+       "items_out": 5929,
+       "skipped": 82
+      },
+      "common_subset": {
+       "score": 0.9017189842248934,
+       "items_out": 5929,
+       "skipped": 82
+      },
+      "unread_at_1": {
+       "score": 0.8911912588914163,
+       "items_out": 6011,
+       "skipped": 0
+      }
+     },
+     "even": {
+      "items_in": 6705,
+      "read_only": {
+       "score": 0.9131414998198183,
+       "items_out": 6563,
+       "skipped": 142
+      },
+      "common_subset": {
+       "score": 0.9131414998198183,
+       "items_out": 6563,
+       "skipped": 142
+      },
+      "unread_at_1": {
+       "score": 0.8964069711101059,
+       "items_out": 6705,
+       "skipped": 0
+      }
+     }
+    },
+    "tie_retry": {
+     "all": {
+      "items_in": 12716,
+      "read_only": {
+       "score": 0.907720102528567,
+       "items_out": 12492,
+       "skipped": 224
+      },
+      "common_subset": {
+       "score": 0.907720102528567,
+       "items_out": 12492,
+       "skipped": 224
+      },
+      "unread_at_1": {
+       "score": 0.893941443731485,
+       "items_out": 12716,
+       "skipped": 0
+      }
+     },
+     "odd": {
+      "items_in": 6011,
+      "read_only": {
+       "score": 0.9017189842248934,
+       "items_out": 5929,
+       "skipped": 82
+      },
+      "common_subset": {
+       "score": 0.9017189842248934,
+       "items_out": 5929,
+       "skipped": 82
+      },
+      "unread_at_1": {
+       "score": 0.8911912588914163,
+       "items_out": 6011,
+       "skipped": 0
+      }
+     },
+     "even": {
+      "items_in": 6705,
+      "read_only": {
+       "score": 0.9131414998198183,
+       "items_out": 6563,
+       "skipped": 142
+      },
+      "common_subset": {
+       "score": 0.9131414998198183,
+       "items_out": 6563,
+       "skipped": 142
+      },
+      "unread_at_1": {
+       "score": 0.8964069711101059,
+       "items_out": 6705,
+       "skipped": 0
+      }
+     }
+    }
+   }
+  }
+ }
+}

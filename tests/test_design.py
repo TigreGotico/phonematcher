@@ -143,3 +143,29 @@ def test_the_closest_two_letters_differ_by_one_step_feature_of_weight_one_eighth
     assert smallest == pytest.approx(0.125 / 9.5) and f"{smallest:.4f}" in PAGE
     assert feature_distance("a", "æ") == pytest.approx(0.125 / 9.5)
     assert [n for n, x, y in zip(FEATURES, vectorize_phones("a"), vectorize_phones("æ")) if x != y] == ["h6"]
+
+
+def test_the_vowel_height_decision_equals_the_ablation_files():
+    ablations = RESULTS / "ablations"
+    dev = json.loads((ablations / "vowel-height-dev.json").read_text(encoding="utf-8"))
+    seen = json.loads((ablations / "vowel-height-seen.json").read_text(encoding="utf-8"))
+    cognates = dev["cognates"]["paired"]["pm-F1-segment"]
+    alignment = dev["alignment"]["paired"]["pm-F1-segment"]
+    assert cognates["high"] < 0 < alignment["low"]
+    for value in (cognates["diff"], cognates["low"], alignment["diff"], alignment["low"], alignment["high"]):
+        assert signed(value) in PAGE
+    assert f"{cognates['high']:.4f}" in PAGE
+    systems = seen["tasks.confusions"]["systems"]
+    shipped = results("confusions-seen.json")["systems"]["phonematcher"]["hillenbrand"]["unread_at_1"]["score"]
+    assert systems["phonematcher"]["hillenbrand"]["unread_at_1"]["score"] == shipped
+    one_encoding = systems["pm-F1-segment"]["hillenbrand"]["unread_at_1"]["score"]
+    assert f"from {shipped:.4f} to {one_encoding:.4f}" in PAGE
+
+
+def test_the_one_encoding_form_of_vowel_height_is_not_the_table():
+    # In the one-encoding form a vowel's hi and lo are 0, so the steps carry height. The table keeps
+    # hi and lo on a vowel: i and e differ on hi and on two steps h1 and h2.
+    names = list(FEATURES)
+    i, e = vectorize_phones("i"), vectorize_phones("e")
+    differing = [n for n, x, y in zip(names, i, e) if x != y]
+    assert differing == ["hi", "h1", "h2"]

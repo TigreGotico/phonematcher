@@ -9,6 +9,20 @@ see: compare-words.md, features.md
 
 This page shows how a tone enters a word distance. A tone is a segment of its own, not a feature of its vowel.
 
+The tone distance is experimental. On the 15 Cantonese tone pairs of the benchmark it ranks tone confusions worse than a baseline that compares only the direction of the contour (issue [#68](https://github.com/TigreGotico/phonematcher/issues/68)). The numbers come from `benchmarks/results/tone-seen.json`:
+
+```python
+import json
+
+scored = json.load(open("benchmarks/results/tone-seen.json"))["scored"]["main"]
+round(scored["phonematcher"]["score"], 4)                                  # 0.2475
+[round(scored["phonematcher"]["interval"][k], 4) for k in ("low", "high")]  # [-0.3167, 0.7396]
+round(scored["direction_baseline"]["score"], 4)                            # 0.7817
+[round(scored["direction_baseline"]["interval"][k], 4) for k in ("low", "high")]  # [0.4554, 0.886]
+```
+
+The data was seen during the work, and the 15 pairs do not show that the baseline is better. They show that the tone distance does not beat it.
+
 ## 1. Write a tone
 
 A tone is a run of tone letters after its syllable. Each letter is a pitch level from 1 (`˩`, extra low) to 5 (`˥`, extra high). The tone letters, the tone diacritics and the superscript digits give the same segments:
