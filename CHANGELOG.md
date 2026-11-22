@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.17.0a1](https://github.com/TigreGotico/phonematcher/tree/0.17.0a1) (2026-11-22)
+
+[Full Changelog](https://github.com/TigreGotico/phonematcher/compare/0.16.0a1...0.17.0a1)
+
+**Merged pull requests:**
+
+- feat: add ablation variants of phonematcher to the benchmark suite [\#55](https://github.com/TigreGotico/phonematcher/pull/55) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
+
 ## [0.16.0a1](https://github.com/TigreGotico/phonematcher/tree/0.16.0a1) (2026-11-22)
 
 [Full Changelog](https://github.com/TigreGotico/phonematcher/compare/0.15.0a1...0.16.0a1)
