@@ -1,4 +1,6 @@
 """Segmentation of IPA strings and the feature-weighted edit distance."""
+import math
+
 import pytest
 
 from phonematcher.distance import edit_distance, ipa_distance, segments
@@ -26,13 +28,15 @@ def test_identical_strings_are_at_zero():
     assert ipa_distance("ˈpojʃ", "ˈpojʃ") == 0.0
 
 
-def test_a_substitution_costs_the_feature_distance():
-    assert ipa_distance("pojs", "pojʃ") == pytest.approx(phonetic_distance("s", "ʃ"))
+def test_a_substitution_costs_the_square_root_of_the_feature_distance():
+    # s and ʃ are 0.0394737 apart (3/76); the square root is 0.198680.
+    assert ipa_distance("pojs", "pojʃ") == pytest.approx(0.198680, abs=1e-6)
+    assert ipa_distance("pojs", "pojʃ") == pytest.approx(math.sqrt(phonetic_distance("s", "ʃ")))
 
 
-def test_insertion_and_deletion_cost_one():
-    assert edit_distance(["a"], ["a", "b"]) == 1.0
-    assert edit_distance(["a", "b"], ["b"]) == 1.0
+def test_insertion_and_deletion_cost_one_half():
+    assert edit_distance(["a"], ["a", "b"]) == 0.5
+    assert edit_distance(["a", "b"], ["b"]) == 0.5
 
 
 def test_a_near_sound_is_nearer_than_a_far_one():

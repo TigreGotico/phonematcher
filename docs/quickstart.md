@@ -36,7 +36,7 @@ The uvular fricatives differ in voice only, so they are near. The velar stop dif
 from phonematcher import ipa_distance, segments
 
 segments("ˈt͡ʃɐ̃w̃")              # ['t͡ʃ', 'ɐ̃', 'w̃']
-ipa_distance("ˈpojʃ", "ˈpojs")   # 0.039
+ipa_distance("ˈpojʃ", "ˈpojs")   # 0.199
 ```
 
 `segments` keeps a diacritic with its base and joins tied symbols into one affricate. Stress and syllable marks are dropped.

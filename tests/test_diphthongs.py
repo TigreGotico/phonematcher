@@ -3,7 +3,6 @@ import pytest
 
 from phonematcher import ipa_distance, segments, vectorize_phones
 from phonematcher.distance import align
-from phonematcher.features import phonetic_distance
 
 
 @pytest.mark.parametrize("ipa, expected", [
@@ -23,14 +22,15 @@ def test_tied_and_untied_diphthong_are_equal():
 
 
 def test_diphthong_costs_one_indel_against_its_first_vowel():
-    # a͡i is [a, i]; against [a] the alignment is a match and one deletion of i, which costs 1.
-    assert ipa_distance("a͡i", "a") == 1.0
+    # a͡i is [a, i]; against [a] the alignment is a match and one deletion of i, which costs 0.5.
+    assert ipa_distance("a͡i", "a") == 0.5
     assert align(segments("a͡i"), segments("a")) == [("a", "a"), ("i", None)]
 
 
 def test_diphthong_glide_substitution_is_gradual():
-    # a͡i against aj: a matches a, then i is replaced by j.
-    assert 0 < ipa_distance("a͡i", "aj") == phonetic_distance("i", "j") < 1
+    # a͡i against aj: a matches a, then i is replaced by j: sqrt(0.157895) = 0.397360.
+    assert 0 < ipa_distance("a͡i", "aj") < 1
+    assert ipa_distance("a͡i", "aj") == pytest.approx(0.397360, abs=1e-6)
 
 
 @pytest.mark.parametrize("diphthong", ["a͡i", "ai", "ei̯"])

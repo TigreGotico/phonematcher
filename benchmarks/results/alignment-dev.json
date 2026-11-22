@@ -2,7 +2,7 @@
  "task": "alignment",
  "system": "phonematcher,levenshtein,aline,sca",
  "split": "dev",
- "commit": "fe92eefa7e4af07c2c73d7c5f8c2fc52021199b1",
+ "commit": "fe3944f052dd84bbf8d44333a3242ea7dbe091fa",
  "data": {
   "source": "https://github.com/SequenceComparison/SupplementaryMaterial",
   "sha": "cc4bf855f9549867e86157f49ac03608717b95c2",
@@ -21,10 +21,10 @@
     "n_in": 5748,
     "n_scored": 4575,
     "n_skipped": 1173,
-    "common_pas": 0.7833935018050542,
-    "common_cs": 0.8757242890816898,
-    "unread_at_zero_pas": 0.6243910925539318,
-    "unread_at_zero_cs": 0.7072966888328808
+    "common_pas": 0.8315282791817088,
+    "common_cs": 0.9072604624951195,
+    "unread_at_zero_pas": 0.6532707028531664,
+    "unread_at_zero_cs": 0.727339398683918
    },
    "levenshtein": {
     "n_in": 5748,
@@ -64,10 +64,10 @@
      "n_in": 5684,
      "n_scored": 4521,
      "n_skipped": 1163,
-     "common_pas": 0.7817955112219451,
-     "common_cs": 0.8748118534278135,
-     "unread_at_zero_pas": 0.6236805066854328,
-     "unread_at_zero_cs": 0.7069098512131642
+     "common_pas": 0.8316708229426434,
+     "common_cs": 0.9074883622888611,
+     "unread_at_zero_pas": 0.6527093596059114,
+     "unread_at_zero_cs": 0.726950876640936
     },
     "levenshtein": {
      "n_in": 5684,
@@ -108,8 +108,8 @@
      "n_skipped": 10,
      "common_pas": 0.8275862068965517,
      "common_cs": 0.9009578544061302,
-     "unread_at_zero_pas": 0.6875,
-     "unread_at_zero_cs": 0.741652704933955
+     "unread_at_zero_pas": 0.703125,
+     "unread_at_zero_cs": 0.7618450126262626
     },
     "levenshtein": {
      "n_in": 64,

@@ -20,10 +20,10 @@ from phonematcher import phonetic_distance, ipa_distance, segments
 phonetic_distance("ʁ", "χ")       # 0.013: uvular fricatives that differ only in voice
 phonetic_distance("ʁ", "k")       # 0.118: a different manner and place
 segments("ˈt͡ʃɐ̃w̃")              # ['t͡ʃ', 'ɐ̃', 'w̃']
-ipa_distance("ˈpojʃ", "ˈpojs")   # 0.039: one near substitution
+ipa_distance("ˈpojʃ", "ˈpojs")   # 0.199: one near substitution
 ```
 
-`phonetic_distance` compares two segments, from 0 to 1. `ipa_distance` compares two IPA strings: an edit distance where a substitution costs the feature distance and an insertion or deletion costs 1.
+`phonetic_distance` compares two segments, from 0 to 1. `ipa_distance` compares two IPA strings: an edit distance where a substitution costs the square root of the feature distance and an insertion or deletion costs 0.5. A substitution costs at most 1, so it never costs more than a deletion plus an insertion. The costs are the ones that the pre-registered test in `benchmarks/prereg-2.md` selected.
 
 ## Search by sound
 

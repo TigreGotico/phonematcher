@@ -267,7 +267,7 @@ Other ties raise `ValueError`. Two sonorants, such as `l͡j`, and a fricative be
 
 ### Diphthongs
 
-`segments` splits a tie between two vowels into the two vowels: `a͡i` gives `a` and `i`, and `ei̯` gives `e` and `i̯`. A tie between two consonants still joins them, so `t͡ʃa͡i` gives `t͡ʃ`, `a` and `i`. A diphthong thus costs as two segments in a word distance, and `ai` and `a͡i` are at distance 0. Against `a` the distance is 1, one deletion of `i`.
+`segments` splits a tie between two vowels into the two vowels: `a͡i` gives `a` and `i`, and `ei̯` gives `e` and `i̯`. A tie between two consonants still joins them, so `t͡ʃa͡i` gives `t͡ʃ`, `a` and `i`. A diphthong thus costs as two segments in a word distance, and `ai` and `a͡i` are at distance 0. Against `a` the distance is 0.5, one deletion of `i`.
 
 Nerbonne and Heeringa (1997, pp. 11-13) compared one-symbol and two-symbol diphthongs on 40 Dutch dialects with feature vectors. The two-symbol form gave the better dialect distances. Anderson et al. (2018, p. 33) define a diphthong in CLTS as two vowels: "Diphthongs are thus defined by two vowels". A diphthong has no vector of its own, so `vectorize_phones` raises `ValueError` for `ai`, `a͡i` and `ei̯`:
 

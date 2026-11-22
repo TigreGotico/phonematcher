@@ -15,10 +15,10 @@ The package root exports `phonetic_distance`, `vectorize_phones`, `segments`, `i
 ## `phonematcher.distance`
 
 - `segments(ipa) -> list[str]`: the segments of an IPA string. A diacritic stays with its base, a tie bar joins two symbols, a space between words becomes one `" "` segment, and stress, syllable and phrase-tone marks are dropped. A tone is one segment of tone letters after its syllable; a tone diacritic or a tone numeral is written as tone letters.
-- `substitution_cost(a, b) -> float`: the cost of replacing segment `a` by `b`: the tone distance of two tones, 1 for a tone and a phone, and the feature distance of two phones.
-- `edit_distance(a, b) -> float`: the Levenshtein distance between two segment lists, where a substitution costs `substitution_cost` and an insertion or deletion costs 1.
+- `substitution_cost(a, b) -> float`: the cost of replacing segment `a` by `b`: the square root of the tone distance of two tones, 1 for a tone and a phone, and the square root of the feature distance of two phones.
+- `edit_distance(a, b) -> float`: the Levenshtein distance between two segment lists, where a substitution costs `substitution_cost` and an insertion or deletion costs 0.5. The costs are those of the pre-registered test in `benchmarks/prereg-2.md` and `docs/benchmarks.md`.
 - `align(a, b) -> list[tuple[str | None, str | None]]`: one least-cost alignment of two segment lists, as pairs of a left and a right segment. `None` marks a gap. The costs are those of `edit_distance`. The traceback starts at the end and prefers a substitution, then a deletion (a gap in `b`), then an insertion.
-- `ipa_distance(a, b, normalized=False) -> float`: `edit_distance` between two IPA strings. With `normalized=True` the distance is divided by the segment count of the longer string, and two empty strings give 0.0.
+- `ipa_distance(a, b, normalized=False) -> float`: `edit_distance` between two IPA strings. With `normalized=True` the distance is divided by the segment count of the longer string, so it falls between 0 and 1, and two empty strings give 0.0.
 
 ## `phonematcher.tone`
 
