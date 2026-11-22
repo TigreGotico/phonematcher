@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.19.0a1](https://github.com/TigreGotico/phonematcher/tree/0.19.0a1) (2026-11-22)
+
+[Full Changelog](https://github.com/TigreGotico/phonematcher/compare/0.18.0a1...0.19.0a1)
+
+**Merged pull requests:**
+
+- feat: add the speed benchmark with a hash of the letter-pair distance matrix [\#59](https://github.com/TigreGotico/phonematcher/pull/59) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
+
 ## [0.18.0a1](https://github.com/TigreGotico/phonematcher/tree/0.18.0a1) (2026-11-22)
 
 [Full Changelog](https://github.com/TigreGotico/phonematcher/compare/0.17.0a1...0.18.0a1)
