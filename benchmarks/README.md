@@ -77,11 +77,14 @@ Three tasks score every system on data that the weight fitting already used. The
 python benchmarks/run.py --task coverage --system all --split seen
 python benchmarks/run.py --task allophones --system all --split seen
 python benchmarks/run.py --task confusions --system all --split seen
+python benchmarks/run.py --task tone --system phonematcher --split seen
 ```
 
 `coverage` counts the segments of PHOIBLE, WikiPron and the orthography2ipa inventories that each system reads. `allophones` asks whether an allophone lies nearer to its phoneme than the other phonemes of the inventory do. `confusions` correlates the segment distance with four sets of listener confusions.
 
 Each run downloads its data into `~/.cache/phonematcher-bench/C1`, `C2` or `C3` and writes `benchmarks/results/<task>-seen.json`. The scripts print one line per system. Pass `--out FILE` to write the result elsewhere. A task scores all its systems in one run, because the common subset needs every system.
+
+`tone` correlates the tone distance with the confusions of the six Cantonese tones (15 pairs, Wong, Cheng and Chen 2018) and scores a contour-direction baseline beside it. It needs no download. The other systems have no tone model, so only phonematcher and the baseline are scored.
 
 ## Cognate detection
 
