@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.15.0a1](https://github.com/TigreGotico/phonematcher/tree/0.15.0a1) (2026-11-22)
+
+[Full Changelog](https://github.com/TigreGotico/phonematcher/compare/0.14.0a1...0.15.0a1)
+
+**Merged pull requests:**
+
+- feat: add the variant retrieval benchmark on WikiPron dialect pairs [\#51](https://github.com/TigreGotico/phonematcher/pull/51) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
+
 ## [0.14.0a1](https://github.com/TigreGotico/phonematcher/tree/0.14.0a1) (2026-11-22)
 
 [Full Changelog](https://github.com/TigreGotico/phonematcher/compare/0.13.1a1...0.14.0a1)
