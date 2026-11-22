@@ -53,6 +53,22 @@ Each system has `reads(segment)`, `segment_distance(a, b)` and `word_distance(a,
 
 An edit distance is normalized by the length of the longer word. ALINE and SCA give a similarity score. Their distance is the mean self-similarity of the two words minus that score. The normalized form divides the distance by the mean.
 
+## Tasks
+
+### alignment
+
+```bash
+python benchmarks/run.py --task alignment --system all --split dev
+```
+
+The task aligns the word pairs of the Benchmark Database of Phonetic Alignments (List and Prokić 2014) and compares each alignment with the gold alignment. It uses `full.psa` and `covington.psa` of `github.com/SequenceComparison/SupplementaryMaterial`, at a pinned commit, fetched into the cache on first use. The repository states no licence, so the data stays in the cache.
+
+The split key is the file name and the pair index, such as `full.psa:17`. `--system all` runs `phonematcher`, `levenshtein`, `aline` and `sca`. The run writes `benchmarks/results/alignment-dev.json`.
+
+Two scores, as List (2014) defines them. The perfect alignments score is the share of pairs whose alignment equals the gold alignment. The column score is `2 * |Ct & Cr| / (|Cr| + |Ct|)` for the columns of one alignment, averaged over the pairs. A system that cannot read a segment skips the item. The all-items score gives a skipped item 0 for both scores.
+
+ALINE aligns locally. Its output is made global: the segments outside the aligned region are paired off from the region outward, and the extra ones go against gaps. `phonematcher` reads a tone as the library reads it in a word, so `³³` and `˧˧` are the same tone.
+
 ## The splits
 
 `split.is_test(key)` is true for one key in five, by the SHA-1 of the key. Each task names its key.

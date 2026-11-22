@@ -15,6 +15,7 @@ from typing import Callable, Dict, List, Optional
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from systems import NAMES, System, UnreadSegment, build  # noqa: E402
+from tasks import alignment  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent
 DEFAULT_CACHE = Path.home() / ".cache" / "phonematcher-bench"
@@ -50,7 +51,10 @@ def selfcheck(system: System) -> str:
 
 
 #: task name -> (function, the splits it has data for)
-TASKS: Dict[str, tuple] = {"selfcheck": (selfcheck, ("dev",))}
+TASKS: Dict[str, tuple] = {"selfcheck": (selfcheck, ("dev",)), "alignment": (alignment.run, ("dev",))}
+
+#: tasks that score all systems together and write ``results/<task>-<split>.json``; the value is the default systems
+WHOLE_TASKS: Dict[str, tuple] = {"alignment": alignment.SYSTEMS}
 
 
 def write_result(path: Path, payload: dict, task: str, system: str, split: str, commit: Optional[str]) -> None:
@@ -79,6 +83,14 @@ def main(argv: Optional[List[str]] = None, repo: Path = ROOT) -> int:
     task, splits = TASKS[args.task]
     if args.split not in splits:
         raise SystemExit(f"task {args.task} has no {args.split} split")
+    if args.task in WHOLE_TASKS:
+        names = WHOLE_TASKS[args.task] if args.system == "all" else [args.system]
+        head = subprocess.run(["git", "-C", str(repo), "rev-parse", "HEAD"], capture_output=True, text=True).stdout.strip()
+        payload = task(names, args.cache, args.split)
+        out = repo / "benchmarks" / "results" / f"{args.task}-{args.split}.json"
+        write_result(out, payload, args.task, ",".join(names), args.split, commit or head)
+        print(f"wrote {out}")
+        return 0
     names = NAMES if args.system == "all" else [args.system]
     failed = 0
     for name in names:
