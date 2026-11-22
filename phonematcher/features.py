@@ -52,9 +52,10 @@ PRE_DIACRITICS = {
 _TIES = ("͡", "͜")
 #: Unicode categories of a base letter, as against a modifier letter or a combining mark.
 _LETTER_CATEGORIES = {"Ll", "Lu", "Lo"}
-#: Click letters. Neither the IPA chart nor a source read for the table says how a click with a
-#: rear closure is written, so a click after a letter with no tie bar is not read.
+#: Click letters, and the velar and uvular letters that write a click's accompaniment (voicing,
+#: nasality) beside it. A click after any other letter with no tie bar is not read.
 _CLICKS = set("ʘǀǃǂǁ‼ʞ")
+_REAR_CLOSURES = set("kɡŋqɢɴ")
 #: Non-IPA spellings (``data/spellings.json``) -> the IPA they read as.
 SPELLINGS: Dict[int, str] = str.maketrans({
     row["spelling"]: row["reads_as"] for row in json.loads(
@@ -109,7 +110,7 @@ def vectorize_phones(segment: str) -> Vector:
         if base in phone_features and all(m in POST_DIACRITICS for m in seg[end:]):
             vec = phone_features[base]
             for marker in seg[:start]:
-                vec = _apply_if(_DIACRITICS[PRE_DIACRITICS[marker]], vec, segment)
+                vec = _apply_pre(marker, vec, segment)
             for marker in seg[end:]:
                 vec = _apply_if(_DIACRITICS[marker, "post"], vec, segment)
             return vec
@@ -124,7 +125,7 @@ def vectorize_phones(segment: str) -> Vector:
         except ValueError:
             raise _unrecognized(segment) from None
         for marker in seg[:start]:
-            vec = _apply_if(_DIACRITICS[PRE_DIACRITICS[marker]], vec, segment)
+            vec = _apply_pre(marker, vec, segment)
         return vec
     if seg and _TIES[0] not in untied:
         clusters: List[str] = []  # a base letter and the combining marks after it
@@ -137,8 +138,8 @@ def vectorize_phones(segment: str) -> Vector:
                 clusters.append(c)
         tied = clusters[0]
         for before, cluster in zip(clusters, clusters[1:]):
-            joins = (unicodedata.category(cluster[0]) in _LETTER_CATEGORIES
-                     and cluster != before and cluster[0] not in _CLICKS)
+            joins = (unicodedata.category(cluster[0]) in _LETTER_CATEGORIES and cluster != before
+                     and (cluster[0] not in _CLICKS or before[0] in _REAR_CLOSURES))
             tied += (_TIES[0] if joins else "") + cluster
         if tied != seg:
             return vectorize_phones(tied)
@@ -207,6 +208,14 @@ def _apply_if(diacritic: dict, vec: Vector, segment: str) -> Vector:
     if out[_HI] is True and out[_LO] is True:
         out[_LO if vec[_HI] is True else _HI] = False
     return tuple(out)
+
+
+def _apply_pre(marker: str, vec: Vector, segment: str) -> Vector:
+    """Apply a mark written before its base. A nasal mark on an affricate adds [+nasal] to it, as
+    a nasal tied before the affricate does."""
+    if PRE_DIACRITICS[marker][0] == "ⁿ" and vec[_DELREL] is True and vec[_SON] is False:
+        return tuple(True if i == _NAS else x for i, x in enumerate(vec))
+    return _apply_if(_DIACRITICS[PRE_DIACRITICS[marker]], vec, segment)
 
 
 def is_vowel_phone(segment: str) -> bool:

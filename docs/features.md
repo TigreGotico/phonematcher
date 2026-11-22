@@ -235,11 +235,11 @@ segments("ts")                                      # ['t', 's']
 
 The reader puts a tie bar between each two base letters and reads the result. A tie that `compose_tie` has no reading for stays unread: `ab`, `ɑi`, `ʔt`, and the three-letter `bvf` and `dzs`, because a fricative tied to a fricative has no reading. For the same reason `ʧ͡f` and `ʤ͡v` stay unread.
 
-A letter that repeats the one before it is a geminate, not a tie: `nn` and `tt` stay unread. A click after a letter, as in `kǀ`, also stays unread. Neither the IPA chart nor a source read for this table says how a click with a rear closure is written, so `k͡ǀ` needs its tie bar.
+A letter that repeats the one before it is a geminate, not a tie: `nn` and `tt` stay unread. A click after a velar or uvular letter (`k ɡ ŋ q ɢ ɴ`) is that letter tied to the click: `kǀ` is `k͡ǀ`. The IPA Handbook says: "Since any click involves a velar or uvular closure, it is possible to symbolize factors such as voicelessness, voicing, or nasality of the click by combining the click symbol with the appropriate velar or uvular symbol" (section 2.5, p. 10). A click after any other letter stays unread.
 
 Only a segment given whole is read this way. `segments` keeps `ts` in running text as two segments, `t` and `s`, because the same two letters are two sounds in many words. Use `segments("t͡s")` or write the tie bar to make one.
 
-A mark before such a segment applies to it as to a listed one. `ʰts` is `t͡s` with `sg` +, and `ᵐɡb` is `ɡ͡b` with `nas` +. The mark's own rule still decides: `◌ⁿ` applies to a plosive and not to an affricate, so `ⁿt͡s` and `ⁿts` stay unread.
+A mark before such a segment applies to it as to a listed one. `ʰts` is `t͡s` with `sg` +, and `ᵐɡb` is `ɡ͡b` with `nas` +. `ⁿ`, `ᵐ` and `ᵑ` before an affricate, tied or not, add `nas` + to it, as a nasal tied before it does: `ⁿd͡z` and `ⁿdz` equal `n͡d͡z`. The mark's own rule still decides elsewhere: `ⁿs` and `ⁿʃ` stay unread, because `◌ⁿ` applies to a stop.
 
 ## Other changes
 
