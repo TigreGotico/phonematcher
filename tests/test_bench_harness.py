@@ -105,9 +105,18 @@ def test_a_word_with_an_unread_segment_raises_and_scores_one_when_asked(built, n
     assert system.word_distance_or_one(["p", UNREAD], ["p", "a"]) == 1.0
 
 
-def test_aline_does_not_read_the_ipa_g(built):
-    assert not built["aline"].reads("ɡ")
-    assert built["aline"].reads("g")
+def test_aline_reads_the_ipa_g_as_the_ascii_g(built):
+    aline = built["aline"]
+    assert aline.reads("ɡ") and aline.reads("g")
+    assert aline.word_distance(["ɡ", "a"], ["g", "a"]) == 0
+    assert aline.word_distance(["ɡ", "a"], ["k", "a"]) == aline.word_distance(["g", "a"], ["k", "a"])
+
+
+def test_aline_maps_the_ipa_g_and_nothing_else(built):
+    # ALINE's symbol set has ASCII "g" only. These letters are also outside it and stay unread.
+    assert systems.Aline.INPUT == {"ɡ": "g"}
+    for letter in ("ʤ", "ʧ", "t͡ʃ", "ǥ"):
+        assert not built["aline"].reads(letter)
 
 
 @pytest.mark.parametrize("name", CHECKED)

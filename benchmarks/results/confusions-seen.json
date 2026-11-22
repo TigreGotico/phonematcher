@@ -1,0 +1,897 @@
+{
+ "task": "confusions",
+ "system": "phonematcher,levenshtein,panphon-weighted,panphon-hamming,aline,soundvectors,sca",
+ "split": "seen",
+ "commit": null,
+ "head": "ef809d239b24a7f8eed684ef68f0b80f0e1eb26f",
+ "tree_dirty": true,
+ "data": {
+  "mandarin": {
+   "url": "https://osf.io/download/k9qzg/",
+   "sha256": "f7627d366c0239a3d16eaa2647b48071e4c01dced66094ce6b41e68f61efc1a4"
+  },
+  "miller_nicely": {
+   "url": "https://cran.r-project.org/src/contrib/Archive/clue/clue_0.3-55.tar.gz",
+   "sha256": "cc92aa08e1b430a23ef60b5f767ff0c611401e53afb5c75ccd2e9698da87f942",
+   "version": "clue 0.3-55"
+  },
+  "hillenbrand": {
+   "url": "https://github.com/santiagobarreda/hillenbrand_et_al_1995/raw/main/h95-alldata.zip",
+   "sha256": "2560548591e3a726c88549b6dc9d226995616c26874d601c69fee8b9eee9d730"
+  },
+  "spanish": {
+   "url": "https://zenodo.org/api/records/3521449/files/SpanishConfusionsCorpus.zip/content",
+   "md5": "c9367123ebc2d6e290b7bc97f526a274",
+   "sha256": "6499915e1c9ee4420b36dcd176588ab01d0da75ddc2a0b4acf8aa144d5ff4dd3",
+   "version": "Zenodo 3521449 v1"
+  }
+ },
+ "pairs": {
+  "mandarin": 253,
+  "miller_nicely": 120,
+  "hillenbrand": 66,
+  "spanish": 465
+ },
+ "systems": {
+  "phonematcher": {
+   "mandarin": {
+    "pairs_in": 253,
+    "skipped": 0,
+    "unread_at_1": {
+     "score": 0.29271665868876645,
+     "interval": {
+      "low": 0.1768259162847497,
+      "high": 0.40208913453044837,
+      "undefined": 0
+     },
+     "pairs_out": 253,
+     "distance_range": [
+      0.013157894736842105,
+      0.506578947368421
+     ]
+    },
+    "common_subset": {
+     "score": 0.35897059625001376,
+     "interval": {
+      "low": 0.12161094166281261,
+      "high": 0.5577841741734547,
+      "undefined": 0
+     },
+     "pairs_out": 78,
+     "distance_range": [
+      0.02631578947368421,
+      0.45394736842105265
+     ]
+    }
+   },
+   "miller_nicely": {
+    "pairs_in": 120,
+    "skipped": 0,
+    "unread_at_1": {
+     "score": 0.34949636526380945,
+     "interval": {
+      "low": 0.17681315668957834,
+      "high": 0.486340388584563,
+      "undefined": 0
+     },
+     "pairs_out": 120,
+     "distance_range": [
+      0.013157894736842105,
+      0.29605263157894735
+     ]
+    },
+    "common_subset": {
+     "score": 0.34949636526380945,
+     "interval": {
+      "low": 0.17681315668957834,
+      "high": 0.486340388584563,
+      "undefined": 0
+     },
+     "pairs_out": 120,
+     "distance_range": [
+      0.013157894736842105,
+      0.29605263157894735
+     ]
+    }
+   },
+   "hillenbrand": {
+    "pairs_in": 66,
+    "skipped": 0,
+    "unread_at_1": {
+     "score": 0.5609720454572342,
+     "interval": {
+      "low": 0.38003248043261173,
+      "high": 0.7125698729440751,
+      "undefined": 0
+     },
+     "pairs_out": 66,
+     "distance_range": [
+      0.013157894736842105,
+      0.2236842105263158
+     ]
+    },
+    "common_subset": {
+     "score": 0.67286656098191,
+     "interval": {
+      "low": 0.4720897329986577,
+      "high": 0.8204487705768195,
+      "undefined": 0
+     },
+     "pairs_out": 45,
+     "distance_range": [
+      0.013157894736842105,
+      0.2236842105263158
+     ]
+    }
+   },
+   "spanish": {
+    "pairs_in": 465,
+    "skipped": 0,
+    "unread_at_1": {
+     "score": 0.07704697767552594,
+     "interval": {
+      "low": -0.01494652249067225,
+      "high": 0.1696809830934477,
+      "undefined": 0
+     },
+     "pairs_out": 465,
+     "distance_range": [
+      0.0,
+      0.625
+     ]
+    },
+    "common_subset": {
+     "score": 0.15951409727854238,
+     "interval": {
+      "low": 0.04780302918279299,
+      "high": 0.2659936858093135,
+      "undefined": 0
+     },
+     "pairs_out": 325,
+     "distance_range": [
+      0.013157894736842105,
+      0.5855263157894737
+     ]
+    }
+   }
+  },
+  "levenshtein": {
+   "mandarin": {
+    "pairs_in": 253,
+    "skipped": 0,
+    "unread_at_1": {
+     "score": null,
+     "interval": {
+      "low": null,
+      "high": null,
+      "undefined": 1000
+     },
+     "pairs_out": 253,
+     "distance_range": [
+      1.0,
+      1.0
+     ]
+    },
+    "common_subset": {
+     "score": null,
+     "interval": {
+      "low": null,
+      "high": null,
+      "undefined": 1000
+     },
+     "pairs_out": 78,
+     "distance_range": [
+      1.0,
+      1.0
+     ]
+    }
+   },
+   "miller_nicely": {
+    "pairs_in": 120,
+    "skipped": 0,
+    "unread_at_1": {
+     "score": null,
+     "interval": {
+      "low": null,
+      "high": null,
+      "undefined": 1000
+     },
+     "pairs_out": 120,
+     "distance_range": [
+      1.0,
+      1.0
+     ]
+    },
+    "common_subset": {
+     "score": null,
+     "interval": {
+      "low": null,
+      "high": null,
+      "undefined": 1000
+     },
+     "pairs_out": 120,
+     "distance_range": [
+      1.0,
+      1.0
+     ]
+    }
+   },
+   "hillenbrand": {
+    "pairs_in": 66,
+    "skipped": 0,
+    "unread_at_1": {
+     "score": null,
+     "interval": {
+      "low": null,
+      "high": null,
+      "undefined": 1000
+     },
+     "pairs_out": 66,
+     "distance_range": [
+      1.0,
+      1.0
+     ]
+    },
+    "common_subset": {
+     "score": null,
+     "interval": {
+      "low": null,
+      "high": null,
+      "undefined": 1000
+     },
+     "pairs_out": 45,
+     "distance_range": [
+      1.0,
+      1.0
+     ]
+    }
+   },
+   "spanish": {
+    "pairs_in": 465,
+    "skipped": 0,
+    "unread_at_1": {
+     "score": null,
+     "interval": {
+      "low": null,
+      "high": null,
+      "undefined": 1000
+     },
+     "pairs_out": 465,
+     "distance_range": [
+      1.0,
+      1.0
+     ]
+    },
+    "common_subset": {
+     "score": null,
+     "interval": {
+      "low": null,
+      "high": null,
+      "undefined": 1000
+     },
+     "pairs_out": 325,
+     "distance_range": [
+      1.0,
+      1.0
+     ]
+    }
+   }
+  },
+  "panphon-weighted": {
+   "mandarin": {
+    "pairs_in": 253,
+    "skipped": 0,
+    "unread_at_1": {
+     "score": 0.27711583540034307,
+     "interval": {
+      "low": 0.1637997574405811,
+      "high": 0.3840649880459874,
+      "undefined": 0
+     },
+     "pairs_out": 253,
+     "distance_range": [
+      0.25,
+      9.375
+     ]
+    },
+    "common_subset": {
+     "score": 0.3621177080459317,
+     "interval": {
+      "low": 0.12448480498496559,
+      "high": 0.5598850363518239,
+      "undefined": 0
+     },
+     "pairs_out": 78,
+     "distance_range": [
+      0.5,
+      8.375
+     ]
+    }
+   },
+   "miller_nicely": {
+    "pairs_in": 120,
+    "skipped": 0,
+    "unread_at_1": {
+     "score": 0.34949636526380945,
+     "interval": {
+      "low": 0.17681315668957834,
+      "high": 0.486340388584563,
+      "undefined": 0
+     },
+     "pairs_out": 120,
+     "distance_range": [
+      0.25,
+      5.625
+     ]
+    },
+    "common_subset": {
+     "score": 0.34949636526380945,
+     "interval": {
+      "low": 0.17681315668957834,
+      "high": 0.486340388584563,
+      "undefined": 0
+     },
+     "pairs_out": 120,
+     "distance_range": [
+      0.25,
+      5.625
+     ]
+    }
+   },
+   "hillenbrand": {
+    "pairs_in": 66,
+    "skipped": 11,
+    "unread_at_1": {
+     "score": 0.4892505525060203,
+     "interval": {
+      "low": 0.2743225361145915,
+      "high": 0.6642853755000345,
+      "undefined": 0
+     },
+     "pairs_out": 66,
+     "distance_range": [
+      0.25,
+      2.5
+     ]
+    },
+    "common_subset": {
+     "score": 0.5226334348914312,
+     "interval": {
+      "low": 0.26615699606957033,
+      "high": 0.7241186803087885,
+      "undefined": 0
+     },
+     "pairs_out": 45,
+     "distance_range": [
+      0.25,
+      2.5
+     ]
+    }
+   },
+   "spanish": {
+    "pairs_in": 465,
+    "skipped": 0,
+    "unread_at_1": {
+     "score": 0.10771271816280276,
+     "interval": {
+      "low": 0.015115307648940597,
+      "high": 0.20085909519560566,
+      "undefined": 0
+     },
+     "pairs_out": 465,
+     "distance_range": [
+      0.0,
+      11.0
+     ]
+    },
+    "common_subset": {
+     "score": 0.18901311828619363,
+     "interval": {
+      "low": 0.07655077108466692,
+      "high": 0.2947596160555159,
+      "undefined": 0
+     },
+     "pairs_out": 325,
+     "distance_range": [
+      0.0,
+      10.25
+     ]
+    }
+   }
+  },
+  "panphon-hamming": {
+   "mandarin": {
+    "pairs_in": 253,
+    "skipped": 0,
+    "unread_at_1": {
+     "score": 0.3544403424090479,
+     "interval": {
+      "low": 0.24494569226288895,
+      "high": 0.4584790186016833,
+      "undefined": 0
+     },
+     "pairs_out": 253,
+     "distance_range": [
+      0.041666666666666664,
+      0.5833333333333334
+     ]
+    },
+    "common_subset": {
+     "score": 0.4032257186880289,
+     "interval": {
+      "low": 0.19077086792436018,
+      "high": 0.5847389551989546,
+      "undefined": 0
+     },
+     "pairs_out": 78,
+     "distance_range": [
+      0.041666666666666664,
+      0.4583333333333333
+     ]
+    }
+   },
+   "miller_nicely": {
+    "pairs_in": 120,
+    "skipped": 0,
+    "unread_at_1": {
+     "score": 0.32719715880238714,
+     "interval": {
+      "low": 0.1597469859865894,
+      "high": 0.46771519145454826,
+      "undefined": 0
+     },
+     "pairs_out": 120,
+     "distance_range": [
+      0.041666666666666664,
+      0.375
+     ]
+    },
+    "common_subset": {
+     "score": 0.32719715880238714,
+     "interval": {
+      "low": 0.1597469859865894,
+      "high": 0.46771519145454826,
+      "undefined": 0
+     },
+     "pairs_out": 120,
+     "distance_range": [
+      0.041666666666666664,
+      0.375
+     ]
+    }
+   },
+   "hillenbrand": {
+    "pairs_in": 66,
+    "skipped": 11,
+    "unread_at_1": {
+     "score": 0.3146886298171884,
+     "interval": {
+      "low": 0.10313690321812241,
+      "high": 0.5160481335393853,
+      "undefined": 0
+     },
+     "pairs_out": 66,
+     "distance_range": [
+      0.041666666666666664,
+      1.0
+     ]
+    },
+    "common_subset": {
+     "score": 0.41500847551546144,
+     "interval": {
+      "low": 0.12826418223163105,
+      "high": 0.644648897942196,
+      "undefined": 0
+     },
+     "pairs_out": 45,
+     "distance_range": [
+      0.041666666666666664,
+      0.20833333333333334
+     ]
+    }
+   },
+   "spanish": {
+    "pairs_in": 465,
+    "skipped": 0,
+    "unread_at_1": {
+     "score": 0.1323063857496146,
+     "interval": {
+      "low": 0.0387973933327256,
+      "high": 0.23325272008087122,
+      "undefined": 0
+     },
+     "pairs_out": 465,
+     "distance_range": [
+      0.0,
+      0.625
+     ]
+    },
+    "common_subset": {
+     "score": 0.14739630789595637,
+     "interval": {
+      "low": 0.03631798675052704,
+      "high": 0.25987790227369667,
+      "undefined": 0
+     },
+     "pairs_out": 325,
+     "distance_range": [
+      0.0,
+      0.5416666666666666
+     ]
+    }
+   }
+  },
+  "aline": {
+   "mandarin": {
+    "pairs_in": 253,
+    "skipped": 175,
+    "unread_at_1": {
+     "score": 0.16487988561868328,
+     "interval": {
+      "low": 0.04242662752863248,
+      "high": 0.2821379545986868,
+      "undefined": 0
+     },
+     "pairs_out": 253,
+     "distance_range": [
+      0.11428571428571432,
+      1.0
+     ]
+    },
+    "common_subset": {
+     "score": 0.3152004798119456,
+     "interval": {
+      "low": 0.07742434092826703,
+      "high": 0.5261750715379097,
+      "undefined": 0
+     },
+     "pairs_out": 78,
+     "distance_range": [
+      0.11428571428571432,
+      1.0
+     ]
+    }
+   },
+   "miller_nicely": {
+    "pairs_in": 120,
+    "skipped": 0,
+    "unread_at_1": {
+     "score": 0.495680034732084,
+     "interval": {
+      "low": 0.34458653615619633,
+      "high": 0.6079872959706352,
+      "undefined": 0
+     },
+     "pairs_out": 120,
+     "distance_range": [
+      0.05714285714285716,
+      1.0
+     ]
+    },
+    "common_subset": {
+     "score": 0.495680034732084,
+     "interval": {
+      "low": 0.34458653615619633,
+      "high": 0.6079872959706352,
+      "undefined": 0
+     },
+     "pairs_out": 120,
+     "distance_range": [
+      0.05714285714285716,
+      1.0
+     ]
+    }
+   },
+   "hillenbrand": {
+    "pairs_in": 66,
+    "skipped": 21,
+    "unread_at_1": {
+     "score": 0.32851382896839,
+     "interval": {
+      "low": 0.07220211335487042,
+      "high": 0.5251090068496255,
+      "undefined": 0
+     },
+     "pairs_out": 66,
+     "distance_range": [
+      0.0,
+      1.0
+     ]
+    },
+    "common_subset": {
+     "score": 0.5293001135878673,
+     "interval": {
+      "low": 0.2769717741967672,
+      "high": 0.7165801203317189,
+      "undefined": 0
+     },
+     "pairs_out": 45,
+     "distance_range": [
+      0.0,
+      0.16000000000000003
+     ]
+    }
+   },
+   "spanish": {
+    "pairs_in": 465,
+    "skipped": 140,
+    "unread_at_1": {
+     "score": 0.16547180081447815,
+     "interval": {
+      "low": 0.061702065947288984,
+      "high": 0.26074070321918885,
+      "undefined": 0
+     },
+     "pairs_out": 465,
+     "distance_range": [
+      0.0,
+      1.0
+     ]
+    },
+    "common_subset": {
+     "score": 0.11513581968665437,
+     "interval": {
+      "low": -0.005552099994128181,
+      "high": 0.22756860447475952,
+      "undefined": 0
+     },
+     "pairs_out": 325,
+     "distance_range": [
+      0.0,
+      1.0
+     ]
+    }
+   }
+  },
+  "soundvectors": {
+   "mandarin": {
+    "pairs_in": 253,
+    "skipped": 0,
+    "unread_at_1": {
+     "score": 0.36841453615410313,
+     "interval": {
+      "low": 0.2587473109173252,
+      "high": 0.4748346020330107,
+      "undefined": 0
+     },
+     "pairs_out": 253,
+     "distance_range": [
+      0.02564102564102564,
+      0.38461538461538464
+     ]
+    },
+    "common_subset": {
+     "score": 0.45651233728035434,
+     "interval": {
+      "low": 0.25759071891609187,
+      "high": 0.6239400012076375,
+      "undefined": 0
+     },
+     "pairs_out": 78,
+     "distance_range": [
+      0.05128205128205128,
+      0.3076923076923077
+     ]
+    }
+   },
+   "miller_nicely": {
+    "pairs_in": 120,
+    "skipped": 0,
+    "unread_at_1": {
+     "score": 0.1954853035193695,
+     "interval": {
+      "low": 0.02307796115267489,
+      "high": 0.3488675679177322,
+      "undefined": 0
+     },
+     "pairs_out": 120,
+     "distance_range": [
+      0.02564102564102564,
+      0.2564102564102564
+     ]
+    },
+    "common_subset": {
+     "score": 0.1954853035193695,
+     "interval": {
+      "low": 0.02307796115267489,
+      "high": 0.3488675679177322,
+      "undefined": 0
+     },
+     "pairs_out": 120,
+     "distance_range": [
+      0.02564102564102564,
+      0.2564102564102564
+     ]
+    }
+   },
+   "hillenbrand": {
+    "pairs_in": 66,
+    "skipped": 0,
+    "unread_at_1": {
+     "score": 0.5813192098816832,
+     "interval": {
+      "low": 0.410629588764516,
+      "high": 0.7209611304074688,
+      "undefined": 0
+     },
+     "pairs_out": 66,
+     "distance_range": [
+      0.02564102564102564,
+      0.15384615384615385
+     ]
+    },
+    "common_subset": {
+     "score": 0.6822038853995884,
+     "interval": {
+      "low": 0.4878492161077663,
+      "high": 0.8103239663200388,
+      "undefined": 0
+     },
+     "pairs_out": 45,
+     "distance_range": [
+      0.02564102564102564,
+      0.15384615384615385
+     ]
+    }
+   },
+   "spanish": {
+    "pairs_in": 465,
+    "skipped": 0,
+    "unread_at_1": {
+     "score": 0.15441485684406264,
+     "interval": {
+      "low": 0.05321522584478904,
+      "high": 0.2523175667203899,
+      "undefined": 0
+     },
+     "pairs_out": 465,
+     "distance_range": [
+      0.02564102564102564,
+      0.4358974358974359
+     ]
+    },
+    "common_subset": {
+     "score": 0.18573191705228126,
+     "interval": {
+      "low": 0.07845802256855632,
+      "high": 0.29323790210723044,
+      "undefined": 0
+     },
+     "pairs_out": 325,
+     "distance_range": [
+      0.02564102564102564,
+      0.41025641025641024
+     ]
+    }
+   }
+  },
+  "sca": {
+   "mandarin": {
+    "pairs_in": 253,
+    "skipped": 0,
+    "unread_at_1": {
+     "score": 0.11541016784482623,
+     "interval": {
+      "low": -0.00666586000798139,
+      "high": 0.2270883393847338,
+      "undefined": 0
+     },
+     "pairs_out": 253,
+     "distance_range": [
+      0.0,
+      1.0
+     ]
+    },
+    "common_subset": {
+     "score": 0.18217148730443977,
+     "interval": {
+      "low": -0.031605577774080254,
+      "high": 0.3803816471975499,
+      "undefined": 0
+     },
+     "pairs_out": 78,
+     "distance_range": [
+      0.0,
+      1.0
+     ]
+    }
+   },
+   "miller_nicely": {
+    "pairs_in": 120,
+    "skipped": 0,
+    "unread_at_1": {
+     "score": 0.1569662822871666,
+     "interval": {
+      "low": -0.022412457357813227,
+      "high": 0.3401859057728808,
+      "undefined": 0
+     },
+     "pairs_out": 120,
+     "distance_range": [
+      0.0,
+      1.0
+     ]
+    },
+    "common_subset": {
+     "score": 0.1569662822871666,
+     "interval": {
+      "low": -0.022412457357813227,
+      "high": 0.3401859057728808,
+      "undefined": 0
+     },
+     "pairs_out": 120,
+     "distance_range": [
+      0.0,
+      1.0
+     ]
+    }
+   },
+   "hillenbrand": {
+    "pairs_in": 66,
+    "skipped": 11,
+    "unread_at_1": {
+     "score": 0.2452113630513756,
+     "interval": {
+      "low": 0.018300631916150865,
+      "high": 0.44496023163573817,
+      "undefined": 0
+     },
+     "pairs_out": 66,
+     "distance_range": [
+      0.0,
+      1.0
+     ]
+    },
+    "common_subset": {
+     "score": 0.3235018891045018,
+     "interval": {
+      "low": -2.976103063506145e-05,
+      "high": 0.5904965405748248,
+      "undefined": 0
+     },
+     "pairs_out": 45,
+     "distance_range": [
+      0.0,
+      0.4
+     ]
+    }
+   },
+   "spanish": {
+    "pairs_in": 465,
+    "skipped": 0,
+    "unread_at_1": {
+     "score": -0.014046257063202193,
+     "interval": {
+      "low": -0.10819477259883833,
+      "high": 0.08313412139229799,
+      "undefined": 0
+     },
+     "pairs_out": 465,
+     "distance_range": [
+      0.0,
+      1.317948717948718
+     ]
+    },
+    "common_subset": {
+     "score": 0.06412497581689382,
+     "interval": {
+      "low": -0.04773706785045424,
+      "high": 0.17521248009891816,
+      "undefined": 0
+     },
+     "pairs_out": 325,
+     "distance_range": [
+      0.0,
+      1.317948717948718
+     ]
+    }
+   }
+  }
+ },
+ "common_subset_pairs": {
+  "mandarin": 78,
+  "miller_nicely": 120,
+  "hillenbrand": 45,
+  "spanish": 325
+ }
+}

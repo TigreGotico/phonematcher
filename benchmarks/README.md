@@ -45,7 +45,7 @@ Pass `--cache DIR` to put it elsewhere. Data never goes into the repository.
 | `phonematcher` | this repository | `vectorize_phones` returns |
 | `levenshtein` | none | the segment is not empty |
 | `panphon-weighted`, `panphon-hamming` | `panphon` 0.22.2 | `FeatureTable.fts` finds it |
-| `aline` | `nltk.metrics.aline` | it is a key of `feature_matrix` (ASCII `g`, no `ɡ`) |
+| `aline` | `nltk.metrics.aline` | it is a key of `feature_matrix` (ASCII `g`; the input mapping `ɡ` to `g` is the only one) |
 | `soundvectors` | `soundvectors`, `pyclts` | `get_vec` returns |
 | `sca` | `lingpy` (GPL-3.0, extra `bench-copyleft`) | `tokens2class` maps it to an SCA class |
 
@@ -68,6 +68,20 @@ The split key is the file name and the pair index, such as `full.psa:17`. `--sys
 Two scores, as List (2014) defines them. The perfect alignments score is the share of pairs whose alignment equals the gold alignment. The column score is `2 * |Ct & Cr| / (|Cr| + |Ct|)` for the columns of one alignment, averaged over the pairs. A system that cannot read a segment skips the item. The all-items score gives a skipped item 0 for both scores.
 
 ALINE aligns locally. Its output is made global: the segments outside the aligned region are paired off from the region outward, and the extra ones go against gaps. `phonematcher` reads a tone as the library reads it in a word, so `³³` and `˧˧` are the same tone.
+
+### The seen-data tasks
+
+Three tasks score every system on data that the weight fitting already used. Their results are labelled `seen`.
+
+```bash
+python benchmarks/run.py --task coverage --system all --split seen
+python benchmarks/run.py --task allophones --system all --split seen
+python benchmarks/run.py --task confusions --system all --split seen
+```
+
+`coverage` counts the segments of PHOIBLE, WikiPron and the orthography2ipa inventories that each system reads. `allophones` asks whether an allophone lies nearer to its phoneme than the other phonemes of the inventory do. `confusions` correlates the segment distance with four sets of listener confusions.
+
+Each run downloads its data into `~/.cache/phonematcher-bench/C1`, `C2` or `C3` and writes `benchmarks/results/<task>-seen.json`. The scripts print one line per system. Pass `--out FILE` to write the result elsewhere. A task scores all its systems in one run, because the common subset needs every system.
 
 ## The splits
 

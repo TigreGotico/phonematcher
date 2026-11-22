@@ -1,0 +1,815 @@
+{
+ "task": "allophones",
+ "system": "phonematcher,levenshtein,panphon-weighted,panphon-hamming,aline,soundvectors,sca",
+ "split": "seen",
+ "commit": null,
+ "head": "ef809d239b24a7f8eed684ef68f0b80f0e1eb26f",
+ "tree_dirty": true,
+ "data": {
+  "phoible": {
+   "url": "https://raw.githubusercontent.com/phoible/dev/master/data/phoible.csv",
+   "sha256": "0816e698563b68ec6a309bab404a06dfb221d4334aa5ffcbc0c18f2bd01844b8",
+   "items": 12716
+  }
+ },
+ "systems": {
+  "phonematcher": {
+   "direct": {
+    "all": {
+     "items_in": 12716,
+     "read_only": {
+      "score": 0.9393178580375938,
+      "items_out": 11973,
+      "skipped": 743
+     },
+     "common_subset": {
+      "score": 0.9029492585084681,
+      "items_out": 4063,
+      "skipped": 8653
+     },
+     "unread_at_1": {
+      "score": 0.8930665112726591,
+      "items_out": 12716,
+      "skipped": 0
+     }
+    },
+    "odd": {
+     "items_in": 6011,
+     "read_only": {
+      "score": 0.9358868911962371,
+      "items_out": 5657,
+      "skipped": 354
+     },
+     "common_subset": {
+      "score": 0.8975876561319687,
+      "items_out": 2019,
+      "skipped": 3992
+     },
+     "unread_at_1": {
+      "score": 0.8895750916841094,
+      "items_out": 6011,
+      "skipped": 0
+     }
+    },
+    "even": {
+     "items_in": 6705,
+     "read_only": {
+      "score": 0.9423908440131407,
+      "items_out": 6316,
+      "skipped": 389
+     },
+     "common_subset": {
+      "score": 0.9082452835564879,
+      "items_out": 2044,
+      "skipped": 4661
+     },
+     "unread_at_1": {
+      "score": 0.896196552010433,
+      "items_out": 6705,
+      "skipped": 0
+     }
+    }
+   },
+   "tie_retry": {
+    "all": {
+     "items_in": 12716,
+     "read_only": {
+      "score": 0.9393400319024177,
+      "items_out": 11991,
+      "skipped": 725
+     },
+     "common_subset": {
+      "score": 0.9029970079507764,
+      "items_out": 4065,
+      "skipped": 8651
+     },
+     "unread_at_1": {
+      "score": 0.8936957776593867,
+      "items_out": 12716,
+      "skipped": 0
+     }
+    },
+    "odd": {
+     "items_in": 6011,
+     "read_only": {
+      "score": 0.9359332289838356,
+      "items_out": 5674,
+      "skipped": 337
+     },
+     "common_subset": {
+      "score": 0.8975876561319687,
+      "items_out": 2019,
+      "skipped": 3992
+     },
+     "unread_at_1": {
+      "score": 0.8907431140003392,
+      "items_out": 6011,
+      "skipped": 0
+     }
+    },
+    "even": {
+     "items_in": 6705,
+     "read_only": {
+      "score": 0.942400060358969,
+      "items_out": 6317,
+      "skipped": 388
+     },
+     "common_subset": {
+      "score": 0.908334975361418,
+      "items_out": 2046,
+      "skipped": 4659
+     },
+     "unread_at_1": {
+      "score": 0.8963428263177812,
+      "items_out": 6705,
+      "skipped": 0
+     }
+    }
+   }
+  },
+  "levenshtein": {
+   "direct": {
+    "all": {
+     "items_in": 12716,
+     "read_only": {
+      "score": 0.5,
+      "items_out": 12716,
+      "skipped": 0
+     },
+     "common_subset": {
+      "score": 0.5,
+      "items_out": 4063,
+      "skipped": 8653
+     },
+     "unread_at_1": {
+      "score": 0.5,
+      "items_out": 12716,
+      "skipped": 0
+     }
+    },
+    "odd": {
+     "items_in": 6011,
+     "read_only": {
+      "score": 0.5,
+      "items_out": 6011,
+      "skipped": 0
+     },
+     "common_subset": {
+      "score": 0.5,
+      "items_out": 2019,
+      "skipped": 3992
+     },
+     "unread_at_1": {
+      "score": 0.5,
+      "items_out": 6011,
+      "skipped": 0
+     }
+    },
+    "even": {
+     "items_in": 6705,
+     "read_only": {
+      "score": 0.5,
+      "items_out": 6705,
+      "skipped": 0
+     },
+     "common_subset": {
+      "score": 0.5,
+      "items_out": 2044,
+      "skipped": 4661
+     },
+     "unread_at_1": {
+      "score": 0.5,
+      "items_out": 6705,
+      "skipped": 0
+     }
+    }
+   },
+   "tie_retry": {
+    "all": {
+     "items_in": 12716,
+     "read_only": {
+      "score": 0.5,
+      "items_out": 12716,
+      "skipped": 0
+     },
+     "common_subset": {
+      "score": 0.5,
+      "items_out": 4065,
+      "skipped": 8651
+     },
+     "unread_at_1": {
+      "score": 0.5,
+      "items_out": 12716,
+      "skipped": 0
+     }
+    },
+    "odd": {
+     "items_in": 6011,
+     "read_only": {
+      "score": 0.5,
+      "items_out": 6011,
+      "skipped": 0
+     },
+     "common_subset": {
+      "score": 0.5,
+      "items_out": 2019,
+      "skipped": 3992
+     },
+     "unread_at_1": {
+      "score": 0.5,
+      "items_out": 6011,
+      "skipped": 0
+     }
+    },
+    "even": {
+     "items_in": 6705,
+     "read_only": {
+      "score": 0.5,
+      "items_out": 6705,
+      "skipped": 0
+     },
+     "common_subset": {
+      "score": 0.5,
+      "items_out": 2046,
+      "skipped": 4659
+     },
+     "unread_at_1": {
+      "score": 0.5,
+      "items_out": 6705,
+      "skipped": 0
+     }
+    }
+   }
+  },
+  "panphon-weighted": {
+   "direct": {
+    "all": {
+     "items_in": 12716,
+     "read_only": {
+      "score": 0.934998882238873,
+      "items_out": 9412,
+      "skipped": 3304
+     },
+     "common_subset": {
+      "score": 0.8981041393758918,
+      "items_out": 4063,
+      "skipped": 8653
+     },
+     "unread_at_1": {
+      "score": 0.8687328356319467,
+      "items_out": 12716,
+      "skipped": 0
+     }
+    },
+    "odd": {
+     "items_in": 6011,
+     "read_only": {
+      "score": 0.9324336976499003,
+      "items_out": 4462,
+      "skipped": 1549
+     },
+     "common_subset": {
+      "score": 0.8927665950737685,
+      "items_out": 2019,
+      "skipped": 3992
+     },
+     "unread_at_1": {
+      "score": 0.8671561739502426,
+      "items_out": 6011,
+      "skipped": 0
+     }
+    },
+    "even": {
+     "items_in": 6705,
+     "read_only": {
+      "score": 0.9373111759027106,
+      "items_out": 4950,
+      "skipped": 1755
+     },
+     "common_subset": {
+      "score": 0.9033764006019129,
+      "items_out": 2044,
+      "skipped": 4661
+     },
+     "unread_at_1": {
+      "score": 0.8701463051873118,
+      "items_out": 6705,
+      "skipped": 0
+     }
+    }
+   },
+   "tie_retry": {
+    "all": {
+     "items_in": 12716,
+     "read_only": {
+      "score": 0.934833295277207,
+      "items_out": 9761,
+      "skipped": 2955
+     },
+     "common_subset": {
+      "score": 0.8981470372741803,
+      "items_out": 4065,
+      "skipped": 8651
+     },
+     "unread_at_1": {
+      "score": 0.8867156313736313,
+      "items_out": 12716,
+      "skipped": 0
+     }
+    },
+    "odd": {
+     "items_in": 6011,
+     "read_only": {
+      "score": 0.9317727330597256,
+      "items_out": 4613,
+      "skipped": 1398
+     },
+     "common_subset": {
+      "score": 0.8927665950737685,
+      "items_out": 2019,
+      "skipped": 3992
+     },
+     "unread_at_1": {
+      "score": 0.8831775938726073,
+      "items_out": 6011,
+      "skipped": 0
+     }
+    },
+    "even": {
+     "items_in": 6705,
+     "read_only": {
+      "score": 0.937575792073874,
+      "items_out": 5148,
+      "skipped": 1557
+     },
+     "common_subset": {
+      "score": 0.9034564765716541,
+      "items_out": 2046,
+      "skipped": 4659
+     },
+     "unread_at_1": {
+      "score": 0.8898874648439751,
+      "items_out": 6705,
+      "skipped": 0
+     }
+    }
+   }
+  },
+  "panphon-hamming": {
+   "direct": {
+    "all": {
+     "items_in": 12716,
+     "read_only": {
+      "score": 0.9417656193833028,
+      "items_out": 9412,
+      "skipped": 3304
+     },
+     "common_subset": {
+      "score": 0.9062311496762311,
+      "items_out": 4063,
+      "skipped": 8653
+     },
+     "unread_at_1": {
+      "score": 0.7568170232682229,
+      "items_out": 12716,
+      "skipped": 0
+     }
+    },
+    "odd": {
+     "items_in": 6011,
+     "read_only": {
+      "score": 0.9398026878751577,
+      "items_out": 4462,
+      "skipped": 1549
+     },
+     "common_subset": {
+      "score": 0.9026133551670609,
+      "items_out": 2019,
+      "skipped": 3992
+     },
+     "unread_at_1": {
+      "score": 0.7563188884069029,
+      "items_out": 6011,
+      "skipped": 0
+     }
+    },
+    "even": {
+     "items_in": 6705,
+     "read_only": {
+      "score": 0.9435350336033722,
+      "items_out": 4950,
+      "skipped": 1755
+     },
+     "common_subset": {
+      "score": 0.9098046952310329,
+      "items_out": 2044,
+      "skipped": 4661
+     },
+     "unread_at_1": {
+      "score": 0.7572635987568723,
+      "items_out": 6705,
+      "skipped": 0
+     }
+    }
+   },
+   "tie_retry": {
+    "all": {
+     "items_in": 12716,
+     "read_only": {
+      "score": 0.9422071774010993,
+      "items_out": 9761,
+      "skipped": 2955
+     },
+     "common_subset": {
+      "score": 0.9062700490454664,
+      "items_out": 4065,
+      "skipped": 8651
+     },
+     "unread_at_1": {
+      "score": 0.7655934530348245,
+      "items_out": 12716,
+      "skipped": 0
+     }
+    },
+    "odd": {
+     "items_in": 6011,
+     "read_only": {
+      "score": 0.939921392846786,
+      "items_out": 4613,
+      "skipped": 1398
+     },
+     "common_subset": {
+      "score": 0.9026133551670609,
+      "items_out": 2019,
+      "skipped": 3992
+     },
+     "unread_at_1": {
+      "score": 0.764415025002841,
+      "items_out": 6011,
+      "skipped": 0
+     }
+    },
+    "even": {
+     "items_in": 6705,
+     "read_only": {
+      "score": 0.9442554144152889,
+      "items_out": 5148,
+      "skipped": 1557
+     },
+     "common_subset": {
+      "score": 0.9098784874328081,
+      "items_out": 2046,
+      "skipped": 4659
+     },
+     "unread_at_1": {
+      "score": 0.766649908053505,
+      "items_out": 6705,
+      "skipped": 0
+     }
+    }
+   }
+  },
+  "aline": {
+   "direct": {
+    "all": {
+     "items_in": 12716,
+     "read_only": {
+      "score": 0.8937981796985254,
+      "items_out": 4063,
+      "skipped": 8653
+     },
+     "common_subset": {
+      "score": 0.8937981796985254,
+      "items_out": 4063,
+      "skipped": 8653
+     },
+     "unread_at_1": {
+      "score": 0.576476629563224,
+      "items_out": 12716,
+      "skipped": 0
+     }
+    },
+    "odd": {
+     "items_in": 6011,
+     "read_only": {
+      "score": 0.8939829781827792,
+      "items_out": 2019,
+      "skipped": 3992
+     },
+     "common_subset": {
+      "score": 0.8939829781827792,
+      "items_out": 2019,
+      "skipped": 3992
+     },
+     "unread_at_1": {
+      "score": 0.5857143377403611,
+      "items_out": 6011,
+      "skipped": 0
+     }
+    },
+    "even": {
+     "items_in": 6705,
+     "read_only": {
+      "score": 0.8936156414697053,
+      "items_out": 2044,
+      "skipped": 4661
+     },
+     "common_subset": {
+      "score": 0.8936156414697053,
+      "items_out": 2044,
+      "skipped": 4661
+     },
+     "unread_at_1": {
+      "score": 0.5681950689587838,
+      "items_out": 6705,
+      "skipped": 0
+     }
+    }
+   },
+   "tie_retry": {
+    "all": {
+     "items_in": 12716,
+     "read_only": {
+      "score": 0.8938196812091288,
+      "items_out": 4065,
+      "skipped": 8651
+     },
+     "common_subset": {
+      "score": 0.8938196812091288,
+      "items_out": 4065,
+      "skipped": 8651
+     },
+     "unread_at_1": {
+      "score": 0.5765592026994303,
+      "items_out": 12716,
+      "skipped": 0
+     }
+    },
+    "odd": {
+     "items_in": 6011,
+     "read_only": {
+      "score": 0.8939829781827792,
+      "items_out": 2019,
+      "skipped": 3992
+     },
+     "common_subset": {
+      "score": 0.8939829781827792,
+      "items_out": 2019,
+      "skipped": 3992
+     },
+     "unread_at_1": {
+      "score": 0.5857143377403611,
+      "items_out": 6011,
+      "skipped": 0
+     }
+    },
+    "even": {
+     "items_in": 6705,
+     "read_only": {
+      "score": 0.8936585391808787,
+      "items_out": 2046,
+      "skipped": 4659
+     },
+     "common_subset": {
+      "score": 0.8936585391808787,
+      "items_out": 2046,
+      "skipped": 4659
+     },
+     "unread_at_1": {
+      "score": 0.5683516685113565,
+      "items_out": 6705,
+      "skipped": 0
+     }
+    }
+   }
+  },
+  "soundvectors": {
+   "direct": {
+    "all": {
+     "items_in": 12716,
+     "read_only": {
+      "score": 0.9381019805294974,
+      "items_out": 12283,
+      "skipped": 433
+     },
+     "common_subset": {
+      "score": 0.9073691205296213,
+      "items_out": 4063,
+      "skipped": 8653
+     },
+     "unread_at_1": {
+      "score": 0.9091921872778667,
+      "items_out": 12716,
+      "skipped": 0
+     }
+    },
+    "odd": {
+     "items_in": 6011,
+     "read_only": {
+      "score": 0.9357232427826631,
+      "items_out": 5835,
+      "skipped": 176
+     },
+     "common_subset": {
+      "score": 0.9054671183078964,
+      "items_out": 2019,
+      "skipped": 3992
+     },
+     "unread_at_1": {
+      "score": 0.9117481037492259,
+      "items_out": 6011,
+      "skipped": 0
+     }
+    },
+    "even": {
+     "items_in": 6705,
+     "read_only": {
+      "score": 0.9402545758695686,
+      "items_out": 6448,
+      "skipped": 257
+     },
+     "common_subset": {
+      "score": 0.9092478595147793,
+      "items_out": 2044,
+      "skipped": 4661
+     },
+     "unread_at_1": {
+      "score": 0.9069008205501501,
+      "items_out": 6705,
+      "skipped": 0
+     }
+    }
+   },
+   "tie_retry": {
+    "all": {
+     "items_in": 12716,
+     "read_only": {
+      "score": 0.938146691479592,
+      "items_out": 12289,
+      "skipped": 427
+     },
+     "common_subset": {
+      "score": 0.9074002246451266,
+      "items_out": 4065,
+      "skipped": 8651
+     },
+     "unread_at_1": {
+      "score": 0.9096551075527017,
+      "items_out": 12716,
+      "skipped": 0
+     }
+    },
+    "odd": {
+     "items_in": 6011,
+     "read_only": {
+      "score": 0.9357650872161537,
+      "items_out": 5837,
+      "skipped": 174
+     },
+     "common_subset": {
+      "score": 0.9054671183078964,
+      "items_out": 2019,
+      "skipped": 3992
+     },
+     "unread_at_1": {
+      "score": 0.9120744823654064,
+      "items_out": 6011,
+      "skipped": 0
+     }
+    },
+    "even": {
+     "items_in": 6705,
+     "read_only": {
+      "score": 0.9403012829373865,
+      "items_out": 6452,
+      "skipped": 253
+     },
+     "common_subset": {
+      "score": 0.9093078207814258,
+      "items_out": 2046,
+      "skipped": 4659
+     },
+     "unread_at_1": {
+      "score": 0.9074861497601339,
+      "items_out": 6705,
+      "skipped": 0
+     }
+    }
+   }
+  },
+  "sca": {
+   "direct": {
+    "all": {
+     "items_in": 12716,
+     "read_only": {
+      "score": 0.9168144517267619,
+      "items_out": 12637,
+      "skipped": 79
+     },
+     "common_subset": {
+      "score": 0.9001942787842035,
+      "items_out": 4063,
+      "skipped": 8653
+     },
+     "unread_at_1": {
+      "score": 0.9154942229908939,
+      "items_out": 12716,
+      "skipped": 0
+     }
+    },
+    "odd": {
+     "items_in": 6011,
+     "read_only": {
+      "score": 0.9143161103284082,
+      "items_out": 5973,
+      "skipped": 38
+     },
+     "common_subset": {
+      "score": 0.8982993485464615,
+      "items_out": 2019,
+      "skipped": 3992
+     },
+     "unread_at_1": {
+      "score": 0.9129068709055281,
+      "items_out": 6011,
+      "skipped": 0
+     }
+    },
+    "even": {
+     "items_in": 6705,
+     "read_only": {
+      "score": 0.9190537364164928,
+      "items_out": 6664,
+      "skipped": 41
+     },
+     "common_subset": {
+      "score": 0.9020660322822469,
+      "items_out": 2044,
+      "skipped": 4661
+     },
+     "unread_at_1": {
+      "score": 0.9178137715941951,
+      "items_out": 6705,
+      "skipped": 0
+     }
+    }
+   },
+   "tie_retry": {
+    "all": {
+     "items_in": 12716,
+     "read_only": {
+      "score": 0.9168570919366946,
+      "items_out": 12643,
+      "skipped": 73
+     },
+     "common_subset": {
+      "score": 0.9002216775906767,
+      "items_out": 4065,
+      "skipped": 8651
+     },
+     "unread_at_1": {
+      "score": 0.9155364265407328,
+      "items_out": 12716,
+      "skipped": 0
+     }
+    },
+    "odd": {
+     "items_in": 6011,
+     "read_only": {
+      "score": 0.9143639607862284,
+      "items_out": 5975,
+      "skipped": 36
+     },
+     "common_subset": {
+      "score": 0.8982993485464615,
+      "items_out": 2019,
+      "skipped": 3992
+     },
+     "unread_at_1": {
+      "score": 0.9129597692768041,
+      "items_out": 6011,
+      "skipped": 0
+     }
+    },
+    "even": {
+     "items_in": 6705,
+     "read_only": {
+      "score": 0.9190911139259021,
+      "items_out": 6668,
+      "skipped": 37
+     },
+     "common_subset": {
+      "score": 0.9021186386563026,
+      "items_out": 2046,
+      "skipped": 4659
+     },
+     "unread_at_1": {
+      "score": 0.9178463872884545,
+      "items_out": 6705,
+      "skipped": 0
+     }
+    }
+   }
+  }
+ }
+}
