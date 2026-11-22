@@ -7,18 +7,49 @@ verify: pytest --import-mode=importlib tests/test_docs.py -k api.md
 see: quickstart.md, features.md
 -->
 
-The package root exports `feature_distance`, `substitution_cost`, `vectorize_phones`, `segments`, `ipa_distance`, `edit_distance`, `align`, `PhoneticFuzzySearch` and `Match`. It also exports `phonetic_distance`, a deprecated alias of `feature_distance`.
+## Stable API
+
+These names are the stable API. Each one is exported from the package root, so `from phonematcher import <name>` works, except `phonex`. The function `phonex` has the name of its module, so it is not exported from the root.
+
+| Name | What it is | Module |
+|---|---|---|
+| `Match` | A search result: id, term readings, score. | `phonematcher.clustering` |
+| `PhoneticFuzzySearch` | An index of IPA terms that finds terms by sound. | `phonematcher.clustering` |
+| `align` | One least-cost alignment of two segment lists. | `phonematcher.distance` |
+| `edit_distance` | The cost of the cheapest edit of one segment list into another. | `phonematcher.distance` |
+| `ipa_distance` | The edit distance between two IPA strings. | `phonematcher.distance` |
+| `segments` | The segments of an IPA string. | `phonematcher.distance` |
+| `substitution_cost` | The cost of replacing one segment by another. | `phonematcher.distance` |
+| `GAP_COST` | The cost of an insertion or a deletion. | `phonematcher.distance` |
+| `feature_distance` | The weighted feature distance of two segments. | `phonematcher.features` |
+| `vectorize_phones` | The feature vector of one segment. | `phonematcher.features` |
+| `FEATURES` | The feature names, read-only. | `phonematcher.features` |
+| `WEIGHTS` | The feature weights, read-only. | `phonematcher.features` |
+| `tone_distance` | The distance between two tones. Experimental. | `phonematcher.tone` |
+| `is_tone` | True for a segment made only of tone letters. | `phonematcher.tone` |
+| `phonex` | The cluster-id key of a word. Import it with `from phonematcher.phonex import phonex`. | `phonematcher.phonex` |
+
+A stable name changes only in a major release, after one deprecation cycle with a warning. `phonetic_distance` is in that cycle: it is still exported from the package root, it warns, and it goes away in the next major version. Use `feature_distance` instead.
+
+## Internal
+
+Every other name is internal. It can change or go away in any release, with no warning. Do not import it in code that must keep working.
+
+- `phonematcher.clustering`: `upgma`, `phone_clusters`, `merge_threshold`.
+- `phonematcher.distance`: `check_readable`, `SUPRASEGMENTALS`, `NON_SYLLABIC`.
+- `phonematcher.features`: `compose_tie`, `is_vowel_phone`, `phone_features`, `NUM_FEATURES`, `SOURCE`, `SPELLINGS`, `PRE_DIACRITICS`, `POST_DIACRITICS`.
+- `phonematcher.tone`: `tone_levels`, `LEVELS`, `DIACRITIC_TONES`, `NUMERALS`, `PHRASE_MARKS`.
+- `phonematcher.scales`: the whole module.
+
+The sections below describe the stable names first, then the internal names that the guides use.
 
 ## `phonematcher.features`
+
 
 - `feature_distance(a, b) -> float`: the weighted feature distance between two segments, from 0 to 1. See [features.md](features.md).
 - `phonetic_distance(a, b) -> float`: the old name of `feature_distance`. It returns the same value and raises a `DeprecationWarning` that names the version where it goes away, the next major version.
 - `vectorize_phones(segment) -> tuple`: the feature vector of one segment, in the order of `FEATURES`. Raises `ValueError` for a segment it cannot read.
-- `is_vowel_phone(segment) -> bool`: true for a syllabic segment.
-- `FEATURES`, `WEIGHTS`, `NUM_FEATURES`: the feature names, their weights and their count.
-- `SOURCE`: where the table comes from.
-- `phone_features`: the table, segment (NFD) to vector.
-- `POST_DIACRITICS`: the diacritics that follow their base.
+- `FEATURES`, `WEIGHTS`: the feature names and their weights, as tuples. Treat them as read-only.
 
 ## `phonematcher.distance`
 
@@ -27,12 +58,12 @@ The package root exports `feature_distance`, `substitution_cost`, `vectorize_pho
 - `edit_distance(a, b, *, strict=False) -> float`: the Levenshtein distance between two segment lists, where a substitution costs `substitution_cost` and an insertion or deletion costs 0.5. The costs are those of the pre-registered test in `benchmarks/prereg-2.md` and `docs/benchmarks.md`.
 - `align(a, b, *, strict=False) -> list[tuple[str | None, str | None]]`: one least-cost alignment of two segment lists, as pairs of a left and a right segment. `None` marks a gap. The costs are those of `edit_distance`. The traceback starts at the end and prefers a substitution, then a deletion (a gap in `b`), then an insertion.
 - `ipa_distance(a, b, normalized=False, *, strict=False) -> float`: `edit_distance` between two IPA strings. With `normalized=True` the distance is divided by the segment count of the longer string, so it falls between 0 and 1, and two empty strings give 0.0.
+- `GAP_COST`: the cost of an insertion or a deletion in `edit_distance` and `align`, 0.5.
 - `strict=True` on `ipa_distance`, `edit_distance` and `align`: a segment the feature table cannot read raises `ValueError` that names the segment and the input. Without it, an unread segment costs as much as a missing one. See [Design choices and limits](design.md#an-unread-segment-is-at-distance-1).
 
 ## `phonematcher.tone`
 
 - `is_tone(segment) -> bool`: true for a segment made only of tone letters.
-- `tone_levels(segment) -> tuple[int, ...] | None`: the pitch levels of a tone, 1 (extra low) to 5 (extra high).
 - `tone_distance(a, b) -> float`: the distance between two tones, from 0 to 1. It is experimental: see [Tones](tones.md) and issue [#68](https://github.com/TigreGotico/phonematcher/issues/68). See [features.md](features.md#tone).
 
 ## `phonematcher.clustering`
@@ -50,16 +81,27 @@ An index of IPA terms. Phones are grouped into clusters of near sounds by UPGMA 
 
 A search result: the term's id, its readings as a tuple, and its score.
 
-### `phone_clusters(share) -> dict`
-
-The clusters of the IPA letters and tied affricates at the merge threshold of `share`, cached. Raises `ValueError` for a share outside 0 to 1.
-
-### `merge_threshold(share) -> float`
-
-The `share` quantile of `substitution_cost` over all pairs of distinct IPA letters and tied affricates, with linear interpolation between the two nearest costs.
-
 ## `phonematcher.phonex`
 
 - `phonex(word, cluster_of) -> tuple[int, ...]`: the cluster ids of a word's segments, with repeats of one cluster collapsed.
+
+## Internal reference
+
+These names can change in any release.
+
+- `phonematcher.features.is_vowel_phone(segment) -> bool`: true for a syllabic segment.
+- `phonematcher.features.NUM_FEATURES`: the feature count.
+- `phonematcher.features.SOURCE`: where the table comes from.
+- `phonematcher.features.phone_features`: the table, segment (NFD) to vector.
+- `phonematcher.features.POST_DIACRITICS`: the diacritics that follow their base.
+- `phonematcher.tone.tone_levels(segment) -> tuple[int, ...] | None`: the pitch levels of a tone, 1 (extra low) to 5 (extra high).
+
+### `phonematcher.clustering.phone_clusters(share) -> dict`
+
+The clusters of the IPA letters and tied affricates at the merge threshold of `share`, cached. Raises `ValueError` for a share outside 0 to 1.
+
+### `phonematcher.clustering.merge_threshold(share) -> float`
+
+The `share` quantile of `substitution_cost` over all pairs of distinct IPA letters and tied affricates, with linear interpolation between the two nearest costs.
 
 [Index](index.md) · Previous: [Design choices and limits](design.md) · Next: [Benchmarks](benchmarks.md)
