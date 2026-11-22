@@ -5,6 +5,7 @@ them, not copied from the page.
 """
 import json
 import shutil
+import subprocess
 import sys
 from pathlib import Path
 
@@ -157,3 +158,54 @@ def test_the_speed_file_renders_its_medians_and_matrix_hash():
     page = render.render(render.RESULTS)
     assert payload["matrix_sha256"] in page
     assert f"| segment_per_second | {payload['median']['segment_per_second']:.6g} |" in page
+
+
+README = render.README
+
+
+def test_the_readme_table_holds_the_test_intervals_of_each_system_and_bolds_the_best():
+    tests = {task: committed(f"{task}-test.json")["intervals"] for task in ("cognates", "alignment", "retrieval")}
+    table = render.readme_table(render.RESULTS)
+
+    def cell(task, system):
+        row = tests[task][system]
+        return f"{row['estimate']:.4f} [{row['low']:.4f}, {row['high']:.4f}]"
+
+    for task, best in (("cognates", "sca"), ("alignment", "sca"), ("retrieval", "pm-P5")):
+        assert f"**{cell(task, best)}**" in table
+    assert f"| ALINE | {cell('cognates', 'aline')} | {cell('alignment', 'aline')} | {cell('retrieval', 'aline')} |" in table
+    assert "| PanPhon, weighted | " + cell("cognates", "panphon-weighted") + " | — | " + cell("retrieval", "panphon-weighted") + " |" in table
+    assert table.count("**") == 6
+    assert "[docs/benchmarks.md](docs/benchmarks.md)" in table and "run once" in table and "did not change any word distance" in table
+
+
+def test_the_readme_block_equals_the_rendered_table():
+    block = render.readme_block(README.read_text(encoding="utf8"))
+    assert block == render.readme_table(render.RESULTS)
+    assert block == subprocess.run([sys.executable, str(BENCHMARKS / "render.py"), "--readme"], capture_output=True, text=True, check=True).stdout
+
+
+def test_check_fails_when_one_number_of_the_readme_table_is_changed(tmp_path, capsys):
+    text = README.read_text(encoding="utf8")
+    changed = tmp_path / "README.md"
+    changed.write_text(text.replace("0.8777 [0.8706", "0.8778 [0.8706", 1), encoding="utf8")
+    assert changed.read_text(encoding="utf8") != text
+    assert render.main(["--check", "--readme-file", str(README)]) == 0
+    assert render.main(["--check", "--readme-file", str(changed)]) == 1
+    assert "differs from a fresh render" in capsys.readouterr().err
+
+
+def test_no_word_distance_moves_without_this_pin_and_the_readme_caption_changing():
+    # The README caption says that the dev-only changes of the library did not change any word distance.
+    # A change that moves one distance also changes this digest: update it together with the caption.
+    import hashlib
+    import random
+
+    from phonematcher import ipa_distance
+    from phonematcher.features import _DATA
+
+    letters = sorted(_DATA["phones"])
+    rng = random.Random(0)
+    words = ["".join(rng.choice(letters) for _ in range(rng.randint(1, 8))) for _ in range(2000)]
+    digest = hashlib.sha256("\n".join(f"{a} {b} {ipa_distance(a, b):.12f}" for a, b in zip(words[::2], words[1::2])).encode("utf8")).hexdigest()
+    assert digest == "332c4f15a4fd50e616f8d4ae565b61b968859f6132c9016bb29fba6002d0058b"

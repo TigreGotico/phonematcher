@@ -1,7 +1,8 @@
 """Render ``docs/benchmarks.md`` from the result files in ``benchmarks/results``.
 
     python benchmarks/render.py            # write docs/benchmarks.md
-    python benchmarks/render.py --check    # exit 1 when docs/benchmarks.md differs from a fresh render
+    python benchmarks/render.py --check    # exit 1 when docs/benchmarks.md or the README table differs from a fresh render
+    python benchmarks/render.py --readme   # print the summary table of the README
 
 Every number in the page comes from a result file. The files of the ``seen`` and ``dev`` splits
 are always rendered; the files of the ``test`` split are rendered when they exist.
@@ -21,6 +22,9 @@ from tasks import ablations, allophones, confusions, coverage, tone  # noqa: E40
 ROOT = Path(__file__).resolve().parent.parent
 RESULTS = ROOT / "benchmarks" / "results"
 PAGE = ROOT / "docs" / "benchmarks.md"
+README = ROOT / "README.md"
+README_START = "<!-- benchmark-table:start -->"
+README_END = "<!-- benchmark-table:end -->"
 
 SPLIT_TITLES = {
     "seen": "Seen data",
@@ -232,18 +236,83 @@ def render(directory: Path = RESULTS) -> str:
     return "\n".join(line for i, line in enumerate(out) if line or i == 0 or out[i - 1]).rstrip("\n") + "\n"
 
 
+README_SYSTEMS = [
+    ("levenshtein", "plain edit distance"),
+    ("panphon-weighted", "PanPhon, weighted"),
+    ("panphon-hamming", "PanPhon, Hamming"),
+    ("aline", "ALINE"),
+    ("soundvectors", "CLTS sound vectors"),
+    ("sca", "SCA"),
+    ("phonematcher", "phonematcher, starting weights (C0)"),
+    ("pm-P5", "phonematcher, shipped library (P5)"),
+]
+README_COLUMNS = [
+    ("cognates", "Cognates, mean AP"),
+    ("alignment", "Alignment, PAS on common pairs"),
+    ("retrieval", "Retrieval, mean recall@1"),
+]
+
+
+def readme_table(directory: Path = RESULTS) -> str:
+    """The summary table of the README: the test-split interval of each system on each task."""
+    tests = load_results(directory).get("test", {})
+    missing = [task for task, _ in README_COLUMNS if task not in tests]
+    if missing:
+        raise SystemExit(f"no test result file for {', '.join(missing)}")
+    cells: Dict[str, Dict[str, Optional[dict]]] = {
+        system: {task: tests[task]["intervals"].get(system) for task, _ in README_COLUMNS} for system, _ in README_SYSTEMS
+    }
+    best = {task: max(c[task]["estimate"] for c in cells.values() if c[task]) for task, _ in README_COLUMNS}
+    rows = []
+    for system, label in README_SYSTEMS:
+        row = [label]
+        for task, _ in README_COLUMNS:
+            cell = cells[system][task]
+            text = "—" if cell is None else span(cell)
+            row.append(f"**{text}**" if cell and cell["estimate"] == best[task] else text)
+        rows.append(row)
+    sizes = {system: {pair["systems"][system]["sample"] for pair in tests["retrieval"]["pairs"].values()} for system in ("sca", "aline")}
+    if any(len(size) != 1 for size in sizes.values()):
+        raise SystemExit(f"retrieval sample sizes differ between pairs: {sizes}")
+    (sca_sample,), (aline_sample,) = sizes["sca"], sizes["aline"]
+    caption = ("Test split, run once under `benchmarks/prereg-2.md`. Each cell is the estimate with its 95% interval. "
+               "The best value in each column is in bold. A dash means that the system does not run the task. "
+               f"SCA ran retrieval on a sample of {sca_sample} queries per pair and ALINE on the first {aline_sample} of those, "
+               "so these two retrieval cells are not on the same queries as the other rows. "
+               "The shipped library is the P5 candidate, with its test numbers. "
+               "The later changes of the library (one segment cost, a relative sensitivity and strict input) were made on dev only "
+               "and did not change any word distance. "
+               "[docs/benchmarks.md](docs/benchmarks.md) holds every result.")
+    return "\n".join([caption, "", *table(["System", *(title for _, title in README_COLUMNS)], rows)]).rstrip("\n") + "\n"
+
+
+def readme_block(text: str) -> Optional[str]:
+    """The text between the two marker comments of the README, or None when a marker is missing."""
+    if README_START not in text or README_END not in text:
+        return None
+    return text.split(README_START, 1)[1].split(README_END, 1)[0].strip("\n") + "\n"
+
+
 def main(argv: Optional[List[str]] = None) -> int:
     parser = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     parser.add_argument("--check", action="store_true", help="fail when the page differs from a fresh render")
+    parser.add_argument("--readme", action="store_true", help="print the summary table of the README")
     parser.add_argument("--results", type=Path, default=RESULTS)
     parser.add_argument("--page", type=Path, default=PAGE)
+    parser.add_argument("--readme-file", type=Path, default=README)
     args = parser.parse_args(argv)
+    if args.readme:
+        print(readme_table(args.results), end="")
+        return 0
     fresh = render(args.results)
     if args.check:
         if not args.page.exists() or args.page.read_text(encoding="utf8") != fresh:
             print(f"{args.page} differs from a fresh render; run benchmarks/render.py", file=sys.stderr)
             return 1
-        print(f"{args.page} matches a fresh render")
+        if readme_block(args.readme_file.read_text(encoding="utf8")) != readme_table(args.results):
+            print(f"the table in {args.readme_file} differs from a fresh render; run benchmarks/render.py --readme", file=sys.stderr)
+            return 1
+        print(f"{args.page} and the table in {args.readme_file} match a fresh render")
         return 0
     args.page.write_text(fresh, encoding="utf8")
     print(f"wrote {args.page}")
