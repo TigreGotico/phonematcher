@@ -6,6 +6,12 @@ The segment set is the letters and tied affricates that ``phone_clusters`` clust
 of every ordered pair of them, diagonal included, is timed once per run, and the ``repr`` of every
 float is hashed, so a later change can show that the matrix is bit-identical. WikiPron pairs and
 index terms come from the broad files that task C6 downloads into ``CACHE/C6``.
+
+Each run starts three fresh processes, one for the segment pass, one for ``ipa_distance`` and one for the
+search, so a cache that one measure fills cannot warm another. In its process the segment pass and the
+``ipa_distance`` pass run twice over the same input. The first pass is cold: it starts from empty caches. The
+second pass is warm: it repeats the work with every cache full. A cache shows in the warm figure, not in
+the cold one, unless a pair repeats inside the pass.
 """
 import argparse
 import hashlib
@@ -99,30 +105,48 @@ def load_average() -> str:
     return Path("/proc/loadavg").read_text().split()[0]
 
 
-def one_run(cache: Path) -> Dict[str, object]:
-    folder = cache / "C6"
-    segs = letters()
+def segment_part(segs: Sequence[str]) -> Dict[str, object]:
     for seg in segs:
         vectorize_phones(seg)
-    record: Dict[str, object] = {"load_at_start": load_average()}
-    pairs, seconds = time_pairs(segs, feature_distance)
-    record["segment"] = {"pairs": pairs, "seconds": seconds, "per_second": pairs / seconds}
+    record = {}
+    for name in ("segment", "segment_warm"):
+        pairs, seconds = time_pairs(segs, feature_distance)
+        record[name] = {"pairs": pairs, "seconds": seconds, "per_second": pairs / seconds}
+    return record
 
+
+def ipa_part(cache: Path) -> Dict[str, object]:
     pool: List[str] = []
-    for path in sorted(folder.glob("*_broad.tsv")):
+    for path in sorted((cache / "C6").glob("*_broad.tsv")):
         pool += read_prons(path)
     ipa = pick_pairs(pool, IPA_PAIRS)
-    start = time.perf_counter()
-    for a, b in ipa:
-        ipa_distance(a, b)
-    seconds = time.perf_counter() - start
-    record["ipa_distance"] = {"pairs": len(ipa), "seconds": seconds, "per_second": len(ipa) / seconds}
+    record = {}
+    for name in ("ipa_distance", "ipa_distance_warm"):
+        start = time.perf_counter()
+        for a, b in ipa:
+            ipa_distance(a, b)
+        seconds = time.perf_counter() - start
+        record[name] = {"pairs": len(ipa), "seconds": seconds, "per_second": len(ipa) / seconds}
+    return record
 
+
+def search_part(cache: Path) -> Dict[str, object]:
+    folder = cache / "C6"
     terms = read_prons(folder / f"{INDEX_FILE}.tsv")[:INDEX_TERMS]
     queries = random.Random(SEED).sample(read_prons(folder / f"{QUERY_FILE}.tsv"), QUERIES)
-    record["search"] = {"terms": len(terms), "queries": len(queries)}
+    record = {"terms": len(terms), "queries": len(queries)}
     for sensitivity in SENSITIVITIES:
-        record["search"][str(sensitivity)] = time_search(terms, queries, sensitivity)
+        record[str(sensitivity)] = time_search(terms, queries, sensitivity)
+    return {"search": record}
+
+
+def one_run(cache: Path, segs: Sequence[str]) -> Dict[str, object]:
+    record: Dict[str, object] = {"load_at_start": load_average()}
+    for part in ("segment", "ipa", "search"):
+        out = subprocess.run([sys.executable, str(Path(__file__).resolve()), "--part", part, "--cache", str(cache),
+                              "--segments", json.dumps(segs, ensure_ascii=False)],
+                             capture_output=True, text=True, check=True).stdout
+        record.update(json.loads(out))
     return record
 
 
@@ -138,7 +162,9 @@ def median_of(runs: List[Dict[str, object]]) -> Dict[str, object]:
 
     summary = {
         "segment_per_second": med("segment", "per_second"),
+        "segment_warm_per_second": med("segment_warm", "per_second"),
         "ipa_distance_per_second": med("ipa_distance", "per_second"),
+        "ipa_distance_warm_per_second": med("ipa_distance_warm", "per_second"),
     }
     for sensitivity in SENSITIVITIES:
         s = str(sensitivity)
@@ -147,15 +173,30 @@ def median_of(runs: List[Dict[str, object]]) -> Dict[str, object]:
     return summary
 
 
+def read_before(path: Path) -> Dict[str, object]:
+    """The part of an earlier result file that the page shows beside a later one."""
+    earlier = json.loads(path.read_text(encoding="utf8"))
+    return {key: earlier[key] for key in ("head", "matrix_sha256", "runs", "median")}
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument("--cache", type=Path, default=Path.home() / ".cache" / "phonematcher-bench")
     parser.add_argument("--runs", type=int, default=3)
     parser.add_argument("--out", type=Path, default=ROOT / "benchmarks" / "results" / "speed.json")
+    parser.add_argument("--before", type=Path, help="a speed result file of the code before a change, kept under the key "
+                        '"before"')
+    parser.add_argument("--part", choices=("segment", "ipa", "search"), help="run one measure and print it as JSON")
+    parser.add_argument("--segments", type=json.loads, help="the letters of --part segment, as a JSON list; the parent "
+                        "reads them because clustering them fills the distance cache")
     args = parser.parse_args()
+    if args.part:
+        parts = {"segment": lambda: segment_part(args.segments), "ipa": lambda: ipa_part(args.cache), "search": lambda: search_part(args.cache)}
+        print(json.dumps(parts[args.part]()))
+        return
 
     segs = letters()
-    runs = [one_run(args.cache) for _ in range(args.runs)]
+    runs = [one_run(args.cache, segs) for _ in range(args.runs)]
     head = subprocess.run(["git", "-C", str(ROOT), "rev-parse", "HEAD"], capture_output=True, text=True).stdout.strip()
     payload = {
         "task": "speed",
@@ -170,11 +211,13 @@ def main() -> None:
             "index_terms": f"the first {INDEX_TERMS} rows of {INDEX_FILE}, one term per row, spaces removed",
             "queries": f"{QUERIES} rows of {QUERY_FILE} drawn with random.Random({SEED}).sample, search(n_results=10)",
             "segments": "letters and tied affricates of phone_clusters; every ordered pair, diagonal included; "
-                        "vectors warmed before timing",
+                        "vectors warmed before timing; one cold pass, then one warm pass over the same pairs",
         },
         "runs": runs,
         "median": median_of(runs),
     }
+    if args.before:
+        payload["before"] = read_before(args.before)
     args.out.write_text(json.dumps(payload, indent=1) + "\n")
     print(f"segments {len(segs)}, pairs {payload['pair_count']}, matrix sha256 {payload['matrix_sha256']}")
     print(json.dumps(payload["median"], indent=1))

@@ -64,3 +64,24 @@ def test_letter_set_has_affricates_and_matrix_is_stable():
 
 def test_machine_names_the_cpu():
     assert speed.machine()["cpu"] != "?"
+
+
+def test_segment_part_times_a_cold_and_a_warm_pass_over_every_ordered_pair():
+    record = speed.segment_part(["p", "b", "t"])
+    assert set(record) == {"segment", "segment_warm"}
+    assert record["segment"]["pairs"] == record["segment_warm"]["pairs"] == 9
+
+
+def test_ipa_part_times_a_cold_and_a_warm_pass_over_the_same_pairs(tmp_path):
+    folder = tmp_path / "C6"
+    folder.mkdir()
+    (folder / "x_broad.tsv").write_text("".join(f"w{i}\tk æ {'t' * (i % 3 + 1)}\n" for i in range(20)), encoding="utf8")
+    record = speed.ipa_part(tmp_path)
+    assert set(record) == {"ipa_distance", "ipa_distance_warm"}
+    assert record["ipa_distance"]["pairs"] == record["ipa_distance_warm"]["pairs"] == speed.IPA_PAIRS
+
+
+def test_read_before_keeps_the_figures_and_drops_the_rest(tmp_path):
+    path = tmp_path / "earlier.json"
+    path.write_text('{"head": "h", "matrix_sha256": "m", "runs": [1], "median": {"x": 2}, "method": {}, "task": "speed"}')
+    assert speed.read_before(path) == {"head": "h", "matrix_sha256": "m", "runs": [1], "median": {"x": 2}}

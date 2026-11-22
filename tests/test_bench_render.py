@@ -157,7 +157,16 @@ def test_the_speed_file_renders_its_medians_and_matrix_hash():
     payload = json.loads((render.RESULTS / "speed.json").read_text(encoding="utf8"))
     page = render.render(render.RESULTS)
     assert payload["matrix_sha256"] in page
-    assert f"| segment_per_second | {payload['median']['segment_per_second']:.6g} |" in page
+    row = f"{payload['median']['segment_per_second']:.6g} |"
+    assert f"| segment_per_second | {payload['before']['median']['segment_per_second']:.6g} | {row}" in page
+
+
+def test_a_speed_file_without_before_renders_one_column():
+    payload = {"machine": {"cpu": "c", "cores": 1, "python": "3"}, "head": "a" * 40, "pair_count": 4, "matrix_sha256": "h",
+               "runs": [{"load_at_start": "0.50"}], "median": {"segment_per_second": 10.0}}
+    lines = render.speed_section(payload)
+    assert "| segment_per_second | 10 |" in lines
+    assert "| Measure | Median |" in lines
 
 
 README = render.README
