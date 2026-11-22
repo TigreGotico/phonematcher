@@ -38,9 +38,15 @@ def test_the_committed_page_is_a_fresh_render_of_the_committed_results():
     assert render.main(["--check"]) == 0
 
 
-def test_the_committed_results_hold_no_test_file():
-    assert not list(render.RESULTS.glob("*-test.json"))
-    assert "## Test split" not in render.PAGE.read_text(encoding="utf8")
+def test_each_committed_test_file_comes_from_the_registered_run():
+    # The single run: commit f092f20 and the registered page, for the three tasks the page names.
+    files = sorted(render.RESULTS.glob("*-test.json"))
+    assert [f.name for f in files] == ["alignment-test.json", "cognates-test.json", "retrieval-test.json"]
+    for path in files:
+        payload = json.loads(path.read_text(encoding="utf8"))
+        assert payload["split"] == "test"
+        assert payload["commit"] == "f092f20c8bbe0aa49a6480946858c0354a2580a9"
+        assert payload["prereg_sha256"] == "29927d4e0e8162276cf12c68450a3b28372dc039d3a24377bbf390a64bd2df7c"
 
 
 def test_an_alignment_row_holds_the_numbers_of_its_file(results):
