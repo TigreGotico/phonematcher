@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.0.0a3](https://github.com/TigreGotico/phonematcher/tree/1.0.0a3) (2026-11-22)
+
+[Full Changelog](https://github.com/TigreGotico/phonematcher/compare/1.0.0a2...1.0.0a3)
+
+**Merged pull requests:**
+
+- docs: add the design and limits page [\#65](https://github.com/TigreGotico/phonematcher/pull/65) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
+
 ## [1.0.0a2](https://github.com/TigreGotico/phonematcher/tree/1.0.0a2) (2026-11-22)
 
 [Full Changelog](https://github.com/TigreGotico/phonematcher/compare/1.0.0a1...1.0.0a2)
