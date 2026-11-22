@@ -17,7 +17,7 @@ from typing import Dict, List, NamedTuple, Sequence, Tuple
 
 import numpy as np
 
-from systems import System, UnreadSegment
+from systems import System
 
 URL = "https://zenodo.org/api/records/192607/files/glottobank/potential-of-cognate-detection-v1.0.zip/content"
 MD5 = "d270e3803e5be2f018c9a2975b750ce8"

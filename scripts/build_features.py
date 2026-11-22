@@ -1,8 +1,8 @@
 """Build phonematcher/data/features.json.
 
 PanPhon (Mortensen et al. 2016, MIT) supplies the segments, the feature weights and the diacritic
-rules. the Hayes (2009) feature tables as converted to CSV by Gorman (Apache-2.0, vendored in
-``scripts/sources/``; tables 4.7 to 4.9 per Gorman) adds [front], [tap] and [trill]. The vowel letters take their height,
+rules. The Hayes (2009) feature tables as converted to CSV by Gorman (Apache-2.0, vendored in
+``scripts/sources/``; tables 4.7 to 4.9 per Gorman) add [front], [tap] and [trill]. The vowel letters take their height,
 backness and rounding from the IPA chart (``scripts/sources/ipa-vowel-chart.csv``). [atr], the
 secondary articulations and the epiglottals are local features. ``phonematcher/data/overrides.json`` holds the other changes, each with its source.
 Run after changing any input:
@@ -12,10 +12,10 @@ Run after changing any input:
 
 Without ``--out`` the script overwrites ``phonematcher/data/features.json``.
 """
+import argparse
 import csv
 import importlib.metadata
 import importlib.util
-import argparse
 import json
 import unicodedata
 from pathlib import Path
@@ -44,8 +44,8 @@ HEIGHTS = ("close", "near-close", "close-mid", "mid", "open-mid", "near-open", "
 STEPS = scales.STEPS
 #: Secondary articulations, each a feature of its own beside the primary place.
 SECONDARY = ("palatalized", "velarized", "labialized", "pharyngealized")
-ADDED = {"front": 0.25, "tap": 0.25, "trill": 0.25, "atr": 0.25, **{s: 0.125 for s in STEPS},
-         **{s: 0.125 for s in SECONDARY}}
+ADDED = {"front": 0.25, "tap": 0.25, "trill": 0.25, "atr": 0.25,
+         **dict.fromkeys(STEPS, 0.125), **dict.fromkeys(SECONDARY, 0.125)}
 
 
 BACKNESS = {"front": "+-", "central": "--", "back": "-+"}
@@ -59,13 +59,13 @@ def read_chart() -> dict:
     chart = {}
     for r in rows:
         front, back = BACKNESS[r["backness"]]
+        level = HEIGHTS.index(r["height"])
         # PanPhon gives 22 of the 28 vowels [-delrel] and six of them 0; a vowel has no release,
         # so all take the majority value.
         height = {"tense": "0"}
-        scales.set_height(height, HEIGHTS.index(r["height"]))
-        chart[r["symbol"]] = {**height, "front": front,
-                              "back": back, "round": r["rounded"], "lab": r["rounded"],
-                              "delrel": "-", "index": HEIGHTS.index(r["height"])}
+        scales.set_height(height, level)
+        chart[r["symbol"]] = {**height, "front": front, "back": back,
+                              "round": r["rounded"], "lab": r["rounded"], "delrel": "-", "index": level}
     return chart
 
 
@@ -119,7 +119,7 @@ def main(out_path: Path) -> None:
         h = hayes.get(letter)
         vec.update({f: (h[HAYES_NAMES[f]] if h else "0" if f == "front" else "-")
                     for f in ("front", "tap", "trill")})
-        vec.update({"atr": "0", **{s: "0" for s in STEPS}, **{s: "-" for s in SECONDARY}})
+        vec.update({"atr": "0", **dict.fromkeys(STEPS, "0"), **dict.fromkeys(SECONDARY, "-")})
         if letter in chart:
             vec.update({f: v for f, v in chart[letter].items() if f != "index"})
         elif h and h["syllabic"] == "+" and vec["syl"] == "+":
@@ -215,8 +215,7 @@ def main(out_path: Path) -> None:
             for d in diacritics["diacritics"]
         ],
     }
-    out_path.write_text(json.dumps(out, ensure_ascii=False, indent=0) + "\n",
-                                        encoding="utf-8")
+    out_path.write_text(json.dumps(out, ensure_ascii=False, indent=0) + "\n", encoding="utf-8")
     print(f"phones in {n_in} + {len(changes['segments'])} added, out {len(phones)}; "
           f"overrides {len(overrides)}; "
           f"diacritics {len(out['diacritics'])}")

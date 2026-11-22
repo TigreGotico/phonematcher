@@ -66,7 +66,8 @@ def segments(ipa: str) -> List[str]:
                 release_tone()
                 out.append(ch)
             continue
-        if not (unicodedata.combining(ch) or ch in POST_DIACRITICS):
+        attaches = unicodedata.combining(ch) or ch in POST_DIACRITICS
+        if not attaches:
             release_tone()
         if ch.isspace():
             release_tone()
@@ -86,7 +87,6 @@ def segments(ipa: str) -> List[str]:
         if ch in PRE_DIACRITICS and (starts_word or is_vowel_phone(out[-1])) and not join_next:
             pending += ch
             continue
-        attaches = unicodedata.combining(ch) or ch in POST_DIACRITICS
         if not pending and out and out[-1] != " " and (attaches or join_next):
             out[-1] += ch
         else:

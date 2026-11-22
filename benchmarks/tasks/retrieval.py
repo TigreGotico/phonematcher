@@ -17,7 +17,6 @@ import argparse
 import csv
 import hashlib
 import json
-import os
 import random
 import sys
 import time
@@ -31,7 +30,7 @@ import numpy as np
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from split import is_test  # noqa: E402
-from systems import NAMES, PhoneMatcher, UnreadSegment, downey  # noqa: E402
+from systems import NAMES, PhoneMatcher, downey  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent.parent
 WIKIPRON_REPO = "https://github.com/CUNY-CL/wikipron"
@@ -463,19 +462,19 @@ def aggregate(cache: Path, split: str, names: Sequence[str] = NAMES) -> dict:
             continue
         counts = next(iter(records.values()))["counts"]
         queries_in = next(iter(records.values()))["queries_in"]
-        by_index = {sys: {i: (s, t, u) for i, s, t, u in zip(r["brute"]["index"], r["brute"]["s"],
+        by_index = {system: {i: (s, t, u) for i, s, t, u in zip(r["brute"]["index"], r["brute"]["s"],
                                                            r["brute"]["t"], r["brute"]["unread"])}
-                    for sys, r in records.items()}
+                    for system, r in records.items()}
         common = sorted(set.intersection(*(set(m) for m in by_index.values()))
                         - {i for m in by_index.values() for i, (_, _, u) in m.items() if u})
         sampled = sorted(set.intersection(*(set(m) for m in by_index.values())))
-        full = [sys for sys, r in records.items() if r["sample"] is None]
-        common_full = sorted(set.intersection(*(set(by_index[sys]) for sys in full))
-                             - {i for sys in full for i, (_, _, u) in by_index[sys].items() if u}) if full else []
+        full = [system for system, r in records.items() if r["sample"] is None]
+        common_full = sorted(set.intersection(*(set(by_index[system]) for system in full))
+                             - {i for system in full for i, (_, _, u) in by_index[system].items() if u}) if full else []
         systems = {}
-        for sys, r in records.items():
-            m = by_index[sys]
-            systems[sys] = {
+        for system, r in records.items():
+            m = by_index[system]
+            systems[system] = {
                 "queries_scored": len(m),
                 "sample": r["sample"],
                 "skipped_unread": sum(u for _, _, u in m.values()),

@@ -36,7 +36,7 @@ def shift(vec: MutableMapping[str, str], moves: Dict[str, int]) -> None:
     if "height" in moves:
         set_height(vec, row + moves["height"])
     if moves.get("toward_mid"):
-        set_height(vec, row + (MID > row) - (MID < row))
+        set_height(vec, row + (row < MID) - (row > MID))
     column = COLUMNS.index((vec["front"], vec["back"])) if (vec["front"], vec["back"]) in COLUMNS else 1
     if "column" in moves:
         vec["front"], vec["back"] = COLUMNS[_clamp(column + moves["column"], 2)]

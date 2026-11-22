@@ -15,7 +15,7 @@ Adapted from pyphone (https://github.com/lingz/pyphone) and fast_fuzzy_search
 import unicodedata
 from collections import namedtuple
 from functools import lru_cache
-from typing import Dict, Hashable, Iterable, List, Sequence, Set, Tuple, Union
+from typing import Dict, Hashable, List, Sequence, Set, Tuple, Union
 
 from phonematcher.distance import edit_distance, segments
 from phonematcher.features import phone_features, phonetic_distance
@@ -81,10 +81,11 @@ class PhoneticFuzzySearch:
         """The cluster of *segment*; a segment outside the table takes its nearest phone's."""
         if segment in self.clusters:
             return self.clusters[segment]
-        if segment not in self._cluster_memo:
+        cid = self._cluster_memo.get(segment)
+        if cid is None:
             nearest = min(self.clusters, key=lambda p: (phonetic_distance(segment, p), p))
-            self._cluster_memo[segment] = self.clusters[nearest]
-        return self._cluster_memo[segment]
+            cid = self._cluster_memo[segment] = self.clusters[nearest]
+        return cid
 
     def _words(self, ipa: str) -> List[List[str]]:
         words: List[List[str]] = [[]]
@@ -110,12 +111,6 @@ class PhoneticFuzzySearch:
                 for key in self._keys(word):
                     self.index.setdefault(key, set()).add(id)
 
-    def _ids_for_word(self, word: Sequence[str]) -> Set[Hashable]:
-        found: Set[Hashable] = set()
-        for key in self._keys(word):
-            found |= self.index.get(key, set())
-        return found
-
     def search(self, query: Readings, n_results: int = 10) -> List[Match]:
         """Terms that sound like *query*, nearest first.
 
@@ -125,8 +120,10 @@ class PhoneticFuzzySearch:
         queries = _as_readings(query)
         candidates: Set[Hashable] = set()
         for q in queries:
-            per_word: Iterable[Set[Hashable]] = (self._ids_for_word(w) for w in self._words(q))
-            candidates |= set.intersection(*per_word) if self._words(q) else set()
+            words = self._words(q)
+            if words:
+                per_word = [set().union(*(self.index.get(key, ()) for key in self._keys(w))) for w in words]
+                candidates |= set.intersection(*per_word)
         q_segs = [segments(q) for q in queries]
         matches = []
         for id in candidates:
