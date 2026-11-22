@@ -157,7 +157,7 @@ def load_results(directory: Path) -> Dict[str, Dict[str, dict]]:
     found: Dict[str, Dict[str, dict]] = {}
     for path in sorted(directory.glob("*.json")):
         payload = json.loads(path.read_text(encoding="utf8"))
-        found.setdefault(payload["split"], {})[payload["task"]] = payload
+        found.setdefault(payload.get("split", ""), {})[payload["task"]] = payload
     return found
 
 
@@ -174,6 +174,28 @@ def decision_section(tests: Dict[str, dict]) -> List[str]:
         for name, row in tests["cognates"]["candidates"].items()
     })
     return ["### Decision", "", *[f"- {reason}" for reason in outcome["reasons"]], "", f"Weights and gap cost after the test: {outcome['winner']}.", ""]
+
+
+def speed_section(payload: dict) -> List[str]:
+    machine = payload["machine"]
+    loads = ", ".join(run["load_at_start"] for run in payload["runs"])
+    rows = [f"| {name} | {value:.6g} |" for name, value in sorted(flatten(payload["median"]).items())]
+    return ["## Speed", "", f"Median of {len(payload['runs'])} runs on {machine['cpu']}, {machine['cores']} cores, "
+            f"Python {machine['python']}; load average at the start of each run: {loads}. {provenance(payload)}", "",
+            f"The distance matrix of {payload['pair_count']} ordered letter pairs has sha256 `{payload['matrix_sha256']}`.", "",
+            "| Measure | Median |", "|---|---|", *rows, ""]
+
+
+def flatten(tree: dict, prefix: str = "") -> Dict[str, float]:
+    """``a.b -> value`` for every number in a nested dict."""
+    flat: Dict[str, float] = {}
+    for key, value in tree.items():
+        name = f"{prefix}{key}"
+        if isinstance(value, dict):
+            flat.update(flatten(value, name + "."))
+        elif isinstance(value, (int, float)):
+            flat[name] = value
+    return flat
 
 
 def render(directory: Path = RESULTS) -> str:
@@ -194,6 +216,8 @@ def render(directory: Path = RESULTS) -> str:
                 out += [f"### {task}", "", provenance(payload), "", *TASKS[task](payload)]
         if split == "test":
             out += decision_section(results[split])
+    if "speed" in results.get("", {}):
+        out += speed_section(results[""]["speed"])
     return "\n".join(line for i, line in enumerate(out) if line or i == 0 or out[i - 1]).rstrip("\n") + "\n"
 
 

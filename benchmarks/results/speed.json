@@ -1,0 +1,103 @@
+{
+ "task": "speed",
+ "head": "c8828233a35805b46ed6b8b138fa6f1f59562e12",
+ "machine": {
+  "cpu": "11th Gen Intel(R) Core(TM) i9-11900H @ 2.50GHz",
+  "cores": 16,
+  "python": "3.14.6"
+ },
+ "segments": 135,
+ "pair_count": 18225,
+ "matrix_sha256": "44c7d449fc5d31f74b289e50ed0994c9741936e25a60944e08a31c400dfe14a9",
+ "method": {
+  "ipa_pairs": "10000 pairs of two distinct rows drawn with random.Random(0).sample from all broad WikiPron files in the cache, sorted by file name, spaces removed",
+  "index_terms": "the first 100000 rows of eng_latn_us_broad, one term per row, spaces removed",
+  "queries": "1000 rows of eng_latn_uk_broad drawn with random.Random(0).sample, search(n_results=10)",
+  "segments": "letters and tied affricates of phone_clusters; every ordered pair, diagonal included; vectors warmed before timing"
+ },
+ "runs": [
+  {
+   "load_at_start": "6.80",
+   "segment": {
+    "pairs": 18225,
+    "seconds": 0.16244708909653127,
+    "per_second": 112190.37596401694
+   },
+   "ipa_distance": {
+    "pairs": 10000,
+    "seconds": 6.0022401040187106,
+    "per_second": 1666.0446477815256
+   },
+   "search": {
+    "terms": 100000,
+    "queries": 1000,
+    "0.05": {
+     "build_seconds": 8.413777605979703,
+     "queries_per_second": 8.445017014334192
+    },
+    "0.1": {
+     "build_seconds": 8.829954011016525,
+     "queries_per_second": 2.9026649991533233
+    }
+   }
+  },
+  {
+   "load_at_start": "7.44",
+   "segment": {
+    "pairs": 18225,
+    "seconds": 0.13856144191231579,
+    "per_second": 131530.0977564387
+   },
+   "ipa_distance": {
+    "pairs": 10000,
+    "seconds": 5.628183497930877,
+    "per_second": 1776.772204331355
+   },
+   "search": {
+    "terms": 100000,
+    "queries": 1000,
+    "0.05": {
+     "build_seconds": 7.210617003031075,
+     "queries_per_second": 8.81275617599052
+    },
+    "0.1": {
+     "build_seconds": 6.965564375976101,
+     "queries_per_second": 2.97285603304089
+    }
+   }
+  },
+  {
+   "load_at_start": "6.55",
+   "segment": {
+    "pairs": 18225,
+    "seconds": 0.12413421005476266,
+    "per_second": 146816.9007718333
+   },
+   "ipa_distance": {
+    "pairs": 10000,
+    "seconds": 5.427339236950502,
+    "per_second": 1842.5234840523387
+   },
+   "search": {
+    "terms": 100000,
+    "queries": 1000,
+    "0.05": {
+     "build_seconds": 8.858191934996285,
+     "queries_per_second": 8.69841036578786
+    },
+    "0.1": {
+     "build_seconds": 6.60071357502602,
+     "queries_per_second": 3.180191362908861
+    }
+   }
+  }
+ ],
+ "median": {
+  "segment_per_second": 131530.0977564387,
+  "ipa_distance_per_second": 1776.772204331355,
+  "build_seconds_0.05": 8.413777605979703,
+  "queries_per_second_0.05": 8.69841036578786,
+  "build_seconds_0.1": 6.965564375976101,
+  "queries_per_second_0.1": 2.97285603304089
+ }
+}

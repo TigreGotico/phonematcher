@@ -144,3 +144,10 @@ def test_the_decision_waits_for_all_three_test_files(results):
     (results / "retrieval-test.json").unlink()
     page = render.render(results)
     assert "## Test split" in page and "### Decision" not in page
+
+
+def test_the_speed_file_renders_its_medians_and_matrix_hash():
+    payload = json.loads((render.RESULTS / "speed.json").read_text(encoding="utf8"))
+    page = render.render(render.RESULTS)
+    assert payload["matrix_sha256"] in page
+    assert f"| segment_per_second | {payload['median']['segment_per_second']:.6g} |" in page
