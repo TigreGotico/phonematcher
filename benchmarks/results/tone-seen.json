@@ -1,0 +1,126 @@
+{
+ "task": "tone",
+ "system": "phonematcher,levenshtein,panphon-weighted,panphon-hamming,aline,soundvectors,sca",
+ "split": "seen",
+ "commit": null,
+ "head": "beaa562e9de473f367dc39d18ab5acafd826d501",
+ "tree_dirty": true,
+ "data": {
+  "source": "Wong, Cheng and Chen (2018), Frontiers in Psychology 9:1604, Tables 12 and 13, CC BY 4.0",
+  "file": "benchmarks/data/cantonese-tone-confusions.csv",
+  "sha256": "3b61f7c48adf0617b8f9c7bb2b9ebcb67429d31e742ecc2e71648fc71fc50629"
+ },
+ "pairs": 15,
+ "pair_rates": {
+  "T1-T2": 0.0,
+  "T1-T3": 0.20666666666666667,
+  "T1-T4": 0.0,
+  "T1-T5": 0.0,
+  "T1-T6": 0.018333333333333333,
+  "T2-T3": 0.0033333333333333335,
+  "T2-T4": 0.0,
+  "T2-T5": 0.13333333333333333,
+  "T2-T6": 0.0033333333333333335,
+  "T3-T4": 0.006666666666666667,
+  "T3-T5": 0.0033333333333333335,
+  "T3-T6": 0.29,
+  "T4-T5": 0.0033333333333333335,
+  "T4-T6": 0.01,
+  "T5-T6": 0.013333333333333334
+ },
+ "chao": {
+  "main": {
+   "values": {
+    "T1": "55",
+    "T2": "35",
+    "T3": "33",
+    "T4": "21",
+    "T5": "23",
+    "T6": "22"
+   },
+   "source": "Alderete 2024, Frontiers in Psychology 15:1270433, Table 8, after Matthews and Yip 2011, p. 27"
+  },
+  "alternative": {
+   "values": {
+    "T1": "55",
+    "T2": "25",
+    "T3": "33",
+    "T4": "21",
+    "T5": "23",
+    "T6": "22"
+   },
+   "source": "Chen et al. 2024, PLoS ONE 19:e0306272, introduction (T2 25, T1 read as 55)"
+  }
+ },
+ "scored": {
+  "main": {
+   "direction_baseline": {
+    "score": 0.7817359599705717,
+    "interval": {
+     "low": 0.4553792194962077,
+     "high": 0.8859573332073859,
+     "undefined": 8
+    },
+    "pairs_in": 15,
+    "pairs_out": 15,
+    "distance_range": [
+     0.0,
+     1.0
+    ]
+   },
+   "phonematcher": {
+    "score": 0.24746170658929867,
+    "interval": {
+     "low": -0.3167377382596731,
+     "high": 0.7396463141228129,
+     "undefined": 0
+    },
+    "pairs_in": 15,
+    "pairs_out": 15,
+    "distance_range": [
+     0.125,
+     0.875
+    ]
+   }
+  },
+  "alternative": {
+   "direction_baseline": {
+    "score": 0.7817359599705717,
+    "interval": {
+     "low": 0.4553792194962077,
+     "high": 0.8859573332073859,
+     "undefined": 8
+    },
+    "pairs_in": 15,
+    "pairs_out": 15,
+    "distance_range": [
+     0.0,
+     1.0
+    ]
+   },
+   "phonematcher": {
+    "score": 0.3578731059988885,
+    "interval": {
+     "low": -0.2041519929840461,
+     "high": 0.8279066552023238,
+     "undefined": 0
+    },
+    "pairs_in": 15,
+    "pairs_out": 15,
+    "distance_range": [
+     0.125,
+     0.875
+    ]
+   }
+  }
+ },
+ "not_scored": [
+  "levenshtein",
+  "panphon-weighted",
+  "panphon-hamming",
+  "aline",
+  "soundvectors",
+  "sca"
+ ],
+ "not_scored_reason": "no tone model"
+}
