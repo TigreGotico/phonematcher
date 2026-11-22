@@ -45,6 +45,11 @@ PRE_DIACRITICS = {
     "ⁿ": ("ⁿ", "post"), "ᵐ": ("ⁿ", "post"), "ᵑ": ("ⁿ", "post"), "ʰ": ("ʰ", "post"),
 }
 _TIES = ("͡", "͜")
+#: Unicode categories of a base letter, as against a modifier letter or a combining mark.
+_LETTER_CATEGORIES = {"Ll", "Lu", "Lo"}
+#: Click letters. Neither the IPA chart nor a source read for the table says how a click with a
+#: rear closure is written, so a click after a letter with no tie bar is not read.
+_CLICKS = set("ʘǀǃǂǁ‼ʞ")
 #: Non-IPA spellings (``data/spellings.json``) -> the IPA they read as.
 SPELLINGS: Dict[int, str] = str.maketrans({
     row["spelling"]: row["reads_as"] for row in json.loads(
@@ -84,7 +89,11 @@ def vectorize_phones(segment: str) -> Vector:
 
     A segment in the table is read as listed. Otherwise the longest listed base in it takes the
     diacritics around it, each by PanPhon's rule for that diacritic, as long as the rule's
-    conditions hold. Raises ``ValueError`` for a segment it cannot read.
+    conditions hold. Marks before the segment apply to a tied segment as to a listed one. Base
+    letters with no tie bar read as the segment with a tie bar between each two of them, as the IPA
+    chart allows two symbols for an affricate, with the tie bar added only if necessary. A letter
+    that repeats the one before it (a geminate) and a click get no tie bar.
+    Raises ``ValueError`` for a segment it cannot read.
     """
     seg = unicodedata.normalize("NFD", segment).translate(_COMPOSED_LETTERS)
     if seg in phone_features:
@@ -110,6 +119,30 @@ def vectorize_phones(segment: str) -> Vector:
             return compose_tie([vectorize_phones(part) for part in untied.split(_TIES[0])])
         except ValueError:
             pass
+    if start:
+        try:
+            vec = vectorize_phones(seg[start:])
+        except ValueError:
+            raise ValueError(f"Unrecognized phone {segment!r}") from None
+        for marker in seg[:start]:
+            vec = _apply_if(_DIACRITICS[PRE_DIACRITICS[marker]], vec, segment)
+        return vec
+    if _TIES[0] not in untied:
+        clusters: List[str] = []  # a base letter and the combining marks after it
+        for c in seg:
+            if unicodedata.category(c) in _LETTER_CATEGORIES or not clusters:
+                clusters.append(c)
+            elif unicodedata.combining(c):
+                clusters[-1] += c
+            else:
+                clusters.append(c)
+        tied = clusters[0]
+        for before, cluster in zip(clusters, clusters[1:]):
+            joins = (unicodedata.category(cluster[0]) in _LETTER_CATEGORIES
+                     and cluster != before and cluster[0] not in _CLICKS)
+            tied += (_TIES[0] if joins else "") + cluster
+        if tied != seg:
+            return vectorize_phones(tied)
     raise ValueError(f"Unrecognized phone {segment!r}" + (": a diphthong is two segments" if _is_diphthong(seg) else ""))
 
 

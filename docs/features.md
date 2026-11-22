@@ -213,6 +213,27 @@ Some transcriptions use a symbol that the IPA chart does not contain. The reader
 
 The annotations come from the Unicode code charts for U+0000 and U+0250. Chapter 7 of the Unicode Standard says that `ʦ` "is a transcription for the sound that could also be transcribed in IPA as [ t͜s ] ... or [ t͡s ]". The chart calls `ʦ` and `ʣ` dental, and the table's `s` and `z` are alveolar. The reading follows the common IPA pairing, not the place word. The full rows, with their sources, are in `phonematcher/data/spellings.json`. To add a spelling, add a row there with the chart annotation as its source, and add its pair to `tests/test_spellings.py`.
 
+## Letters with no tie bar
+
+The IPA chart says: "Affricates and double articulations can be represented by two symbols joined by a tie bar if necessary." (Other Symbols, IPA chart revised to 2015/2005). So a transcription may leave the tie bar out when the two symbols are one segment. `vectorize_phones` reads such a segment as the one with the tie bar:
+
+```python
+from phonematcher import segments
+from phonematcher.features import vectorize_phones
+
+vectorize_phones("ts") == vectorize_phones("t͡s")   # True
+vectorize_phones("kp") == vectorize_phones("k͡p")   # True
+segments("ts")                                      # ['t', 's']
+```
+
+The reader puts a tie bar between each two base letters and reads the result. A tie that `compose_tie` has no reading for stays unread: `ab`, `ɑi`, `ʔt`, and the three-letter `bvf` and `dzs`, because a fricative tied to a fricative has no reading. For the same reason `ʧ͡f` and `ʤ͡v` stay unread.
+
+A letter that repeats the one before it is a geminate, not a tie: `nn` and `tt` stay unread. A click after a letter, as in `kǀ`, also stays unread. Neither the IPA chart nor a source read for this table says how a click with a rear closure is written, so `k͡ǀ` needs its tie bar.
+
+Only a segment given whole is read this way. `segments` keeps `ts` in running text as two segments, `t` and `s`, because the same two letters are two sounds in many words. Use `segments("t͡s")` or write the tie bar to make one.
+
+A mark before such a segment applies to it as to a listed one. `ʰts` is `t͡s` with `sg` +, and `ᵐɡb` is `ɡ͡b` with `nas` +. The mark's own rule still decides: `◌ⁿ` applies to a plosive and not to an affricate, so `ⁿt͡s` and `ⁿts` stay unread.
+
 ## Other changes
 
 | Segment | Feature | Value | Source |
