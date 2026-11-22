@@ -55,4 +55,4 @@ The clusters of the IPA letters and tied affricates at `threshold`, cached.
 
 - `phonex(word, cluster_of) -> tuple[int, ...]`: the cluster ids of a word's segments, with repeats of one cluster collapsed.
 
-[Index](index.md) · Previous: [The feature table](features.md) · Next: [Benchmarks](benchmarks.md)
+[Index](index.md) · Previous: [Design choices and limits](design.md) · Next: [Benchmarks](benchmarks.md)
