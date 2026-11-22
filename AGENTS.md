@@ -20,6 +20,7 @@ pytest --import-mode=importlib tests/
 - `phonematcher/phonex.py`: a word as its sequence of cluster ids.
 - `phonematcher/data/features.json`: built, never hand-edited. Rebuild with `scripts/build_features.py` (needs `panphon` and `pyyaml`).
 - `phonematcher/data/overrides.json`: single-value changes to the built table, each with its source and reason.
+- `benchmarks/`: the benchmark harness, outside the wheel; see `benchmarks/README.md`. Its tests are `tests/test_bench_harness.py` (extra `bench`) and `benchmarks/test_sca.py` (extra `bench-copyleft`, not run in CI).
 - `scripts/sources/hayes2009-features.csv`: Hayes (2009) feature table, CSV conversion by Kyle Gorman (Apache-2.0).
 - `scripts/sources/ipa-vowel-chart.csv`: height, backness and rounding of the 28 vowel letters of the IPA chart.
 
