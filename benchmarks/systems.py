@@ -129,6 +129,12 @@ def per_length(raw: float, a: Word, b: Word, normalized: bool) -> float:
     return raw / longest if longest else 0.0
 
 
+#: The morpheme and word boundaries that LingPy writes into a token list. They are no sound.
+BOUNDARIES = frozenset("+_")
+#: Stress marks, which ``segments`` drops; an affricate with one stays whole.
+STRESS = str.maketrans("", "", "ˈˌ")
+
+
 class PhoneMatcher(System):
     """This package: substitutions at the square root of the feature distance, deletion and insertion at 0.5.
 
@@ -165,11 +171,17 @@ class PhoneMatcher(System):
         return True
 
     def _parts(self, segment: str) -> List[str]:
-        """The segment as the library reads it: itself, or the parts ``segments`` splits it into."""
+        """The segment as the library reads it: itself, or the parts ``segments`` splits it into
+        (whole, once the stress marks are gone), or none for a boundary token."""
+        if segment in BOUNDARIES:
+            return []
         if self._reads_whole(segment):
             return [self._letters(segment)]
+        unstressed = segment.translate(STRESS)
+        if unstressed and self._reads_whole(unstressed):
+            return [self._letters(unstressed)]
         parts = self._segments(segment)
-        return parts if len(parts) > 1 and all(self._reads_whole(p) for p in parts) else [segment]
+        return parts if parts and parts != [segment] and all(self._reads_whole(p) for p in parts) else [segment]
 
     def reads(self, segment: str) -> bool:
         return all(self._reads_whole(p) for p in self._parts(segment))
