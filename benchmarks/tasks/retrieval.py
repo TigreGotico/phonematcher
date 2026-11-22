@@ -50,7 +50,7 @@ SAMPLE_SIZE = 500
 SLOW: Dict[str, int] = {"aline": 100, "sca": SAMPLE_SIZE}
 FUZZY_PARTS = 5
 SAMPLE_SEED = 0
-SENSITIVITIES = (0.0, 0.05, 0.1, 0.15, 0.2)
+SENSITIVITIES = (0.01, 0.02, 0.03, 0.05, 0.08, 0.12)
 TIE_EPSILON = 1e-9
 #: systems whose word distance is an edit distance with one cost per segment pair and a constant
 #: indel cost, so the distance to the whole index is computed as one vectorised table

@@ -23,7 +23,7 @@ from typing import Callable, Dict, List, Sequence, Tuple
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 
-from phonematcher import PhoneticFuzzySearch, ipa_distance, phonetic_distance  # noqa: E402
+from phonematcher import PhoneticFuzzySearch, ipa_distance, feature_distance  # noqa: E402
 from phonematcher.clustering import phone_clusters  # noqa: E402
 from phonematcher.features import vectorize_phones  # noqa: E402
 
@@ -105,7 +105,7 @@ def one_run(cache: Path) -> Dict[str, object]:
     for seg in segs:
         vectorize_phones(seg)
     record: Dict[str, object] = {"load_at_start": load_average()}
-    pairs, seconds = time_pairs(segs, phonetic_distance)
+    pairs, seconds = time_pairs(segs, feature_distance)
     record["segment"] = {"pairs": pairs, "seconds": seconds, "per_second": pairs / seconds}
 
     pool: List[str] = []
@@ -163,7 +163,7 @@ def main() -> None:
         "machine": machine(),
         "segments": len(segs),
         "pair_count": len(segs) ** 2,
-        "matrix_sha256": matrix_hash(segs, phonetic_distance),
+        "matrix_sha256": matrix_hash(segs, feature_distance),
         "method": {
             "ipa_pairs": f"{IPA_PAIRS} pairs of two distinct rows drawn with random.Random({SEED}).sample from all "
                          "broad WikiPron files in the cache, sorted by file name, spaces removed",

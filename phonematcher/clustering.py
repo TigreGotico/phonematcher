@@ -1,7 +1,7 @@
 """Phonetic fuzzy search over IPA.
 
 Phones are grouped into clusters of near sounds (UPGMA average linkage over
-:func:`~phonematcher.features.phonetic_distance`). Each word of a term is indexed by its cluster
+:func:`~phonematcher.distance.substitution_cost`). Each word of a term is indexed by its cluster
 sequence and by every sequence with one or two clusters deleted, so a query finds terms that differ
 by near sounds or by a dropped sound. Candidates are ranked by the feature-weighted edit distance
 of :mod:`phonematcher.distance`.
@@ -18,8 +18,8 @@ from collections import namedtuple
 from functools import lru_cache
 from typing import Dict, Hashable, List, Sequence, Set, Tuple, Union
 
-from phonematcher.distance import edit_distance, segments
-from phonematcher.features import phone_features, phonetic_distance
+from phonematcher.distance import edit_distance, segments, substitution_cost
+from phonematcher.features import phone_features
 from phonematcher.phonex import phonex
 from phonematcher.tone import is_tone
 
@@ -29,14 +29,14 @@ Match = namedtuple("Match", ["id", "term", "score"])
 Readings = Union[str, Sequence[str]]
 
 
-def upgma(labels: Sequence[str], threshold: float) -> Dict[str, int]:
+def upgma(labels: Sequence[str], threshold: float, dist: Dict[Tuple[str, str], float]) -> Dict[str, int]:
     """Group *labels* by UPGMA average linkage, merging while the closest pair of groups is at most
-    *threshold* apart. Returns ``label -> cluster id``.
+    *threshold* apart. *dist* holds the distance of every pair ``(a, b)`` with ``a < b``. Returns
+    ``label -> cluster id``.
 
     Distances are summed exactly, so the order in which a set yields its labels cannot change a sum
     by a rounding error. Equal distances merge the pair with the lowest cluster positions first, and
     cluster ids follow the order of *labels*."""
-    dist = {(a, b): phonetic_distance(a, b) for a in labels for b in labels if a < b}
 
     def between(c1: Set[str], c2: Set[str]) -> float:
         return math.fsum(dist[min(a, b), max(a, b)] for a in c1 for b in c2) / (len(c1) * len(c2))
@@ -51,16 +51,41 @@ def upgma(labels: Sequence[str], threshold: float) -> Dict[str, int]:
     return {label: cid for cid, cluster in enumerate(clusters, start=1) for label in cluster}
 
 
-@lru_cache(maxsize=8)
-def phone_clusters(threshold: float) -> Dict[str, int]:
-    """The clusters of the IPA letters and tied affricates in the table at *threshold*.
+@lru_cache(maxsize=None)
+def _letter_costs() -> Tuple[Tuple[str, ...], Dict[Tuple[str, str], float], Tuple[float, ...]]:
+    """The IPA letters and tied affricates of the table, the :func:`substitution_cost` of every pair
+    ``(a, b)`` with ``a < b``, and those costs in ascending order."""
+    letters = tuple(sorted(
+        p for p in phone_features
+        if (len(p) == 1 and unicodedata.category(p).startswith("L"))
+        or (len(p) == 3 and p[1] in "\u0361\u035c")
+    ))
+    costs = {(a, b): substitution_cost(a, b) for a in letters for b in letters if a < b}
+    return letters, costs, tuple(sorted(costs.values()))
 
-    Any other segment, such as a letter with diacritics, takes the cluster of its nearest phone.
+
+def merge_threshold(share: float) -> float:
+    """The *share* quantile of the segment costs over all pairs of distinct letters, with linear
+    interpolation between the two nearest costs. Raises ``ValueError`` outside 0 to 1."""
+    if not 0 <= share <= 1:
+        raise ValueError(f"cluster_sensitivity is a share from 0 to 1, not {share!r}")
+    ordered = _letter_costs()[2]
+    position = share * (len(ordered) - 1)
+    low = int(position)
+    high = min(low + 1, len(ordered) - 1)
+    return ordered[low] + (position - low) * (ordered[high] - ordered[low])
+
+
+@lru_cache(maxsize=8)
+def phone_clusters(share: float) -> Dict[str, int]:
+    """The clusters of the IPA letters and tied affricates in the table.
+
+    Two groups of letters merge when their mean :func:`~phonematcher.distance.substitution_cost`
+    is at most :func:`merge_threshold` of *share*. Any other segment, such as a letter with
+    diacritics, takes the cluster of its nearest phone.
     """
-    phones = [p for p in phone_features
-              if (len(p) == 1 and unicodedata.category(p).startswith("L"))
-              or (len(p) == 3 and p[1] in "\u0361\u035c")]
-    return upgma(sorted(phones), threshold)
+    letters, costs, _ = _letter_costs()
+    return upgma(letters, merge_threshold(share), costs)
 
 
 def _as_readings(term: Readings) -> Tuple[str, ...]:
@@ -71,11 +96,12 @@ class PhoneticFuzzySearch:
     """An index of IPA terms, searched by sound.
 
     A term is one IPA string or several readings of the same item; a match on any reading counts.
-    *cluster_sensitivity* is the UPGMA merge threshold: higher values put more phones in one
-    cluster, which finds more candidates.
+    *cluster_sensitivity* is a share from 0 to 1. The UPGMA merge threshold is that quantile of the
+    segment costs over all pairs of letters, so a higher share puts more phones in one cluster,
+    which finds more candidates.
     """
 
-    def __init__(self, cluster_sensitivity: float = 0.1):
+    def __init__(self, cluster_sensitivity: float = 0.08):
         self.cluster_sensitivity = cluster_sensitivity
         self.clusters = phone_clusters(cluster_sensitivity)
         self.index: Dict[Tuple[int, ...], Set[Hashable]] = {}
@@ -88,7 +114,7 @@ class PhoneticFuzzySearch:
             return self.clusters[segment]
         cid = self._cluster_memo.get(segment)
         if cid is None:
-            nearest = min(self.clusters, key=lambda p: (phonetic_distance(segment, p), p))
+            nearest = min(self.clusters, key=lambda p: (substitution_cost(segment, p), p))
             cid = self._cluster_memo[segment] = self.clusters[nearest]
         return cid
 

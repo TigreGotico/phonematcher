@@ -29,10 +29,10 @@ transcribe("carro", "pt-BR-x-rj")   # 'ˈkaχu'
 ## 3. Compare two sounds
 
 ```python
-from phonematcher import phonetic_distance
+from phonematcher import feature_distance
 
-phonetic_distance("ʁ", "χ")   # 0.013
-phonetic_distance("ʁ", "k")   # 0.118
+feature_distance("ʁ", "χ")   # 0.013
+feature_distance("ʁ", "k")   # 0.118
 ```
 
 The uvular fricatives differ in voice only, so they are near. The velar stop differs in manner, place and voice, so it is farther.

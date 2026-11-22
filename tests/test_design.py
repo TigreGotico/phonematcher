@@ -13,7 +13,7 @@ import pytest
 
 from phonematcher import ipa_distance, segments, vectorize_phones
 from phonematcher.distance import GAP_COST, substitution_cost
-from phonematcher.features import FEATURES, phonetic_distance
+from phonematcher.features import FEATURES, feature_distance
 
 ROOT = Path(__file__).resolve().parent.parent
 PAGE = (ROOT / "docs" / "design.md").read_text(encoding="utf-8")
@@ -114,7 +114,7 @@ def test_every_example_of_an_unread_kind_raises_value_error():
         assert f"`{example}`" in PAGE
         with pytest.raises(ValueError):
             vectorize_phones(example)
-        assert phonetic_distance(example, "a") == 1.0
+        assert feature_distance(example, "a") == 1.0
 
 
 def test_pharyngealized_and_retracted_tongue_root_differ_in_one_feature():
@@ -139,7 +139,7 @@ def test_the_closest_two_letters_differ_by_one_step_feature_of_weight_one_eighth
     spec.loader.exec_module(script)
     letters = script.base_letters()
     assert len(letters) == 135 and "135 letters" in PAGE
-    smallest = min(phonetic_distance(a, b) for a, b in combinations(letters, 2))
+    smallest = min(feature_distance(a, b) for a, b in combinations(letters, 2))
     assert smallest == pytest.approx(0.125 / 9.5) and f"{smallest:.4f}" in PAGE
-    assert phonetic_distance("a", "æ") == pytest.approx(0.125 / 9.5)
+    assert feature_distance("a", "æ") == pytest.approx(0.125 / 9.5)
     assert [n for n, x, y in zip(FEATURES, vectorize_phones("a"), vectorize_phones("æ")) if x != y] == ["h6"]

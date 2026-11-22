@@ -1,7 +1,7 @@
 """An empty segment is unreadable, as any other unreadable segment is."""
 import pytest
 
-from phonematcher.features import phonetic_distance, vectorize_phones
+from phonematcher.features import feature_distance, vectorize_phones
 
 
 def test_an_empty_segment_raises_value_error():
@@ -10,4 +10,4 @@ def test_an_empty_segment_raises_value_error():
 
 
 def test_an_empty_segment_is_far_from_every_segment():
-    assert phonetic_distance("", "a") == 1.0
+    assert feature_distance("", "a") == 1.0

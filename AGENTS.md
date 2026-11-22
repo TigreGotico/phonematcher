@@ -14,8 +14,8 @@ pytest --import-mode=importlib tests/
 
 ## Layout
 
-- `phonematcher/features.py`: loads `data/features.json` and gives `vectorize_phones`, `phonetic_distance`, `is_vowel_phone`.
-- `phonematcher/distance.py`: `segments`, `edit_distance`, `ipa_distance`.
+- `phonematcher/features.py`: loads `data/features.json` and gives `vectorize_phones`, `feature_distance` (and the deprecated alias `phonetic_distance`), `is_vowel_phone`.
+- `phonematcher/distance.py`: `segments`, `substitution_cost` (the one segment cost), `edit_distance`, `ipa_distance`.
 - `phonematcher/clustering.py`: `PhoneticFuzzySearch`, UPGMA clustering of phones.
 - `phonematcher/phonex.py`: a word as its sequence of cluster ids.
 - `phonematcher/data/features.json`: built, never hand-edited. Rebuild with `scripts/build_features.py` (needs `panphon` and `pyyaml`).

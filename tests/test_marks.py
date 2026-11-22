@@ -6,7 +6,7 @@ and from PanPhon's own segment rows, not from the rules under test.
 """
 import pytest
 
-from phonematcher.features import FEATURES, phonetic_distance, vectorize_phones
+from phonematcher.features import FEATURES, feature_distance, vectorize_phones
 
 
 def feature(segment, name):

@@ -14,7 +14,7 @@ from phonematcher.features import (
     NUM_FEATURES,
     SOURCE,
     phone_features,
-    phonetic_distance,
+    feature_distance,
     vectorize_phones,
 )
 
@@ -62,7 +62,7 @@ def test_affricate_is_a_stop_with_a_fricative_release(affricate, stop, fricative
     assert feature(affricate, "cont") is False
     assert feature(affricate, "delrel") is True
     assert feature(affricate, "voi") is feature(fricative, "voi")
-    assert phonetic_distance(affricate, fricative) < phonetic_distance(affricate, "a")
+    assert feature_distance(affricate, fricative) < feature_distance(affricate, "a")
 
 
 def test_both_tie_bars_give_the_same_affricate():
@@ -96,12 +96,12 @@ def test_glottal_fricatives_differ_in_voice():
 
 
 def test_voicing_pairs_are_nearer_than_place_pairs():
-    assert phonetic_distance("p", "b") < phonetic_distance("p", "k")
-    assert phonetic_distance("ʁ", "χ") < phonetic_distance("ʁ", "k")
+    assert feature_distance("p", "b") < feature_distance("p", "k")
+    assert feature_distance("ʁ", "χ") < feature_distance("ʁ", "k")
 
 
 def test_unknown_symbol_is_far_from_everything():
-    assert phonetic_distance("?", "a") == 1.0
+    assert feature_distance("?", "a") == 1.0
     with pytest.raises(ValueError):
         vectorize_phones("?")
 
@@ -131,7 +131,7 @@ def test_near_open_vowels_are_low():
     """[æ] and [ɐ] are near-open (IPA chart); PHOIBLE 2.0 marks both [+low] in every inventory row.
     The Hayes CSV marks [æ] [+low] and lists no [ɐ]."""
     assert feature("æ", "lo") is True and feature("ɐ", "lo") is True
-    assert phonetic_distance("ɐ", "a") < phonetic_distance("ɐ", "e")
+    assert feature_distance("ɐ", "a") < feature_distance("ɐ", "e")
 
 
 def test_a_listed_diacritic_keeps_its_effect_on_a_chart_vowel():
@@ -157,7 +157,7 @@ def test_centralized_vowel_is_neither_front_nor_back():
 @pytest.mark.parametrize("segment, stop", [("ⁿd", "d"), ("ᵐb", "b"), ("ᵑɡ", "ɡ")])
 def test_prenasalized_stop_is_a_nasal_stop(segment, stop):
     assert feature(segment, "nas") is True and feature(segment, "cont") is False
-    assert phonetic_distance(segment, stop) < phonetic_distance(segment, "a")
+    assert feature_distance(segment, stop) < feature_distance(segment, "a")
 
 
 def test_preaspirated_stop_has_spread_glottis():
@@ -172,14 +172,14 @@ CHART_HEIGHT = {"i": 0, "ɪ": 1, "e": 2, "ɛ": 4, "æ": 5, "a": 6}
 def test_vowel_distance_grows_with_chart_height_difference():
     """Down the front column of the chart, each step away from [i] is farther than the last."""
     rows = sorted(CHART_HEIGHT, key=CHART_HEIGHT.get)
-    steps = [phonetic_distance("i", v) for v in rows]
+    steps = [feature_distance("i", v) for v in rows]
     assert steps == sorted(steps) and len(set(steps)) == len(steps)
 
 
 def test_mid_central_vowel_sits_between_close_mid_and_open_mid():
     """[ə] is mid on the chart, halfway between [ɘ] and [ɜ]."""
-    assert phonetic_distance("ə", "ɘ") == pytest.approx(phonetic_distance("ə", "ɜ"))
-    assert phonetic_distance("ə", "ɘ") < phonetic_distance("ɘ", "ɜ")
+    assert feature_distance("ə", "ɘ") == pytest.approx(feature_distance("ə", "ɜ"))
+    assert feature_distance("ə", "ɘ") < feature_distance("ɘ", "ɜ")
 
 
 def test_open_a_is_front_and_near_open_a_is_central():
@@ -201,7 +201,7 @@ def test_no_segment_is_both_high_and_low():
 def test_chart_letters_panphon_lacks(letter, near, feat):
     """Labiodental flap (IPA chart) and the epiglottals (Hassan et al. 2011)."""
     assert vectorize_phones(letter) != vectorize_phones(near)
-    assert phonetic_distance(letter, near) < phonetic_distance(letter, "a")
+    assert feature_distance(letter, near) < feature_distance(letter, "a")
     expected = {"tap": True, "trill": True, "cont": False}[feat]
     assert feature(letter, feat) is expected
 
@@ -214,8 +214,8 @@ def test_labiodental_flap_has_the_place_of_v():
 def test_lowered_and_raised_marks_move_a_vowel_one_chart_row():
     """◌̞ lowers and ◌̝ raises (IPA chart): lowered close-mid [e̞] is nearer open-mid [ɛ] than [e]
     is, and raised [ɛ̝] is nearer [e] than [ɛ] is."""
-    assert phonetic_distance("e̞", "ɛ") < phonetic_distance("e", "ɛ")
-    assert phonetic_distance("ɛ̝", "e") < phonetic_distance("ɛ", "e")
+    assert feature_distance("e̞", "ɛ") < feature_distance("e", "ɛ")
+    assert feature_distance("ɛ̝", "e") < feature_distance("ɛ", "e")
 
 
 @pytest.mark.parametrize("segment, base", [("kˤ", "k"), ("iˤ", "i"), ("ɠˤ", "ɠ")])
@@ -341,18 +341,18 @@ def test_advanced_and_retracted_move_a_vowel_one_column():
 def test_rounding_marks_move_one_step_on_the_rounding_scale():
     """IPA chart: ◌̹ more rounded, ◌̜ less rounded."""
     assert feature("ɔ̜", "round") is None and feature("ɛ̹", "round") is None
-    assert phonetic_distance("ɔ̜", "ʌ") < phonetic_distance("ɔ", "ʌ")
+    assert feature_distance("ɔ̜", "ʌ") < feature_distance("ɔ", "ʌ")
 
 
 def test_half_long_sits_between_short_and_long():
     assert feature("eˑ", "long") is None
-    assert phonetic_distance("eˑ", "e") == pytest.approx(phonetic_distance("eˑ", "eː"))
+    assert feature_distance("eˑ", "e") == pytest.approx(feature_distance("eˑ", "eː"))
 
 
 def test_mid_centralized_moves_to_the_centre_and_toward_mid():
     """IPA chart: ◌̽ mid-centralized. [e̽] is central and one row nearer mid than [e]."""
     assert feature("e̽", "front") is False and feature("e̽", "back") is False
-    assert phonetic_distance("e̽", "ə") < phonetic_distance("ë", "ə")
+    assert feature_distance("e̽", "ə") < feature_distance("ë", "ə")
 
 
 def test_vectorize_phones_returns_the_table_row_for_every_listed_segment():
@@ -383,7 +383,7 @@ def test_every_listed_tie_is_one_the_rule_rebuilds():
 @pytest.mark.parametrize("tied, like", [("t̠͡ʃ", "t͡ʃ"), ("t̠͡ʃʰ", "t͡ʃʰ"), ("m͡b", "ᵐb"),
                                         ("ŋ͡m͡ɡ͡b", "ᵑɡ͡b")])
 def test_an_unlisted_tie_reads_by_the_rule(tied, like):
-    assert phonetic_distance(tied, like) < 0.05
+    assert feature_distance(tied, like) < 0.05
 
 
 def test_a_nasal_tied_to_an_affricate_prenasalizes_it():

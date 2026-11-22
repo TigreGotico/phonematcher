@@ -3,7 +3,7 @@ import math
 import unicodedata
 from typing import List, Optional, Sequence, Tuple
 
-from phonematcher.features import POST_DIACRITICS, PRE_DIACRITICS, SPELLINGS, is_vowel_phone, phonetic_distance
+from phonematcher.features import POST_DIACRITICS, PRE_DIACRITICS, SPELLINGS, feature_distance, is_vowel_phone, phonetic_distance  # noqa: F401 (deprecated path)
 from phonematcher.tone import DIACRITIC_TONES, LEVELS, NUMERALS, PHRASE_MARKS, is_tone, tone_distance
 
 #: Stress, syllable and boundary marks: they carry no segment of their own.
@@ -105,12 +105,16 @@ def substitution_cost(a: str, b: str) -> float:
     deletion plus an insertion: the square root of the tone distance of two tones, 1 for a tone and
     a phone, and the square root of the feature distance of two phones.
 
+    This is the one segment cost of the package: :func:`edit_distance`, :func:`align`,
+    :func:`ipa_distance` and the clusters of :class:`~phonematcher.clustering.PhoneticFuzzySearch`
+    all use it.
+
     The square root keeps the cost a metric and makes a near substitution dearer against a gap, as
     the pre-registered test of ``benchmarks/prereg-2.md`` selected (``docs/benchmarks.md``).
     """
     if is_tone(a) or is_tone(b):
         return math.sqrt(tone_distance(a, b)) if is_tone(a) and is_tone(b) else 1.0
-    return math.sqrt(phonetic_distance(a, b))
+    return math.sqrt(feature_distance(a, b))
 
 
 def edit_distance(a: Sequence[str], b: Sequence[str]) -> float:
