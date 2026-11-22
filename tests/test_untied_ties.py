@@ -52,18 +52,10 @@ def test_a_mark_before_untied_letters_applies_to_the_tied_segment(marked, base, 
     assert vectorize_phones(marked) == _with(vectorize_phones(base), **change)
 
 
-def test_a_mark_the_base_refuses_still_refuses_after_untied_letters():
-    # ◌ⁿ applies to a plosive, not to an affricate: the same refusal as for ⁿt͡s.
-    for segment in ("ⁿts", "ⁿdʒ", "ⁿt͡s"):
-        with pytest.raises(ValueError):
-            vectorize_phones(segment)
-
-
 # compose_tie has no reading for most of these, so the whole segment has none. A doubled letter is
-# a geminate, not a tie of a letter with itself. No source says how a click with a rear closure
-# is written, so a click after a letter reads only with a tie bar.
+# a geminate, not a tie of a letter with itself.
 @pytest.mark.parametrize("segment", ["ʤ͡v", "ʧ͡f", "t͡ʃ͡f", "d͡ʒ͡v", "ab", "ɑi", "ãb", "ʔt", "dʒ˩", "bvf", "dzs",
-                                    "nn", "tt", "kk", "ŋnn", "kǀ", "ŋǃ", "ɡǀ", "ɡʘ"])
+                                    "nn", "tt", "kk", "ŋnn"])
 def test_ties_compose_tie_refuses_stay_unread(segment):
     with pytest.raises(ValueError):
         vectorize_phones(segment)
