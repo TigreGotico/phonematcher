@@ -50,6 +50,23 @@ best.id, best.term, round(best.score, 3)   # ('carro', ('ˈkaʁu',), 0.115)
 
 A term may have several readings: `search.add_term(["ˈpojʃ", "ˈpojs"], "pois")`.
 
+## How it compares
+
+<!-- benchmark-table:start -->
+Test split, run once under `benchmarks/prereg-2.md`. Each cell is the estimate with its 95% interval. The best value in each column is in bold. A dash means that the system does not run the task. SCA ran retrieval on a sample of 500 queries per pair and ALINE on the first 100 of those, so these two retrieval cells are not on the same queries as the other rows. The shipped library is the P5 candidate, with its test numbers. The later changes of the library (one segment cost, a relative sensitivity and strict input) were made on dev only and did not change any word distance. [docs/benchmarks.md](docs/benchmarks.md) holds every result.
+
+| System | Cognates, mean AP | Alignment, PAS on common pairs | Retrieval, mean recall@1 |
+|---|---|---|---|
+| plain edit distance | 0.8234 [0.8108, 0.8363] | 0.6154 [0.5487, 0.6872] | 0.6861 [0.6763, 0.6956] |
+| PanPhon, weighted | 0.6361 [0.6151, 0.6565] | — | 0.7765 [0.7675, 0.7856] |
+| PanPhon, Hamming | 0.6462 [0.6242, 0.6663] | — | 0.7623 [0.7531, 0.7719] |
+| ALINE | 0.6130 [0.5903, 0.6359] | 0.8923 [0.8513, 0.9333] | 0.4150 [0.3742, 0.4550] |
+| CLTS sound vectors | 0.7399 [0.7224, 0.7561] | — | 0.7929 [0.7844, 0.8017] |
+| SCA | **0.8835 [0.8718, 0.8949]** | **0.8974 [0.8564, 0.9385]** | 0.7925 [0.7773, 0.8086] |
+| phonematcher, starting weights (C0) | 0.7326 [0.7140, 0.7500] | 0.7949 [0.7436, 0.8513] | 0.8082 [0.7999, 0.8168] |
+| phonematcher, shipped library (P5) | 0.8035 [0.7874, 0.8186] | 0.8513 [0.8051, 0.8974] | **0.8777 [0.8706, 0.8851]** |
+<!-- benchmark-table:end -->
+
 ## Documentation
 
 - [docs/index.md](docs/index.md): every page, in reading order.
