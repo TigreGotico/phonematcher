@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.3.1a1](https://github.com/TigreGotico/phonematcher/tree/2.3.1a1) (2026-11-22)
+
+[Full Changelog](https://github.com/TigreGotico/phonematcher/compare/2.3.0a1...2.3.1a1)
+
+**Merged pull requests:**
+
+- fix: read a prenasal mark before an affricate, and a click after its velar or uvular letter [\#92](https://github.com/TigreGotico/phonematcher/pull/92) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
+
 ## [2.3.0a1](https://github.com/TigreGotico/phonematcher/tree/2.3.0a1) (2026-11-22)
 
 [Full Changelog](https://github.com/TigreGotico/phonematcher/compare/2.2.1a2...2.3.0a1)
