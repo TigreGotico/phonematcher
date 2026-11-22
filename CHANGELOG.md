@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.2.1a1](https://github.com/TigreGotico/phonematcher/tree/2.2.1a1) (2026-11-22)
+
+[Full Changelog](https://github.com/TigreGotico/phonematcher/compare/2.2.0a2...2.2.1a1)
+
+**Merged pull requests:**
+
+- fix: check the type of public arguments, add \_\_version\_\_, document silent cases [\#86](https://github.com/TigreGotico/phonematcher/pull/86) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
+
 ## [2.2.0a2](https://github.com/TigreGotico/phonematcher/tree/2.2.0a2) (2026-11-22)
 
 [Full Changelog](https://github.com/TigreGotico/phonematcher/compare/2.2.0a1...2.2.0a2)
