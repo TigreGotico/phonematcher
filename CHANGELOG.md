@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.0.0a1](https://github.com/TigreGotico/phonematcher/tree/1.0.0a1) (2026-11-22)
+
+[Full Changelog](https://github.com/TigreGotico/phonematcher/compare/0.20.0a1...1.0.0a1)
+
+**Breaking changes:**
+
+- feat!: price a word at the costs the pre-registered test chose [\#63](https://github.com/TigreGotico/phonematcher/pull/63) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
+
 ## [0.20.0a1](https://github.com/TigreGotico/phonematcher/tree/0.20.0a1) (2026-11-22)
 
 [Full Changelog](https://github.com/TigreGotico/phonematcher/compare/0.19.0a1...0.20.0a1)
