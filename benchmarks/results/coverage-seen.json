@@ -3,7 +3,7 @@
  "system": "phonematcher,levenshtein,panphon-weighted,panphon-hamming,aline,soundvectors,sca",
  "split": "seen",
  "commit": null,
- "head": "ef809d239b24a7f8eed684ef68f0b80f0e1eb26f",
+ "head": "fe92eefa7e4af07c2c73d7c5f8c2fc52021199b1",
  "tree_dirty": true,
  "data": {
   "phoible": {
@@ -31,43 +31,43 @@
    "phoible": {
     "direct": {
      "types": 4158,
-     "types_read": 2586,
-     "types_unread": 1572,
-     "type_share": 0.6219336219336219,
+     "types_read": 3765,
+     "types_unread": 393,
+     "type_share": 0.9054834054834054,
      "tokens": 116373,
-     "tokens_read": 111746,
-     "token_share": 0.9602399181940828
+     "tokens_read": 115723,
+     "token_share": 0.994414511957241
     },
     "tie_retry": {
      "types": 4158,
-     "types_read": 2744,
-     "types_unread": 1414,
-     "type_share": 0.6599326599326599,
+     "types_read": 3765,
+     "types_unread": 393,
+     "type_share": 0.9054834054834054,
      "tokens": 116373,
-     "tokens_read": 112561,
-     "token_share": 0.9672432608938499
+     "tokens_read": 115723,
+     "token_share": 0.994414511957241
     }
    },
    "wikipron": {
     "direct": {
      "types": 3604,
-     "types_read": 2057,
-     "types_unread": 1547,
-     "type_share": 0.5707547169811321,
+     "types_read": 2594,
+     "types_unread": 1010,
+     "type_share": 0.7197558268590455,
      "tokens": 55266303,
-     "tokens_read": 54567660,
-     "token_share": 0.9873586080111058
+     "tokens_read": 54929900,
+     "token_share": 0.9939130540358381
     }
    },
    "orthography2ipa": {
     "direct": {
      "types": 2438,
-     "types_read": 1507,
-     "types_unread": 931,
-     "type_share": 0.618129614438064,
+     "types_read": 2066,
+     "types_unread": 372,
+     "type_share": 0.8474159146841673,
      "tokens": 57515,
-     "tokens_read": 55931,
-     "token_share": 0.9724593584282362
+     "tokens_read": 56784,
+     "token_share": 0.9872902721029296
     }
    }
   },
@@ -409,43 +409,43 @@
    "phoible": {
     "direct": {
      "types": 4158,
-     "types_read": 2586,
-     "types_unread": 1572,
-     "type_share": 0.6219336219336219,
+     "types_read": 3765,
+     "types_unread": 393,
+     "type_share": 0.9054834054834054,
      "tokens": 116373,
-     "tokens_read": 111746,
-     "token_share": 0.9602399181940828
+     "tokens_read": 115723,
+     "token_share": 0.994414511957241
     },
     "tie_retry": {
      "types": 4158,
-     "types_read": 2744,
-     "types_unread": 1414,
-     "type_share": 0.6599326599326599,
+     "types_read": 3765,
+     "types_unread": 393,
+     "type_share": 0.9054834054834054,
      "tokens": 116373,
-     "tokens_read": 112561,
-     "token_share": 0.9672432608938499
+     "tokens_read": 115723,
+     "token_share": 0.994414511957241
     }
    },
    "wikipron": {
     "direct": {
      "types": 3604,
-     "types_read": 2057,
-     "types_unread": 1547,
-     "type_share": 0.5707547169811321,
+     "types_read": 2594,
+     "types_unread": 1010,
+     "type_share": 0.7197558268590455,
      "tokens": 55266303,
-     "tokens_read": 54567660,
-     "token_share": 0.9873586080111058
+     "tokens_read": 54929900,
+     "token_share": 0.9939130540358381
     }
    },
    "orthography2ipa": {
     "direct": {
      "types": 2438,
-     "types_read": 1507,
-     "types_unread": 931,
-     "type_share": 0.618129614438064,
+     "types_read": 2066,
+     "types_unread": 372,
+     "type_share": 0.8474159146841673,
      "tokens": 57515,
-     "tokens_read": 55931,
-     "token_share": 0.9724593584282362
+     "tokens_read": 56784,
+     "token_share": 0.9872902721029296
     }
    }
   }

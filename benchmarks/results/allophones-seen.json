@@ -3,7 +3,7 @@
  "system": "phonematcher,levenshtein,panphon-weighted,panphon-hamming,aline,soundvectors,sca",
  "split": "seen",
  "commit": null,
- "head": "ef809d239b24a7f8eed684ef68f0b80f0e1eb26f",
+ "head": "fe92eefa7e4af07c2c73d7c5f8c2fc52021199b1",
  "tree_dirty": true,
  "data": {
   "phoible": {
@@ -18,9 +18,9 @@
     "all": {
      "items_in": 12716,
      "read_only": {
-      "score": 0.9393178580375938,
-      "items_out": 11973,
-      "skipped": 743
+      "score": 0.9097211567900764,
+      "items_out": 12492,
+      "skipped": 224
      },
      "common_subset": {
       "score": 0.9029492585084681,
@@ -28,7 +28,7 @@
       "skipped": 8653
      },
      "unread_at_1": {
-      "score": 0.8930665112726591,
+      "score": 0.8959003197130851,
       "items_out": 12716,
       "skipped": 0
      }
@@ -36,9 +36,9 @@
     "odd": {
      "items_in": 6011,
      "read_only": {
-      "score": 0.9358868911962371,
-      "items_out": 5657,
-      "skipped": 354
+      "score": 0.9038356646959654,
+      "items_out": 5929,
+      "skipped": 82
      },
      "common_subset": {
       "score": 0.8975876561319687,
@@ -46,7 +46,7 @@
       "skipped": 3992
      },
      "unread_at_1": {
-      "score": 0.8895750916841094,
+      "score": 0.8932738467415079,
       "items_out": 6011,
       "skipped": 0
      }
@@ -54,9 +54,9 @@
     "even": {
      "items_in": 6705,
      "read_only": {
-      "score": 0.9423908440131407,
-      "items_out": 6316,
-      "skipped": 389
+      "score": 0.9150380976137826,
+      "items_out": 6563,
+      "skipped": 142
      },
      "common_subset": {
       "score": 0.9082452835564879,
@@ -64,7 +64,7 @@
       "skipped": 4661
      },
      "unread_at_1": {
-      "score": 0.896196552010433,
+      "score": 0.8982549400012507,
       "items_out": 6705,
       "skipped": 0
      }
@@ -74,9 +74,9 @@
     "all": {
      "items_in": 12716,
      "read_only": {
-      "score": 0.9393400319024177,
-      "items_out": 11991,
-      "skipped": 725
+      "score": 0.9097211567900764,
+      "items_out": 12492,
+      "skipped": 224
      },
      "common_subset": {
       "score": 0.9029970079507764,
@@ -84,7 +84,7 @@
       "skipped": 8651
      },
      "unread_at_1": {
-      "score": 0.8936957776593867,
+      "score": 0.8959003197130851,
       "items_out": 12716,
       "skipped": 0
      }
@@ -92,9 +92,9 @@
     "odd": {
      "items_in": 6011,
      "read_only": {
-      "score": 0.9359332289838356,
-      "items_out": 5674,
-      "skipped": 337
+      "score": 0.9038356646959654,
+      "items_out": 5929,
+      "skipped": 82
      },
      "common_subset": {
       "score": 0.8975876561319687,
@@ -102,7 +102,7 @@
       "skipped": 3992
      },
      "unread_at_1": {
-      "score": 0.8907431140003392,
+      "score": 0.8932738467415079,
       "items_out": 6011,
       "skipped": 0
      }
@@ -110,9 +110,9 @@
     "even": {
      "items_in": 6705,
      "read_only": {
-      "score": 0.942400060358969,
-      "items_out": 6317,
-      "skipped": 388
+      "score": 0.9150380976137826,
+      "items_out": 6563,
+      "skipped": 142
      },
      "common_subset": {
       "score": 0.908334975361418,
@@ -120,7 +120,7 @@
       "skipped": 4659
      },
      "unread_at_1": {
-      "score": 0.8963428263177812,
+      "score": 0.8982549400012507,
       "items_out": 6705,
       "skipped": 0
      }

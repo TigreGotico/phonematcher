@@ -123,25 +123,28 @@ class PhoneMatcher(System):
 
     A tone is read as the library reads it in a word: ``segments`` turns a tone numeral such as
     ``³³`` into the tone letters ``˧˧``. Those letters go to the library; ``align`` gives the
-    segments back as they came in.
+    segments back as they came in. A diphthong given as one segment, such as ``ei``, is two
+    segments to the library, so the word distance splits it with ``segments``; ``align`` cannot
+    split a gold column and leaves it unread.
     """
 
     name = "phonematcher"
 
     def __init__(self):
         from phonematcher import align, edit_distance, phonetic_distance, vectorize_phones
-        from phonematcher.distance import segments
+        from phonematcher.distance import segments, substitution_cost
         from phonematcher.tone import is_tone
 
         self._edit, self._distance, self._vectorize = edit_distance, phonetic_distance, vectorize_phones
         self._align_pairs, self._segments, self._is_tone = align, segments, is_tone
+        self._substitution = substitution_cost
 
     def _letters(self, segment: str) -> str:
         """The tone letters of a tone segment, else the segment itself."""
         parsed = self._segments(segment)
         return parsed[0] if len(parsed) == 1 and self._is_tone(parsed[0]) else segment
 
-    def reads(self, segment: str) -> bool:
+    def _reads_whole(self, segment: str) -> bool:
         if self._is_tone(self._letters(segment)):
             return True
         try:
@@ -150,11 +153,29 @@ class PhoneMatcher(System):
             return False
         return True
 
+    def _parts(self, segment: str) -> List[str]:
+        """The segment as the library reads it: itself, or the parts ``segments`` splits it into."""
+        if self._reads_whole(segment):
+            return [self._letters(segment)]
+        parts = self._segments(segment)
+        return parts if len(parts) > 1 and all(self._reads_whole(p) for p in parts) else [segment]
+
+    def reads(self, segment: str) -> bool:
+        return all(self._reads_whole(p) for p in self._parts(segment))
+
     def segment_distance(self, a: str, b: str) -> float:
-        return self._distance(self._letters(a), self._letters(b))
+        return self._substitution(self._letters(a), self._letters(b))
 
     def _word_distance(self, a: Word, b: Word, normalized: bool) -> float:
-        return per_length(self._edit([self._letters(s) for s in a], [self._letters(s) for s in b]), a, b, normalized)
+        left = [p for s in a for p in self._parts(s)]
+        right = [p for s in b for p in self._parts(s)]
+        return per_length(self._edit(left, right), left, right, normalized)
+
+    def align(self, a: List[str], b: List[str]) -> Pairs:
+        for segment in (*a, *b):
+            if not self._reads_whole(segment):
+                raise UnreadSegment(f"{self.name} cannot align {segment!r} as one column")
+        return self._align(a, b)
 
     def _align(self, a: Word, b: Word) -> Pairs:
         i = j = 0
@@ -290,6 +311,15 @@ class Aline(System):
         return downey(self.similarity(a, b), self.similarity(a, a), self.similarity(b, b), normalized)
 
     def _align(self, a: Word, b: Word) -> Pairs:
+        """The alignment of the mapped segments, with the segments given back as they came in."""
+        i = j = 0
+        pairs: Pairs = []
+        for left, right in self._align_mapped([self.INPUT.get(s, s) for s in a], [self.INPUT.get(s, s) for s in b]):
+            pairs.append((a[i] if left is not None else None, b[j] if right is not None else None))
+            i, j = i + (left is not None), j + (right is not None)
+        return pairs
+
+    def _align_mapped(self, a: Word, b: Word) -> Pairs:
         """The first local alignment of ``aline.align``, made global. ALINE leaves the ends of a
         word outside the aligned region unpaired. The segments before the region are paired off
         from its start backwards, and those after it from its end onwards. A word with more
