@@ -209,3 +209,15 @@ def test_no_word_distance_moves_without_this_pin_and_the_readme_caption_changing
     words = ["".join(rng.choice(letters) for _ in range(rng.randint(1, 8))) for _ in range(2000)]
     digest = hashlib.sha256("\n".join(f"{a} {b} {ipa_distance(a, b):.12f}" for a, b in zip(words[::2], words[1::2])).encode("utf8")).hexdigest()
     assert digest == "332c4f15a4fd50e616f8d4ae565b61b968859f6132c9016bb29fba6002d0058b"
+
+
+def test_each_ablation_table_names_its_cost_rule():
+    dev = render.ablations_section({"systems": ["phonematcher", "pm-p5-uniform"], "tasks": {}})
+    old = render.ablations_section({"systems": ["phonematcher", "pm-uniform"], "tasks": {}})
+    seen = render.ablations_section(committed("ablations-seen.json"))
+    assert dev[0].startswith("Cost rule: the shipped P5 costs, gap 0.5") and "square root" in dev[0]
+    assert old[0].startswith("Cost rule: the C0 costs, gap 1 and linear")
+    assert seen[0].startswith("Cost rule: none matters here")
+    committed_dev = committed("ablations-dev.json")
+    assert all(name == "phonematcher" or name.startswith("pm-p5-") for name in committed_dev["systems"])
+    assert render.ablations_section(committed_dev)[0] == render.P5_NOTE

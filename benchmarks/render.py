@@ -34,8 +34,17 @@ SPLIT_TITLES = {
 SPLIT_TEXT = {
     "seen": "These data were inspected while the weights were fitted. The scores are descriptions, not tests.",
     "dev": "The development split holds the items that `benchmarks/split.py` assigns to dev. Weights, indel costs and sensitivities were chosen on it.",
-    "test": "The test split ran once, from a clean tree, under the pre-registration in `benchmarks/prereg-2.md`.",
+    "test": "The test split ran once, from a clean tree, under the pre-registration in `benchmarks/prereg-2.md`. "
+    "The rows `phonematcher` and `pm-` followed by a variant name (`pm-panphon22`, `pm-no-height`, `pm-flat-diacritics`, `pm-uniform`, `pm-indel-0.5`, `pm-indel-1.5`) use the C0 costs: gap 1 and linear substitutions. "
+    "The candidate rows `pm-C1` to `pm-P5` carry their own costs, and `pm-P5` is the shipped library.",
 }
+C0_NOTE = ("Cost rule: the C0 costs, gap 1 and linear substitutions. The rows are compared with each other, not with the shipped library, "
+           "which prices a word at the P5 costs.")
+P5_NOTE = ("Cost rule: the shipped P5 costs, gap 0.5 and substitutions at the square root of the feature distance. "
+           "`phonematcher` is the shipped library, and each `pm-p5-` row changes one thing in it. "
+           "`pm-p5-indel-0.5` is the shipped costs again and serves as a control.")
+SEEN_NOTE = ("Cost rule: none matters here. Each score ranks pairs of segments by their segment distance, and the square root keeps that order, "
+             "so the C0 costs and the P5 costs give the same rows.")
 TASK_ORDER = ["coverage", "allophones", "confusions", "tone", "cognates", "cognates-toneless", "alignment", "retrieval", "ablations"]
 
 
@@ -131,7 +140,10 @@ def retrieval_table(payload: dict) -> List[str]:
 
 
 def ablations_section(payload: dict) -> List[str]:
-    out = []
+    if "control" in payload:
+        out = [SEEN_NOTE, ""]
+    else:
+        out = [P5_NOTE if any(name.startswith("pm-p5-") for name in payload["systems"]) else C0_NOTE, ""]
     for task in TASK_ORDER:
         if task in payload["tasks"] and task != "ablations":
             out += [f"#### {task}", "", *TASKS[task](payload["tasks"][task])]
