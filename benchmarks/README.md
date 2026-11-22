@@ -96,6 +96,29 @@ python benchmarks/run.py --task cognates --system all --split dev
 
 The run scores all systems together and writes `benchmarks/results/cognates-dev.json`. Each system gets two scores per data set, once on the words that every system reads and once on all words with unread pairs at distance 1. The first score is the average precision of the negative normalized distance for "same cognate set", over all word pairs of one concept. The second is the B-cubed F-score of a flat UPGMA cut at the threshold that is best on average over the six training sets. The B-cubed score uses LingPy's counting, as the paper's figures do, and the `per_word` entry holds the score with every word counted. A `control` entry holds the levenshtein system under LingPy's B-cubed counting next to the paper's Table 6. The task `cognates-toneless` runs the same with tone tokens removed from every word.
 
+## Ablations
+
+`benchmarks/variants.py` builds six variants of phonematcher without changing the package. Each is a system, and each reads the segments phonematcher reads and keeps its tone distance.
+
+| Name | What changes |
+|---|---|
+| `pm-panphon22` | PanPhon's 22 features, each with the weight that PanPhon applies |
+| `pm-no-height` | the height steps `h1` to `h6` are left out |
+| `pm-flat-diacritics` | a mark applies its content only; no mark moves a vowel along a scale |
+| `pm-uniform` | all 36 features at weight 1 |
+| `pm-indel-0.5`, `pm-indel-1.5` | deletion and insertion cost 0.5 and 1.5 |
+
+`--system all` does not run them. `--system variants` runs phonematcher and the six variants.
+
+```bash
+python benchmarks/run.py --task ablations --system variants --split seen
+python benchmarks/run.py --task ablations --system variants --split dev
+```
+
+The `seen` run covers coverage, allophones and confusions, and the control. The `dev` run covers cognates, toneless cognates, alignment and retrieval. Retrieval scores every system by brute force on the fixed sample of 500 queries per language pair, with no fuzzy search. The runs write `benchmarks/results/ablations-seen.json` and `ablations-dev.json`. Retrieval keeps its records in the cache, so give it a cache of its own: the TSV files of `C6` may be links to another cache.
+
+The control compares `pm-panphon22` with `panphon-weighted`: `python benchmarks/variants.py control`. It prints the pair counts for every PHOIBLE segment that both systems read. A variant is a diagnostic and not a candidate.
+
 ## The splits
 
 `split.is_test(key)` is true for one key in five, by the SHA-1 of the key. Each task names its key.

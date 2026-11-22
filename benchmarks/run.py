@@ -15,7 +15,8 @@ from typing import Callable, Dict, List, Optional
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from systems import NAMES, System, UnreadSegment, build  # noqa: E402
-from tasks import alignment, allophones, cognates, cognates_toneless, confusions, coverage, retrieval, tone  # noqa: E402
+from variants import NAMES as VARIANTS  # noqa: E402
+from tasks import ablations, alignment, allophones, cognates, cognates_toneless, confusions, coverage, retrieval, tone  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent
 DEFAULT_CACHE = Path.home() / ".cache" / "phonematcher-bench"
@@ -67,6 +68,7 @@ SUITE_TASKS = {
     "cognates-toneless": cognates_toneless,
     "retrieval": retrieval,
     "tone": tone,
+    "ablations": ablations,
 }
 RESULTS = ROOT / "benchmarks" / "results"
 
@@ -102,7 +104,7 @@ def run_suite(module, args, names: List[str], commit: Optional[str], repo: Path)
 def main(argv: Optional[List[str]] = None, repo: Path = ROOT) -> int:
     parser = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     parser.add_argument("--task", required=True, choices=sorted([*TASKS, *SUITE_TASKS]))
-    parser.add_argument("--system", required=True, help=f"one of {', '.join(NAMES)}, or all")
+    parser.add_argument("--system", required=True, help=f"one of {', '.join([*NAMES, *VARIANTS])}, all, or variants (phonematcher and the ablation variants)")
     parser.add_argument("--split", default="dev", choices=SPLITS)
     parser.add_argument("--cache", type=Path, default=DEFAULT_CACHE)
     parser.add_argument("--out", type=Path, help="result file of a suite task; default benchmarks/results/<task>-<split>.json")
@@ -118,7 +120,7 @@ def main(argv: Optional[List[str]] = None, repo: Path = ROOT) -> int:
         commit = commit_of_clean_tree(repo)
 
     if args.task in SUITE_TASKS:
-        names = NAMES if args.system == "all" else [args.system]
+        names = {"all": NAMES, "variants": ["phonematcher", *VARIANTS]}.get(args.system, [args.system])
         return run_suite(SUITE_TASKS[args.task], args, names, commit, repo)
     task, splits = TASKS[args.task]
     if args.split not in splits:
@@ -131,7 +133,7 @@ def main(argv: Optional[List[str]] = None, repo: Path = ROOT) -> int:
         write_result(out, payload, args.task, ",".join(names), args.split, commit or head)
         print(f"wrote {out}")
         return 0
-    names = NAMES if args.system == "all" else [args.system]
+    names = {"all": NAMES, "variants": ["phonematcher", *VARIANTS]}.get(args.system, [args.system])
     failed = 0
     for name in names:
         try:

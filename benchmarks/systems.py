@@ -27,25 +27,25 @@ class UnreadSegment(ValueError):
     """A word holds a segment that the system cannot read."""
 
 
-def edit_distance(a: Word, b: Word, substitution: Callable[[str, str], float]) -> float:
-    """Edit distance with the given substitution cost and unit deletion and insertion."""
-    row = [float(j) for j in range(len(b) + 1)]
+def edit_distance(a: Word, b: Word, substitution: Callable[[str, str], float], indel: float = 1.0) -> float:
+    """Edit distance with the given substitution cost and one cost for deletion and insertion."""
+    row = [j * indel for j in range(len(b) + 1)]
     for i, x in enumerate(a, start=1):
-        prev, row[0] = row[0], float(i)
+        prev, row[0] = row[0], i * indel
         for j, y in enumerate(b, start=1):
-            prev, row[j] = row[j], min(row[j] + 1.0, row[j - 1] + 1.0, prev + substitution(x, y))
+            prev, row[j] = row[j], min(row[j] + indel, row[j - 1] + indel, prev + substitution(x, y))
     return row[-1]
 
 
-def edit_alignment(a: Word, b: Word, substitution: Callable[[str, str], float]) -> Pairs:
+def edit_alignment(a: Word, b: Word, substitution: Callable[[str, str], float], indel: float = 1.0) -> Pairs:
     """One least-cost alignment under :func:`edit_distance`'s costs. The traceback starts at the
     end and prefers a substitution, then a gap in *b*, then a gap in *a*."""
     n, m = len(a), len(b)
-    cost = [[float(i + j) if not i * j else 0.0 for j in range(m + 1)] for i in range(n + 1)]
+    cost = [[(i + j) * indel if not i * j else 0.0 for j in range(m + 1)] for i in range(n + 1)]
     for i in range(1, n + 1):
         for j in range(1, m + 1):
             cost[i][j] = min(
-                cost[i - 1][j] + 1.0, cost[i][j - 1] + 1.0, cost[i - 1][j - 1] + substitution(a[i - 1], b[j - 1])
+                cost[i - 1][j] + indel, cost[i][j - 1] + indel, cost[i - 1][j - 1] + substitution(a[i - 1], b[j - 1])
             )
     pairs: Pairs = []
     i, j = n, m
@@ -53,7 +53,7 @@ def edit_alignment(a: Word, b: Word, substitution: Callable[[str, str], float]) 
         if i and j and abs(cost[i][j] - cost[i - 1][j - 1] - substitution(a[i - 1], b[j - 1])) < 1e-9:
             pairs.append((a[i - 1], b[j - 1]))
             i, j = i - 1, j - 1
-        elif i and abs(cost[i][j] - cost[i - 1][j] - 1.0) < 1e-9:
+        elif i and abs(cost[i][j] - cost[i - 1][j] - indel) < 1e-9:
             pairs.append((a[i - 1], None))
             i -= 1
         else:
@@ -457,6 +457,10 @@ def build(name: str, cache: Path) -> System:
         "soundvectors": lambda: SoundVectors(cache),
         "sca": Sca,
     }
+    if name.startswith("pm-"):
+        from variants import build_variant
+
+        return build_variant(name)
     if name not in factories:
         raise KeyError(f"unknown system {name!r}; known: {', '.join(NAMES)}")
     return factories[name]()
