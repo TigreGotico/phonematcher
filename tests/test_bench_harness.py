@@ -127,6 +127,8 @@ def test_selfcheck_prints_one_line_for_the_system(name, capsys):
 
 
 def test_a_system_whose_package_is_missing_is_an_error(monkeypatch, capsys):
+    for name in [m for m in sys.modules if m == "lingpy" or m.startswith("lingpy.")]:
+        monkeypatch.setitem(sys.modules, name, None)
     monkeypatch.setitem(sys.modules, "lingpy", None)
     assert run.main(["--task", "selfcheck", "--system", "sca"]) == 1
     assert "error: system sca" in capsys.readouterr().err
