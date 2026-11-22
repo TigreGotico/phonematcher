@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.2.0a1](https://github.com/TigreGotico/phonematcher/tree/2.2.0a1) (2026-11-22)
+
+[Full Changelog](https://github.com/TigreGotico/phonematcher/compare/2.1.0a1...2.2.0a1)
+
+**Merged pull requests:**
+
+- feat: freeze the API list and export the stable names from the package root [\#83](https://github.com/TigreGotico/phonematcher/pull/83) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
+
 ## [2.1.0a1](https://github.com/TigreGotico/phonematcher/tree/2.1.0a1) (2026-11-22)
 
 [Full Changelog](https://github.com/TigreGotico/phonematcher/compare/2.0.0a1...2.1.0a1)
