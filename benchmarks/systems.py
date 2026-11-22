@@ -101,6 +101,14 @@ class System:
         except UnreadSegment:
             return 1.0
 
+    def segment_distance_or_one(self, a: str, b: str) -> float:
+        """The segment distance: 0.0 for equal segments, 1.0 when either segment is unread."""
+        if a == b:
+            return 0.0
+        if not (self.reads(a) and self.reads(b)):
+            return 1.0
+        return self.segment_distance(a, b)
+
 
 def per_length(raw: float, a: Word, b: Word, normalized: bool) -> float:
     """Divide by the length of the longer word, as the normalized distance of every edit system."""
@@ -236,11 +244,16 @@ class Aline(System):
 
     ``aline.align`` returns only the best local alignments, with no score. The score of the first
     one is summed from the module's own ``sigma_skip``, ``sigma_sub`` and ``sigma_exp``. A segment
-    is read when it is a key of ``aline.feature_matrix``, which holds ASCII ``g`` and no ``ɡ``.
-    Words go in as lists, so an expansion pair has a list as one member and a segment never does.
+    is read when it is a key of ``aline.feature_matrix``.
+
+    The symbol set of ``feature_matrix`` holds ASCII ``g`` and not ``ɡ`` (U+0261), the IPA letter
+    that PHOIBLE, WikiPron and the confusion sets write. ``INPUT`` maps ``ɡ`` to ``g`` before any
+    lookup. It maps nothing else. Words go in as lists, so an expansion pair has a list as one
+    member and a segment never does.
     """
 
     name = "aline"
+    INPUT = {"ɡ": "g"}
 
     def __init__(self):
         from nltk.metrics import aline
@@ -248,10 +261,10 @@ class Aline(System):
         self._aline = aline
 
     def reads(self, segment: str) -> bool:
-        return segment in self._aline.feature_matrix
+        return self.INPUT.get(segment, segment) in self._aline.feature_matrix
 
     def similarity(self, a: Word, b: Word) -> float:
-        a, b = list(a), list(b)
+        a, b = [self.INPUT.get(s, s) for s in a], [self.INPUT.get(s, s) for s in b]
         found = self._aline.align(a, b)
         if not found:
             return 0.0
