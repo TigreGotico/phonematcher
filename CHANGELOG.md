@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.3.2a1](https://github.com/TigreGotico/phonematcher/tree/2.3.2a1) (2026-11-22)
+
+[Full Changelog](https://github.com/TigreGotico/phonematcher/compare/2.3.1a1...2.3.2a1)
+
+**Merged pull requests:**
+
+- fix: ablate phonematcher at the shipped costs, and say which cost rule each table uses [\#96](https://github.com/TigreGotico/phonematcher/pull/96) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
+
 ## [2.3.1a1](https://github.com/TigreGotico/phonematcher/tree/2.3.1a1) (2026-11-22)
 
 [Full Changelog](https://github.com/TigreGotico/phonematcher/compare/2.3.0a1...2.3.1a1)
