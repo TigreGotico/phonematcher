@@ -1,5 +1,21 @@
 # Changelog
 
+## [0.9.0a1](https://github.com/TigreGotico/phonematcher/tree/0.9.0a1) (2026-11-21)
+
+[Full Changelog](https://github.com/TigreGotico/phonematcher/compare/0.8.0a1...0.9.0a1)
+
+**Merged pull requests:**
+
+- feat: read a nasalized voiceless vowel and a syllabic fricative, and list the marks a base refuses [\#33](https://github.com/TigreGotico/phonematcher/pull/33) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
+
+## [0.8.0a1](https://github.com/TigreGotico/phonematcher/tree/0.8.0a1) (2026-11-21)
+
+[Full Changelog](https://github.com/TigreGotico/phonematcher/compare/0.7.0a1...0.8.0a1)
+
+**Merged pull requests:**
+
+- feat: split a tie between two vowels so a diphthong costs two segments [\#32](https://github.com/TigreGotico/phonematcher/pull/32) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
+
 ## [0.7.0a1](https://github.com/TigreGotico/phonematcher/tree/0.7.0a1) (2026-11-21)
 
 [Full Changelog](https://github.com/TigreGotico/phonematcher/compare/0.6.0a1...0.7.0a1)
