@@ -19,7 +19,7 @@ PanPhon gives a vowel two height features, `hi` and `lo`, so it knows three heig
 
 The alternatives are `hi` and `lo` alone, or one numeric height. Steps keep every feature a plus, a minus or a zero, as PanPhon does. The source is the IPA chart, which fixes the rows (`docs/features.md`, "Vowels").
 
-The evidence is thin. On the Hillenbrand vowel confusions, the weighted table scores 0.5610. The same table with zero weight on the steps scores 0.5340. The PanPhon 22 features score 0.4153. The intervals of the three overlap, and the data was seen during the work. On the six cognate test sets, under the C0 word costs (gap 1, linear substitutions), the variant with zero weight on the steps differs from the shipped table by -0.0002, with an interval from -0.0013 to +0.0008. The shipped word costs were not ablated. The steps are kept because the chart has seven rows, not because a test showed that they help cognate detection.
+The evidence is thin. On the Hillenbrand vowel confusions, the weighted table scores 0.5610. The same table with zero weight on the steps scores 0.5340. The 22 features of PanPhon 0.22.2 score 0.4153. The intervals of the three overlap, and the data was seen during the work. On the six cognate test sets, under the C0 word costs (gap 1, linear substitutions), the variant with zero weight on the steps differs from the shipped table by -0.0002, with an interval from -0.0013 to +0.0008. The shipped word costs were not ablated. The steps are kept because the chart has seven rows, not because a test showed that they help cognate detection.
 
 The table keeps both codings, a trade-off that was measured. A form with one encoding sets `hi` and `lo` to 0 on every vowel, so the steps alone carry height and the distance stays a weighted L1 over fixed vectors. It is a metric. On the development split it changed the paired cognate AP by -0.0006, with an interval from -0.0012 to -0.0001, and the alignment PAS by +0.0039, with an interval from +0.0011 to +0.0066. On the Hillenbrand confusions it lowered the Spearman correlation from 0.5610 to 0.5474. The rule for changes made after the test run refuses a change when the interval of any development task lies wholly below 0, and the cognate interval does.
 
@@ -47,7 +47,7 @@ The rules change no score that the benchmarks measure. Under the C0 word costs (
 
 ### A diphthong is two segments
 
-A diphthong written whole, as `ai`, has no vector. `segments` splits `a͡i` into `a` and `i`. The alternatives are one segment with a start vector and an end vector, one segment compared by its nucleus only, and one segment aligned against two. The table takes two segments, because the word distance needs no new rule: a diphthong costs as two segments, and `a͡i` against `a` costs one deletion. This is a choice of this table, and no source is cited for it.
+A diphthong written whole, as `ai`, has no vector. `segments` splits `a͡i` into `a` and `i`. The alternatives are one segment with a start vector and an end vector, one segment compared by its nucleus only, and one segment aligned against two. The table takes two segments, because the word distance needs no new rule: a diphthong costs as two segments, and `a͡i` against `a` costs one deletion. The choice follows Nerbonne and Heeringa (1997, p. 11), who found that "two-phone representations of diphthongs provide a more satisfactory base" for dialect distance. The sources do not agree. Heeringa (2004, p. 188) found that "it seems to make no difference whether diphthongs are represented as two segments or as one segment". Rubehn et al. (2024, p. 209) take the other choice: "feature vectors for diphthongs are based on their initial segments", so a diphthong is one segment.
 
 ### Tone is its own segment
 
@@ -120,7 +120,7 @@ This change came after the test run, and it was measured on the development spli
 
 ### The feature weights stay
 
-The weights of PanPhon's 22 features are PanPhon's. Fits of the weights to perceptual confusions did not transfer from one data set to the next, and the candidates C1 to C3 that changed the weights did not beat C0. No change to the feature weights passed a clean test; the test that changed the word costs kept the weights. The weights stay.
+The weights of the 22 features in the data of PanPhon 0.22.2 are PanPhon's. The PanPhon paper counts 21 features (Mortensen et al. 2016, p. 3477); the 22 are the columns of the weight file of version 0.22.2. Fits of the weights to perceptual confusions did not transfer from one data set to the next, and the candidates C1 to C3 that changed the weights did not beat C0. No change to the feature weights passed a clean test; the test that changed the word costs kept the weights. The weights stay.
 
 ## What does not read
 
