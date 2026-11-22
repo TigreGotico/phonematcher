@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.0.1a1](https://github.com/TigreGotico/phonematcher/tree/1.0.1a1) (2026-11-22)
+
+[Full Changelog](https://github.com/TigreGotico/phonematcher/compare/1.0.0a4...1.0.1a1)
+
+**Merged pull requests:**
+
+- fix: make the phone clusters independent of the hash seed [\#76](https://github.com/TigreGotico/phonematcher/pull/76) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
+
 ## [1.0.0a4](https://github.com/TigreGotico/phonematcher/tree/1.0.0a4) (2026-11-22)
 
 [Full Changelog](https://github.com/TigreGotico/phonematcher/compare/1.0.0a3...1.0.0a4)
