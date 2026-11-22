@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.3.0a1](https://github.com/TigreGotico/phonematcher/tree/2.3.0a1) (2026-11-22)
+
+[Full Changelog](https://github.com/TigreGotico/phonematcher/compare/2.2.1a2...2.3.0a1)
+
+**Merged pull requests:**
+
+- feat: export is\_vowel\_phone as stable API [\#91](https://github.com/TigreGotico/phonematcher/pull/91) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
+
 ## [2.2.1a2](https://github.com/TigreGotico/phonematcher/tree/2.2.1a2) (2026-11-22)
 
 [Full Changelog](https://github.com/TigreGotico/phonematcher/compare/2.2.1a1...2.2.1a2)
