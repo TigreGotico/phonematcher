@@ -15,7 +15,7 @@ from typing import Callable, Dict, List, Optional
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from systems import NAMES, System, UnreadSegment, build  # noqa: E402
-from tasks import alignment, allophones, confusions, coverage  # noqa: E402
+from tasks import alignment, allophones, cognates, cognates_toneless, confusions, coverage  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent
 DEFAULT_CACHE = Path.home() / ".cache" / "phonematcher-bench"
@@ -59,7 +59,13 @@ WHOLE_TASKS: Dict[str, tuple] = {"alignment": alignment.SYSTEMS}
 
 #: task name -> module with ``SPLITS``, ``run(systems, split, cache)`` and ``lines(payload)``.
 #: These tasks run every requested system together, because the common subset needs all of them.
-SUITE_TASKS = {"coverage": coverage, "allophones": allophones, "confusions": confusions}
+SUITE_TASKS = {
+    "coverage": coverage,
+    "allophones": allophones,
+    "confusions": confusions,
+    "cognates": cognates,
+    "cognates-toneless": cognates_toneless,
+}
 RESULTS = ROOT / "benchmarks" / "results"
 
 
