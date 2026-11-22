@@ -127,7 +127,7 @@ def vectorize_phones(segment: str) -> Vector:
         for marker in seg[:start]:
             vec = _apply_if(_DIACRITICS[PRE_DIACRITICS[marker]], vec, segment)
         return vec
-    if _TIES[0] not in untied:
+    if seg and _TIES[0] not in untied:
         clusters: List[str] = []  # a base letter and the combining marks after it
         for c in seg:
             if unicodedata.category(c) in _LETTER_CATEGORIES or not clusters:
