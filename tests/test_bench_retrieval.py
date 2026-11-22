@@ -199,8 +199,8 @@ def test_a_diphthong_given_as_one_segment_is_two_segments_for_phonematcher():
     phonematcher = systems.build("phonematcher", Path("unused"))
     pair = pair_of({"tai": [("t", "aɪ")], "ta": [("t", "a")]}, [("tai", ("t", "a", "ɪ"))])
     engine = retrieval.Batched(phonematcher, pair)
-    # index order: ta, tai. t a ɪ against t a ɪ (from t aɪ) is 0; against t a it is one insertion over 3.
-    assert engine.word_distances(("t", "a", "ɪ")) == pytest.approx([1 / 3, 0.0])
+    # index order: ta, tai. t a ɪ against t a ɪ (from t aɪ) is 0; against t a it is one insertion, 0.5 over 3.
+    assert engine.word_distances(("t", "a", "ɪ")) == pytest.approx([1 / 6, 0.0])
     assert engine.check(pair) > 0
 
 

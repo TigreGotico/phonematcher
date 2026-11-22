@@ -100,6 +100,21 @@ def test_p5_takes_the_square_root_of_every_substitution_and_halves_the_gap():
     assert p5.word_distance(["p", "a"], ["a"]) == 0.5
 
 
+def test_the_library_is_the_winning_candidate():
+    from phonematcher import ipa_distance, segments
+
+    p5 = variants.build_variant("pm-P5")
+    # p and b differ by 0.125 of the 9.5 weights, so the substitution costs sqrt(0.125 / 9.5);
+    # the missing "a" costs 0.5 over a longer word of 2 segments.
+    assert ipa_distance("pa", "ba") == pytest.approx(math.sqrt(0.125 / 9.5))
+    assert ipa_distance("pa", "a") == 0.5
+    assert ipa_distance("pa", "a", normalized=True) == 0.25
+    for a, b in [("pa", "ba"), ("pa", "a"), ("pat", "bata"), ("ma˥", "ma˦")]:
+        words = [list(segments(x)) for x in (a, b)]
+        assert ipa_distance(a, b) == pytest.approx(p5.word_distance(*words), abs=1e-12)
+        assert ipa_distance(a, b, normalized=True) == pytest.approx(p5.word_distance(*words, normalized=True), abs=1e-12)
+
+
 def test_p5_takes_the_square_root_of_a_tone_substitution_too():
     from phonematcher.tone import tone_distance
 

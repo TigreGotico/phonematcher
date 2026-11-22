@@ -3,7 +3,7 @@
  "system": "phonematcher,pm-panphon22,pm-no-height,pm-flat-diacritics,pm-uniform,pm-indel-0.5,pm-indel-1.5",
  "split": "seen",
  "commit": null,
- "head": "0584df184386afda3d139bb9b13bcca632b05777",
+ "head": "fe3944f052dd84bbf8d44333a3242ea7dbe091fa",
  "tree_dirty": true,
  "systems": [
   "phonematcher",
@@ -29,7 +29,7 @@
      "files": 543
     },
     "orthography2ipa": {
-     "version": "7.124.36a2",
+     "version": "7.124.45a2",
      "specs": 7404,
      "dropped": [
       "ˈ",
@@ -72,13 +72,13 @@
      },
      "orthography2ipa": {
       "direct": {
-       "types": 2427,
-       "types_read": 2068,
-       "types_unread": 359,
-       "type_share": 0.8520807581376184,
-       "tokens": 57540,
-       "tokens_read": 56827,
-       "token_share": 0.9876086200903719
+       "types": 2569,
+       "types_read": 2168,
+       "types_unread": 401,
+       "type_share": 0.843908135461269,
+       "tokens": 58487,
+       "tokens_read": 57836,
+       "token_share": 0.9888693213876588
       }
      }
     },
@@ -116,13 +116,13 @@
      },
      "orthography2ipa": {
       "direct": {
-       "types": 2427,
-       "types_read": 2068,
-       "types_unread": 359,
-       "type_share": 0.8520807581376184,
-       "tokens": 57540,
-       "tokens_read": 56827,
-       "token_share": 0.9876086200903719
+       "types": 2569,
+       "types_read": 2168,
+       "types_unread": 401,
+       "type_share": 0.843908135461269,
+       "tokens": 58487,
+       "tokens_read": 57836,
+       "token_share": 0.9888693213876588
       }
      }
     },
@@ -160,13 +160,13 @@
      },
      "orthography2ipa": {
       "direct": {
-       "types": 2427,
-       "types_read": 2068,
-       "types_unread": 359,
-       "type_share": 0.8520807581376184,
-       "tokens": 57540,
-       "tokens_read": 56827,
-       "token_share": 0.9876086200903719
+       "types": 2569,
+       "types_read": 2168,
+       "types_unread": 401,
+       "type_share": 0.843908135461269,
+       "tokens": 58487,
+       "tokens_read": 57836,
+       "token_share": 0.9888693213876588
       }
      }
     },
@@ -204,13 +204,13 @@
      },
      "orthography2ipa": {
       "direct": {
-       "types": 2427,
-       "types_read": 2068,
-       "types_unread": 359,
-       "type_share": 0.8520807581376184,
-       "tokens": 57540,
-       "tokens_read": 56827,
-       "token_share": 0.9876086200903719
+       "types": 2569,
+       "types_read": 2168,
+       "types_unread": 401,
+       "type_share": 0.843908135461269,
+       "tokens": 58487,
+       "tokens_read": 57836,
+       "token_share": 0.9888693213876588
       }
      }
     },
@@ -248,13 +248,13 @@
      },
      "orthography2ipa": {
       "direct": {
-       "types": 2427,
-       "types_read": 2068,
-       "types_unread": 359,
-       "type_share": 0.8520807581376184,
-       "tokens": 57540,
-       "tokens_read": 56827,
-       "token_share": 0.9876086200903719
+       "types": 2569,
+       "types_read": 2168,
+       "types_unread": 401,
+       "type_share": 0.843908135461269,
+       "tokens": 58487,
+       "tokens_read": 57836,
+       "token_share": 0.9888693213876588
       }
      }
     },
@@ -292,13 +292,13 @@
      },
      "orthography2ipa": {
       "direct": {
-       "types": 2427,
-       "types_read": 2068,
-       "types_unread": 359,
-       "type_share": 0.8520807581376184,
-       "tokens": 57540,
-       "tokens_read": 56827,
-       "token_share": 0.9876086200903719
+       "types": 2569,
+       "types_read": 2168,
+       "types_unread": 401,
+       "type_share": 0.843908135461269,
+       "tokens": 58487,
+       "tokens_read": 57836,
+       "token_share": 0.9888693213876588
       }
      }
     },
@@ -336,13 +336,13 @@
      },
      "orthography2ipa": {
       "direct": {
-       "types": 2427,
-       "types_read": 2068,
-       "types_unread": 359,
-       "type_share": 0.8520807581376184,
-       "tokens": 57540,
-       "tokens_read": 56827,
-       "token_share": 0.9876086200903719
+       "types": 2569,
+       "types_read": 2168,
+       "types_unread": 401,
+       "type_share": 0.843908135461269,
+       "tokens": 58487,
+       "tokens_read": 57836,
+       "token_share": 0.9888693213876588
       }
      }
     }
@@ -366,8 +366,8 @@
     },
     "orthography2ipa": {
      "direct": {
-      "types_read_by_all": 2068,
-      "tokens_read_by_all": 56827
+      "types_read_by_all": 2168,
+      "tokens_read_by_all": 57836
      }
     }
    },
@@ -406,13 +406,13 @@
      },
      "orthography2ipa": {
       "direct": {
-       "types": 2427,
-       "types_read": 1476,
-       "types_unread": 951,
-       "type_share": 0.6081582200247219,
-       "tokens": 57540,
-       "tokens_read": 55907,
-       "token_share": 0.971619742787626
+       "types": 2569,
+       "types_read": 1576,
+       "types_unread": 993,
+       "type_share": 0.6134682755936162,
+       "tokens": 58487,
+       "tokens_read": 56916,
+       "token_share": 0.9731393301075453
       }
      }
     },
@@ -450,13 +450,13 @@
      },
      "orthography2ipa": {
       "direct": {
-       "types": 2427,
-       "types_read": 2068,
-       "types_unread": 359,
-       "type_share": 0.8520807581376184,
-       "tokens": 57540,
-       "tokens_read": 56827,
-       "token_share": 0.9876086200903719
+       "types": 2569,
+       "types_read": 2168,
+       "types_unread": 401,
+       "type_share": 0.843908135461269,
+       "tokens": 58487,
+       "tokens_read": 57836,
+       "token_share": 0.9888693213876588
       }
      }
     }
@@ -1313,8 +1313,8 @@
        },
        "pairs_out": 253,
        "distance_range": [
-        0.013157894736842105,
-        0.506578947368421
+        0.11470786693528089,
+        0.7117435966472906
        ]
       },
       "common_subset": {
@@ -1326,8 +1326,8 @@
        },
        "pairs_out": 253,
        "distance_range": [
-        0.013157894736842105,
-        0.506578947368421
+        0.11470786693528089,
+        0.7117435966472906
        ]
       }
      },
@@ -1343,8 +1343,8 @@
        },
        "pairs_out": 120,
        "distance_range": [
-        0.013157894736842105,
-        0.29605263157894735
+        0.11470786693528089,
+        0.5441071875825088
        ]
       },
       "common_subset": {
@@ -1356,8 +1356,8 @@
        },
        "pairs_out": 120,
        "distance_range": [
-        0.013157894736842105,
-        0.29605263157894735
+        0.11470786693528089,
+        0.5441071875825088
        ]
       }
      },
@@ -1373,8 +1373,8 @@
        },
        "pairs_out": 66,
        "distance_range": [
-        0.013157894736842105,
-        0.2236842105263158
+        0.11470786693528089,
+        0.47295265146345866
        ]
       },
       "common_subset": {
@@ -1386,8 +1386,8 @@
        },
        "pairs_out": 66,
        "distance_range": [
-        0.013157894736842105,
-        0.2236842105263158
+        0.11470786693528089,
+        0.47295265146345866
        ]
       }
      },
@@ -1404,7 +1404,7 @@
        "pairs_out": 465,
        "distance_range": [
         0.0,
-        0.625
+        0.7905694150420949
        ]
       },
       "common_subset": {
@@ -1417,7 +1417,7 @@
        "pairs_out": 465,
        "distance_range": [
         0.0,
-        0.625
+        0.7905694150420949
        ]
       }
      }

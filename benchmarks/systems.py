@@ -119,7 +119,7 @@ def per_length(raw: float, a: Word, b: Word, normalized: bool) -> float:
 
 
 class PhoneMatcher(System):
-    """This package: feature-weighted substitutions, unit deletion and insertion.
+    """This package: substitutions at the square root of the feature distance, deletion and insertion at 0.5.
 
     A tone is read as the library reads it in a word: ``segments`` turns a tone numeral such as
     ``³³`` into the tone letters ``˧˧``. Those letters go to the library; ``align`` gives the

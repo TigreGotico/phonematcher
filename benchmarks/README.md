@@ -21,7 +21,7 @@ python benchmarks/run.py --task selfcheck --system all
 ```
 
 ```text
-phonematcher: reads(p)=True reads(snowman)=False word(pa,pa)=0 word(pa,ba)=0.0132 normalized=0.0066
+phonematcher: reads(p)=True reads(snowman)=False word(pa,pa)=0 word(pa,ba)=0.1147 normalized=0.0574
 levenshtein: reads(p)=True reads(snowman)=True word(pa,pa)=0 word(pa,ba)=1.0000 normalized=0.5000
 panphon-weighted: reads(p)=True reads(snowman)=False word(pa,pa)=0 word(pa,ba)=0.2500 normalized=0.1250
 panphon-hamming: reads(p)=True reads(snowman)=False word(pa,pa)=0 word(pa,ba)=0.0417 normalized=0.0208
@@ -129,7 +129,7 @@ The `dev` and `seen` splits run freely. The `test` split runs only with `--final
 
 `benchmarks/prereg-2.md` fixes the systems, metrics, candidates and decision rules of the single test run. Its sha256 is a constant in `benchmarks/final.py`. A run reads the page, compares its hash with the constant and stops on a difference.
 
-`benchmarks/variants.py` builds the five weight candidates as systems: `pm-C1`, `pm-C2`, `pm-C3`, `pm-P4` and `pm-P5`. The C0 candidate is the `phonematcher` system. `k1(system)` applies rule 1. `c3_weight()` finds the weight of `syl`, `son` and `cons` in C3 by bisection of [1, 10] to 0.01.
+`benchmarks/variants.py` builds the five weight candidates as systems: `pm-C1`, `pm-C2`, `pm-C3`, `pm-P4` and `pm-P5`. The `phonematcher` system is P5, the winner of the pre-registered test, so `pm-P5` and `phonematcher` give the same distances. The C0 candidate, the table with gap cost 1 and linear substitutions, is the library before that change; no variant rebuilds it. `k1(system)` applies rule 1. `c3_weight()` finds the weight of `syl`, `son` and `cons` in C3 by bisection of [1, 10] to 0.01.
 
 ```bash
 python benchmarks/run.py --task cognates  --system all --split test --final

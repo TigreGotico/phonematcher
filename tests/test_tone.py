@@ -1,5 +1,7 @@
 """Tone: the IPA chart's tone letters and tone diacritics (International Phonetic Association,
 The IPA Chart, footer "IPA Chart revised to 2015/2005", "Tones and word accents")."""
+import math
+
 import pytest
 
 from phonematcher import ipa_distance, segments
@@ -48,9 +50,11 @@ def test_tone_distance_follows_the_shape_of_the_contour():
 
 
 def test_a_tone_substitution_costs_one_quarter_per_level_step():
-    assert ipa_distance("ma˥", "ma˦") == pytest.approx(0.25)
-    assert ipa_distance("ma˥", "ma˩") == pytest.approx(1.0)
-    assert ipa_distance("ma˥", "ma") == 1.0
+    # The tone distance is 1/4 per level step; the substitution costs its square root.
+    assert ipa_distance("ma˥", "ma˦") == pytest.approx(0.5)  # sqrt(1/4)
+    assert ipa_distance("ma˥", "ma˩") == pytest.approx(1.0)  # sqrt(4/4)
+    assert ipa_distance("ma˥", "ma˧") == pytest.approx(math.sqrt(0.5))  # sqrt(2/4)
+    assert ipa_distance("ma˥", "ma") == 0.5  # one deletion
 
 
 def test_tone_letters_are_not_listed_as_phones():
