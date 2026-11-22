@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.14.0a1](https://github.com/TigreGotico/phonematcher/tree/0.14.0a1) (2026-11-22)
+
+[Full Changelog](https://github.com/TigreGotico/phonematcher/compare/0.13.1a1...0.14.0a1)
+
+**Merged pull requests:**
+
+- feat: add the cognate detection benchmark \(C4\) [\#49](https://github.com/TigreGotico/phonematcher/pull/49) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
+
 ## [0.13.1a1](https://github.com/TigreGotico/phonematcher/tree/0.13.1a1) (2026-11-22)
 
 [Full Changelog](https://github.com/TigreGotico/phonematcher/compare/0.13.0a1...0.13.1a1)
