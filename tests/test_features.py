@@ -418,3 +418,16 @@ def test_the_first_22_features_are_the_columns_of_the_panphon_weight_file():
         header = next(csv.reader(handle))
     assert len(header) == 22
     assert list(FEATURES[:22]) == header
+
+
+# Expected values from the IPA chart, not from the code. Vowels (a, i) are syllabic. The glides
+# j and w are the non-syllabic counterparts of i and u. The chart's diacritic "◌̩ syllabic" makes
+# m̩ syllabic. The chart's diacritic "◌˞ rhoticity" on ə gives ɚ, a vowel, so it is syllabic.
+@pytest.mark.parametrize("segment, syllabic", [
+    ("a", True), ("i", True), ("j", False), ("w", False), ("m̩", True), ("ɚ", True),
+    ("m", False), ("zzz", False),
+])
+def test_is_vowel_phone_is_true_for_a_syllabic_segment(segment, syllabic):
+    from phonematcher import is_vowel_phone
+
+    assert is_vowel_phone(segment) is syllabic

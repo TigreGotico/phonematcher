@@ -10,13 +10,13 @@ API = (Path(__file__).resolve().parent.parent / "docs" / "api.md").read_text(enc
 
 STABLE = {
     "Match", "PhoneticFuzzySearch", "align", "edit_distance", "feature_distance", "ipa_distance",
-    "segments", "substitution_cost", "vectorize_phones", "tone_distance", "is_tone",
+    "segments", "substitution_cost", "vectorize_phones", "tone_distance", "is_tone", "is_vowel_phone",
     "FEATURES", "WEIGHTS", "GAP_COST",
 }
 DEPRECATED = {"phonetic_distance"}
 SUBMODULE_ONLY = {"phonex"}
 INTERNAL = {
-    "upgma", "phone_clusters", "merge_threshold", "compose_tie", "check_readable", "is_vowel_phone",
+    "upgma", "phone_clusters", "merge_threshold", "compose_tie", "check_readable",
     "tone_levels", "scales", "SPELLINGS", "PRE_DIACRITICS", "POST_DIACRITICS", "SUPRASEGMENTALS",
     "LEVELS", "DIACRITIC_TONES", "NUMERALS", "PHRASE_MARKS", "NUM_FEATURES", "SOURCE",
 }

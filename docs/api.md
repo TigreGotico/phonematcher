@@ -23,6 +23,7 @@ These names are the stable API. Each one is exported from the package root, so `
 | `GAP_COST` | The cost of an insertion or a deletion. | `phonematcher.distance` |
 | `feature_distance` | The weighted feature distance of two segments. | `phonematcher.features` |
 | `vectorize_phones` | The feature vector of one segment. | `phonematcher.features` |
+| `is_vowel_phone` | True for a syllabic segment. | `phonematcher.features` |
 | `FEATURES` | The feature names, read-only. | `phonematcher.features` |
 | `WEIGHTS` | The feature weights, read-only. | `phonematcher.features` |
 | `tone_distance` | The distance between two tones. Experimental. | `phonematcher.tone` |
@@ -39,7 +40,7 @@ Every other name is internal. It can change or go away in any release, with no w
 
 - `phonematcher.clustering`: `upgma`, `phone_clusters`, `merge_threshold`.
 - `phonematcher.distance`: `check_readable`, `SUPRASEGMENTALS`, `NON_SYLLABIC`.
-- `phonematcher.features`: `compose_tie`, `is_vowel_phone`, `phone_features`, `NUM_FEATURES`, `SOURCE`, `SPELLINGS`, `PRE_DIACRITICS`, `POST_DIACRITICS`.
+- `phonematcher.features`: `compose_tie`, `phone_features`, `NUM_FEATURES`, `SOURCE`, `SPELLINGS`, `PRE_DIACRITICS`, `POST_DIACRITICS`.
 - `phonematcher.tone`: `tone_levels`, `LEVELS`, `DIACRITIC_TONES`, `NUMERALS`, `PHRASE_MARKS`.
 - `phonematcher.scales`: the whole module.
 
@@ -51,6 +52,7 @@ The sections below describe the stable names first, then the internal names that
 - `feature_distance(a, b) -> float`: the weighted feature distance between two segments, from 0 to 1. See [features.md](features.md).
 - `phonetic_distance(a, b) -> float`: the old name of `feature_distance`. It returns the same value and raises a `DeprecationWarning` that names the version where it goes away, the next major version.
 - `vectorize_phones(segment) -> tuple`: the feature vector of one segment, in the order of `FEATURES`. Raises `ValueError` for a segment it cannot read.
+- `is_vowel_phone(segment) -> bool`: true when the segment reads and its `syl` feature is `+`: a vowel, a syllabic consonant such as `m̩`, or a rhotic vowel such as `ɚ`. It is false for a glide, a consonant, and a segment that cannot be read (it does not raise).
 - `FEATURES`, `WEIGHTS`: the feature names and their weights, as tuples. Treat them as read-only.
 
 ## `phonematcher.distance`
@@ -94,7 +96,6 @@ A search result: the term's id, its readings as a tuple, and its score.
 
 These names can change in any release.
 
-- `phonematcher.features.is_vowel_phone(segment) -> bool`: true for a syllabic segment.
 - `phonematcher.features.NUM_FEATURES`: the feature count.
 - `phonematcher.features.SOURCE`: where the table comes from.
 - `phonematcher.features.phone_features`: the table, segment (NFD) to vector.
