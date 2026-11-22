@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.13.1a1](https://github.com/TigreGotico/phonematcher/tree/0.13.1a1) (2026-11-22)
+
+[Full Changelog](https://github.com/TigreGotico/phonematcher/compare/0.13.0a1...0.13.1a1)
+
+**Merged pull requests:**
+
+- fix: harness scores tones, diphthongs and ALINE's ɡ as the libraries read them [\#47](https://github.com/TigreGotico/phonematcher/pull/47) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
+
 ## [0.13.0a1](https://github.com/TigreGotico/phonematcher/tree/0.13.0a1) (2026-11-22)
 
 [Full Changelog](https://github.com/TigreGotico/phonematcher/compare/0.12.0a1...0.13.0a1)
