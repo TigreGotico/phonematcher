@@ -338,4 +338,4 @@ python scripts/build_features.py
 
 The build prints the number of segments in, added and out, the number of value changes and the number of diacritic rules. It stops if a change's recorded old value does not match the table, or if a segment is [+high, +low].
 
-[Index](index.md) · Previous: [Add a segment](add-a-segment.md) · Next: [API reference](api.md)
+[Index](index.md) · Previous: [Add a segment](add-a-segment.md) · Next: [Design choices and limits](design.md)
