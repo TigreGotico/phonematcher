@@ -6,6 +6,9 @@ word is a list of segments. ``word_distance`` raises ``UnreadSegment`` when a se
 word is outside the system's symbol set, so a task decides whether to skip the item or to score
 it at distance 1. ``word_distance_or_one`` is the second choice.
 
+Systems that align also give ``align(a, b)``: one alignment as pairs ``(left, right)``, with ``None``
+for a gap.
+
 Third-party packages are imported when a system is built, so a missing package is an
 ``ImportError`` at that point and never a silent skip.
 """
@@ -17,6 +20,7 @@ CLTS_URL = "https://github.com/cldf-clts/clts"
 CLTS_TAG = "v2.3.1"
 
 Word = Sequence[str]
+Pairs = List[Tuple[Optional[str], Optional[str]]]
 
 
 class UnreadSegment(ValueError):
@@ -31,6 +35,31 @@ def edit_distance(a: Word, b: Word, substitution: Callable[[str, str], float]) -
         for j, y in enumerate(b, start=1):
             prev, row[j] = row[j], min(row[j] + 1.0, row[j - 1] + 1.0, prev + substitution(x, y))
     return row[-1]
+
+
+def edit_alignment(a: Word, b: Word, substitution: Callable[[str, str], float]) -> Pairs:
+    """One least-cost alignment under :func:`edit_distance`'s costs. The traceback starts at the
+    end and prefers a substitution, then a gap in *b*, then a gap in *a*."""
+    n, m = len(a), len(b)
+    cost = [[float(i + j) if not i * j else 0.0 for j in range(m + 1)] for i in range(n + 1)]
+    for i in range(1, n + 1):
+        for j in range(1, m + 1):
+            cost[i][j] = min(
+                cost[i - 1][j] + 1.0, cost[i][j - 1] + 1.0, cost[i - 1][j - 1] + substitution(a[i - 1], b[j - 1])
+            )
+    pairs: Pairs = []
+    i, j = n, m
+    while i or j:
+        if i and j and abs(cost[i][j] - cost[i - 1][j - 1] - substitution(a[i - 1], b[j - 1])) < 1e-9:
+            pairs.append((a[i - 1], b[j - 1]))
+            i, j = i - 1, j - 1
+        elif i and abs(cost[i][j] - cost[i - 1][j] - 1.0) < 1e-9:
+            pairs.append((a[i - 1], None))
+            i -= 1
+        else:
+            pairs.append((None, b[j - 1]))
+            j -= 1
+    return pairs[::-1]
 
 
 class System:
@@ -54,6 +83,17 @@ class System:
                 raise UnreadSegment(f"{self.name} cannot read {segment!r}")
         return self._word_distance(a, b, normalized)
 
+    def _align(self, a: Word, b: Word) -> Pairs:
+        raise NotImplementedError(f"{self.name} does not align")
+
+    def align(self, a: List[str], b: List[str]) -> Pairs:
+        """One alignment of two words as pairs ``(left, right)``, ``None`` for a gap. Raises
+        ``UnreadSegment`` for a segment the system cannot read."""
+        for segment in (*a, *b):
+            if not self.reads(segment):
+                raise UnreadSegment(f"{self.name} cannot read {segment!r}")
+        return self._align(a, b)
+
     def word_distance_or_one(self, a: List[str], b: List[str], normalized: bool = False) -> float:
         """The word distance, or 1.0 when either word holds an unread segment."""
         try:
@@ -71,16 +111,31 @@ def per_length(raw: float, a: Word, b: Word, normalized: bool) -> float:
 
 
 class PhoneMatcher(System):
-    """This package: feature-weighted substitutions, unit deletion and insertion."""
+    """This package: feature-weighted substitutions, unit deletion and insertion.
+
+    A tone is read as the library reads it in a word: ``segments`` turns a tone numeral such as
+    ``³³`` into the tone letters ``˧˧``. Those letters go to the library; ``align`` gives the
+    segments back as they came in.
+    """
 
     name = "phonematcher"
 
     def __init__(self):
-        from phonematcher import edit_distance, phonetic_distance, vectorize_phones
+        from phonematcher import align, edit_distance, phonetic_distance, vectorize_phones
+        from phonematcher.distance import segments
+        from phonematcher.tone import is_tone
 
         self._edit, self._distance, self._vectorize = edit_distance, phonetic_distance, vectorize_phones
+        self._align_pairs, self._segments, self._is_tone = align, segments, is_tone
+
+    def _letters(self, segment: str) -> str:
+        """The tone letters of a tone segment, else the segment itself."""
+        parsed = self._segments(segment)
+        return parsed[0] if len(parsed) == 1 and self._is_tone(parsed[0]) else segment
 
     def reads(self, segment: str) -> bool:
+        if self._is_tone(self._letters(segment)):
+            return True
         try:
             self._vectorize(segment)
         except ValueError:
@@ -88,10 +143,18 @@ class PhoneMatcher(System):
         return True
 
     def segment_distance(self, a: str, b: str) -> float:
-        return self._distance(a, b)
+        return self._distance(self._letters(a), self._letters(b))
 
     def _word_distance(self, a: Word, b: Word, normalized: bool) -> float:
-        return per_length(self._edit(a, b), a, b, normalized)
+        return per_length(self._edit([self._letters(s) for s in a], [self._letters(s) for s in b]), a, b, normalized)
+
+    def _align(self, a: Word, b: Word) -> Pairs:
+        i = j = 0
+        pairs: Pairs = []
+        for left, right in self._align_pairs([self._letters(s) for s in a], [self._letters(s) for s in b]):
+            pairs.append((a[i] if left is not None else None, b[j] if right is not None else None))
+            i, j = i + (left is not None), j + (right is not None)
+        return pairs
 
 
 class Levenshtein(System):
@@ -107,6 +170,9 @@ class Levenshtein(System):
 
     def _word_distance(self, a: Word, b: Word, normalized: bool) -> float:
         return per_length(edit_distance(a, b, self.segment_distance), a, b, normalized)
+
+    def _align(self, a: Word, b: Word) -> Pairs:
+        return edit_alignment(a, b, self.segment_distance)
 
 
 class PanPhon(System):
@@ -210,6 +276,43 @@ class Aline(System):
     def _word_distance(self, a: Word, b: Word, normalized: bool) -> float:
         return downey(self.similarity(a, b), self.similarity(a, a), self.similarity(b, b), normalized)
 
+    def _align(self, a: Word, b: Word) -> Pairs:
+        """The first local alignment of ``aline.align``, made global. ALINE leaves the ends of a
+        word outside the aligned region unpaired. The segments before the region are paired off
+        from its start backwards, and those after it from its end onwards. A word with more
+        segments outside the region than the other has the extra ones against gaps. An expansion
+        pair (one segment against two) becomes the first segment against the one, then the second
+        against a gap. The region sits at the first place where both words hold its segments."""
+        found = self._aline.align(list(a), list(b))
+        if not found:
+            return [(x, None) for x in a] + [(None, y) for y in b]
+        region: Pairs = []
+        for p, q in found[0]:
+            if isinstance(q, list):
+                region += [(p, q[0]), (None, q[1])]
+            elif isinstance(p, list):
+                region += [(p[0], q), (p[1], None)]
+            else:
+                region.append((None if p == "-" else p, None if q == "-" else q))
+        left = [x for x, _ in region if x is not None]
+        right = [y for _, y in region if y is not None]
+        starts = [
+            (i, j)
+            for i in range(len(a) - len(left) + 1)
+            for j in range(len(b) - len(right) + 1)
+            if list(a[i : i + len(left)]) == left and list(b[j : j + len(right)]) == right
+        ]
+        i, j = min(starts, key=lambda start: (start[0] + len(left), start[1] + len(right)))
+        before_a, before_b = list(a[:i]), list(b[:j])
+        after_a, after_b = list(a[i + len(left) :]), list(b[j + len(right) :])
+        k = min(len(before_a), len(before_b))
+        head = [(x, None) for x in before_a[: len(before_a) - k]] + [(None, y) for y in before_b[: len(before_b) - k]]
+        head += list(zip(before_a[len(before_a) - k :], before_b[len(before_b) - k :]))
+        k = min(len(after_a), len(after_b))
+        tail = list(zip(after_a[:k], after_b[:k]))
+        tail += [(x, None) for x in after_a[k:]] + [(None, y) for y in after_b[k:]]
+        return head + region + tail
+
 
 class SoundVectors(System):
     """CLTS sound vectors (soundvectors 1.0 with pyclts and the BIPA transcription system).
@@ -292,6 +395,12 @@ class Sca(System):
 
     def _word_distance(self, a: Word, b: Word, normalized: bool) -> float:
         return downey(self.similarity(a, b), self.similarity(a, a), self.similarity(b, b), normalized)
+
+    def _align(self, a: Word, b: Word) -> Pairs:
+        pair = self._pairwise(list(a), list(b))
+        pair.align(mode="global")
+        left, right, _ = pair.alignments[0]
+        return [(None if x == "-" else x, None if y == "-" else y) for x, y in zip(left, right)]
 
 
 def build(name: str, cache: Path) -> System:

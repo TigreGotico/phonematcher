@@ -41,3 +41,8 @@ def test_a_segment_outside_the_classes_is_unread():
     except systems.UnreadSegment:
         return
     raise AssertionError("no UnreadSegment")
+
+
+def test_align_puts_a_gap_at_the_unmatched_end():
+    assert SCA.align(["p", "a", "t"], ["a", "t"]) == [("p", None), ("a", "a"), ("t", "t")]
+    assert SCA.align(["p", "a"], ["t", "a"]) == [("p", "t"), ("a", "a")]
