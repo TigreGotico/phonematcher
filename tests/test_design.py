@@ -61,7 +61,7 @@ def test_the_shipped_costs_are_the_winner_and_sit_below_edit_distance_and_sca():
 
 def test_the_height_numbers_equal_the_ablation_files():
     confusions = results("ablations-seen.json")["tasks"]["confusions"]["systems"]
-    scores = {name: confusions[name]["hillenbrand"]["unread_at_1"] for name in ("phonematcher", "pm-no-height", "pm-panphon22")}
+    scores = {name: confusions[name]["hillenbrand"]["unread_at_1"] for name in ("phonematcher", "pm-p5-no-height", "pm-p5-panphon22")}
     for score in scores.values():
         assert f"{score['score']:.4f}" in PAGE
     spans = [(s["interval"]["low"], s["interval"]["high"]) for s in scores.values()]
@@ -75,6 +75,16 @@ def test_the_scale_marks_move_the_paired_cognate_score_by_less_than_one_ten_thou
     paired = results("cognates-test.json")["paired"]["pm-flat-diacritics"]
     assert abs(paired["diff"]) < 1e-4
     assert "less than 0.0001" in PAGE
+
+
+def test_the_dev_ablations_of_the_shipped_costs_equal_the_ablation_file():
+    # The test-set numbers of this page use the C0 costs; the development numbers use the shipped
+    # costs, so the file's rows are the pm-p5- ones, and its control row repeats the shipped library.
+    cognates = results("ablations-dev.json")["tasks"]["cognates"]["systems"]
+    scores = {name: cognates[name]["unread_at_1"]["average_precision"]["mean"] for name in ("phonematcher", "pm-p5-no-height", "pm-p5-flat-diacritics", "pm-p5-indel-0.5")}
+    assert scores["pm-p5-indel-0.5"] == scores["phonematcher"]
+    assert f"{scores['pm-p5-no-height']:.4f}" in PAGE and f"{scores['phonematcher']:.4f}" in PAGE
+    assert f"{scores['pm-p5-flat-diacritics']:.4f}" == f"{scores['pm-p5-no-height']:.4f}"
 
 
 def test_the_tone_numbers_equal_the_tone_file():

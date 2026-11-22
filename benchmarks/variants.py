@@ -15,6 +15,12 @@ a single thing in the segment distance or the edit distance:
 The feature distance is the package's: the weighted sum of half the value differences, over the
 sum of the weights that the variant keeps. A variant is a diagnostic; none is a candidate.
 
+Each variant exists under two cost rules. The ``pm-`` names keep the C0 costs: gap 1 and linear
+substitutions, the rule of the pre-registered test run. The ``pm-p5-`` names keep the shipped P5
+costs: gap 0.5 and substitutions at the square root of the feature distance. ``phonematcher`` is
+on the P5 costs, so it is compared with the ``pm-p5-`` names, and the ``pm-`` names are compared
+with each other. ``pm-p5-indel-0.5`` is the shipped costs again and serves as a control.
+
     python benchmarks/variants.py control --cache DIR
 
 prints the control: ``pm-panphon22`` against ``panphon-weighted`` on every PHOIBLE segment both read.
@@ -35,6 +41,8 @@ from phonematcher.tone import tone_distance
 from systems import PhoneMatcher, System, edit_alignment, edit_distance, per_length  # noqa: E402
 
 NAMES = ["pm-panphon22", "pm-no-height", "pm-flat-diacritics", "pm-uniform", "pm-indel-0.5", "pm-indel-1.5"]
+#: the same variants on the shipped P5 costs
+P5_NAMES = [f"pm-p5-{name.removeprefix('pm-')}" for name in NAMES]
 #: the weight candidates of ``prereg-2.md``; C0 is the ``phonematcher`` system
 CANDIDATES = ["pm-C1", "pm-C2", "pm-C3", "pm-P4", "pm-P5"]
 HEIGHT_STEPS = tuple(f"h{k}" for k in range(1, 7))
@@ -158,19 +166,22 @@ class Variant(PhoneMatcher):
 
 
 def build_variant(name: str) -> Variant:
-    if name == "pm-panphon22":
-        return Variant(name, weights=panphon_weights())
-    if name == "pm-no-height":
-        return Variant(name, weights=[0.0 if f in HEIGHT_STEPS else w for f, w in zip(features.FEATURES, features.WEIGHTS)])
-    if name == "pm-flat-diacritics":
-        return Variant(name, vectorize=flat_features().vectorize_phones)
-    if name == "pm-uniform":
-        return Variant(name, weights=[1.0] * features.NUM_FEATURES)
-    if name.startswith("pm-indel-") and name in NAMES:
-        return Variant(name, indel=float(name.removeprefix("pm-indel-")))
     if name in CANDIDATES:
         return build_candidate(name)
-    raise KeyError(f"unknown variant {name!r}; known: {', '.join(NAMES + CANDIDATES)}")
+    p5 = name in P5_NAMES
+    base = "pm-" + name.removeprefix("pm-p5-") if p5 else name
+    if base not in NAMES:
+        raise KeyError(f"unknown variant {name!r}; known: {', '.join(NAMES + P5_NAMES + CANDIDATES)}")
+    costs = {"indel": 0.5, "power": 0.5} if p5 else {}
+    if base == "pm-panphon22":
+        return Variant(name, weights=panphon_weights(), **costs)
+    if base == "pm-no-height":
+        return Variant(name, weights=[0.0 if f in HEIGHT_STEPS else w for f, w in zip(features.FEATURES, features.WEIGHTS)], **costs)
+    if base == "pm-flat-diacritics":
+        return Variant(name, vectorize=flat_features().vectorize_phones, **costs)
+    if base == "pm-uniform":
+        return Variant(name, weights=[1.0] * features.NUM_FEATURES, **costs)
+    return Variant(name, **{**costs, "indel": float(base.removeprefix("pm-indel-"))})
 
 
 def c2_weights() -> List[float]:

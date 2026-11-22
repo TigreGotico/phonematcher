@@ -98,7 +98,7 @@ The run scores all systems together and writes `benchmarks/results/cognates-dev.
 
 ## Ablations
 
-`benchmarks/variants.py` builds six variants of phonematcher without changing the package. Each is a system, and each reads the segments phonematcher reads and keeps its tone distance.
+`benchmarks/variants.py` builds six variants of phonematcher without changing the package. Each is a system, and each reads the segments phonematcher reads and keeps its tone distance. Each variant exists under two cost rules. A `pm-` name keeps the C0 costs, gap 1 and linear substitutions, which the test run used. A `pm-p5-` name keeps the shipped costs, gap 0.5 and substitutions at the square root of the feature distance. The `phonematcher` system prices words at the shipped costs, so it is compared with the `pm-p5-` names only.
 
 | Name | What changes |
 |---|---|
@@ -108,14 +108,14 @@ The run scores all systems together and writes `benchmarks/results/cognates-dev.
 | `pm-uniform` | all 36 features at weight 1 |
 | `pm-indel-0.5`, `pm-indel-1.5` | deletion and insertion cost 0.5 and 1.5 |
 
-`--system all` does not run them. `--system variants` runs phonematcher and the six variants.
+`--system all` does not run them. `--system variants` runs phonematcher and the six variants at the C0 costs. `--system variants-p5` runs phonematcher and the six variants at the shipped costs. `pm-p5-indel-0.5` has the shipped gap, so it gives the same distances as `phonematcher` and serves as a control.
 
 ```bash
-python benchmarks/run.py --task ablations --system variants --split seen
-python benchmarks/run.py --task ablations --system variants --split dev
+python benchmarks/run.py --task ablations --system variants-p5 --split seen
+python benchmarks/run.py --task ablations --system variants-p5 --split dev
 ```
 
-The `seen` run covers coverage, allophones and confusions, and the control. The `dev` run covers cognates, toneless cognates, alignment and retrieval. Retrieval scores every system by brute force on the fixed sample of 500 queries per language pair, with no fuzzy search. The runs write `benchmarks/results/ablations-seen.json` and `ablations-dev.json`. Retrieval keeps its records in the cache, so give it a cache of its own: the TSV files of `C6` may be links to another cache.
+The `seen` run covers coverage, allophones and confusions, and the control. The `dev` run covers cognates, toneless cognates, alignment and retrieval. Retrieval scores every system by brute force on the fixed sample of 500 queries per language pair, with no fuzzy search. The runs write `benchmarks/results/ablations-seen.json` and `ablations-dev.json`; the committed files hold the `variants-p5` runs. The test run scored the `pm-` variants at the C0 costs, and those rows are in the test result files. Retrieval keeps its records in the cache, so give it a cache of its own: the TSV files of `C6` may be links to another cache.
 
 The control compares `pm-panphon22` with `panphon-weighted`: `python benchmarks/variants.py control`. It prints the pair counts for every PHOIBLE segment that both systems read. A variant is a diagnostic and not a candidate.
 

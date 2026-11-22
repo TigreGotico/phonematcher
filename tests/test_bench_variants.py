@@ -145,6 +145,38 @@ def test_every_variant_is_a_system_with_its_own_name():
         assert isinstance(variant, systems.System) and variant.name == name
 
 
+P5_BUILT = {name: variants.build_variant(name) for name in variants.P5_NAMES}
+
+
+def test_every_p5_variant_is_named_for_a_c0_variant():
+    assert variants.P5_NAMES == [name.replace("pm-", "pm-p5-", 1) for name in variants.NAMES]
+    assert [v.name for v in P5_BUILT.values()] == variants.P5_NAMES
+
+
+def test_p5_variants_take_the_square_root_of_the_feature_distance():
+    # p and b differ in [voice] only. Without the six steps (0.75) the weights total 8.75, so the
+    # linear distance is 0.125 / 8.75 and the shipped rule is its square root.
+    assert P5_BUILT["pm-p5-no-height"].segment_distance("p", "b") == pytest.approx((0.125 / 8.75) ** 0.5)
+    assert BUILT["pm-no-height"].segment_distance("p", "b") == pytest.approx(0.125 / 8.75)
+    # uniform weights: 1 of 36 features
+    assert P5_BUILT["pm-p5-uniform"].segment_distance("p", "b") == pytest.approx((1 / 36) ** 0.5)
+
+
+def test_p5_variants_keep_the_shipped_gap_unless_the_variant_sets_it():
+    for name, variant in P5_BUILT.items():
+        assert variant.indel == {"pm-p5-indel-0.5": 0.5, "pm-p5-indel-1.5": 1.5}.get(name, 0.5)
+    assert P5_BUILT["pm-p5-uniform"].word_distance(["a"], []) == 0.5
+    assert P5_BUILT["pm-p5-indel-1.5"].word_distance(["a"], []) == 1.5
+
+
+def test_the_p5_indel_half_variant_is_the_shipped_library():
+    words = [(["p", "a", "t"], ["b", "a"]), (["k", "i", "t", "a"], ["k", "e", "t"]), ([], ["a"])]
+    shipped, control = systems.build("phonematcher", Path(".")), P5_BUILT["pm-p5-indel-0.5"]
+    for left, right in words:
+        assert control.word_distance(left, right) == pytest.approx(shipped.word_distance(left, right))
+        assert control.word_distance(left, right, normalized=True) == pytest.approx(shipped.word_distance(left, right, normalized=True))
+
+
 def test_an_unknown_variant_is_an_error():
     with pytest.raises(KeyError):
         variants.build_variant("pm-nothing")
@@ -157,6 +189,9 @@ def test_all_leaves_the_variants_out_and_variants_adds_them(capsys):
     assert run.main(["--task", "selfcheck", "--system", "variants"]) == 0
     printed = [line.split(":")[0] for line in capsys.readouterr().out.splitlines()]
     assert printed == ["phonematcher", *variants.NAMES]
+    assert run.main(["--task", "selfcheck", "--system", "variants-p5"]) == 0
+    printed = [line.split(":")[0] for line in capsys.readouterr().out.splitlines()]
+    assert printed == ["phonematcher", *variants.P5_NAMES]
 
 
 def test_the_default_edit_distance_keeps_unit_indels():
