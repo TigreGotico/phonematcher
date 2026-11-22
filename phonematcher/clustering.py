@@ -12,6 +12,7 @@ text.
 Adapted from pyphone (https://github.com/lingz/pyphone) and fast_fuzzy_search
 (https://github.com/lingz/fast_fuzzy_search), MIT License.
 """
+import math
 import unicodedata
 from collections import namedtuple
 from functools import lru_cache
@@ -30,11 +31,15 @@ Readings = Union[str, Sequence[str]]
 
 def upgma(labels: Sequence[str], threshold: float) -> Dict[str, int]:
     """Group *labels* by UPGMA average linkage, merging while the closest pair of groups is at most
-    *threshold* apart. Returns ``label -> cluster id``."""
+    *threshold* apart. Returns ``label -> cluster id``.
+
+    Distances are summed exactly, so the order in which a set yields its labels cannot change a sum
+    by a rounding error. Equal distances merge the pair with the lowest cluster positions first, and
+    cluster ids follow the order of *labels*."""
     dist = {(a, b): phonetic_distance(a, b) for a in labels for b in labels if a < b}
 
     def between(c1: Set[str], c2: Set[str]) -> float:
-        return sum(dist[min(a, b), max(a, b)] for a in c1 for b in c2) / (len(c1) * len(c2))
+        return math.fsum(dist[min(a, b), max(a, b)] for a in c1 for b in c2) / (len(c1) * len(c2))
 
     clusters = [{label} for label in labels]
     while len(clusters) > 1:
