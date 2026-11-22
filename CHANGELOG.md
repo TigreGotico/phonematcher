@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.12.0a1](https://github.com/TigreGotico/phonematcher/tree/0.12.0a1) (2026-11-22)
+
+[Full Changelog](https://github.com/TigreGotico/phonematcher/compare/0.11.0a1...0.12.0a1)
+
+**Merged pull requests:**
+
+- feat: add the alignment benchmark task on the List and Prokic gold alignments [\#43](https://github.com/TigreGotico/phonematcher/pull/43) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
+
 ## [0.11.0a1](https://github.com/TigreGotico/phonematcher/tree/0.11.0a1) (2026-11-22)
 
 [Full Changelog](https://github.com/TigreGotico/phonematcher/compare/0.10.1a1...0.11.0a1)
