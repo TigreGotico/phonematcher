@@ -128,17 +128,19 @@ def summarize(per_system: Dict[str, Dict[str, Optional[Tuple[float, float]]]], k
     return {"n_common": len(common), "systems": systems}
 
 
-def run(names: Sequence[str], cache: Path, split: str) -> dict:
-    """Score the systems on the items of *split*. Returns the payload that ``run.py`` writes."""
+def score(names: Sequence[str], cache: Path, split: str, limit: int = 0) -> Tuple[dict, Dict[str, Dict[str, Optional[Tuple[float, float]]]]]:
+    """Score the systems on the items of *split*; also returns each system's score per item key.
+    *limit* keeps about that many items, evenly spaced."""
     directory = fetch(cache)
     items, left_out = load(directory, split)
+    items = items[:: -(-len(items) // limit)] if limit else items
     keys = [key for key, _, _ in items]
     per_system = {name: evaluate(build(name, cache), items) for name in names}
     by_file = {}
     for name in FILES:
         file_keys = [k for k in keys if k.startswith(name + ":")]
         by_file[name] = {"n_in": len(file_keys), **summarize(per_system, file_keys)}
-    return {
+    payload = {
         "data": {"source": URL, "sha": SHA, "files": list(FILES)},
         "n_in": len(items) + left_out,
         "n_items": len(items),
@@ -146,3 +148,9 @@ def run(names: Sequence[str], cache: Path, split: str) -> dict:
         "all": summarize(per_system, keys),
         "by_file": by_file,
     }
+    return payload, per_system
+
+
+def run(names: Sequence[str], cache: Path, split: str) -> dict:
+    """Score the systems on the items of *split*. Returns the payload that ``run.py`` writes."""
+    return score(names, cache, split)[0]

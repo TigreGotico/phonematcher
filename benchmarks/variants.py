@@ -24,6 +24,7 @@ import csv
 import importlib.util
 import io
 import sys
+from itertools import combinations
 from pathlib import Path
 from typing import Dict, List, Optional, Sequence, Tuple
 
@@ -31,10 +32,17 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from phonematcher import features
 from phonematcher.tone import tone_distance
-from systems import PhoneMatcher, edit_alignment, edit_distance, per_length  # noqa: E402
+from systems import PhoneMatcher, System, edit_alignment, edit_distance, per_length  # noqa: E402
 
 NAMES = ["pm-panphon22", "pm-no-height", "pm-flat-diacritics", "pm-uniform", "pm-indel-0.5", "pm-indel-1.5"]
+#: the weight candidates of ``prereg-2.md``; C0 is the ``phonematcher`` system
+CANDIDATES = ["pm-C1", "pm-C2", "pm-C3", "pm-P4", "pm-P5"]
 HEIGHT_STEPS = tuple(f"h{k}" for k in range(1, 7))
+HALF_WEIGHT = ("front", "back", "round", "lab")
+MAJOR_CLASS = ("syl", "son", "cons")
+#: vowel chart of constraint K1, and the obstruents it keeps apart from every chart vowel
+CHART = Path(__file__).resolve().parent.parent / "scripts" / "sources" / "ipa-vowel-chart.csv"
+OBSTRUENTS = "pbtdkɡqʔfvszʃʒxχh"
 
 
 def panphon_weights(by_file_label: bool = False) -> Tuple[float, ...]:
@@ -108,11 +116,14 @@ def reread(module, shifts: bool) -> int:
 class Variant(PhoneMatcher):
     """phonematcher with other feature weights, other feature vectors or another indel cost."""
 
-    def __init__(self, name: str, weights: Sequence[float] = features.WEIGHTS, indel: float = 1.0, vectorize=None):
+    def __init__(
+        self, name: str, weights: Sequence[float] = features.WEIGHTS, indel: float = 1.0, vectorize=None, power: float = 1.0
+    ):
         super().__init__()
         self.name = name
         self.weights = tuple(weights)
         self.indel = indel
+        self.power = power
         if vectorize is not None:
             self._vectorize = vectorize
         self._substitution = self.substitution
@@ -135,8 +146,10 @@ class Variant(PhoneMatcher):
     def substitution(self, a: str, b: str) -> float:
         """The package's ``substitution_cost`` with this variant's phone distance."""
         if self._is_tone(a) or self._is_tone(b):
-            return tone_distance(a, b) if self._is_tone(a) and self._is_tone(b) else 1.0
-        return self.phone_distance(a, b)
+            cost = tone_distance(a, b) if self._is_tone(a) and self._is_tone(b) else 1.0
+        else:
+            cost = self.phone_distance(a, b)
+        return cost ** self.power
 
     def _word_distance(self, a, b, normalized: bool) -> float:
         left = [p for s in a for p in self._parts(s)]
@@ -155,7 +168,54 @@ def build_variant(name: str) -> Variant:
         return Variant(name, weights=[1.0] * features.NUM_FEATURES)
     if name.startswith("pm-indel-") and name in NAMES:
         return Variant(name, indel=float(name.removeprefix("pm-indel-")))
-    raise KeyError(f"unknown variant {name!r}; known: {', '.join(NAMES)}")
+    if name in CANDIDATES:
+        return build_candidate(name)
+    raise KeyError(f"unknown variant {name!r}; known: {', '.join(NAMES + CANDIDATES)}")
+
+
+def c2_weights() -> List[float]:
+    """Every feature 1, the six height steps 1/6 each, and front, back, round and lab 1/2 each."""
+    return [1 / 6 if f in HEIGHT_STEPS else 0.5 if f in HALF_WEIGHT else 1.0 for f in features.FEATURES]
+
+
+def chart_vowels() -> List[str]:
+    with open(CHART, encoding="utf-8", newline="") as handle:
+        return [row["symbol"] for row in csv.DictReader(handle)]
+
+
+def k1(system: System) -> bool:
+    """Constraint K1: every pair of chart vowels is nearer than any chart vowel and any obstruent."""
+    vowels = chart_vowels()
+    widest = max(system.segment_distance(a, b) for a, b in combinations(vowels, 2))
+    return widest < min(system.segment_distance(v, o) for v in vowels for o in OBSTRUENTS)
+
+
+def with_major_class(weight: float) -> List[float]:
+    return [weight if f in MAJOR_CLASS else w for f, w in zip(features.FEATURES, c2_weights())]
+
+
+def c3_weight() -> float:
+    """The least weight for ``syl``, ``son`` and ``cons`` in C2 that passes K1, by bisection of
+    [1, 10] to 0.01. The search keeps the upper end, which passes."""
+    low, high = 1.0, 10.0
+    while high - low > 0.01:
+        mid = (low + high) / 2
+        low, high = (low, mid) if k1(Variant("c3-search", weights=with_major_class(mid))) else (mid, high)
+    return round(high, 2)
+
+
+def build_candidate(name: str) -> Variant:
+    if name == "pm-C1":
+        return Variant(name, weights=[1.0] * features.NUM_FEATURES)
+    if name == "pm-C2":
+        return Variant(name, weights=c2_weights())
+    if name == "pm-C3":
+        return Variant(name, weights=with_major_class(c3_weight()))
+    if name == "pm-P4":
+        return Variant(name, indel=0.5)
+    if name == "pm-P5":
+        return Variant(name, indel=0.5, power=0.5)
+    raise KeyError(f"unknown candidate {name!r}; known: {', '.join(CANDIDATES)}")
 
 
 def phoible_segments(cache: Path) -> List[str]:

@@ -125,6 +125,32 @@ The control compares `pm-panphon22` with `panphon-weighted`: `python benchmarks/
 
 The `dev` and `seen` splits run freely. The `test` split runs only with `--final`, on a clean git tree. The result records the commit.
 
+## The test run
+
+`benchmarks/prereg-2.md` fixes the systems, metrics, candidates and decision rules of the single test run. Its sha256 is a constant in `benchmarks/final.py`. A run reads the page, compares its hash with the constant and stops on a difference.
+
+`benchmarks/variants.py` builds the five weight candidates as systems: `pm-C1`, `pm-C2`, `pm-C3`, `pm-P4` and `pm-P5`. The C0 candidate is the `phonematcher` system. `k1(system)` applies rule 1. `c3_weight()` finds the weight of `syl`, `son` and `cons` in C3 by bisection of [1, 10] to 0.01.
+
+```bash
+python benchmarks/run.py --task cognates  --system all --split test --final
+python benchmarks/run.py --task alignment --system all --split test --final
+python benchmarks/run.py --task retrieval --system all --split test --final
+python benchmarks/final.py decide
+python benchmarks/render.py
+```
+
+`--final` needs a clean git tree and `--system all`. It scores the seven systems, the six C10 variants and the five candidates, and writes `benchmarks/results/<task>-test.json` with the commit, the hash of the page, each system's main metric with its 95% interval, and each system's difference to phonematcher on the same units with its interval. The intervals come from 1,000 resamples of the unit with seed 0. The units are the concepts of each test set for cognates, the pairs that every aligning system reads for alignment, and the queries of each dialect pair for retrieval. Every system sees the same resamples.
+
+`final.decide` applies rules 1 to 5 to the paired differences. `python benchmarks/final.py decide` prints the winner and the reasons from the three test files.
+
+`--dry-run` walks the same path on the dev split, with `--limit N` units per data set, language pair or file, and writes nothing to `benchmarks/results`:
+
+```bash
+python benchmarks/run.py --task cognates --system all --split dev --dry-run --limit 4
+```
+
+`python benchmarks/render.py` writes `docs/benchmarks.md` from `benchmarks/results/*.json`. `python benchmarks/render.py --check` exits 1 when the page differs from a fresh render.
+
 ## Tests
 
 `pytest --import-mode=importlib tests/test_bench_harness.py` covers every system except SCA.
