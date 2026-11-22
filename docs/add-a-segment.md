@@ -74,10 +74,10 @@ The line says how many segments PanPhon lists, how many `segments` entries were 
 The distances to the two source segments show where the vector sits. It differs from `ɾ` in place features and from `v` in manner features:
 
 ```python
-from phonematcher import phonetic_distance
+from phonematcher import feature_distance
 
-phonetic_distance("ⱱ", "ɾ")   # 0.086
-phonetic_distance("ⱱ", "v")   # 0.158
+feature_distance("ⱱ", "ɾ")   # 0.086
+feature_distance("ⱱ", "v")   # 0.158
 ```
 
 ## 5. Write the test

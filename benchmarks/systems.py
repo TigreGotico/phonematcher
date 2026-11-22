@@ -142,11 +142,11 @@ class PhoneMatcher(System):
     name = "phonematcher"
 
     def __init__(self):
-        from phonematcher import align, edit_distance, phonetic_distance, vectorize_phones
+        from phonematcher import align, edit_distance, feature_distance, vectorize_phones
         from phonematcher.distance import segments, substitution_cost
         from phonematcher.tone import is_tone
 
-        self._edit, self._distance, self._vectorize = edit_distance, phonetic_distance, vectorize_phones
+        self._edit, self._distance, self._vectorize = edit_distance, feature_distance, vectorize_phones
         self._align_pairs, self._segments, self._is_tone = align, segments, is_tone
         self._substitution = substitution_cost
 

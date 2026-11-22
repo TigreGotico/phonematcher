@@ -130,7 +130,7 @@ class Variant(PhoneMatcher):
         self._align_pairs = lambda a, b: edit_alignment(a, b, self.substitution, self.indel)
 
     def phone_distance(self, a: str, b: str) -> float:
-        """The package's ``phonetic_distance`` on this variant's weights and vectors."""
+        """The package's ``feature_distance`` on this variant's weights and vectors."""
         if a == b:
             return 0.0
         if a == " " or b == " ":

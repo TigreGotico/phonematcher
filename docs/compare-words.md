@@ -30,13 +30,13 @@ from phonematcher import ipa_distance
 ipa_distance("ˈkaza", "ˈkasa")   # 0.115
 ```
 
-The cost of a substitution is the square root of the feature distance of the two sounds. Here `phonetic_distance("z", "s")` is 0.013, and its square root is 0.115:
+The cost of a substitution is the square root of the feature distance of the two sounds. Here `feature_distance("z", "s")` is 0.013, and its square root is 0.115:
 
 ```python
-from phonematcher import phonetic_distance
+from phonematcher import feature_distance
 
-phonetic_distance("z", "s")        # 0.013
-phonetic_distance("z", "s") ** 0.5  # 0.115
+feature_distance("z", "s")        # 0.013
+feature_distance("z", "s") ** 0.5  # 0.115
 ```
 
 A change to a vowel costs the same way. `a` against `ɐ` is a near substitution:

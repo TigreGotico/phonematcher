@@ -59,7 +59,7 @@ def test_time_search_on_three_terms():
 def test_letter_set_has_affricates_and_matrix_is_stable():
     segs = speed.letters()
     assert "p" in segs and "t͡s" in segs
-    assert speed.matrix_hash(segs[:6], speed.phonetic_distance) == speed.matrix_hash(segs[:6], speed.phonetic_distance)
+    assert speed.matrix_hash(segs[:6], speed.feature_distance) == speed.matrix_hash(segs[:6], speed.feature_distance)
 
 
 def test_machine_names_the_cpu():

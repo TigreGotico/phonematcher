@@ -15,7 +15,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "benchmarks"))
 import run  # noqa: E402
 import systems  # noqa: E402
 import variants  # noqa: E402
-from phonematcher import features, phonetic_distance  # noqa: E402
+from phonematcher import features, feature_distance  # noqa: E402
 
 BUILT = {name: variants.build_variant(name) for name in variants.NAMES}
 
@@ -101,13 +101,13 @@ def test_no_height_gives_two_vowels_that_differ_only_in_height_steps_distance_ze
     # and open-mid rows), with [high] and [low] the same.
     assert BUILT["pm-no-height"].segment_distance("ɘ", "ə") == 0.0
     assert BUILT["pm-no-height"].segment_distance("ɛ", "e") == 0.0
-    assert phonetic_distance("ɘ", "ə") == pytest.approx(0.125 / 9.5)
-    assert phonetic_distance("ɛ", "e") == pytest.approx(0.25 / 9.5)
+    assert feature_distance("ɘ", "ə") == pytest.approx(0.125 / 9.5)
+    assert feature_distance("ɛ", "e") == pytest.approx(0.25 / 9.5)
 
 
 def test_flat_diacritics_leave_a_lowered_vowel_as_its_base():
     # The package reads e̞ one row lower (a flip of [h4]); PanPhon's rule for the mark has no content.
-    assert phonetic_distance("e", "e̞") == pytest.approx(0.125 / 9.5)
+    assert feature_distance("e", "e̞") == pytest.approx(0.125 / 9.5)
     assert BUILT["pm-flat-diacritics"].segment_distance("e", "e̞") == 0.0
 
 
@@ -136,7 +136,7 @@ def test_the_package_table_is_untouched_by_building_the_flat_variant():
     before = dict(features.phone_features)
     variants.build_variant("pm-flat-diacritics")
     assert features.phone_features == before
-    assert phonetic_distance("e", "e̞") > 0
+    assert feature_distance("e", "e̞") > 0
 
 
 def test_every_variant_is_a_system_with_its_own_name():

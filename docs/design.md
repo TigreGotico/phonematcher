@@ -85,6 +85,14 @@ The edit distance prices a deletion and an insertion at 0.5. It prices a substit
 
 P5 beat C0 on all three tasks and had the largest cognate difference, so the library uses it. The candidates P4 and P5 came from dev results, so only the test could decide between them and C0. The square root also keeps the cost a metric.
 
+### One segment cost and a relative sensitivity
+
+`substitution_cost` is the one cost of replacing a segment by another. The edit distance, the alignment and the clusters of the search all use it. `feature_distance` is the linear feature distance under its own name, and `phonetic_distance` stays as a deprecated alias of it.
+
+The search clusters phones on the price that ranks its candidates, so one pair of sounds has one price. The sensitivity is a share from 0 to 1: the merge threshold is that quantile of the segment costs over all pairs of letters in the table, so a value keeps its meaning when the costs change.
+
+This change came after the test run, and it was measured on the development split only. The default was chosen again by rule 7 of `benchmarks/prereg-2.md` over the shares 0.01, 0.02, 0.03, 0.05, 0.08 and 0.12. The values 0.08 and 0.12 tie at a mean recall at 1 of 0.8521 over the four dialect pairs, and the rule does not name a tie-break, so the lower share won with fewer candidates. The change had to pass the acceptance rule that applies to every change after the test run: no development task may show a paired difference whose interval lies wholly below 0. Against the earlier library at 0.1, the mean recall at 1 differs by 0.0000, with an interval from 0.0000 to 0.0000 (1,000 resamples, seed 0, 500 queries in each of four pairs), and every query scores the same. A query returns from 1% to 23% fewer candidates, depending on the pair. The costs of the word distance, the alignment and the cognate task do not depend on the clusters, so they did not change.
+
 ### The feature weights stay
 
 The weights of PanPhon's 22 features are PanPhon's. Fits of the weights to perceptual confusions did not transfer from one data set to the next, and the candidates C1 to C3 that changed the weights did not beat C0. No change to the feature weights passed a clean test; the test that changed the word costs kept the weights. The weights stay.

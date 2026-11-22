@@ -22,15 +22,16 @@ phonematcher has no runtime dependencies.
 ## Distance between sounds
 
 ```python
-from phonematcher import phonetic_distance, ipa_distance, segments
+from phonematcher import feature_distance, ipa_distance, segments, substitution_cost
 
-phonetic_distance("ʁ", "χ")       # 0.013: uvular fricatives that differ only in voice
-phonetic_distance("ʁ", "k")       # 0.118: a different manner, place and voice
+feature_distance("ʁ", "χ")       # 0.013: uvular fricatives that differ only in voice
+feature_distance("ʁ", "k")       # 0.118: a different manner, place and voice
+substitution_cost("ʁ", "χ")      # 0.115: the square root of the feature distance
 segments("ˈt͡ʃɐ̃w̃")              # ['t͡ʃ', 'ɐ̃', 'w̃']
 ipa_distance("ˈpojʃ", "ˈpojs")   # 0.199: one near substitution
 ```
 
-`phonetic_distance` compares two segments, from 0 to 1. `ipa_distance` compares two IPA strings: an edit distance where a substitution costs the square root of the feature distance and an insertion or deletion costs 0.5. A substitution costs at most 1, so it never costs more than a deletion plus an insertion. The costs are the ones that the pre-registered test in `benchmarks/prereg-2.md` selected.
+`feature_distance` compares two segments, from 0 to 1. `substitution_cost` is the one cost of replacing a segment by another. It is the square root of the feature distance. `ipa_distance` compares two IPA strings: an edit distance where a substitution costs `substitution_cost` and an insertion or deletion costs 0.5. A substitution costs at most 1, so it never costs more than a deletion plus an insertion. The search groups sounds with the same cost. The costs are the ones that the pre-registered test in `benchmarks/prereg-2.md` selected.
 
 ## Search by sound
 

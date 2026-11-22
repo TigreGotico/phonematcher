@@ -5,7 +5,7 @@ import unicodedata
 
 from phonematcher.clustering import phone_clusters
 from phonematcher.distance import edit_distance, segments
-from phonematcher.features import phone_features, phonetic_distance
+from phonematcher.features import phone_features, feature_distance
 from phonematcher.tone import DIACRITIC_TONES, tone_distance
 
 EPS = 1e-12
@@ -25,18 +25,18 @@ def test_the_letter_set_and_the_tone_set_have_their_expected_sizes():
 
 def test_letter_distance_is_in_range_symmetric_and_zero_on_identity():
     for a, b in itertools.product(LETTERS, repeat=2):
-        d = phonetic_distance(a, b)
+        d = feature_distance(a, b)
         assert 0 <= d <= 1, (a, b, d)
-        assert d == phonetic_distance(b, a), (a, b)
+        assert d == feature_distance(b, a), (a, b)
     for a in LETTERS:
-        assert phonetic_distance(a, a) == 0
+        assert feature_distance(a, a) == 0
 
 
 def test_letter_distance_obeys_the_triangle_inequality_on_sampled_triples():
     rng = random.Random(0)
     for _ in range(20000):
         a, b, c = (rng.choice(TABLE) for _ in range(3))
-        assert phonetic_distance(a, c) <= phonetic_distance(a, b) + phonetic_distance(b, c) + EPS, (a, b, c)
+        assert feature_distance(a, c) <= feature_distance(a, b) + feature_distance(b, c) + EPS, (a, b, c)
 
 
 def test_edit_distance_is_symmetric_and_zero_on_identity():

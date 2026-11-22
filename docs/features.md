@@ -284,7 +284,7 @@ Nerbonne and Heeringa (1997, pp. 11-13) compared one-symbol and two-symbol dipht
 
 ## Distance
 
-`phonetic_distance(a, b)` compares two segments feature by feature. The values count as + = 1, 0 = 0 and − = −1. Each feature adds its weight times half the difference of the two values:
+`feature_distance(a, b)` compares two segments feature by feature. The values count as + = 1, 0 = 0 and − = −1. Each feature adds its weight times half the difference of the two values:
 
 | Values | Cost of the feature |
 |---|---|

@@ -9,11 +9,13 @@ A feature value is ``True`` (+), ``False`` (−) or ``None`` (0: the feature doe
 """
 import json
 import unicodedata
+import warnings
 from functools import lru_cache
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple
 
 from phonematcher.scales import shift
+from phonematcher.version import VERSION_MAJOR
 
 _DATA = json.loads((Path(__file__).parent / "data" / "features.json").read_text(encoding="utf-8"))
 
@@ -207,7 +209,7 @@ def is_vowel_phone(segment: str) -> bool:
         return False
 
 
-def phonetic_distance(a: str, b: str) -> float:
+def feature_distance(a: str, b: str) -> float:
     """Weighted feature distance between two segments, from 0 (same features) to 1.
 
     Each feature contributes its PanPhon weight times half the difference of its values, with
@@ -225,3 +227,14 @@ def phonetic_distance(a: str, b: str) -> float:
         return 1.0
     diff = sum(w * abs(_NUMBER[x] - _NUMBER[y]) / 2 for w, x, y in zip(WEIGHTS, va, vb))
     return diff / _TOTAL_WEIGHT
+
+
+def phonetic_distance(a: str, b: str) -> float:
+    """Deprecated alias of :func:`feature_distance`."""
+    warnings.warn(
+        f"phonetic_distance is deprecated and will be removed in {VERSION_MAJOR + 1}.0.0; "
+        "use feature_distance",
+        DeprecationWarning,
+        stacklevel=2,
+    )
+    return feature_distance(a, b)
