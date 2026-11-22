@@ -31,7 +31,7 @@ import numpy as np
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from split import is_test  # noqa: E402
-from systems import NAMES, UnreadSegment, downey  # noqa: E402
+from systems import NAMES, PhoneMatcher, UnreadSegment, downey  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent.parent
 WIKIPRON_REPO = "https://github.com/CUNY-CL/wikipron"
@@ -65,7 +65,7 @@ Pron = Tuple[str, ...]
 def stamp() -> str:
     """Hash of the code a stored record depends on: a record made by other code is not reused."""
     digest = hashlib.sha1()
-    files = [ROOT / "benchmarks" / "systems.py"]
+    files = [ROOT / "benchmarks" / "systems.py", ROOT / "benchmarks" / "variants.py"]
     files += sorted((ROOT / "phonematcher").rglob("*.py")) + sorted((ROOT / "phonematcher").rglob("*.json"))
     for path in files:
         digest.update(path.read_bytes())
@@ -183,7 +183,7 @@ class Batched:
     def __init__(self, system, pair: Pair):
         self.system = system
         # PhoneMatcher splits a segment such as a diphthong into the parts the library reads
-        self.parts = system._parts if system.name == "phonematcher" else lambda segment: [segment]
+        self.parts = system._parts if isinstance(system, PhoneMatcher) else lambda segment: [segment]
         prons = [self.expand(p) for p in pair.prons]
         segments = sorted({s for p in prons for s in p} | {s for _, q in pair.queries for s in self.expand(q)})
         self.id = {s: i for i, s in enumerate(segments)}
@@ -311,7 +311,7 @@ class Sequential:
 def brute_force(system, pair: Pair, indices: Sequence[int]) -> dict:
     """Rank record of every chosen query: ``s``, ``t`` and whether the item is unscorable
     (the query or every reading of the gold word holds a segment the system cannot read)."""
-    engine = (Batched if system.name in BATCHED else Sequential)(system, pair)
+    engine = (Batched if system.name in BATCHED or isinstance(system, PhoneMatcher) else Sequential)(system, pair)
     checked = engine.check(pair)
     gold_of = {w: i for i, w in enumerate(pair.words)}
     readings: Dict[int, List[Pron]] = {}
@@ -471,7 +471,7 @@ def aggregate(cache: Path, split: str, names: Sequence[str] = NAMES) -> dict:
         sampled = sorted(set.intersection(*(set(m) for m in by_index.values())))
         full = [sys for sys, r in records.items() if r["sample"] is None]
         common_full = sorted(set.intersection(*(set(by_index[sys]) for sys in full))
-                             - {i for sys in full for i, (_, _, u) in by_index[sys].items() if u})
+                             - {i for sys in full for i, (_, _, u) in by_index[sys].items() if u}) if full else []
         systems = {}
         for sys, r in records.items():
             m = by_index[sys]
