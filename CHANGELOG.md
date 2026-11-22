@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.13.0a1](https://github.com/TigreGotico/phonematcher/tree/0.13.0a1) (2026-11-22)
+
+[Full Changelog](https://github.com/TigreGotico/phonematcher/compare/0.12.0a1...0.13.0a1)
+
+**Merged pull requests:**
+
+- feat: add the coverage, allophone and confusion benchmark tasks on seen data [\#45](https://github.com/TigreGotico/phonematcher/pull/45) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
+
 ## [0.12.0a1](https://github.com/TigreGotico/phonematcher/tree/0.12.0a1) (2026-11-22)
 
 [Full Changelog](https://github.com/TigreGotico/phonematcher/compare/0.11.0a1...0.12.0a1)
