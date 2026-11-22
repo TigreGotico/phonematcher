@@ -243,3 +243,18 @@ Common pairs: 4575 of 5748.
 | pm-uniform | 0.6090 | 0.8437 | 0.9087 | 0.8577 | 0.8047 | 0.9007 | 0.8463 | 500/500/500/500 |
 | pm-indel-0.5 | 0.6747 | 0.8380 | 0.9137 | 0.9007 | 0.8317 | 0.9480 | 0.8816 | 500/500/500/500 |
 | pm-indel-1.5 | 0.6027 | 0.8240 | 0.9137 | 0.8507 | 0.7977 | 0.8870 | 0.8368 | 500/500/500/500 |
+
+## Speed
+
+Median of 3 runs on 11th Gen Intel(R) Core(TM) i9-11900H @ 2.50GHz, 16 cores, Python 3.14.6; load average at the start of each run: 6.80, 7.44, 6.55. Commit `c8828233a358`.
+
+The distance matrix of 18225 ordered letter pairs has sha256 `44c7d449fc5d31f74b289e50ed0994c9741936e25a60944e08a31c400dfe14a9`.
+
+| Measure | Median |
+|---|---|
+| build_seconds_0.05 | 8.41378 |
+| build_seconds_0.1 | 6.96556 |
+| ipa_distance_per_second | 1776.77 |
+| queries_per_second_0.05 | 8.69841 |
+| queries_per_second_0.1 | 2.97286 |
+| segment_per_second | 131530 |
