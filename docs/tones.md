@@ -9,7 +9,7 @@ see: compare-words.md, features.md
 
 This page shows how a tone enters a word distance. A tone is a segment of its own, not a feature of its vowel.
 
-The tone distance is experimental. On the 15 Cantonese tone pairs of the benchmark it ranks tone confusions worse than a baseline that compares only the direction of the contour (issue [#68](https://github.com/TigreGotico/phonematcher/issues/68)). The numbers come from `benchmarks/results/tone-seen.json`:
+The tone distance is experimental. On the 15 Cantonese tone pairs of the benchmark it ranks tone confusions worse than a baseline that compares only the direction of the contour (issue [#68](https://github.com/TigreGotico/phonematcher/issues/68)). The numbers come from `benchmarks/results/tone-seen.json`. Run this block from the root of a clone of the repository, because the file is not in the installed package:
 
 ```python
 import json

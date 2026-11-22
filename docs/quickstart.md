@@ -46,6 +46,12 @@ segments("ˈt͡ʃɐ̃w̃")              # ['t͡ʃ', 'ɐ̃', 'w̃']
 ipa_distance("ˈpojʃ", "ˈpojs")   # 0.199
 ```
 
+```python
+ipa_distance("casa", "kasa")   # 0.199
+```
+
+Pass `strict=True` to raise on a character that IPA does not define. It cannot catch the ASCII letters `c`, `y`, `j` and `r`, which are also IPA letters. The score above compares the palatal stop `c` with `k`, so a spelling that holds one of these letters gives a wrong score with no error.
+
 `segments` keeps a diacritic with its base and joins tied symbols into one affricate. Stress and syllable marks are dropped.
 
 ## 5. Search

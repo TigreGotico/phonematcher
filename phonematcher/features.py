@@ -74,6 +74,14 @@ def _is_listed_vowel(seg: str) -> bool:
     return seg in phone_features and phone_features[seg][0] is True
 
 
+def _unrecognized(segment: str, note: str = "") -> ValueError:
+    """The error for a segment with no vector. It lists the code points, so a combining mark that
+    prints as nothing is visible."""
+    points = " ".join(f"U+{ord(c):04X}" for c in segment)
+    return ValueError(f"Unrecognized phone {segment!r} ({points}){note}. A word distance or a search"
+                      " takes strict=True to raise on such a segment instead of costing it 1")
+
+
 @lru_cache(maxsize=4096)
 def vectorize_phones(segment: str) -> Vector:
     """The feature vector of one IPA *segment*.
@@ -114,7 +122,7 @@ def vectorize_phones(segment: str) -> Vector:
         try:
             vec = vectorize_phones(seg[start:])
         except ValueError:
-            raise ValueError(f"Unrecognized phone {segment!r}") from None
+            raise _unrecognized(segment) from None
         for marker in seg[:start]:
             vec = _apply_if(_DIACRITICS[PRE_DIACRITICS[marker]], vec, segment)
         return vec
@@ -134,7 +142,7 @@ def vectorize_phones(segment: str) -> Vector:
             tied += (_TIES[0] if joins else "") + cluster
         if tied != seg:
             return vectorize_phones(tied)
-    raise ValueError(f"Unrecognized phone {segment!r}" + (": a diphthong is two segments" if _is_diphthong(seg) else ""))
+    raise _unrecognized(segment, ": a diphthong is two segments" if _is_diphthong(seg) else "")
 
 
 _NAS, _SON, _CONT, _DELREL, _SG, _CG = (_INDEX[f] for f in ("nas", "son", "cont", "delrel", "sg", "cg"))

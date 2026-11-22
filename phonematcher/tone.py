@@ -56,5 +56,10 @@ def tone_distance(a: str, b: str) -> float:
     0.2475, against 0.7817 for a baseline that compares only the direction of the contour (issue
     #68, https://github.com/TigreGotico/phonematcher/issues/68).
     """
+    for name, value in (("a", a), ("b", b)):
+        if not isinstance(value, str):
+            raise TypeError(f"tone_distance() argument {name} must be str, not {type(value).__name__}")
+        if not is_tone(value):
+            raise ValueError(f"tone_distance() argument {name} is not a tone: {value!r}")
     pa, pb = _contour(tone_levels(a)), _contour(tone_levels(b))
     return sum(abs(x - y) for x, y in zip(pa, pb)) / (4 * _POINTS)

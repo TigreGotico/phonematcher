@@ -152,7 +152,7 @@ The first list is the share of queries whose first result is the right word. The
 
 ## 6. Choose a sensitivity
 
-The default is 0.08. A rule chooses it on the development results. The rule is rule 7 of `benchmarks/prereg-2.md`, applied to these six values: 0.01, 0.02, 0.03, 0.05, 0.08 and 0.12. Take the value with the highest mean recall at 1 among the values whose mean candidate count is at most 5% of the index pronunciations in every pair. The choice came after the test run, and the test data played no part in it.
+The default is 0.08. A rule chooses it on the development results. The rule is rule 7 of [`benchmarks/prereg-2.md`](https://github.com/TigreGotico/phonematcher/blob/dev/benchmarks/prereg-2.md), applied to these six values: 0.01, 0.02, 0.03, 0.05, 0.08 and 0.12. Take the value with the highest mean recall at 1 among the values whose mean candidate count is at most 5% of the index pronunciations in every pair. The choice came after the test run, and the test data played no part in it.
 
 This block gives, for each value, the largest share of the index that a query returns over the four pairs:
 

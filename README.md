@@ -17,7 +17,9 @@ Every distance comes from distinctive features. The feature table starts from Pa
 uv pip install phonematcher
 ```
 
-phonematcher has no runtime dependencies.
+The library has no runtime dependencies. The "Search by sound" example below also needs orthography2ipa: `uv pip install phonematcher orthography2ipa`.
+
+Pass `strict=True` to raise on a character that IPA does not define. It cannot catch the ASCII letters `c`, `y`, `j` and `r`, which are also IPA letters, so a spelling that holds one is read as IPA and gives a wrong score with no error.
 
 ## Distance between sounds
 
@@ -31,7 +33,7 @@ segments("ˈt͡ʃɐ̃w̃")              # ['t͡ʃ', 'ɐ̃', 'w̃']
 ipa_distance("ˈpojʃ", "ˈpojs")   # 0.199: one near substitution
 ```
 
-`feature_distance` compares two segments, from 0 to 1. `substitution_cost` is the one cost of replacing a segment by another. It is the square root of the feature distance. `ipa_distance` compares two IPA strings: an edit distance where a substitution costs `substitution_cost` and an insertion or deletion costs 0.5. A substitution costs at most 1, so it never costs more than a deletion plus an insertion. The search groups sounds with the same cost. The costs are the ones that the pre-registered test in `benchmarks/prereg-2.md` selected.
+`feature_distance` compares two segments, from 0 to 1. `substitution_cost` is the one cost of replacing a segment by another. It is the square root of the feature distance. `ipa_distance` compares two IPA strings: an edit distance where a substitution costs `substitution_cost` and an insertion or deletion costs 0.5. A substitution costs at most 1, so it never costs more than a deletion plus an insertion. The search groups sounds with the same cost. The costs are the ones that the pre-registered test in [`benchmarks/prereg-2.md`](https://github.com/TigreGotico/phonematcher/blob/dev/benchmarks/prereg-2.md) selected.
 
 ## Search by sound
 
@@ -53,7 +55,7 @@ A term may have several readings: `search.add_term(["ˈpojʃ", "ˈpojs"], "pois"
 ## How it compares
 
 <!-- benchmark-table:start -->
-Test split, run once under `benchmarks/prereg-2.md`. Each cell is the estimate with its 95% interval. The best value in each column is in bold. A dash means that the system does not run the task. SCA ran retrieval on a sample of 500 queries per pair and ALINE on the first 100 of those, so these two retrieval cells are not on the same queries as the other rows. The shipped library is the P5 candidate, with its test numbers. The later changes of the library (one segment cost, a relative sensitivity and strict input) were made on dev only and did not change any word distance. [docs/benchmarks.md](docs/benchmarks.md) holds every result.
+Test split, run once under [`benchmarks/prereg-2.md`](https://github.com/TigreGotico/phonematcher/blob/dev/benchmarks/prereg-2.md). Each cell is the estimate with its 95% interval. The best value in each column is in bold. A dash means that the system does not run the task. SCA ran retrieval on a sample of 500 queries per pair and ALINE on the first 100 of those, so these two retrieval cells are not on the same queries as the other rows. The shipped library is the P5 candidate, with its test numbers. The later changes of the library (one segment cost, a relative sensitivity and strict input) were made on dev only and did not change any word distance. [docs/benchmarks.md](docs/benchmarks.md) holds every result.
 
 | System | Cognates, mean AP | Alignment, PAS on common pairs | Retrieval, mean recall@1 |
 |---|---|---|---|

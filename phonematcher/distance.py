@@ -128,16 +128,24 @@ def check_readable(segs: Sequence[str], source: str) -> None:
                 raise ValueError(f"cannot read the segment {seg!r} in {source!r}") from None
 
 
+def _check_sequences(function: str, a: Sequence[str], b: Sequence[str]) -> None:
+    for name, value in (("a", a), ("b", b)):
+        if not isinstance(value, (str, list, tuple)):
+            raise TypeError(f"{function}() argument {name} must be a list of segments, not {type(value).__name__}")
+
+
 def edit_distance(a: Sequence[str], b: Sequence[str], *, strict: bool = False) -> float:
     """Levenshtein distance between two segment sequences, with feature-weighted substitutions.
 
     Deletion and insertion cost 0.5, the value that the pre-registered test of
     ``benchmarks/prereg-2.md`` selected (``docs/benchmarks.md``). Pass the output of :func:`segments`, or call
-    :func:`ipa_distance` on strings.
+    :func:`ipa_distance` on strings. A string is read as one segment per character, so it is not
+    split into the segments of :func:`segments`.
 
     An unread segment is at distance 1 from every other segment, so it costs as much as a missing
     one. With *strict*, an unread segment raises ``ValueError`` instead.
     """
+    _check_sequences("edit_distance", a, b)
     if strict:
         check_readable(a, " ".join(a))
         check_readable(b, " ".join(b))
@@ -158,6 +166,7 @@ def align(a: Sequence[str], b: Sequence[str], *, strict: bool = False) -> List[T
     result is deterministic. With *strict*, an unread segment raises ``ValueError``, as in
     :func:`edit_distance`.
     """
+    _check_sequences("align", a, b)
     if strict:
         check_readable(a, " ".join(a))
         check_readable(b, " ".join(b))
@@ -201,6 +210,9 @@ def ipa_distance(a: str, b: str, normalized: bool = False, *, strict: bool = Fal
     A segment that the feature table cannot read costs as much as a missing one. With *strict*,
     it raises ``ValueError`` that names the segment and the string.
     """
+    for name, value in (("a", a), ("b", b)):
+        if not isinstance(value, str):
+            raise TypeError(f"ipa_distance() argument {name} must be str, not {type(value).__name__}")
     sa, sb = segments(a), segments(b)
     if strict:
         check_readable(sa, a)
