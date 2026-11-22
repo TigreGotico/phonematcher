@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.10.0a1](https://github.com/TigreGotico/phonematcher/tree/0.10.0a1) (2026-11-22)
+
+[Full Changelog](https://github.com/TigreGotico/phonematcher/compare/0.9.0a1...0.10.0a1)
+
+**Merged pull requests:**
+
+- feat: read letters with no tie bar as the tied segment, and marks before them [\#34](https://github.com/TigreGotico/phonematcher/pull/34) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
+
 ## [0.9.0a1](https://github.com/TigreGotico/phonematcher/tree/0.9.0a1) (2026-11-21)
 
 [Full Changelog](https://github.com/TigreGotico/phonematcher/compare/0.8.0a1...0.9.0a1)
