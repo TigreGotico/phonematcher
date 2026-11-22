@@ -1,0 +1,146 @@
+"""``benchmarks/render.py``: the page is a function of the result files, and ``--check`` finds a page that is not.
+
+The expected strings are built from the numbers in the result files, formatted as the page formats
+them, not copied from the page.
+"""
+import json
+import shutil
+import sys
+from pathlib import Path
+
+import pytest
+
+BENCHMARKS = Path(__file__).resolve().parent.parent / "benchmarks"
+sys.path.insert(0, str(BENCHMARKS))
+
+import render  # noqa: E402
+import variants  # noqa: E402
+
+SYSTEMS = ["phonematcher", *variants.CANDIDATES]
+
+
+@pytest.fixture
+def results(tmp_path):
+    """A copy of the committed seen and dev result files."""
+    folder = tmp_path / "results"
+    folder.mkdir()
+    for path in render.RESULTS.glob("*.json"):
+        shutil.copy(path, folder / path.name)
+    return folder
+
+
+def committed(name):
+    return json.loads((render.RESULTS / name).read_text(encoding="utf8"))
+
+
+def test_the_committed_page_is_a_fresh_render_of_the_committed_results():
+    assert render.PAGE.read_text(encoding="utf8") == render.render(render.RESULTS)
+    assert render.main(["--check"]) == 0
+
+
+def test_the_committed_results_hold_no_test_file():
+    assert not list(render.RESULTS.glob("*-test.json"))
+    assert "## Test split" not in render.PAGE.read_text(encoding="utf8")
+
+
+def test_an_alignment_row_holds_the_numbers_of_its_file(results):
+    row = committed("alignment-dev.json")["all"]["systems"]["phonematcher"]
+    expected = f"| phonematcher | {row['n_scored']} of {row['n_in']} | {row['common_pas']:.4f} | {row['common_cs']:.4f} | {row['unread_at_zero_pas']:.4f} |"
+    assert expected in render.render(results)
+
+
+def test_a_cognate_row_holds_the_numbers_of_its_file(results):
+    row = committed("cognates-dev.json")["systems"]["sca"]
+    expected = (f"| sca | {row['unread_at_1']['average_precision']['mean']:.4f} | {row['unread_at_1']['bcubed_f']['mean']:.4f} | "
+                f"{row['common']['average_precision']['mean']:.4f} | {row['common']['bcubed_f']['mean']:.4f} |")
+    assert expected in render.render(results)
+
+
+def test_a_retrieval_row_holds_the_recall_of_each_pair_and_their_mean(results):
+    payload = committed("retrieval-dev.json")
+    recalls = [pair["systems"]["levenshtein"]["all_items_unread_at_1"]["recall@1"] for pair in payload["pairs"].values()]
+    cells = " | ".join(f"{r:.4f}" for r in recalls)
+    assert f"| levenshtein | {cells} | {sum(recalls) / len(recalls):.4f} |" in render.render(results)
+
+
+def test_a_changed_number_changes_the_page(results):
+    path = results / "alignment-dev.json"
+    payload = json.loads(path.read_text(encoding="utf8"))
+    payload["all"]["systems"]["phonematcher"]["common_pas"] = 0.1234
+    path.write_text(json.dumps(payload), encoding="utf8")
+    assert "| 0.1234 |" in render.render(results)
+    assert "| 0.1234 |" not in render.PAGE.read_text(encoding="utf8")
+
+
+def test_check_fails_for_a_page_that_differs_and_for_a_missing_page(results, tmp_path, capsys):
+    page = tmp_path / "page.md"
+    args = ["--check", "--results", str(results), "--page", str(page)]
+    assert render.main(args) == 1
+    assert render.main(["--results", str(results), "--page", str(page)]) == 0
+    assert render.main(args) == 0
+    page.write_text(page.read_text(encoding="utf8").replace("0.", "1.", 1), encoding="utf8")
+    assert render.main(args) == 1
+    assert "differs from a fresh render" in capsys.readouterr().err
+
+
+def test_check_fails_when_a_result_file_changes_after_the_page_was_written(results, tmp_path):
+    page = tmp_path / "page.md"
+    render.main(["--results", str(results), "--page", str(page)])
+    path = results / "alignment-dev.json"
+    payload = json.loads(path.read_text(encoding="utf8"))
+    payload["all"]["systems"]["phonematcher"]["common_pas"] = 0.5
+    path.write_text(json.dumps(payload), encoding="utf8")
+    assert render.main(["--check", "--results", str(results), "--page", str(page)]) == 1
+
+
+def interval(estimate):
+    return {"estimate": estimate, "low": estimate - 0.01, "high": estimate + 0.01}
+
+
+def paired(diff, low=None):
+    return {"diff": diff, "low": diff - 0.01 if low is None else low, "high": diff + 0.01}
+
+
+def candidates():
+    return {n.removeprefix("pm-"): {"system": n, "k1": n != "pm-C1", **({"major_class_weight": 1.38} if n == "pm-C3" else {})} for n in variants.CANDIDATES}
+
+
+def write_test_files(folder, c4_low):
+    head = "a" * 40
+    diffs = {n: paired(0.02, c4_low if n == "pm-P5" else -0.5) for n in variants.CANDIDATES}
+    systems = {n: {"bcubed_f_at_training_threshold": {"bcubed_f": {"mean": 0.5 + i / 100}}} for i, n in enumerate(SYSTEMS)}
+    intervals = {n: interval(0.6 + i / 100) for i, n in enumerate(SYSTEMS)}
+    files = {
+        "cognates": {"systems": systems},
+        "alignment": {"n_items": 9, "all": {"n_common": 7, "systems": {
+            n: {"n_scored": 8, "n_in": 9, "common_pas": 0.7, "common_cs": 0.8, "unread_at_zero_pas": 0.6} for n in SYSTEMS}}},
+        "retrieval": {"pairs": {"en-US-UK": {"fuzzy_search": None, "systems": {
+            n: {"queries_scored": 11, "all_items_unread_at_1": {"recall@1": 0.5, "recall@10": 0.9, "mrr": 0.6}} for n in SYSTEMS}}}},
+    }
+    for task, body in files.items():
+        payload = {"task": task, "split": "test", "commit": head, "candidates": candidates(),
+                   "intervals": intervals, "paired": {n: dict(d) for n, d in diffs.items()}, **body}
+        (folder / f"{task}-test.json").write_text(json.dumps(payload), encoding="utf8")
+
+
+def test_the_test_files_render_with_intervals_differences_and_the_decision(results):
+    write_test_files(results, c4_low=0.01)
+    page = render.render(results)
+    assert "## Test split" in page and "Commit `aaaaaaaaaaaa`." in page
+    assert "| pm-P5 | 0.6500 [0.6400, 0.6600] | +0.0200 [+0.0100, +0.0300] | 0.5500 |" in page
+    assert "| C3 | pm-C3 | yes | syl, son and cons at 1.38 |" in page
+    assert "| C1 | pm-C1 | no | - |" in page
+    assert "C1: out by rule 1, K1 fails" in page
+    assert "Weights and gap cost after the test: P5." in page
+
+
+def test_the_decision_keeps_c0_when_no_candidate_beats_it(results):
+    write_test_files(results, c4_low=-0.5)
+    assert "Weights and gap cost after the test: C0." in render.render(results)
+
+
+def test_the_decision_waits_for_all_three_test_files(results):
+    write_test_files(results, c4_low=0.01)
+    (results / "retrieval-test.json").unlink()
+    page = render.render(results)
+    assert "## Test split" in page and "### Decision" not in page

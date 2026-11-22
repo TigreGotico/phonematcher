@@ -16,6 +16,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from systems import NAMES, System, UnreadSegment, build  # noqa: E402
 from variants import NAMES as VARIANTS  # noqa: E402
+import final  # noqa: E402
 from tasks import ablations, alignment, allophones, cognates, cognates_toneless, confusions, coverage, retrieval, tone  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -109,8 +110,17 @@ def main(argv: Optional[List[str]] = None, repo: Path = ROOT) -> int:
     parser.add_argument("--cache", type=Path, default=DEFAULT_CACHE)
     parser.add_argument("--out", type=Path, help="result file of a suite task; default benchmarks/results/<task>-<split>.json")
     parser.add_argument("--final", action="store_true", help="allow the test split; needs a clean git tree")
+    parser.add_argument("--dry-run", action="store_true", help="walk the --final path on the dev split, capped at --limit units, and write nothing")
+    parser.add_argument("--limit", type=int, default=0, help="with --dry-run: units per data set, language pair or file")
     args = parser.parse_args(argv)
 
+    if args.dry_run:
+        if args.final or args.split != "dev" or args.task not in final.TASKS:
+            raise SystemExit(f"--dry-run takes --split dev, no --final and one of {', '.join(final.TASKS)}")
+        record = final.run_final(args.task, args.cache, args.split, args.limit)
+        print("\n".join(final.report(args.task, args.split, record)))
+        print("dry run: nothing written")
+        return 0
     commit = None
     if args.split == "test" and not args.final:
         raise SystemExit("the test split runs only with --final")
@@ -119,6 +129,15 @@ def main(argv: Optional[List[str]] = None, repo: Path = ROOT) -> int:
             raise SystemExit("--final applies to --split test only")
         commit = commit_of_clean_tree(repo)
 
+    if args.final and args.task in final.TASKS:
+        if args.system != "all":
+            raise SystemExit("--final scores every system, the C10 variants and the candidates; pass --system all")
+        record = final.run_final(args.task, args.cache, args.split)
+        print("\n".join(final.report(args.task, args.split, record)))
+        out = args.out or RESULTS / f"{args.task}-test.json"
+        write_result(out, {"head": commit, **record}, args.task, ",".join(final.final_names()), args.split, commit)
+        print(f"wrote {out}")
+        return 0
     if args.task in SUITE_TASKS:
         names = {"all": NAMES, "variants": ["phonematcher", *VARIANTS]}.get(args.system, [args.system])
         return run_suite(SUITE_TASKS[args.task], args, names, commit, repo)

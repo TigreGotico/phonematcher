@@ -338,13 +338,36 @@ def control(levenshtein: Dict[str, List[Concept]], names: Sequence[str], directo
 SPLITS = ("dev", "test")
 
 
-def run(systems: List[System], split: str, cache: Path, drop_tones: bool = False) -> dict:
-    """Score every system on the dev (training) or the test data sets. ``run.py`` lets the test
-    sets through only with ``--final``."""
+def at_training_threshold(train: Dict[str, List[Concept]], scored: Dict[str, List[Concept]]) -> dict:
+    """Mean B-cubed F (LingPy counting, unread words at distance 1) of the *scored* data sets at the
+    threshold that has the best mean F on the *train* data sets."""
+    thresholds = threshold_grid(list(train.values()))
+    grid = np.array([cluster_scores(train[n], thresholds) for n in train])
+    best = int(np.vectorize(f_score)(grid[:, :, 0], grid[:, :, 1]).mean(axis=0).argmax())
+    f = {n: f_score(*cluster_scores(scored[n], [thresholds[best]])[0]) for n in scored}
+    return {"threshold": thresholds[best], "bcubed_f": {**f, "mean": float(np.mean(list(f.values())))}}
+
+
+def first_concepts(words: Sequence[Word], count: int) -> List[Word]:
+    """The words of the first *count* concepts in file order."""
+    keep = list(dict.fromkeys(w.concept for w in words))[:count]
+    return [w for w in words if w.concept in keep]
+
+
+def score(
+    systems: List[System], split: str, cache: Path, drop_tones: bool = False, final: bool = False, limit: int = 0
+) -> Tuple[dict, Dict[str, Dict[str, List[Concept]]]]:
+    """Score every system on the dev (training) or the test data sets; also returns the concepts
+    of every system and data set. ``run.py`` lets the test sets through only with ``--final``.
+
+    With *final*, each system also gets ``bcubed_f_at_training_threshold``: its F on the scored sets at
+    the threshold that is best on the six training sets. *limit* keeps the first concepts of each set."""
     names = TEST if split == "test" else TRAINING
     prefix = "D_test_" if split == "test" else "D_training_"
     directory = fetch(cache)
     words = {n: load(directory / f"{prefix}{n}.tsv", drop_tones) for n in names}
+    if limit:
+        words = {n: first_concepts(w, limit) for n, w in words.items()}
     sets = {system.name: {n: concepts_of(system, words[n]) for n in names} for system in systems}
     payload = {
         "source": SOURCE,
@@ -355,7 +378,18 @@ def run(systems: List[System], split: str, cache: Path, drop_tones: bool = False
     }
     if split == "dev" and not drop_tones and "levenshtein" in sets:
         payload["control"] = control(sets["levenshtein"], names, directory)
-    return payload
+    if final:
+        for system in systems:
+            if split == "dev":
+                train = sets[system.name]
+            else:
+                train = {n: concepts_of(system, load(directory / f"D_training_{n}.tsv", drop_tones)) for n in TRAINING}
+            payload["systems"][system.name]["bcubed_f_at_training_threshold"] = at_training_threshold(train, sets[system.name])
+    return payload, sets
+
+
+def run(systems: List[System], split: str, cache: Path, drop_tones: bool = False) -> dict:
+    return score(systems, split, cache, drop_tones)[0]
 
 
 def lines(payload: dict) -> List[str]:
