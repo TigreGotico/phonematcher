@@ -1,4 +1,11 @@
 # API reference
+<!-- agent-hint
+covers: every public name of the package and what it returns
+source: phonematcher/__init__.py, phonematcher/features.py, phonematcher/distance.py, phonematcher/tone.py, phonematcher/clustering.py, phonematcher/phonex.py
+generated: no
+verify: pytest --import-mode=importlib tests/test_docs.py -k api.md
+see: quickstart.md, features.md
+-->
 
 The package root exports `phonetic_distance`, `vectorize_phones`, `segments`, `ipa_distance`, `edit_distance`, `align`, `PhoneticFuzzySearch` and `Match`.
 
@@ -47,3 +54,5 @@ The clusters of the IPA letters and tied affricates at `threshold`, cached.
 ## `phonematcher.phonex`
 
 - `phonex(word, cluster_of) -> tuple[int, ...]`: the cluster ids of a word's segments, with repeats of one cluster collapsed.
+
+[Index](index.md) · Previous: [The feature table](features.md) · Next: [Benchmarks](benchmarks.md)

@@ -1,4 +1,11 @@
 # The feature table
+<!-- agent-hint
+covers: the feature table: its 36 features, weights, sources, diacritic rules and the distance formula
+source: phonematcher/data/features.json, phonematcher/data/overrides.json, scripts/build_features.py
+generated: no
+verify: pytest --import-mode=importlib tests/test_docs.py -k features.md
+see: add-a-segment.md, compare-sounds.md, api.md
+-->
 
 Each IPA segment has a vector of 36 distinctive features. A value is `True` (+), `False` (−) or `None` (0, the feature does not apply). The table is in `phonematcher/data/features.json`. The script `scripts/build_features.py` builds it from PanPhon, the Hayes (2009) feature tables as converted to CSV by Gorman, the IPA vowel chart and a file of cited changes.
 
@@ -318,7 +325,7 @@ Superscript digits are tone numerals: the digit is the level, so `²¹⁴` is `�
 
 Some marks are not read and are dropped like stress marks. The chart lists downstep `ꜜ` and upstep `ꜛ` with the level tones, but they change the pitch of the tones after them, and a tone here is the contour of one syllable only. Global rise `↗` and global fall `↘` belong to the intonation of a phrase. The neutral-tone numeral `⁰` has no level.
 
-Two tones are compared by their contours. Each tone gives its pitch at the start, the middle and the end of the syllable, by linear steps between its levels. The tone distance is the mean difference of the three pitches, divided by four, the range from `˩` to `˥`. Thus `˥` and `˩` are at 1, `˥` and `˦` at 0.25, and `˧˥` and `˩˥` at 0.25. A tone against a phone costs 1, so a tone never replaces a sound, and a missing tone costs 1, like a missing sound.
+Two tones are compared by their contours. Each tone gives its pitch at the start, the middle and the end of the syllable, by linear steps between its levels. The tone distance is the mean difference of the three pitches, divided by four, the range from `˩` to `˥`. Thus `˥` and `˩` are at 1, `˥` and `˦` at 0.25, and `˧˥` and `˩˥` at 0.25. A tone against a phone costs 1, so a tone costs no less than deleting one segment and inserting the other (see [Tones](tones.md)), and a missing tone costs 0.5, like a missing sound.
 
 The scale of one quarter per level is linear and not fitted to perception data. The search index ignores tones, so a query finds a word with any tone, and the score ranks the same tone first.
 
@@ -330,3 +337,5 @@ python scripts/build_features.py
 ```
 
 The build prints the number of segments in, added and out, the number of value changes and the number of diacritic rules. It stops if a change's recorded old value does not match the table, or if a segment is [+high, +low].
+
+[Index](index.md) · Previous: [Add a segment](add-a-segment.md) · Next: [API reference](api.md)
