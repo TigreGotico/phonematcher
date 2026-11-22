@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.0.0a1](https://github.com/TigreGotico/phonematcher/tree/2.0.0a1) (2026-11-22)
+
+[Full Changelog](https://github.com/TigreGotico/phonematcher/compare/1.0.1a1...2.0.0a1)
+
+**Breaking changes:**
+
+- feat!: one segment cost, and a cluster sensitivity that is a share [\#78](https://github.com/TigreGotico/phonematcher/pull/78) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
+
 ## [1.0.1a1](https://github.com/TigreGotico/phonematcher/tree/1.0.1a1) (2026-11-22)
 
 [Full Changelog](https://github.com/TigreGotico/phonematcher/compare/1.0.0a4...1.0.1a1)
