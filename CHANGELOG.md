@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.3.2a2](https://github.com/TigreGotico/phonematcher/tree/2.3.2a2) (2026-11-22)
+
+[Full Changelog](https://github.com/TigreGotico/phonematcher/compare/2.3.2a1...2.3.2a2)
+
+**Merged pull requests:**
+
+- perf: cache feature\_distance on the ordered pair and read vectors as ints [\#90](https://github.com/TigreGotico/phonematcher/pull/90) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
+
 ## [2.3.2a1](https://github.com/TigreGotico/phonematcher/tree/2.3.2a1) (2026-11-22)
 
 [Full Changelog](https://github.com/TigreGotico/phonematcher/compare/2.3.1a1...2.3.2a1)
