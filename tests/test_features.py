@@ -6,6 +6,7 @@ Expected values follow the IPA chart (International Phonetic Association; footer
 import json
 import unicodedata
 from importlib.resources import files
+from pathlib import Path
 
 import pytest
 
@@ -404,3 +405,16 @@ def test_a_tie_the_rule_does_not_cover_raises(tied):
 
 def test_an_affricate_keeps_the_glottal_features_of_its_stop():
     assert feature("tʼ͡s", "cg") is True and feature("tʰ͡s", "sg") is True
+
+
+def test_the_first_22_features_are_the_columns_of_the_panphon_weight_file():
+    # docs/design.md states that PanPhon 0.22.2's data has 22 features; the table's own come after them.
+    import csv
+
+    import panphon
+
+    path = Path(panphon.__file__).parent / "data" / "feature_weights.csv"
+    with open(path, encoding="utf-8") as handle:
+        header = next(csv.reader(handle))
+    assert len(header) == 22
+    assert list(FEATURES[:22]) == header
