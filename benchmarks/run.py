@@ -15,7 +15,7 @@ from typing import Callable, Dict, List, Optional
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from systems import NAMES, System, UnreadSegment, build  # noqa: E402
-from tasks import alignment, allophones, cognates, cognates_toneless, confusions, coverage  # noqa: E402
+from tasks import alignment, allophones, cognates, cognates_toneless, confusions, coverage, retrieval  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent
 DEFAULT_CACHE = Path.home() / ".cache" / "phonematcher-bench"
@@ -65,6 +65,7 @@ SUITE_TASKS = {
     "confusions": confusions,
     "cognates": cognates,
     "cognates-toneless": cognates_toneless,
+    "retrieval": retrieval,
 }
 RESULTS = ROOT / "benchmarks" / "results"
 
