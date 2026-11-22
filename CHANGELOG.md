@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.10.1a1](https://github.com/TigreGotico/phonematcher/tree/0.10.1a1) (2026-11-22)
+
+[Full Changelog](https://github.com/TigreGotico/phonematcher/compare/0.10.0a1...0.10.1a1)
+
+**Merged pull requests:**
+
+- fix: an empty segment is unreadable, not a crash [\#39](https://github.com/TigreGotico/phonematcher/pull/39) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
+
 ## [0.10.0a1](https://github.com/TigreGotico/phonematcher/tree/0.10.0a1) (2026-11-22)
 
 [Full Changelog](https://github.com/TigreGotico/phonematcher/compare/0.9.0a1...0.10.0a1)
