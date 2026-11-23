@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.3.4a3](https://github.com/TigreGotico/phonematcher/tree/2.3.4a3) (2026-11-23)
+
+[Full Changelog](https://github.com/TigreGotico/phonematcher/compare/2.3.4a2...2.3.4a3)
+
+**Merged pull requests:**
+
+- docs: rewrite the whitepaper in plain English [\#105](https://github.com/TigreGotico/phonematcher/pull/105) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
+
 ## [2.3.4a2](https://github.com/TigreGotico/phonematcher/tree/2.3.4a2) (2026-11-23)
 
 [Full Changelog](https://github.com/TigreGotico/phonematcher/compare/2.3.4a1...2.3.4a2)
