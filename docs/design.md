@@ -124,13 +124,13 @@ The weights of the 22 features in the data of PanPhon 0.22.2 are PanPhon's. The 
 
 ## What does not read
 
-`vectorize_phones` raises `ValueError` for a segment it cannot read. The table counts the distinct segments (types) of three corpora and the occurrences (tokens) of those segments. The counts come from one run, recorded in `benchmarks/results/coverage-seen.json`. The run was made on a tree with uncommitted changes, and the results were committed as `4a31c7f`.
+`vectorize_phones` raises `ValueError` for a segment it cannot read. The table counts the distinct segments (types) of three corpora and the occurrences (tokens) of those segments. The counts come from one run, recorded in `benchmarks/results/coverage-seen.json`. The run was made on a clean tree at commit `5a6f2a0`.
 
 | Corpus | Distinct segments | Read | Unread | Share of tokens read |
 |---|---|---|---|---|
 | PHOIBLE 2.0 | 4158 | 3765 | 393 | 0.9944 |
-| WikiPron | 3604 | 2594 | 1010 | 0.9939 |
-| orthography2ipa | 2569 | 2168 | 401 | 0.9889 |
+| WikiPron | 3604 | 2605 | 999 | 0.9939 |
+| orthography2ipa | 2569 | 2184 | 385 | 0.9898 |
 
 Most unread segments are rare. The kinds of segment that do not read are these.
 

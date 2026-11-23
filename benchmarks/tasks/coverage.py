@@ -1,9 +1,9 @@
 """C1: how many of the segments in three corpora each system reads.
 
 The orthography2ipa inventory is a set of TTS tokens. It holds the stress marks ˈ and ˌ on purpose
-whenever a spec has stress rules, so both are dropped before counting, for every system. The bare
-length mark ː and the bare ʲ stay in the count as unread: they are a known spec defect
-(orthography2ipa issue 2443).
+whenever a spec has stress rules, so both are dropped before counting, for every system. The other
+items are phones, with a length mark or a modifier letter on its base letter, and tone letters.
+A few specs also list a bare ʰ, ʷ or ʼ as an item; it counts like any other segment.
 
 Corpora: PHOIBLE 2.0 (CC BY 4.0, a token is one inventory), the WikiPron TSV files (Apache-2.0,
 a token is one occurrence) and the phone inventories of the orthography2ipa specs (a token is
