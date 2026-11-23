@@ -181,7 +181,8 @@ def test_run_writes_the_result_with_n_in_and_n_out(cache, tmp_path):
     repo.mkdir()
     status = run.main(["--task", "alignment", "--system", "levenshtein", "--cache", str(cache)], repo=repo)
     assert status == 0
-    record = json.loads((repo / "benchmarks" / "results" / "alignment-dev.json").read_text(encoding="utf8"))
+    record = json.loads((cache / "results" / "alignment-dev.json").read_text(encoding="utf8"))
+    assert not (repo / "benchmarks").exists()
     assert (record["n_in"], record["n_items"], record["n_left_out"]) == (8, 6, 2)
     assert record["data"]["sha"] == alignment.SHA
     row = record["all"]["systems"]["levenshtein"]

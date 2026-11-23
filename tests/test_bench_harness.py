@@ -193,3 +193,49 @@ def test_a_result_file_records_split_and_commit(tmp_path):
     assert json.loads(path.read_text(encoding="utf8")) == {
         "task": "t", "system": "levenshtein", "split": "dev", "commit": None, "score": 0.5,
     }
+
+
+class EmptyTask:
+    """A suite task with no data: it scores nothing and returns an empty payload."""
+
+    SPLITS = ("seen",)
+
+    @staticmethod
+    def run(systems, split, cache):
+        return {}
+
+    @staticmethod
+    def lines(payload):
+        return []
+
+
+def test_two_suite_runs_in_a_row_keep_the_tree_clean_and_record_head(repo, tmp_path_factory, monkeypatch):
+    import json
+
+    # The committed results directory sits inside the tree; a run must not write there.
+    monkeypatch.setattr(run, "RESULTS", repo / "benchmarks" / "results")
+    monkeypatch.setitem(run.SUITE_TASKS, "coverage", EmptyTask)
+    head = subprocess.run(["git", "-C", str(repo), "rev-parse", "HEAD"], capture_output=True, text=True, check=True).stdout.strip()
+    cache = tmp_path_factory.mktemp("cache")
+    for _ in range(2):
+        assert run.main(["--task", "coverage", "--system", "levenshtein", "--split", "seen", "--cache", str(cache)], repo=repo) == 0
+        record = json.loads((cache / "results" / "coverage-seen.json").read_text(encoding="utf8"))
+        assert record["head"] == head and record["tree_dirty"] is False
+        run.commit_of_clean_tree(repo)
+
+
+def test_copy_results_copies_the_named_files_into_the_results_directory(tmp_path, capsys):
+    import copy_results
+
+    source, results = tmp_path / "out", tmp_path / "results"
+    source.mkdir()
+    (source / "a-seen.json").write_text('{"a": 1}\n')
+    (source / "b-dev.json").write_text('{"b": 2}\n')
+    assert copy_results.main(["--from", str(source), "a-seen.json"], results=results) == 0
+    assert [p.name for p in results.iterdir()] == ["a-seen.json"]
+    assert (results / "a-seen.json").read_text() == '{"a": 1}\n'
+    assert copy_results.main(["--from", str(source)], results=results) == 0
+    assert sorted(p.name for p in results.iterdir()) == ["a-seen.json", "b-dev.json"]
+    assert "2 files in, 2 copied" in capsys.readouterr().out
+    with pytest.raises(SystemExit, match="no result file"):
+        copy_results.main(["--from", str(source), "c.json"], results=results)
