@@ -316,6 +316,11 @@ def readme_table(directory: Path = RESULTS) -> str:
     return "\n".join([caption, "", *table(["System", *(title for _, title in README_COLUMNS)], rows)]).rstrip("\n") + "\n"
 
 
+WHITEPAPER_SYSTEMS = [*README_SYSTEMS[:-2], ("phonematcher", "phonematcher, original costs"), ("pm-P5", "phonematcher, released costs")]
+CANDIDATE_NAMES = {"C1": "equal weights", "C2": "one unit per dimension", "C3": "heavier major classes",
+                   "P4": "half gap", "P5": "released costs"}
+
+
 def bare(row: dict) -> str:
     return f"{row['diff']:+.4f} [{row['low']:+.4f}, {row['high']:+.4f}]"
 
@@ -349,7 +354,7 @@ def wp_cognates(results: dict) -> str:
     sets = ", ".join(name.split("-")[0] for name in first["data_sets_scored"])
     empty = " and ".join(name.split("-")[0] for name, n in first["words_out"].items() if n == 0)
     rows = []
-    for system, label in README_SYSTEMS:
+    for system, label in WHITEPAPER_SYSTEMS:
         entry = test["systems"][system]
         common, every = entry["common"], entry["unread_at_1"]
         rows.append([label, num(common["average_precision"]["mean"]), num(common["bcubed_f"]["mean"]),
@@ -376,7 +381,7 @@ def wp_romance(results: dict) -> str:
 def wp_alignment(results: dict) -> str:
     test = results["test"]["alignment"]
     rows = []
-    for system, label in README_SYSTEMS:
+    for system, label in WHITEPAPER_SYSTEMS:
         entry = test["all"]["systems"].get(system)
         if entry is None:
             continue
@@ -395,7 +400,7 @@ def wp_retrieval(results: dict) -> str:
     common = sum(p["common_queries"] for p in pairs)
     shared = sum(p["shared_sampled_queries"] for p in pairs)
     rows = [[label, mean(system, "common_subset"), mean(system, "on_shared_queries"), span(test["intervals"][system]),
-             "/".join(str(p["systems"][system]["queries_scored"]) for p in pairs)] for system, label in README_SYSTEMS]
+             "/".join(str(p["systems"][system]["queries_scored"]) for p in pairs)] for system, label in WHITEPAPER_SYSTEMS]
     caption = (f"Test split, mean recall@1 over the four dialect pairs ({', '.join(test['pairs'])}). "
                f"The common queries are the {common} queries that every system reads and scores. "
                f"The shared queries are the {shared} queries of the ALINE sample, which every system scores. "
@@ -408,8 +413,8 @@ def wp_candidates(results: dict) -> str:
     tests = results["test"]
     rows = []
     for name, row in tests["cognates"]["candidates"].items():
-        rows.append([name, "yes" if row["k1"] else "no", *(bare(tests[task]["paired"][row["system"]]) for task in final.TASKS)])
-    head = ["Candidate", "K1 holds", "Cognates, AP minus C0", "Alignment, PAS minus C0", "Retrieval, recall@1 minus C0"]
+        rows.append([CANDIDATE_NAMES[name], "yes" if row["k1"] else "no", *(bare(tests[task]["paired"][row["system"]]) for task in final.TASKS)])
+    head = ["Candidate", "Passes the vowel rule", "Cognates, AP minus original", "Alignment, PAS minus original", "Retrieval, recall@1 minus original"]
     return "\n".join(table(head, rows))
 
 
@@ -421,7 +426,7 @@ def wp_ablations(results: dict) -> str:
         rows.append([label, bare(tests["cognates"]["paired"][f"pm-{name}"]), bare(tests["alignment"]["paired"][f"pm-{name}"]),
                      num(dev[f"pm-p5-{name}"]["unread_at_1"]["average_precision"]["mean"])])
     rows.append(["the table (control)", "-", "-", num(dev["phonematcher"]["unread_at_1"]["average_precision"]["mean"])])
-    head = ["Variant", "Test cognates, AP minus table (C0 costs)", "Test alignment, PAS minus table (C0 costs)", "Dev cognates, AP (P5 costs)"]
+    head = ["Variant", "Test cognates, AP minus table (original costs)", "Test alignment, PAS minus table (original costs)", "Dev cognates, AP (released costs)"]
     return "\n".join(table(head, rows))
 
 
@@ -451,7 +456,7 @@ def wp_vowel_height(directory: Path) -> str:
     dev = json.loads((directory / "ablations" / "vowel-height-dev.json").read_text(encoding="utf8"))
     rows = [[label, bare(dev[task]["paired"]["pm-F1-segment"])] for task, label in (
         ("cognates", "Cognates, AP"), ("alignment", "Alignment, PAS"), ("retrieval", "Retrieval, recall@1"))]
-    return "\n".join(["Dev split, P5 costs. One height encoding minus the table.", "", *table(["Task", "Paired difference [95% interval]"], rows)])
+    return "\n".join(["Dev split, released costs. One height encoding minus the table.", "", *table(["Task", "Paired difference [95% interval]"], rows)])
 
 
 def wp_control(results: dict) -> str:
