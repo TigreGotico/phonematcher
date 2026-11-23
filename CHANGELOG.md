@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.3.5a1](https://github.com/TigreGotico/phonematcher/tree/2.3.5a1) (2026-11-23)
+
+[Full Changelog](https://github.com/TigreGotico/phonematcher/compare/2.3.4a3...2.3.5a1)
+
+**Merged pull requests:**
+
+- fix: regenerate coverage against orthography2ipa 7.124.46a4 [\#107](https://github.com/TigreGotico/phonematcher/pull/107) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
+
 ## [2.3.4a3](https://github.com/TigreGotico/phonematcher/tree/2.3.4a3) (2026-11-23)
 
 [Full Changelog](https://github.com/TigreGotico/phonematcher/compare/2.3.4a2...2.3.4a3)
