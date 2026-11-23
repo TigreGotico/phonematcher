@@ -179,8 +179,11 @@ class PhoneticFuzzySearch:
 
         A candidate must match every word of at least one query reading. Its score is the smallest
         feature-weighted edit distance between a query reading and a term reading. *n_results* is a
-        count of at least 1, or ``None`` for every match.
+        count of at least 1, or ``None`` for every match. Matches with the same score are ordered by
+        the type name of their id, then by the id as text, so the order does not change between runs.
         """
+        if n_results is not None and (isinstance(n_results, bool) or not isinstance(n_results, int)):
+            raise TypeError(f"search() argument n_results must be int or None, not {type(n_results).__name__}")
         if n_results is not None and n_results < 1:
             raise ValueError(f"search() argument n_results must be at least 1, not {n_results!r}")
         queries = _as_readings(query, "search", "query")
@@ -195,5 +198,5 @@ class PhoneticFuzzySearch:
         for id in candidates:
             score = min(edit_distance(q, segments(t)) for q in q_segs for t in self.library[id])
             matches.append(Match(id, self.library[id], score))
-        matches.sort(key=lambda m: (m.score, str(m.id)))
+        matches.sort(key=lambda m: (m.score, type(m.id).__name__, str(m.id)))
         return matches[:n_results]
