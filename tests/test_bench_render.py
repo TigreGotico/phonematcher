@@ -22,11 +22,9 @@ SYSTEMS = ["phonematcher", *variants.CANDIDATES]
 
 @pytest.fixture
 def results(tmp_path):
-    """A copy of the committed seen and dev result files."""
+    """A copy of the committed result files."""
     folder = tmp_path / "results"
-    folder.mkdir()
-    for path in render.RESULTS.glob("*.json"):
-        shutil.copy(path, folder / path.name)
+    shutil.copytree(render.RESULTS, folder)
     return folder
 
 
