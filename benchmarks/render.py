@@ -1,8 +1,9 @@
 """Render ``docs/benchmarks.md`` from the result files in ``benchmarks/results``.
 
     python benchmarks/render.py            # write docs/benchmarks.md
-    python benchmarks/render.py --check    # exit 1 when docs/benchmarks.md or the README table differs from a fresh render
+    python benchmarks/render.py --check    # exit 1 when docs/benchmarks.md, the README table or a whitepaper table differs from a fresh render
     python benchmarks/render.py --readme   # print the summary table of the README
+    python benchmarks/render.py --whitepaper   # rewrite the marked tables of whitepaper.md
 
 Every number in the page comes from a result file. The files of the ``seen`` and ``dev`` splits
 are always rendered; the files of the ``test`` split are rendered when they exist.
@@ -23,6 +24,7 @@ ROOT = Path(__file__).resolve().parent.parent
 RESULTS = ROOT / "benchmarks" / "results"
 PAGE = ROOT / "docs" / "benchmarks.md"
 README = ROOT / "README.md"
+WHITEPAPER = ROOT / "whitepaper.md"
 README_START = "<!-- benchmark-table:start -->"
 README_END = "<!-- benchmark-table:end -->"
 
@@ -314,6 +316,179 @@ def readme_table(directory: Path = RESULTS) -> str:
     return "\n".join([caption, "", *table(["System", *(title for _, title in README_COLUMNS)], rows)]).rstrip("\n") + "\n"
 
 
+WHITEPAPER_SYSTEMS = [*README_SYSTEMS[:-2], ("phonematcher", "phonematcher, original costs"), ("pm-P5", "phonematcher, released costs")]
+CANDIDATE_NAMES = {"C1": "equal weights", "C2": "one unit per dimension", "C3": "heavier major classes",
+                   "P4": "half gap", "P5": "released costs"}
+
+
+def bare(row: dict) -> str:
+    return f"{row['diff']:+.4f} [{row['low']:+.4f}, {row['high']:+.4f}]"
+
+
+def wp_coverage(results: dict) -> str:
+    census = results["seen"]["coverage"]
+    rows = []
+    for label, key in (("PHOIBLE 2.0", "phoible"), ("WikiPron", "wikipron"), ("orthography2ipa", "orthography2ipa")):
+        row = census["systems"]["phonematcher"][key]["direct"]
+        rows.append([label, str(row["types"]), str(row["types_read"]), num(row["type_share"]), num(row["token_share"])])
+    return "\n".join(table(["Corpus", "Segment types", "Types read", "Share of types", "Share of tokens"], rows))
+
+
+def wp_readings(results: dict) -> str:
+    census = results["seen"]["coverage"]
+    phoible = census["phonematcher_readings"]["segments_only"]["phoible"]
+    full = census["systems"]["phonematcher"]["phoible"]["direct"]
+    rows = [[label, f"{row['types_read']} of {row['types']}", num(row["type_share"])] for label, row in (
+        ("the segment as written", phoible["direct"]),
+        ("as written, or with a tie bar between its pieces", phoible["tie_retry"]),
+        ("as the library reads a word: whole, split into segments, tones included", full),
+    )]
+    return "\n".join(table(["Reading of a PHOIBLE segment", "Types read", "Share of types"], rows))
+
+
+def wp_cognates(results: dict) -> str:
+    test = results["test"]["cognates"]
+    romance = "Romance-110-43"
+    first = test["systems"]["pm-P5"]["common"]
+    words = sum(first["words_out"].values())
+    sets = ", ".join(name.split("-")[0] for name in first["data_sets_scored"])
+    empty = " and ".join(name.split("-")[0] for name, n in first["words_out"].items() if n == 0)
+    rows = []
+    for system, label in WHITEPAPER_SYSTEMS:
+        entry = test["systems"][system]
+        common, every = entry["common"], entry["unread_at_1"]
+        rows.append([label, num(common["average_precision"]["mean"]), num(common["bcubed_f"]["mean"]),
+                     num(common["average_precision"][romance]), span(test["intervals"][system]),
+                     num(every["average_precision"][romance])])
+    head = ["System", "AP, common words", "B-cubed F, common words", "Romance AP, common words",
+            "AP, all words [95% interval]", "Romance AP, all words"]
+    caption = (f"Test split. The common words are the {words} words that every system reads, in {sets}; "
+               f"{empty} have no word that every system reads. The common columns have no interval. "
+               "The all-words column is the pre-registered main metric, with unread pairs at distance 1.")
+    return "\n".join([caption, "", *table(head, rows)])
+
+
+def wp_romance(results: dict) -> str:
+    test = results["test"]["cognates"]
+    rows = []
+    for name, total in test["words"].items():
+        systems = ("pm-P5", "panphon-weighted", "aline", "soundvectors", "levenshtein", "sca")
+        rows.append([name.split("-")[0], str(total), *(str(test["systems"][system]["skipped"]["words"][name]) for system in systems)])
+    head = ["Test set", "Words", "phonematcher", "PanPhon", "ALINE", "CLTS sound vectors", "plain edit distance", "SCA"]
+    return "\n".join(["Test split. Words that each system cannot read; both PanPhon systems read the same words.", "", *table(head, rows)])
+
+
+def wp_alignment(results: dict) -> str:
+    test = results["test"]["alignment"]
+    rows = []
+    for system, label in WHITEPAPER_SYSTEMS:
+        entry = test["all"]["systems"].get(system)
+        if entry is None:
+            continue
+        rows.append([label, f"{entry['n_scored']} of {entry['n_in']}", span(test["intervals"][system]), num(entry["common_cs"])])
+    caption = f"Test split. Every system is scored on the {test['all']['n_common']} pairs that all four aligning systems read."
+    return "\n".join([caption, "", *table(["System", "Pairs read", "PAS, common pairs [95% interval]", "Column score, common pairs"], rows)])
+
+
+def wp_retrieval(results: dict) -> str:
+    test = results["test"]["retrieval"]
+    pairs = list(test["pairs"].values())
+
+    def mean(system: str, view: str) -> str:
+        return num(math.fsum(p["systems"][system][view]["recall@1"] for p in pairs) / len(pairs))
+
+    common = sum(p["common_queries"] for p in pairs)
+    shared = sum(p["shared_sampled_queries"] for p in pairs)
+    rows = [[label, mean(system, "common_subset"), mean(system, "on_shared_queries"), span(test["intervals"][system]),
+             "/".join(str(p["systems"][system]["queries_scored"]) for p in pairs)] for system, label in WHITEPAPER_SYSTEMS]
+    caption = (f"Test split, mean recall@1 over the four dialect pairs ({', '.join(test['pairs'])}). "
+               f"The common queries are the {common} queries that every system reads and scores. "
+               f"The shared queries are the {shared} queries of the ALINE sample, which every system scores. "
+               "These two columns have no interval.")
+    head = ["System", f"Common queries ({common})", f"Shared queries ({shared})", "All queries [95% interval]", "Queries per pair"]
+    return "\n".join([caption, "", *table(head, rows)])
+
+
+def wp_candidates(results: dict) -> str:
+    tests = results["test"]
+    rows = []
+    for name, row in tests["cognates"]["candidates"].items():
+        rows.append([CANDIDATE_NAMES[name], "yes" if row["k1"] else "no", *(bare(tests[task]["paired"][row["system"]]) for task in final.TASKS)])
+    head = ["Candidate", "Passes the vowel rule", "Cognates, AP minus original", "Alignment, PAS minus original", "Retrieval, recall@1 minus original"]
+    return "\n".join(table(head, rows))
+
+
+def wp_ablations(results: dict) -> str:
+    tests, dev = results["test"], results["dev"]["ablations"]["tasks"]["cognates"]["systems"]
+    rows = []
+    for name, label in (("panphon22", "PanPhon's 22 features"), ("no-height", "no height steps"),
+                        ("flat-diacritics", "no scale marks"), ("uniform", "every weight 1")):
+        rows.append([label, bare(tests["cognates"]["paired"][f"pm-{name}"]), bare(tests["alignment"]["paired"][f"pm-{name}"]),
+                     num(dev[f"pm-p5-{name}"]["unread_at_1"]["average_precision"]["mean"])])
+    rows.append(["the table (control)", "-", "-", num(dev["phonematcher"]["unread_at_1"]["average_precision"]["mean"])])
+    head = ["Variant", "Test cognates, AP minus table (original costs)", "Test alignment, PAS minus table (original costs)", "Dev cognates, AP (released costs)"]
+    return "\n".join(table(head, rows))
+
+
+def wp_confusions(results: dict) -> str:
+    systems = results["seen"]["ablations"]["tasks"]["confusions"]["systems"]
+    rows = []
+    for name, label in (("phonematcher", "the table"), ("pm-p5-no-height", "no height steps"), ("pm-p5-panphon22", "PanPhon's 22 features")):
+        row = systems[name]["hillenbrand"]["unread_at_1"]
+        interval = row.get("interval")
+        rows.append([label, f"{row['score']:.4f} [{interval['low']:.4f}, {interval['high']:.4f}]" if interval else num(row["score"])])
+    pairs = systems["phonematcher"]["hillenbrand"]["pairs_in"]
+    return "\n".join([f"Seen data, {pairs} vowel pairs. Spearman correlation of the negative segment distance with confusion.", "",
+                      *table(["Feature set", "Hillenbrand vowels [95% interval]"], rows)])
+
+
+def wp_tone(results: dict) -> str:
+    tone = results["seen"]["tone"]
+    rows = []
+    for values, label in (("main", "main Chao values"), ("alternative", "alternative Chao values")):
+        for system, name in (("phonematcher", "tone distance"), ("direction_baseline", "direction baseline")):
+            row = tone["scored"][values][system]
+            rows.append([name, label, f"{row['score']:.4f} [{row['interval']['low']:.4f}, {row['interval']['high']:.4f}]"])
+    return "\n".join([f"Seen data, {tone['pairs']} Cantonese tone pairs.", "", *table(["System", "Tone values", "Spearman [95% interval]"], rows)])
+
+
+def wp_vowel_height(directory: Path) -> str:
+    dev = json.loads((directory / "ablations" / "vowel-height-dev.json").read_text(encoding="utf8"))
+    rows = [[label, bare(dev[task]["paired"]["pm-F1-segment"])] for task, label in (
+        ("cognates", "Cognates, AP"), ("alignment", "Alignment, PAS"), ("retrieval", "Retrieval, recall@1"))]
+    return "\n".join(["Dev split, released costs. One height encoding minus the table.", "", *table(["Task", "Paired difference [95% interval]"], rows)])
+
+
+def wp_control(results: dict) -> str:
+    control = results["seen"]["ablations"]["control"]
+    rows = [["segment pairs that both read", str(control["pairs_compared"]), str(control["pairs_differing"])],
+            ["pairs whose 22 values equal PanPhon's", str(control["identical_vector_pairs"]), str(control["identical_vector_pairs_differing"])]]
+    return "\n".join(table(["Pairs", "Count", "Distance differs"], rows))
+
+
+def whitepaper_blocks(directory: Path = RESULTS) -> Dict[str, str]:
+    """The text of each marked table of whitepaper.md, by name."""
+    results = load_results(directory)
+    blocks = {name: build(results) for name, build in (
+        ("coverage", wp_coverage), ("readings", wp_readings), ("cognates", wp_cognates), ("romance", wp_romance),
+        ("alignment", wp_alignment), ("retrieval", wp_retrieval), ("candidates", wp_candidates),
+        ("ablations", wp_ablations), ("confusions", wp_confusions), ("tone", wp_tone), ("control", wp_control))}
+    blocks["vowel-height"] = wp_vowel_height(directory)
+    return {name: text.rstrip("\n") + "\n" for name, text in blocks.items()}
+
+
+def fill_whitepaper(text: str, blocks: Dict[str, str]) -> str:
+    """*text* with the content between each pair of markers replaced by its block; a missing marker raises."""
+    for name, block in blocks.items():
+        start, end = f"<!-- whitepaper:{name}:start -->", f"<!-- whitepaper:{name}:end -->"
+        if text.count(start) != 1 or text.count(end) != 1:
+            raise SystemExit(f"whitepaper.md needs one {start} and one {end}")
+        head, rest = text.split(start, 1)
+        tail = rest.split(end, 1)[1]
+        text = f"{head}{start}\n{block}{end}{tail}"
+    return text
+
+
 def readme_block(text: str) -> Optional[str]:
     """The text between the two marker comments of the README, or None when a marker is missing."""
     if README_START not in text or README_END not in text:
@@ -328,9 +503,16 @@ def main(argv: Optional[List[str]] = None) -> int:
     parser.add_argument("--results", type=Path, default=RESULTS)
     parser.add_argument("--page", type=Path, default=PAGE)
     parser.add_argument("--readme-file", type=Path, default=README)
+    parser.add_argument("--whitepaper", action="store_true", help="rewrite the marked tables of whitepaper.md")
+    parser.add_argument("--whitepaper-file", type=Path, default=WHITEPAPER)
     args = parser.parse_args(argv)
     if args.readme:
         print(readme_table(args.results), end="")
+        return 0
+    if args.whitepaper:
+        paper = args.whitepaper_file.read_text(encoding="utf8")
+        args.whitepaper_file.write_text(fill_whitepaper(paper, whitepaper_blocks(args.results)), encoding="utf8")
+        print(f"wrote the tables of {args.whitepaper_file}")
         return 0
     fresh = render(args.results)
     if args.check:
@@ -340,7 +522,11 @@ def main(argv: Optional[List[str]] = None) -> int:
         if readme_block(args.readme_file.read_text(encoding="utf8")) != readme_table(args.results):
             print(f"the table in {args.readme_file} differs from a fresh render; run benchmarks/render.py --readme", file=sys.stderr)
             return 1
-        print(f"{args.page} and the table in {args.readme_file} match a fresh render")
+        paper = args.whitepaper_file.read_text(encoding="utf8")
+        if fill_whitepaper(paper, whitepaper_blocks(args.results)) != paper:
+            print(f"a table in {args.whitepaper_file} differs from a fresh render; run benchmarks/render.py --whitepaper", file=sys.stderr)
+            return 1
+        print(f"{args.page}, the table in {args.readme_file} and the tables in {args.whitepaper_file} match a fresh render")
         return 0
     args.page.write_text(fresh, encoding="utf8")
     print(f"wrote {args.page}")

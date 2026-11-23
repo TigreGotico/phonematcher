@@ -75,6 +75,7 @@ Test split, run once under [`benchmarks/prereg-2.md`](https://github.com/TigreGo
 - [docs/quickstart.md](docs/quickstart.md): first steps.
 - [docs/features.md](docs/features.md): the feature table, its sources and the distance.
 - [docs/api.md](docs/api.md): every public name.
+- [whitepaper.md](whitepaper.md): the method and the evidence as one paper, with the pre-registered test and its limits.
 
 ## Licence
 
