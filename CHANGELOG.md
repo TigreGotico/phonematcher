@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.3.6a2](https://github.com/TigreGotico/phonematcher/tree/2.3.6a2) (2026-11-23)
+
+[Full Changelog](https://github.com/TigreGotico/phonematcher/compare/2.3.6a1...2.3.6a2)
+
+**Merged pull requests:**
+
+- test: bind the whitepaper order sentences to the result files [\#113](https://github.com/TigreGotico/phonematcher/pull/113) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
+
 ## [2.3.6a1](https://github.com/TigreGotico/phonematcher/tree/2.3.6a1) (2026-11-23)
 
 [Full Changelog](https://github.com/TigreGotico/phonematcher/compare/2.3.5a1...2.3.6a1)
@@ -380,7 +388,6 @@
 - fix: do not decompose an IPA letter that Unicode writes as base plus diacritic [\#7](https://github.com/TigreGotico/phonematcher/pull/7) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
 - ci: run the test suite in CI [\#6](https://github.com/TigreGotico/phonematcher/pull/6) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
 - docs: rewrite README in Simplified Technical English [\#4](https://github.com/TigreGotico/phonematcher/pull/4) ([JarbasAl](https://github.com/JarbasAl))
-- docs: add docs guide and runnable examples [\#3](https://github.com/TigreGotico/phonematcher/pull/3) ([JarbasAl](https://github.com/JarbasAl))
 
 
 
