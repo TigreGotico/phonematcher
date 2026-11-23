@@ -3,7 +3,7 @@ import math
 
 import pytest
 
-from phonematcher.distance import edit_distance, ipa_distance, segments
+from phonematcher.distance import edit_distance, ipa_distance, segments, substitution_cost
 from phonematcher.features import feature_distance
 
 
@@ -54,3 +54,14 @@ def test_a_prenasalization_or_preaspiration_mark_joins_the_following_stop():
 def test_a_mark_after_a_final_vowel_stays_in_its_word():
     assert segments("maʰ m") == ["m", "aʰ", " ", "m"]
     assert segments("maʰ") == ["m", "aʰ"]
+
+
+def test_the_cached_substitution_cost_gives_the_uncached_values():
+    from phonematcher.clustering import phone_clusters
+
+    segs = [*sorted(phone_clusters(0.1)), "˥", "˩˥", "˧˧", "k̃", " "]
+    for a in segs:
+        for b in segs:
+            assert repr(substitution_cost(a, b)) == repr(substitution_cost.__wrapped__(a, b)), (a, b)
+    # a tone against a phone costs a deletion plus an insertion
+    assert substitution_cost("˥", "a") == substitution_cost("a", "˥") == 1.0

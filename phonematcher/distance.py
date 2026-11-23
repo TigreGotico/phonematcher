@@ -1,6 +1,7 @@
 """Distances between IPA strings, built on the segment distance in :mod:`phonematcher.features`."""
 import math
 import unicodedata
+from functools import lru_cache
 from typing import List, Optional, Sequence, Tuple
 
 from phonematcher.features import POST_DIACRITICS, PRE_DIACRITICS, SPELLINGS, feature_distance, is_vowel_phone, phonetic_distance, vectorize_phones  # noqa: F401 (deprecated path)
@@ -116,6 +117,7 @@ def segments(ipa: str) -> List[str]:
     return [unicodedata.normalize("NFC", s) for s in out]
 
 
+@lru_cache(maxsize=65536)
 def substitution_cost(a: str, b: str) -> float:
     """Cost of replacing segment *a* by *b*, from 0 to 1, so a substitution never costs more than a
     deletion plus an insertion: the square root of the tone distance of two tones, 1 for a tone and
@@ -128,8 +130,11 @@ def substitution_cost(a: str, b: str) -> float:
     The square root keeps the cost a metric and makes a near substitution dearer against a gap, as
     the pre-registered test of ``benchmarks/prereg-2.md`` selected (``docs/benchmarks.md``).
     """
-    if is_tone(a) or is_tone(b):
-        return math.sqrt(tone_distance(a, b)) if is_tone(a) and is_tone(b) else 1.0
+    a_tone, b_tone = is_tone(a), is_tone(b)
+    if a_tone and b_tone:
+        return math.sqrt(tone_distance(a, b))
+    if a_tone or b_tone:
+        return 1.0
     return math.sqrt(feature_distance(a, b))
 
 

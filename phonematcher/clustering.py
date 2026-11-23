@@ -12,10 +12,11 @@ text.
 Adapted from pyphone (https://github.com/lingz/pyphone) and fast_fuzzy_search
 (https://github.com/lingz/fast_fuzzy_search), MIT License.
 """
-import math
 import unicodedata
 from collections import namedtuple
+from fractions import Fraction
 from functools import lru_cache
+from operator import itemgetter
 from typing import Dict, Hashable, List, Sequence, Set, Tuple, Union
 
 from phonematcher.distance import check_readable, edit_distance, segments, substitution_cost
@@ -34,21 +35,26 @@ def upgma(labels: Sequence[str], threshold: float, dist: Dict[Tuple[str, str], f
     *threshold* apart. *dist* holds the distance of every pair ``(a, b)`` with ``a < b``. Returns
     ``label -> cluster id``.
 
-    Distances are summed exactly, so the order in which a set yields its labels cannot change a sum
-    by a rounding error. Equal distances merge the pair with the lowest cluster positions first, and
-    cluster ids follow the order of *labels*."""
-
-    def between(c1: Set[str], c2: Set[str]) -> float:
-        return math.fsum(dist[min(a, b), max(a, b)] for a in c1 for b in c2) / (len(c1) * len(c2))
-
-    clusters = [{label} for label in labels]
-    while len(clusters) > 1:
-        d, i, j = min((between(clusters[i], clusters[j]), i, j)
-                      for i in range(len(clusters)) for j in range(i + 1, len(clusters)))
+    Each pair of groups keeps the exact sum of its pair distances, so a merge adds two rows
+    (Lance-Williams) and no sum depends on the order of the additions. Equal distances merge the
+    pair with the lowest positions first, and cluster ids follow the order of *labels*."""
+    members = {i: [label] for i, label in enumerate(labels)}
+    total = {(i, j): Fraction(dist[min(a, b), max(a, b)])
+             for i, a in enumerate(labels) for j, b in enumerate(labels) if i < j}
+    mean = {pair: float(value) for pair, value in total.items()}
+    while mean:
+        (i, j), d = min(mean.items(), key=itemgetter(1, 0))
         if d > threshold:
             break
-        clusters[i] |= clusters.pop(j)
-    return {label: cid for cid, cluster in enumerate(clusters, start=1) for label in cluster}
+        members[i] += members.pop(j)
+        del total[i, j], mean[i, j]
+        for k in members:
+            if k != i:
+                ik, jk = (min(i, k), max(i, k)), (min(j, k), max(j, k))
+                total[ik] += total.pop(jk)
+                del mean[jk]
+                mean[ik] = float(total[ik]) / (len(members[i]) * len(members[k]))
+    return {label: cid for cid, i in enumerate(sorted(members), start=1) for label in members[i]}
 
 
 @lru_cache(maxsize=None)
@@ -115,6 +121,7 @@ class PhoneticFuzzySearch:
         self.clusters = phone_clusters(cluster_sensitivity)
         self.index: Dict[Tuple[int, ...], Set[Hashable]] = {}
         self.library: Dict[Hashable, Tuple[str, ...]] = {}
+        self._segmented: Dict[Hashable, Tuple[List[str], ...]] = {}
         self._cluster_memo: Dict[str, int] = {}
 
     def cluster_of(self, segment: str) -> int:
@@ -133,9 +140,10 @@ class PhoneticFuzzySearch:
             check_readable(segs, ipa)
         return segs
 
-    def _words(self, ipa: str) -> List[List[str]]:
+    @staticmethod
+    def _words(segs: Sequence[str]) -> List[List[str]]:
         words: List[List[str]] = [[]]
-        for seg in self._segments(ipa):
+        for seg in segs:
             if seg == " ":
                 words.append([])
             elif not is_tone(seg):
@@ -157,11 +165,10 @@ class PhoneticFuzzySearch:
         readings = _as_readings(term, "add_term", "term")
         if id is None:
             raise ValueError("add_term() argument id must not be None")
-        if self.strict:
-            for reading in readings:
-                self._segments(reading)
-        for reading in self.library.pop(id, ()):
-            for word in self._words(reading):
+        segmented = tuple(self._segments(reading) for reading in readings)
+        self.library.pop(id, None)
+        for segs in self._segmented.pop(id, ()):
+            for word in self._words(segs):
                 for key in self._keys(word):
                     ids = self.index.get(key)
                     if ids is not None:
@@ -169,8 +176,9 @@ class PhoneticFuzzySearch:
                         if not ids:
                             del self.index[key]
         self.library[id] = readings
-        for reading in readings:
-            for word in self._words(reading):
+        self._segmented[id] = segmented
+        for segs in segmented:
+            for word in self._words(segs):
                 for key in self._keys(word):
                     self.index.setdefault(key, set()).add(id)
 
@@ -187,16 +195,16 @@ class PhoneticFuzzySearch:
         if n_results is not None and n_results < 1:
             raise ValueError(f"search() argument n_results must be at least 1, not {n_results!r}")
         queries = _as_readings(query, "search", "query")
+        q_segs = [self._segments(q) for q in queries]
         candidates: Set[Hashable] = set()
-        for q in queries:
-            words = self._words(q)
+        for segs in q_segs:
+            words = self._words(segs)
             if words:
                 per_word = [set().union(*(self.index.get(key, ()) for key in self._keys(w))) for w in words]
                 candidates |= set.intersection(*per_word)
-        q_segs = [self._segments(q) for q in queries]
         matches = []
         for id in candidates:
-            score = min(edit_distance(q, segments(t)) for q in q_segs for t in self.library[id])
+            score = min(edit_distance(q, t) for q in q_segs for t in self._segmented[id])
             matches.append(Match(id, self.library[id], score))
         matches.sort(key=lambda m: (m.score, type(m.id).__name__, str(m.id)))
         return matches[:n_results]
