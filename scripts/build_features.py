@@ -82,6 +82,32 @@ def base_letter(segment: str) -> str:
     return letters[0] if len(letters) == 1 else ""
 
 
+def validate(changes: dict, features: list) -> None:
+    """Stop the build with a message naming the first entry of *changes* that is not well formed."""
+    known = set(features)
+
+    def check(kind: str, name: str, values: dict) -> None:
+        for f, v in values.items():
+            if f not in known:
+                raise SystemExit(f"{kind} {name}: unknown feature {f!r}")
+            if v not in ("+", "-", "0"):
+                raise SystemExit(f"{kind} {name}: value {v!r} of {f} is not '+', '-' or '0'")
+
+    for kind, key in (("overrides", "phone"), ("diacritics", "marker"), ("segments", "segment")):
+        for entry in changes[kind]:
+            if not entry.get("source"):
+                raise SystemExit(f"{kind} entry {entry[key]} has no source")
+    for o in changes["overrides"]:
+        check("override", o["phone"], {o["feature"]: o["value"]})
+        phone = unicodedata.normalize("NFD", o["phone"])
+        if base_letter(phone) != phone:
+            raise SystemExit(f"override {o['phone']}: the segment is not a bare table letter")
+    for d in changes["diacritics"]:
+        check("diacritic", d["marker"], d["content"])
+    for s in changes["segments"]:
+        check("segments entry", s["segment"], s["set"])
+
+
 def main(out_path: Path) -> None:
     with open(DATA / "feature_weights.csv", encoding="utf-8") as fh:
         rows = list(csv.reader(fh))
@@ -100,6 +126,7 @@ def main(out_path: Path) -> None:
     n_in = len(panphon)
 
     changes = json.loads((HERE / "overrides.json").read_text(encoding="utf-8"))
+    validate(changes, features)
     overrides = changes["overrides"]
     for s in changes["segments"]:
         missing = [s[k] for k in ("from", "place_of") if k in s and s[k] not in panphon]
