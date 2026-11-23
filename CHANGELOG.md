@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.3.4a1](https://github.com/TigreGotico/phonematcher/tree/2.3.4a1) (2026-11-23)
+
+[Full Changelog](https://github.com/TigreGotico/phonematcher/compare/2.3.3a1...2.3.4a1)
+
+**Merged pull requests:**
+
+- fix: rerun the dev cognate and ablation results with the corrected benchmark reader [\#99](https://github.com/TigreGotico/phonematcher/pull/99) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
+
 ## [2.3.3a1](https://github.com/TigreGotico/phonematcher/tree/2.3.3a1) (2026-11-23)
 
 [Full Changelog](https://github.com/TigreGotico/phonematcher/compare/2.3.2a2...2.3.3a1)
