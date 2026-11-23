@@ -342,21 +342,6 @@ def fixture_run(monkeypatch):
     return calls
 
 
-def git(repo, *args):
-    subprocess.run(["git", "-C", str(repo), "-c", "user.name=t", "-c", "user.email=t@example.org", *args], check=True, capture_output=True)
-
-
-@pytest.fixture
-def repo(tmp_path):
-    root = tmp_path / "repo"
-    root.mkdir()
-    git(root, "init", "-q")
-    (root / "f.txt").write_text("one\n")
-    git(root, "add", "f.txt")
-    git(root, "commit", "-q", "-m", "first")
-    return root
-
-
 def head_of(repo):
     return subprocess.run(["git", "-C", str(repo), "rev-parse", "HEAD"], capture_output=True, text=True, check=True).stdout.strip()
 

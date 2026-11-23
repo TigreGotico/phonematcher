@@ -33,7 +33,7 @@ def test_a_wrong_type_names_the_argument_and_the_type(call, text):
     assert str(error.value) == text
 
 
-def test_a_right_type_still_works():
+def test_a_right_type_is_accepted():
     assert ipa_distance("ka", "ka") == 0.0
     assert edit_distance(["k", "a"], ("k", "a")) == 0.0
     assert [pair for pair in align(["k"], ["k"])] == [("k", "k")]
@@ -51,7 +51,7 @@ def test_n_results_below_one_raises(n_results):
         search.search("kasa", n_results=n_results)
 
 
-def test_n_results_one_and_none_still_work():
+def test_n_results_one_and_none_are_accepted():
     search = PhoneticFuzzySearch()
     search.add_term("kasa", "a")
     search.add_term("kaza", "b")

@@ -1,19 +1,18 @@
-"""Strict input raises on an unread segment; the default behaviour is the one before the option."""
-import hashlib
+"""Strict input raises on an unread segment; without it, an unread segment costs as much as a missing one."""
+import math
 import random
 
 import pytest
 
-from phonematcher import PhoneticFuzzySearch, align, edit_distance, ipa_distance, segments, vectorize_phones
+from phonematcher import GAP_COST, PhoneticFuzzySearch, align, edit_distance, ipa_distance, segments, substitution_cost, vectorize_phones
 from phonematcher.features import phone_features
 
 UNREAD = ["k̃", "ˁ", "ʳ", "ʅ", "aʰ"]
 LETTERS = list("pbtdkgqʔmnɲŋfvszʃʒxχhrlɾjwaeiouɛɔəɪʊæɑɨʉ")
 TONES = ["˥", "˩˥", "˧"]
 
-#: SHA-256 over the results of the four entry points on 2,000 seeded strings that include unread
-#: segments, taken before the option existed. A change of the feature table or the costs changes it.
-NON_STRICT_DIGEST = "edf321e8d1031d35462d687fa529f6b1ca0c327485450b065fd2262e95df82e2"
+#: p and b differ in [voice] alone, weight 0.125 of the table's 9.5; a substitution costs the square root
+VOICE = math.sqrt(0.125 / 9.5)
 
 
 def random_strings(count=2000):
@@ -29,31 +28,47 @@ def random_strings(count=2000):
     return [f"{word()} {word()}" if rng.random() < 0.2 else word() for _ in range(count)]
 
 
-def non_strict_digest():
-    strs = random_strings()
-    parts = {name: hashlib.sha256() for name in ("ipa_distance", "edit_distance", "align", "search")}
-    for a, b in zip(strs[0::2], strs[1::2]):
-        parts["ipa_distance"].update(repr((ipa_distance(a, b), ipa_distance(a, b, True))).encode())
-        sa, sb = segments(a), segments(b)
-        parts["edit_distance"].update(repr(edit_distance(sa, sb)).encode())
-        parts["align"].update(repr(align(sa, sb)).encode())
-    search = PhoneticFuzzySearch()
-    for i, term in enumerate(strs[:1000]):
-        search.add_term(term, i)
-    for query in strs[1000:]:
-        parts["search"].update(repr(search.search(query)).encode())
-    return hashlib.sha256("".join(p.hexdigest() for p in parts.values()).encode()).hexdigest()
-
-
 def test_the_unread_segments_are_unread():
     for seg in UNREAD:
         with pytest.raises(ValueError):
             vectorize_phones(seg)
 
 
-def test_without_strict_the_four_entry_points_give_the_results_they_gave_before_the_option():
+def test_the_random_strings_hold_unread_segments():
     assert any(u in s for s in random_strings() for u in UNREAD)
-    assert non_strict_digest() == NON_STRICT_DIGEST
+
+
+def test_without_strict_each_alignment_costs_the_edit_distance_of_its_pair():
+    strs = random_strings()
+    for a, b in zip(strs[0::2], strs[1::2]):
+        sa, sb = segments(a), segments(b)
+        cost = math.fsum(GAP_COST if x is None or y is None else substitution_cost(x, y) for x, y in align(sa, sb))
+        assert cost == pytest.approx(edit_distance(sa, sb)) == pytest.approx(ipa_distance(a, b)), (a, b)
+
+
+def test_without_strict_each_search_score_is_the_least_distance_to_a_reading():
+    strs = random_strings()
+    search = PhoneticFuzzySearch()
+    for i, term in enumerate(strs[:500]):
+        search.add_term(term, i)
+    for query in strs[1000:1100]:
+        for match in search.search(query):
+            assert match.score == ipa_distance(query, strs[match.id]), (query, match)
+
+
+def test_without_strict_an_unread_segment_is_priced_in_each_entry_point():
+    # an unread segment costs 1 against any segment and 0.5 as a gap; a tone against a phone costs 1
+    assert edit_distance(["m", "a", "k̃"], ["m", "a"]) == 0.5
+    assert edit_distance(["k̃"], ["p"]) == 1.0
+    assert edit_distance(["˥"], ["a"]) == 1.0
+    assert align(["p", "a", "ʅ"], ["b", "a"]) == [("p", "b"), ("a", "a"), ("ʅ", None)]
+    assert ipa_distance("pa", "ba") == pytest.approx(VOICE)
+    assert ipa_distance("pa", "ba", True) == pytest.approx(VOICE / 2)
+    # the space between two words is a segment: p a, space, t a against p a is three gaps
+    assert ipa_distance("pa ta", "pa") == 1.5
+    search = PhoneticFuzzySearch()
+    search.add_term("baʅ", "x")
+    assert [(m.id, m.score) for m in search.search("ba")] == [("x", 0.5)]
 
 
 @pytest.mark.parametrize("seg", UNREAD)

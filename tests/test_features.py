@@ -18,11 +18,7 @@ from phonematcher.features import (
     feature_distance,
     vectorize_phones,
 )
-
-
-
-def feature(segment, name):
-    return vectorize_phones(segment)[FEATURES.index(name)]
+from tests.conftest import feature
 
 
 def test_every_vector_has_every_feature():

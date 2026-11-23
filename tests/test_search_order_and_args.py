@@ -23,10 +23,15 @@ print([m.id for m in s.search("maʃ")])
 def test_tied_ids_of_mixed_types_sort_the_same_under_every_hash_seed():
     # Same score for all three; the rule is (type name, text): "int" < "str", then "1" < "a".
     expected = "[1, '1', 'a']"
-    for seed in range(16):
-        env = {**os.environ, "PYTHONHASHSEED": str(seed), "PYTHONPATH": str(ROOT)}
-        out = subprocess.run([sys.executable, "-c", PROBE], env=env, capture_output=True, text=True, check=True)
-        assert out.stdout.strip() == expected, f"PYTHONHASHSEED={seed}"
+    # the 16 processes run at once
+    processes = {
+        seed: subprocess.Popen([sys.executable, "-c", PROBE], env={**os.environ, "PYTHONHASHSEED": str(seed), "PYTHONPATH": str(ROOT)},
+                               stdout=subprocess.PIPE, text=True)
+        for seed in range(16)
+    }
+    for seed, process in processes.items():
+        out, _ = process.communicate()
+        assert process.returncode == 0 and out.strip() == expected, f"PYTHONHASHSEED={seed}"
 
 
 @pytest.fixture
