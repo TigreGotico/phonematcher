@@ -149,7 +149,7 @@ A mark reads only if a chart states its meaning. These marks occur in PHOIBLE, W
 
 ### Marks that a base refuses
 
-A rule applies a mark only to the bases a chart prints it on. A base outside that class makes `vectorize_phones` raise `ValueError`, and the segment is at distance 1 from every other. A rule widens when a chart prints the mark on the new class of base, as the IPA chart does for `◌̃` on a vowel. The Unicode chart gives a mark a name and no base, so a name alone does not widen a rule.
+A rule applies a mark only to the bases that its conditions accept. The conditions are PanPhon's, unless `overrides.json` changes them with a source, so a rule can accept more bases than a chart prints: `b̃`, `iˤ`, `aˠ` and `å` read. A base outside the class makes `vectorize_phones` raise `ValueError`, and the segment is at distance 1 from every other. A rule widens when a chart prints the mark on a base that the rule refuses, as the IPA chart does for `◌̃` on a vowel. The Unicode chart gives a mark a name and no base, so a name alone does not widen a rule.
 
 | Mark | What the charts print | Bases that stay refused |
 |---|---|---|

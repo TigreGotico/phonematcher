@@ -80,7 +80,7 @@ Most segments that the table cannot read are rare. Thus the token share is much 
 
 ## 3. Diacritics, ties, tone and the reading rules
 
-A diacritic applies only to the type of base that a chart shows it on. The chart shows nasalization on a vowel, as in `ẽ`. Thus `k̃` does not read. The chart shows aspiration on stops, as in `tʰ`. Thus `aʰ` does not read. This rule decreases coverage. But no reading is a guess. A rule becomes wider only when a chart shows the mark on a new type of base.
+A diacritic applies only to the bases that its rule accepts. The rule is PanPhon's, unless `overrides.json` changes it with a source. PanPhon's rule for nasalization accepts a voiced base that is not already nasal, so `b̃`, `z̃` and `w̃` read, and `k̃` and `m̃` do not. The IPA chart prints the mark on a vowel, as in `ẽ`, so the rule also accepts a voiceless vowel. PanPhon's rule for aspiration accepts stops and voiceless fricatives. Thus `aʰ` does not read. Some rules accept any base: `iˤ`, `å` and `ḁ` read, and `aˠ` reads because `a` is not high. A refusal decreases coverage. A rule becomes wider only when a chart prints the mark on a base that the rule refuses.
 
 Eight marks move a vowel on a scale of the chart:
 
