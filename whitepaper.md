@@ -134,8 +134,6 @@ We chose the default share, 0.08, on the development data. We took the share wit
 
 A segment that the table cannot read costs the same as a missing segment. The library gives no warning. With `strict=True`, the distance, alignment and search functions stop with an error. The error gives the segment. Strict mode cannot find the ASCII letters `c`, `y`, `j` and `r`, because they are also IPA letters.
 
-We added the relative sensitivity and strict mode after the test. They do not change a word distance. A test keeps a hash of many word distances, and this hash did not change. On the development queries, each query gives the same result at the share 0.08 as with the absolute threshold of the tested version. This comparison is an audit run. No result file has its scores for each query.
-
 ## 5. Evaluation
 
 ### 5.1 One test, with rules written before the test
@@ -369,7 +367,7 @@ Two of our results agree with earlier work. Heeringa (2004, p. 185) found that m
 
 ## 8. Limits
 
-We used the test data. We chose the released costs with the one test. We examined all changes after the test only on development data and seen data. There is no new test. The released library uses those costs, with later changes that do not change a word distance.
+We used the test data. We chose the released costs with the one test. We examined all changes after the test only on development data and seen data. There is no new test. The released library uses those costs.
 
 On cognate detection, SCA scores higher than phonematcher on all words, and the intervals do not overlap. On the common words, SCA scores higher only on the point estimate. Plain edit distance also has the higher point estimate on the pre-registered measure. The files do not let us calculate an interval for that difference.
 
@@ -389,9 +387,11 @@ The tone model uses one small data set that we used before.
 
 The test ran at commit `f092f20c8bbe0aa49a6480946858c0354a2580a9` of `TigreGotico/phonematcher`. The written rules are in `benchmarks/prereg-2.md`. Their sha256 is `29927d4e0e8162276cf12c68450a3b28372dc039d3a24377bbf390a64bd2df7c`. The test code stops if the hash of the file is different.
 
-The two audit runs of section 6 are not in the result files. The triangle check ran on the tree of commit `ecde385`. The weight fit ran `scripts/fit_weights.py` from commit `3a134ef` on the library at commit `9c0f5bf`.
+The two audit runs of section 6 are not in the result files. The triangle check ran on the tree of commit `ecde385`. The weight fit ran `scripts/fit_weights.py` on the library at commit `9c0f5bf`. The script is not on `dev`. It is on the branch `feat/fit-weights`, at commit `3a134ef`.
 
-`benchmarks/render.py` makes the tables of this paper from `benchmarks/results/`. `tests/test_whitepaper.py` checks each number in the text against those files. It connects each number to the system and the claim in its sentence. The five audit-run numbers of section 6 are typed, because no file has them.
+The relative sensitivity and strict mode came after the test. They do not change a word distance. A test keeps a hash of many word distances, and this hash did not change. On the development queries, each query gives the same result at the share 0.08 as with the absolute threshold 0.1 of the tested version. The paired difference in mean recall at 1 is 0.0000, with an interval from 0.0000 to 0.0000 (1000 resamples, seed 0, 500 queries in each of four pairs). A query returns from 1% to 23% fewer candidates, depending on the pair. This comparison is an audit run. No result file has its scores for each query.
+
+`benchmarks/render.py` makes the tables of this paper from `benchmarks/results/`. `tests/test_whitepaper.py` checks each number in the text against those files. It connects each number to the system and the claim in its sentence. The five audit-run numbers of section 6 and the three of the sensitivity comparison above are typed, because no file has them.
 
 The data and its licences:
 

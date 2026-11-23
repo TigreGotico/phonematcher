@@ -21,11 +21,11 @@ The alternatives are `hi` and `lo` alone, or one numeric height. Steps keep ever
 
 The evidence is thin. On the Hillenbrand vowel confusions, the weighted table scores 0.5610. The same table with zero weight on the steps scores 0.5340. The 22 features of PanPhon 0.22.2 score 0.4153. The intervals of the three overlap, and the data was seen during the work. On the six cognate test sets, under the C0 word costs (gap 1, linear substitutions), the variant with zero weight on the steps differs from the shipped table by -0.0002, with an interval from -0.0013 to +0.0008. On the development split, under the shipped word costs (gap 0.5, square-root substitutions), the cognate AP of the variant with zero weight on the steps is 0.7725 and the shipped table's is 0.7727. The steps are kept because the chart has seven rows, not because a test showed that they help cognate detection.
 
-The table keeps both codings, a trade-off that was measured. A form with one encoding sets `hi` and `lo` to 0 on every vowel, so the steps alone carry height and the distance stays a weighted L1 over fixed vectors. It is a metric. On the development split it changed the paired cognate AP by -0.0006, with an interval from -0.0012 to -0.0001, and the alignment PAS by +0.0039, with an interval from +0.0011 to +0.0066. On the Hillenbrand confusions it lowered the Spearman correlation from 0.5610 to 0.5474. The rule for changes made after the test run refuses a change when the interval of any development task lies wholly below 0, and the cognate interval does.
+The table keeps both codings, a trade-off that was measured. A form with one encoding sets `hi` and `lo` to 0 on every vowel, so the steps alone carry height and the distance stays a weighted L1 over fixed vectors. It is a metric. On the development split it changed the paired cognate AP by -0.0006, with an interval from -0.0012 to -0.0001, and the alignment PAS by +0.0039, with an interval from +0.0011 to +0.0066. On the Hillenbrand confusions it lowered the Spearman correlation from 0.5610 to 0.5474. The acceptance rule refuses a change when the interval of any development task lies wholly below 0, and the cognate interval does.
 
 A second form drops `hi` and `lo` only when both segments are vowels. It breaks the triangle inequality on 875 of the 400,995 triples of table base letters. For `b`, `e` and `ɪ`, the feature distance of `b` and `ɪ` is 0.486842, and the way through `e` costs 0.460526 + 0.013158 = 0.473684, which is 0.013158 less. The cause is that `hi` still separates `b` from `ɪ`, and the two vowels no longer differ on it. A cost that is not a metric is not used.
 
-The cognate, alignment and Hillenbrand numbers are in `benchmarks/results/ablations/vowel-height-dev.json` and `vowel-height-seen.json`, and `tests/test_design.py` ties this page to them. These development numbers use the shipped word costs. The paired test-set numbers on this page use the C0 costs, and `benchmarks/results/ablations-dev.json` holds the development ablations at the shipped costs. The triple count and the distances of the second form are not in a result file. They come from a run of the check on the development tree of version 1.0.0a3 (commit `ecde385`) over every unordered triple of the 135 base letters.
+The cognate, alignment and Hillenbrand numbers are in `benchmarks/results/ablations/vowel-height-dev.json` and `vowel-height-seen.json`, and `tests/test_design.py` ties this page to them. These development numbers use the shipped word costs. The paired test-set numbers on this page use the C0 costs, and `benchmarks/results/ablations-dev.json` holds the development ablations at the shipped costs. The triple count and the distances of the second form come from a check over every unordered triple of the 135 base letters. No result file holds them, and [whitepaper.md](../whitepaper.md#9-reproducibility) names the run.
 
 ### Pharyngealization is its own feature
 
@@ -112,11 +112,11 @@ P5 beat C0 on all three tasks and had the largest cognate difference, so the lib
 
 ### One segment cost and a relative sensitivity
 
-`substitution_cost` is the one cost of replacing a segment by another. The edit distance, the alignment and the clusters of the search all use it. `feature_distance` is the linear feature distance under its own name, and `phonetic_distance` stays as a deprecated alias of it.
+`substitution_cost` is the one cost of replacing a segment by another. The edit distance, the alignment and the clusters of the search all use it. `feature_distance` is the linear feature distance under its own name, and `phonetic_distance` is a deprecated alias of it.
 
 The search clusters phones on the price that ranks its candidates, so one pair of sounds has one price. The sensitivity is a share from 0 to 1: the merge threshold is that quantile of the segment costs over all pairs of letters in the table, so a value keeps its meaning when the costs change.
 
-This change came after the test run, and it was measured on the development split only. The default was chosen again by rule 7 of [`benchmarks/prereg-2.md`](https://github.com/TigreGotico/phonematcher/blob/dev/benchmarks/prereg-2.md) over the shares 0.01, 0.02, 0.03, 0.05, 0.08 and 0.12. The values 0.08 and 0.12 tie at a mean recall at 1 of 0.8521 over the four dialect pairs, and the rule does not name a tie-break, so the lower share won with fewer candidates. The change had to pass the acceptance rule that applies to every change after the test run: no development task may show a paired difference whose interval lies wholly below 0. Against the earlier library at 0.1, the mean recall at 1 differs by 0.0000, with an interval from 0.0000 to 0.0000 (1,000 resamples, seed 0, 500 queries in each of four pairs), and every query scores the same. A query returns from 1% to 23% fewer candidates, depending on the pair. The costs of the word distance, the alignment and the cognate task do not depend on the clusters, so they did not change.
+The default share is 0.08. Rule 7 of [`benchmarks/prereg-2.md`](https://github.com/TigreGotico/phonematcher/blob/dev/benchmarks/prereg-2.md) chooses it on the development split, and [Search](search.md#6-choose-a-sensitivity) gives the rule and the values. The costs of the word distance, the alignment and the cognate task do not depend on the clusters.
 
 ### The feature weights stay
 
@@ -124,7 +124,7 @@ The weights of the 22 features in the data of PanPhon 0.22.2 are PanPhon's. The 
 
 ## What does not read
 
-`vectorize_phones` raises `ValueError` for a segment it cannot read. The table counts the distinct segments (types) of three corpora and the occurrences (tokens) of those segments. The counts come from one run, recorded in `benchmarks/results/coverage-seen.json`. The run was made on a clean tree at commit `5a6f2a0`.
+`vectorize_phones` raises `ValueError` for a segment it cannot read. The table counts the distinct segments (types) of three corpora and the occurrences (tokens) of those segments. The counts come from one run, recorded in `benchmarks/results/coverage-seen.json`.
 
 | Corpus | Distinct segments | Read | Unread | Share of tokens read |
 |---|---|---|---|---|

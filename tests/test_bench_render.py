@@ -183,7 +183,8 @@ def test_the_readme_table_holds_the_test_intervals_of_each_system_and_bolds_the_
     assert f"| ALINE | {cell('cognates', 'aline')} | {cell('alignment', 'aline')} | {cell('retrieval', 'aline')} |" in table
     assert "| PanPhon, weighted | " + cell("cognates", "panphon-weighted") + " | — | " + cell("retrieval", "panphon-weighted") + " |" in table
     assert table.count("**") == 6
-    assert "[docs/benchmarks.md](docs/benchmarks.md)" in table and "run once" in table and "did not change any word distance" in table
+    assert "[docs/benchmarks.md](docs/benchmarks.md)" in table and "run once" in table
+    assert "later changes" not in table
 
 
 def test_the_readme_block_equals_the_rendered_table():
@@ -202,9 +203,9 @@ def test_check_fails_when_one_number_of_the_readme_table_is_changed(tmp_path, ca
     assert "differs from a fresh render" in capsys.readouterr().err
 
 
-def test_no_word_distance_moves_without_this_pin_and_the_readme_caption_changing():
-    # The README caption says that the dev-only changes of the library did not change any word distance.
-    # A change that moves one distance also changes this digest: update it together with the caption.
+def test_no_word_distance_moves_without_this_pin_and_the_whitepaper_changing():
+    # Section 9 of whitepaper.md says that a hash of many word distances did not change after the test.
+    # A change that moves one distance also changes this digest: update it together with that section.
     import hashlib
     import random
 

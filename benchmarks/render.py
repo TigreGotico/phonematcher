@@ -310,8 +310,6 @@ def readme_table(directory: Path = RESULTS) -> str:
                f"SCA ran retrieval on a sample of {sca_sample} queries per pair and ALINE on the first {aline_sample} of those, "
                "so these two retrieval cells are not on the same queries as the other rows. "
                "The shipped library is the P5 candidate, with its test numbers. "
-               "The later changes of the library (one segment cost, a relative sensitivity and strict input) were made on dev only "
-               "and did not change any word distance. "
                "[docs/benchmarks.md](docs/benchmarks.md) holds every result.")
     return "\n".join([caption, "", *table(["System", *(title for _, title in README_COLUMNS)], rows)]).rstrip("\n") + "\n"
 
