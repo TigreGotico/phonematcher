@@ -42,7 +42,7 @@ Pass `--cache DIR` to put it elsewhere. Data never goes into the repository.
 
 | Name | Package | Reads a segment when |
 |---|---|---|
-| `phonematcher` | this repository | `vectorize_phones` returns |
+| `phonematcher` | this repository | `vectorize_phones` returns for it, or for each part that `segments` cuts it into (`ˈa` is `a`, as the library drops a stress mark); the boundary tokens `+` and `_` of LingPy word lists count as no segment |
 | `levenshtein` | none | the segment is not empty |
 | `panphon-weighted`, `panphon-hamming` | `panphon` 0.22.2 | `FeatureTable.fts` finds it |
 | `aline` | `nltk.metrics.aline` | it is a key of `feature_matrix` (ASCII `g`; the input mapping `ɡ` to `g` is the only one) |

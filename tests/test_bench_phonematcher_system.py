@@ -42,3 +42,32 @@ def test_aline_aligns_the_ipa_g_it_reads():
     from systems import Aline
 
     assert Aline().align(["ɡ", "a"], ["k", "a"]) == [("ɡ", "k"), ("a", "a")]
+
+
+def test_a_vowel_with_a_stress_mark_reads_as_the_library_reads_it():
+    # segments("ˈio") drops the mark, so the library prices "ˈio" and "io" at 0
+    assert ipa_distance("ˈio", "io") == 0.0
+    assert SYSTEM.reads("ˈi")
+    assert SYSTEM.word_distance(["ˈi", "o"], ["i", "o"]) == 0.0
+    assert SYSTEM.word_distance(["k", "ˈa"], ["k", "e"]) == ipa_distance("kˈa", "ke")
+    assert SYSTEM.word_distance(["k", "ˈa"], ["k", "e"]) > 0.0
+
+
+def test_a_stress_mark_leaves_an_affricate_whole():
+    assert ipa_distance("ˈtʃa", "tʃa") == 0.0
+    for stressed, bare in (("ˈtʃ", "tʃ"), ("ˌts", "ts")):
+        assert SYSTEM._parts(stressed) == SYSTEM._parts(bare) == [bare]
+        assert SYSTEM.word_distance([stressed, "a"], [bare, "a"]) == 0.0
+
+
+def test_a_boundary_token_is_no_segment():
+    assert SYSTEM.reads("+") and SYSTEM.reads("_")
+    assert SYSTEM.word_distance(["k", "a", "+", "s", "a"], ["k", "a", "s", "a"]) == 0.0
+    assert SYSTEM.word_distance(["k", "a", "_", "s", "a"], ["k", "a", "s", "a"]) == 0.0
+
+
+def test_a_mark_on_an_unreadable_base_stays_unread():
+    assert not SYSTEM.reads("ˈ☃")
+    assert not SYSTEM.reads("∼")
+    # a token that segments drops whole stays unread: the neutral-tone numeral is no stress mark
+    assert not SYSTEM.reads("⁰") and not SYSTEM.reads("‿")
