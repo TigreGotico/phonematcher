@@ -1,8 +1,25 @@
 # Changelog
 
+## [2.4.0a1](https://github.com/TigreGotico/phonematcher/tree/2.4.0a1) (2026-11-23)
+
+[Full Changelog](https://github.com/TigreGotico/phonematcher/compare/2.3.10a3...2.4.0a1)
+
+**Merged pull requests:**
+
+- feat: one tie-bar constant, one download helper, one edit-distance DP [\#125](https://github.com/TigreGotico/phonematcher/pull/125) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
+- docs: state what the library does, keep provenance in the paper [\#124](https://github.com/TigreGotico/phonematcher/pull/124) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
+
 ## [2.3.10a3](https://github.com/TigreGotico/phonematcher/tree/2.3.10a3) (2026-11-23)
 
-[Full Changelog](https://github.com/TigreGotico/phonematcher/compare/2.3.9a1...2.3.10a3)
+[Full Changelog](https://github.com/TigreGotico/phonematcher/compare/2.3.10a2...2.3.10a3)
+
+## [2.3.10a2](https://github.com/TigreGotico/phonematcher/tree/2.3.10a2) (2026-11-23)
+
+[Full Changelog](https://github.com/TigreGotico/phonematcher/compare/2.3.10a1...2.3.10a2)
+
+## [2.3.10a1](https://github.com/TigreGotico/phonematcher/tree/2.3.10a1) (2026-11-23)
+
+[Full Changelog](https://github.com/TigreGotico/phonematcher/compare/2.3.9a1...2.3.10a1)
 
 **Merged pull requests:**
 
@@ -372,26 +389,13 @@
 
 [Full Changelog](https://github.com/TigreGotico/phonematcher/compare/0.3.0a2...0.4.0a1)
 
-**Merged pull requests:**
-
-- feat: align, normalized ipa\_distance, py.typed and \_\_all\_\_ [\#19](https://github.com/TigreGotico/phonematcher/pull/19) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
-- ci: prove features.json is what build\_features.py makes [\#17](https://github.com/TigreGotico/phonematcher/pull/17) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
-
 ## [0.3.0a2](https://github.com/TigreGotico/phonematcher/tree/0.3.0a2) (2026-11-21)
 
 [Full Changelog](https://github.com/TigreGotico/phonematcher/compare/0.3.0a1...0.3.0a2)
 
-**Merged pull requests:**
-
-- test: list letters that share one feature vector [\#18](https://github.com/TigreGotico/phonematcher/pull/18) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
-
 ## [0.3.0a1](https://github.com/TigreGotico/phonematcher/tree/0.3.0a1) (2026-11-21)
 
 [Full Changelog](https://github.com/TigreGotico/phonematcher/compare/0.2.0a1...0.3.0a1)
-
-**Merged pull requests:**
-
-- feat: census of the segments phonematcher cannot read [\#15](https://github.com/TigreGotico/phonematcher/pull/15) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
 
 ## [0.2.0a1](https://github.com/TigreGotico/phonematcher/tree/0.2.0a1) (2026-11-19)
 
