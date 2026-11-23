@@ -68,6 +68,7 @@ def prose(text=PAPER):
     text = re.sub(r"```.*?```", "", text, flags=re.S)
     text = re.sub(r"`[^`]*`", "", text)
     text = re.sub(r"(?m)^#+ [\d.]+ ", "", text)
+    text = re.sub(r"(?m)^\d+\. ", "", text)
     text = re.sub(r"(?i)section \d+(\.\d+)?", "", text)
     return re.sub(r"\b(19|20)\d\d\b(, pp?\. [\d–]+)?", "", text)
 
@@ -105,11 +106,11 @@ def anchors():
         anchored("highest recall@1", f4(retrieval["intervals"]["pm-P5"]["estimate"])),
         anchored("precision is", iv["pm-P5"], "below SCA at", iv["sca"], "below plain edit distance at", iv["levenshtein"]),
         anchored("Plain edit distance also has the higher point estimate", iv["levenshtein"], "against", iv["pm-P5"]),
-        anchored("P5 reached a B-cubed F", f4(p5["bcubed_f_at_training_threshold"]["bcubed_f"][ROMANCE]),
+        anchored("released library reached a B-cubed F", f4(p5["bcubed_f_at_training_threshold"]["bcubed_f"][ROMANCE]),
                  "against", f4(sca["bcubed_f_at_training_threshold"]["bcubed_f"][ROMANCE]), "for SCA"),
         anchored(str(p5["skipped"]["words"][ROMANCE]), "of the", str(cognates["words"][ROMANCE]), "Romance words",
                  str(p5["skipped"]["pairs"][ROMANCE]), "of its", str(p5["skipped"]["pairs_in"][ROMANCE]), "word pairs"),
-        anchored(str(p5["common"]["words_out"][ROMANCE]), "Romance words", "P5 scores", f4(p5["common"]["average_precision"][ROMANCE]),
+        anchored(str(p5["common"]["words_out"][ROMANCE]), "Romance words", "released library scores", f4(p5["common"]["average_precision"][ROMANCE]),
                  "SCA", f4(sca["common"]["average_precision"][ROMANCE])),
         anchored("Hillenbrand correlation rose from", f4(seen["hillenbrand"]["unread_at_1"]["score"]), "to 0.6394",
                  "Mandarin one from", f4(seen["mandarin"]["unread_at_1"]["score"]), "to 0.3395",
@@ -179,6 +180,11 @@ def prose_values():
     control = results("ablations-seen.json")["control"]
     values[str(control["segments_with_vector_difference"])] = "segments with a changed PanPhon value"
     values[str(control["segments_read_by_both"])] = "segments both read"
+    parts = {"CSV features": ("front", "tap", "trill"), "height steps": tuple(f"h{i}" for i in range(1, 7)),
+             "tongue root": ("atr",), "secondary features": ("palatalized", "labialized", "velarized", "pharyngealized")}
+    assert all(name in FEATURES for names in parts.values() for name in names)
+    assert FEATURES.index("velaric") + 1 + sum(len(names) for names in parts.values()) == len(FEATURES)
+    values.update({str(len(names)): what for what, names in parts.items()})
     letters = len(_letter_costs()[0])
     triples = math.comb(letters, 3)
     values[str(letters)] = "base letters of the table"
@@ -206,7 +212,7 @@ def test_every_table_has_its_markers_and_holds_its_numbers():
 
 
 def test_check_fails_when_one_rendered_number_is_changed(tmp_path, capsys):
-    cell = "| phonematcher, shipped library (P5) | 0.9179 |"
+    cell = "| phonematcher, released costs | 0.9179 |"
     assert PAPER.count(cell) == 1
     changed = tmp_path / "whitepaper.md"
     changed.write_text(PAPER.replace(cell, cell.replace("0.9179", "0.9180")), encoding="utf8")
@@ -245,7 +251,7 @@ def test_each_key_number_sits_beside_its_system_and_claim():
 def test_a_swapped_system_or_value_fails_the_anchors():
     swaps = [
         ("precision is 0.8035, below SCA at 0.8835", "precision is 0.8835, above SCA at 0.8035"),
-        ("P5 scores an average precision of 0.9812 and SCA 0.9877", "P5 scores an average precision of 0.9877 and SCA 0.9812"),
+        ("library scores an average precision of 0.9812 and SCA 0.9877", "library scores an average precision of 0.9877 and SCA 0.9812"),
         ("0.8234 against 0.8035", "0.8035 against 0.8234"),
         ("0.3631 at its training threshold, against 0.8660 for SCA", "0.8660 at its training threshold, against 0.3631 for SCA"),
     ]

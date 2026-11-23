@@ -9,29 +9,59 @@ see: docs/design.md, docs/benchmarks.md, docs/features.md
 
 ## Abstract
 
-phonematcher measures how far apart two IPA segments or two IPA strings are, and finds the terms of an index that sound like a query. Each distance comes from a table of distinctive features. The table starts from PanPhon, and every change to it cites a source. We compared seven systems once on held-out data, under rules fixed before the run. On retrieval of a word across dialects, phonematcher has the highest recall@1, 0.8777. On cognate detection its mean average precision is 0.8035, below SCA at 0.8835 and below plain edit distance at 0.8234. On alignment it is below SCA and ALINE, with overlapping intervals. The same run chose the word costs: a gap of 0.5 and substitutions at the square root of the feature distance, so these figures come from the winning candidate and carry a selection effect. Several refinements that the sources suggest did not improve a score, and PanPhon's own features beat our full table on test cognates. Our tone distance does not beat a baseline that compares only the direction of the contour.
+phonematcher gives the distance between two IPA segments or two IPA strings. It also finds the terms in an index that sound like a query. Each distance comes from a table of distinctive features. The table starts from PanPhon. Each change to PanPhon has a source.
+
+We tested seven systems one time on held-out data. We wrote the rules of the test before the test. On word retrieval across dialects, phonematcher has the highest recall@1, 0.8777. On cognate detection, its mean average precision is 0.8035, below SCA at 0.8835 and below plain edit distance at 0.8234. On alignment, it is below SCA and ALINE, and the intervals overlap.
+
+The same test chose the word costs. A gap costs 0.5. A substitution costs the square root of the feature distance. These numbers come from the candidate that won the test, so they have a selection effect. Some changes that the sources suggest did not improve a score. PanPhon's own features scored higher than our full table on test cognates. Our tone distance is not better than a baseline that uses only the direction of the contour.
 
 ## 1. Introduction
 
-Many tasks need to know whether two transcriptions sound alike. A voice assistant matches a spoken name against a contact list. A dialectologist compares pronunciations of one word across regions. A historical linguist looks for cognate candidates. Each task needs a distance between sounds that is finer than "same or different".
+Many tasks must find out if two transcriptions sound alike. Some examples:
 
-phonematcher gives that distance for transcriptions in the International Phonetic Alphabet. It compares two segments, compares two strings, and searches an index for the terms nearest to a query. It reads IPA only, so text must first pass through a grapheme-to-IPA converter.
+- A voice assistant compares a spoken name with a list of contacts.
+- A dialect study compares one word in many regions.
+- A historical study looks for cognates.
 
-Two rules shape the library. First, every feature value has a source that we opened and read, or the documentation says that the value is our own choice. Second, the claims about performance come from one test run whose rules we wrote down before any test result existed. We report every row of that run, including the tasks where phonematcher is behind.
+Each task needs a distance that is finer than "same" or "different".
+
+phonematcher gives this distance for the International Phonetic Alphabet (IPA). It compares two segments. It compares two strings. It finds the terms in an index that are nearest to a query. It reads only IPA. To use text, change the text to IPA first.
+
+Two rules control the library:
+
+1. Each feature value has a source that we read. If a value has no source, the documentation says that the value is our choice.
+2. The results come from one test. We wrote the rules of the test before we had a test result. We give all the results of that test, also the results where phonematcher is worse.
 
 ## 2. The feature table and its sources
 
-A segment is a vector of 36 features. Each value is plus, minus or zero, and zero means that the feature does not apply. The first 22 features, with their weights, are those of PanPhon 0.22.2 (Mortensen et al. 2016). The PanPhon paper counts 21 features (Mortensen et al. 2016, p. 3477), so the count depends on the version. Three consonant features, `front`, `tap` and `trill`, come from Gorman (2022), a CSV version of the feature tables in Hayes's textbook *Introductory Phonology*. We did not read the book itself, so we cite the CSV.
+A segment is a vector of 36 features. Each value is plus, minus or zero. Zero means that the feature does not apply.
 
-Vowels follow the IPA chart (International Phonetic Association 2015), not a feature table, because the chart defines what each vowel symbol means. The chart places 28 vowel letters on seven height rows. PanPhon's `hi` and `lo` give only three heights, so we add six step features. Two vowels then differ on as many steps as there are rows between them.
+The features come from these sources:
 
-One feature, `atr`, records the tongue-root position that the marks `◌̘` and `◌̙` set. Four more features mark a secondary articulation: palatalized, labialized, velarized and pharyngealized. That makes 22 from PanPhon, three from the CSV, six height steps, `atr` and four secondary features, 36 in all. In PanPhon such a mark overwrites the place of its base, so `kʲ` and `qʲ` get the same vector. In phonematcher the base keeps its place and the mark sets a feature of its own.
+- 22 features and their weights come from PanPhon 0.22.2 (Mortensen et al. 2016). The PanPhon paper counts 21 features (Mortensen et al. 2016, p. 3477). Thus the count changes with the version.
+- Three consonant features, `front`, `tap` and `trill`, come from Gorman (2022). This source is a CSV file of the feature tables in the textbook *Introductory Phonology* by Hayes. We did not read the book. Thus we cite only the CSV file.
+- Six height steps come from the IPA chart (International Phonetic Association 2015).
+- One feature, `atr`, gives the position of the tongue root. The marks `◌̘` and `◌̙` set it.
+- Four features give a secondary articulation: palatalized, labialized, velarized and pharyngealized.
 
-Pharyngealization needs a word of its own. The mark `ˤ` and the mark for a retracted tongue root both involve the tongue root, and one could read them as the same articulation. The sources point the other way. McCarthy (1994, pp. 218–219) places the constriction of the Arabic emphatics in the upper pharynx. Hermes et al. (2017, p. 204) find a clear difference in place between pharyngeal and pharyngealized consonants. Al-Solami (2017, p. 25) reports retraction of both the tongue root and the tongue dorsum, the root inconsistently. Casali (2007, p. 2) writes that the size of the pharyngeal cavity measures [ATR] better than the position of the tongue root alone, at least in languages such as Akan. So `ˤ` sets `atr` to minus, as `◌̙` does, and also sets its own feature. We know of no language that contrasts `iˤ` with `i̙`, so this choice rests on the descriptions of the articulation and not on a contrast.
+The total is 22 + 3 + 6 + 1 + 4 = 36.
 
-The table is built by a script from four inputs: the PanPhon data, the Gorman CSV, the vowel chart and a file of overrides with a source for each entry. A test rebuilds the table and requires the result to equal the published file byte for byte.
+The vowels follow the IPA chart, not a feature table. The chart defines each vowel symbol. The chart puts 28 vowel letters on seven height rows. PanPhon's `hi` and `lo` give only three heights. Thus we add six height steps. Two vowels differ on one step for each row between them.
 
-Coverage tells how much real transcription the table can read. We counted it on three collections: PHOIBLE 2.0 (Moran and McCloy 2019), WikiPron (Lee et al. 2020) and the phone inventories of the orthography2ipa converter. A type is a distinct segment. A token is an inventory in PHOIBLE, an occurrence in WikiPron and a language specification in orthography2ipa. We looked at these collections while we built the table, so the counts describe the table; they do not test it.
+In PanPhon, a secondary mark replaces the place of its base. Thus `kʲ` and `qʲ` have the same vector in PanPhon. In phonematcher, the base keeps its place. The mark sets its own feature.
+
+The mark `ˤ` (pharyngealized) and the mark `◌̙` (retracted tongue root) both use the tongue root. The sources show that they are not the same articulation:
+
+- McCarthy (1994, pp. 218–219) puts the constriction of the Arabic emphatics in the upper pharynx.
+- Hermes et al. (2017, p. 204) find a clear difference in place between pharyngeal and pharyngealized consonants.
+- Al-Solami (2017, p. 25) finds that the tongue root and the tongue dorsum move back. The tongue root does not always move back.
+- Casali (2007, p. 2) writes that the size of the pharyngeal cavity measures [ATR] better than the position of the tongue root, at least in languages such as Akan.
+
+Thus `ˤ` sets `atr` to minus, as `◌̙` does. It also sets its own feature. We know no language that has a contrast between `iˤ` and `i̙`. Thus this choice comes from the descriptions of the articulation, not from a contrast.
+
+A script makes the table from four inputs: the PanPhon data, the CSV file, the vowel chart and a file of changes. Each change has a source. A test makes the table again. The result must be the same as the published file, byte for byte.
+
+Coverage shows how much real transcription the table can read. We counted coverage in three collections: PHOIBLE 2.0 (Moran and McCloy 2019), WikiPron (Lee et al. 2020) and the phone lists of orthography2ipa. A type is one different segment. A token is one inventory in PHOIBLE, one occurrence in WikiPron and one language in orthography2ipa. We used these collections when we made the table. Thus the counts describe the table. They are not a test.
 
 <!-- whitepaper:coverage:start -->
 | Corpus | Segment types | Types read | Share of types | Share of tokens |
@@ -41,17 +71,34 @@ Coverage tells how much real transcription the table can read. We counted it on 
 | orthography2ipa | 2569 | 2168 | 0.8439 | 0.9889 |
 <!-- whitepaper:coverage:end -->
 
-Most segments that the table cannot read are rare, which is why the token shares are so much higher than the type shares. The unread types fall into a few kinds: a diphthong written as one unit, a mark that no chart defines, a mark on a kind of base that no chart shows it on, and a letter that the table has no row for.
+Most segments that the table cannot read are rare. Thus the token share is much higher than the type share. The table cannot read these types of segment:
+
+- a diphthong written as one unit;
+- a mark that no chart defines;
+- a mark on a base that no chart shows it on;
+- a letter that has no row in the table.
 
 ## 3. Diacritics, ties, tone and the reading rules
 
-A diacritic applies only to the kind of base that a chart prints it on. The chart shows nasalization on a vowel, as in `ẽ`, so `k̃` does not read. It shows aspiration on stops, as in `tʰ`, so `aʰ` does not read. This costs some coverage, but no reading is a guess. A rule widens only when a chart prints the mark on a new kind of base.
+A diacritic applies only to the type of base that a chart shows it on. The chart shows nasalization on a vowel, as in `ẽ`. Thus `k̃` does not read. The chart shows aspiration on stops, as in `tʰ`. Thus `aʰ` does not read. This rule decreases coverage. But no reading is a guess. A rule becomes wider only when a chart shows the mark on a new type of base.
 
-Eight marks move a vowel along a scale of the chart: raised and lowered along height; advanced, retracted, centralized and mid-centralized along backness; more and less rounded along rounding. PanPhon has no rule for most of them. We move the vowel one row or one column, or one step on the rounding scale. The chart names each mark and its direction. The size of the step is our choice. A mark at the end of its scale changes nothing.
+Eight marks move a vowel on a scale of the chart:
 
-Letters written side by side without a tie bar read as a tied segment when the tie makes sense: `ts` reads as `t͡s`. A tie combines its parts. A nasal before an obstruent makes a prenasalized stop. A stop before a fricative makes an affricate. Two stops or two nasals make a double articulation, as in `k͡p`. Two vowels do not combine, so a diphthong is two segments. The literature is divided here. Nerbonne and Heeringa (1997, p. 11) found that two-segment diphthongs gave the better dialect distances. Heeringa (2004, p. 188) found no difference. Rubehn et al. (2024, p. 209) treat a diphthong as one segment with the vector of its first part.
+- along height: raised and lowered;
+- along backness: advanced, retracted, centralized and mid-centralized;
+- along rounding: more rounded and less rounded.
 
-The tie rule matters for coverage. The table below counts the PHOIBLE types that read under three readings.
+PanPhon has no rule for most of these marks. We move the vowel one row, one column, or one step of rounding. The chart gives the name and the direction of each mark. The size of the step is our choice. A mark at the end of its scale changes nothing.
+
+Two letters without a tie bar read as one tied segment if the tie is possible. For example, `ts` reads as `t͡s`. A tie combines its parts:
+
+- A nasal before an obstruent gives a prenasalized stop.
+- A stop before a fricative gives an affricate.
+- Two stops or two nasals give a double articulation, as in `k͡p`.
+
+Two vowels do not combine. Thus a diphthong is two segments. The sources do not agree on this point. Nerbonne and Heeringa (1997, p. 11) found better dialect distances with two segments. Heeringa (2004, p. 188) found no difference. Rubehn et al. (2024, p. 209) use one segment with the vector of its first part.
+
+The tie rule increases coverage. This table gives the PHOIBLE types that read with three methods.
 
 <!-- whitepaper:readings:start -->
 | Reading of a PHOIBLE segment | Types read | Share of types |
@@ -61,43 +108,70 @@ The tie rule matters for coverage. The table below counts the PHOIBLE types that
 | as the library reads a word: whole, split into segments, tones included | 3765 of 4158 | 0.9055 |
 <!-- whitepaper:readings:end -->
 
-A tone is a segment of its own and follows the syllable that carries it. Tone letters, tone diacritics and superscript digits give the same segment, so `má`, `ma˦` and `ma⁴` all read as `m`, `a`, `˦`. We do not use PanPhon's two tone features. Two tones are compared by their pitch at the start, middle and end of the syllable. Their distance is the mean difference, scaled by the range of the five levels. Section 6 shows that this distance does not beat a simple baseline, and we mark it as experimental.
+A tone is its own segment. It comes after the syllable that has the tone. Tone letters, tone diacritics and superscript digits give the same segment. Thus `má`, `ma˦` and `ma⁴` all read as `m`, `a`, `˦`. We do not use the two tone features of PanPhon. We compare two tones by their pitch at the start, the middle and the end of the syllable. The distance is the mean difference, divided by the range of the five levels. Section 6 shows that this distance is not better than a simple baseline. Thus the tone distance is experimental.
 
-A stress mark is not a segment. The reader drops it, so `ˈio` and `io` are at distance 0.
+A stress mark is not a segment. The library removes it. Thus `ˈio` and `io` are at distance 0.
 
 ## 4. Distances and search
 
-The feature distance of two segments is a weighted city-block distance between their vectors. A plus against a minus costs the full weight of the feature, and a zero against either costs half. Dividing by the total weight, 9.5, puts the distance between 0 and 1. A segment that cannot be read is at distance 1 from everything.
+The feature distance of two segments is a weighted city-block distance between their vectors. Plus against minus costs the full weight of the feature. Zero against plus or minus costs half the weight. We divide by the total weight, 9.5. Thus the distance is between 0 and 1. A segment that the table cannot read is at distance 1 from all other segments.
 
-Word distance is an edit distance. A substitution costs the square root of the feature distance. A deletion or an insertion costs 0.5. A tone against a phone costs 1. So a substitution never costs more than a deletion plus an insertion, and since the square root of a metric is a metric, the word distance stays a metric. The normalized distance divides by the segment count of the longer word. These costs are the candidate P5, which the test run selected (section 5).
+The word distance is an edit distance:
 
-The square root makes a small substitution dearer relative to a gap. P5, which adds the square root to P4, gained more than P4 on all three test tasks, on the point estimate; no interval for the difference between the two exists (section 5.5).
+- A substitution costs the square root of the feature distance.
+- A deletion or an insertion costs 0.5.
+- A tone against a phone costs 1.
 
-Search would be slow if every query were compared with every term, so the index groups the letters of the table into clusters and files each term under its sequences of clusters. A query retrieves the terms that share a cluster sequence, and these candidates are ranked by edit distance. The clusters come from average-linkage clustering on the substitution cost. The sensitivity sets how coarse the clusters are. It is a share between 0 and 1: the merge threshold is that quantile of the costs over all pairs of letters, so a given share means the same thing whatever the costs are.
+Thus a substitution never costs more than a deletion and an insertion. The square root of a metric is a metric. Thus the word distance is a metric. The normalized distance divides by the number of segments in the longer word. The test chose these costs (section 5.5). We call them the released costs.
 
-The default share, 0.08, came from the development data. We took the share with the best mean recall@1 among those that keep the candidate lists short. The shares 0.08 and 0.12 tie at 0.8521 over the four dialect pairs, and we took the smaller one, because it returns fewer candidates.
+The square root makes a small substitution more expensive, relative to a gap. The test also had a candidate with the same gap of 0.5 but no square root. The released costs gained more than that candidate on all three test tasks. This is true for the point estimates. No interval for the difference between the two exists.
 
-A segment that cannot be read costs as much as a missing one, and nothing warns the user. With `strict=True`, the distance, alignment and search functions raise an error that names the segment instead. Strict mode cannot catch the ASCII letters `c`, `y`, `j` and `r`, because they are valid IPA letters as well.
+The search does not compare the query with each term. The index puts the letters of the table into clusters. Each term goes into the index under its sequences of clusters. A query gets the terms that have the same cluster sequence. The edit distance then sorts these candidates. The clusters come from average-linkage clustering on the substitution cost.
 
-The relative sensitivity and strict mode were added after the test run. Neither changes a word distance, and a test pins a hash of many word distances to keep it so. On the development queries, every query also gives the same result at the share 0.08 as under the absolute threshold of the tested version, in an audit run whose per-query scores are not published.
+The sensitivity controls the size of the clusters. It is a share between 0 and 1. The merge threshold is that quantile of the costs of all pairs of letters. Thus one share has the same meaning with different costs.
+
+We chose the default share, 0.08, on the development data. We took the share with the best mean recall@1 that also kept the lists of candidates short. The shares 0.08 and 0.12 both have a mean recall@1 of 0.8521 over the four dialect pairs. We took the smaller share, because it gives fewer candidates.
+
+A segment that the table cannot read costs the same as a missing segment. The library gives no warning. With `strict=True`, the distance, alignment and search functions stop with an error. The error gives the segment. Strict mode cannot find the ASCII letters `c`, `y`, `j` and `r`, because they are also IPA letters.
+
+We added the relative sensitivity and strict mode after the test. They do not change a word distance. A test keeps a hash of many word distances, and this hash did not change. On the development queries, each query gives the same result at the share 0.08 as with the absolute threshold of the tested version. This comparison is an audit run. No result file has its scores for each query.
 
 ## 5. Evaluation
 
-### 5.1 One test run, fixed in advance
+### 5.1 One test, with rules written before the test
 
-Before the test, we wrote down the systems, the tasks, the metrics, the candidate costs and the rules that would pick a winner. The test then ran once. Each result file records the commit of the run and a hash of the written rules. The rules allow a task to run again only after a crash. Each pre-registered metric has a 95% bootstrap interval from 1000 resamples, and a paired difference uses the same resamples for both systems.
+Before the test, we wrote the systems, the tasks, the metrics, the candidate costs and the rules that choose the winner. Then the test ran one time. Each result file records the commit of the test and a hash of the written rules. The rules permit a second run of a task only after a crash. Each pre-registered metric has a 95% bootstrap interval from 1000 resamples. A paired difference uses the same resamples for the two systems.
 
-Alignment and retrieval items were split by a hash of each item, one item in five going to test. Cognate detection uses the published training and test sets of List, Greenhill and Gray (2017). We tuned costs and defaults on the development part. Some data has no test part, because we had already looked at it while building the table and its weights. We call that data "seen". A development or seen number is never a test result.
+Alignment and retrieval use a hash of each item to divide the data. One item in five goes to the test. Cognate detection uses the published training and test sets of List, Greenhill and Gray (2017). We set the costs and the defaults on the development data. Some data has no test part, because we used it when we made the table and its weights. We call this data "seen". A development number or a seen number is never a test result.
 
 ### 5.2 Systems and tasks
 
-Seven systems ran. Plain edit distance gives every substitution the cost 1. PanPhon offers a weighted and an unweighted feature edit distance (Mortensen et al. 2016). ALINE aligns words by multivalued features (Kondrak 2000). CLTS sound vectors are the feature vectors of Rubehn et al. (2024), built on the CLTS catalogue (Anderson et al. 2018). SCA aligns words by sound classes. List (2012) describes it as the alignment that LexStat builds on. The seventh system is phonematcher as it stood at the test, with the costs we call C0: a gap of 1 and linear substitutions. The candidate costs ran beside them, and P5 is the library as it ships.
+Seven systems ran:
 
-Cognate detection uses the six test sets of List, Greenhill and Gray (2017). The score is the mean average precision of "same cognate set" over the word pairs of each concept, with unreadable pairs at distance 1. Alignment uses the gold alignments of List and Prokić (2014), and scores the share of pairs that a system aligns exactly as the gold does, on the pairs that every aligning system can read. Retrieval indexes the WikiPron pronunciations of one dialect and looks each word up by its pronunciation in another dialect, for four pairs of dialects. The score is recall@1 over all queries.
+- Plain edit distance: each substitution costs 1.
+- PanPhon, weighted and unweighted: feature edit distances (Mortensen et al. 2016).
+- ALINE: alignment by multivalued features (Kondrak 2000).
+- CLTS sound vectors: the feature vectors of Rubehn et al. (2024), made from the CLTS catalogue (Anderson et al. 2018).
+- SCA: alignment by sound classes. List (2012) describes SCA as the alignment that LexStat uses.
+- phonematcher at the time of the test, with its original costs: a gap of 1, and a substitution that costs the feature distance itself.
+
+Five other sets of costs for phonematcher also ran (section 5.5). One of them is the released library.
+
+There are three tasks:
+
+- Cognate detection uses the six test sets of List, Greenhill and Gray (2017). The score is the mean average precision (AP) of "same cognate set" over the word pairs of each concept. A pair that a system cannot read is at distance 1.
+- Alignment uses the gold alignments of List and Prokić (2014). The score is the share of pairs that a system aligns the same as the gold alignment (PAS). We use only the pairs that all aligning systems can read.
+- Retrieval puts the WikiPron pronunciations of one dialect into an index. Then it finds each word from its pronunciation in a second dialect. There are four pairs of dialects. The score is recall@1: the share of queries that get the correct word first.
 
 ### 5.3 Results
 
-On cognates, the first columns use only the words that every system can read. The all-words column, which was the planned main measure, is distorted on Romance by a defect in our benchmark code (section 5.4). On the common words, phonematcher has a lower average precision than SCA and a higher one than every other system, though these columns have no interval. On all words, phonematcher is clearly behind SCA, whose interval does not overlap. Plain edit distance also has the higher point estimate on this main measure, 0.8234 against 0.8035. The result files store each system's paired difference to C0, not to P5, so the interval of that difference cannot be computed, and the overlap of the two separate intervals does not settle it. The Romance defect lowers phonematcher's all-words score but not that of plain edit distance. The common words were chosen after we saw the results, and they leave out Chinese and Tujia, the two tonal sets, because PanPhon and ALINE read none of their words.
+The cognate table starts with the words that all systems can read. The all-words column is the planned main measure. A defect in our benchmark code changes this column on Romance (section 5.4).
+
+On the common words, phonematcher has a lower average precision than SCA. It has a higher average precision than all other systems. These columns have no interval.
+
+On all words, phonematcher is worse than SCA, and the intervals do not overlap. Plain edit distance also has the higher point estimate on this main measure, 0.8234 against 0.8035. The result files give the paired difference of each system to the original costs, not to the released costs. Thus we cannot calculate the interval of this difference. The overlap of the two separate intervals does not answer the question. The Romance defect decreases the all-words score of phonematcher, but not of plain edit distance.
+
+We chose the common words after we saw the results. The common words do not include Chinese and Tujia, the two tonal sets. PanPhon and ALINE cannot read any of their words.
 
 <!-- whitepaper:cognates:start -->
 Test split. The common words are the 5497 words that every system reads, in Bahnaric, Huon, Romance, Uralic; Chinese and Tujia have no word that every system reads. The common columns have no interval. The all-words column is the pre-registered main metric, with unread pairs at distance 1.
@@ -110,11 +184,13 @@ Test split. The common words are the 5497 words that every system reads, in Bahn
 | ALINE | 0.9060 | 0.9132 | 0.9833 | 0.6130 [0.5903, 0.6359] | 0.7559 |
 | CLTS sound vectors | 0.8283 | 0.8469 | 0.9634 | 0.7399 [0.7224, 0.7561] | 0.7820 |
 | SCA | 0.9239 | 0.9209 | 0.9877 | 0.8835 [0.8718, 0.8949] | 0.9558 |
-| phonematcher, starting weights (C0) | 0.8381 | 0.8479 | 0.9647 | 0.7326 [0.7140, 0.7500] | 0.7609 |
-| phonematcher, shipped library (P5) | 0.9179 | 0.9198 | 0.9812 | 0.8035 [0.7874, 0.8186] | 0.7641 |
+| phonematcher, original costs | 0.8381 | 0.8479 | 0.9647 | 0.7326 [0.7140, 0.7500] | 0.7609 |
+| phonematcher, released costs | 0.9179 | 0.9198 | 0.9812 | 0.8035 [0.7874, 0.8186] | 0.7641 |
 <!-- whitepaper:cognates:end -->
 
-On alignment, phonematcher is behind SCA and ALINE on the point estimate, but the intervals overlap. ALINE reads few segments, which leaves few common pairs and wide intervals. phonematcher is clearly ahead of plain edit distance. SCA was once run over all the alignment pairs, test pairs included, to check that it matched its published settings. SCA is an untuned baseline, so that run affected no decision about phonematcher.
+On alignment, phonematcher is below SCA and ALINE on the point estimate. The intervals overlap. ALINE reads few segments. Thus there are few common pairs, and the intervals are wide. phonematcher is clearly better than plain edit distance.
+
+SCA ran one time on all the alignment pairs, also the test pairs. This run made sure that SCA agreed with its published settings. SCA has no tuning. Thus that run did not change a decision about phonematcher.
 
 <!-- whitepaper:alignment:start -->
 Test split. Every system is scored on the 195 pairs that all four aligning systems read.
@@ -124,11 +200,11 @@ Test split. Every system is scored on the 195 pairs that all four aligning syste
 | plain edit distance | 1459 of 1459 | 0.6154 [0.5487, 0.6872] | 0.7709 |
 | ALINE | 195 of 1459 | 0.8923 [0.8513, 0.9333] | 0.9413 |
 | SCA | 1459 of 1459 | 0.8974 [0.8564, 0.9385] | 0.9531 |
-| phonematcher, starting weights (C0) | 1163 of 1459 | 0.7949 [0.7436, 0.8513] | 0.8752 |
-| phonematcher, shipped library (P5) | 1163 of 1459 | 0.8513 [0.8051, 0.8974] | 0.9178 |
+| phonematcher, original costs | 1163 of 1459 | 0.7949 [0.7436, 0.8513] | 0.8752 |
+| phonematcher, released costs | 1163 of 1459 | 0.8513 [0.8051, 0.8974] | 0.9178 |
 <!-- whitepaper:alignment:end -->
 
-On retrieval, phonematcher has the highest recall@1, on all queries, on the queries every system reads, and on the queries that every system scored. SCA ran on a sample of 500 queries per pair and ALINE on the first 100 of those. Their all-queries scores therefore come from different queries than the others', and there is no paired difference against them. The shared-queries column compares every system on the same queries, without an interval.
+On retrieval, phonematcher has the highest recall@1 in three views: on all queries, on the queries that all systems read, and on the queries that all systems scored. SCA ran on a sample of 500 queries per pair. ALINE ran on the first 100 of those queries. Thus their all-queries scores use different queries from the other systems. There is no paired difference for SCA or ALINE. The column of shared queries compares all systems on the same queries. This column has no interval.
 
 <!-- whitepaper:retrieval:start -->
 Test split, mean recall@1 over the four dialect pairs (en-US-UK, pt-PT-BR, es-ES-LA, hy-E-W). The common queries are the 223 queries that every system reads and scores. The shared queries are the 400 queries of the ALINE sample, which every system scores. These two columns have no interval.
@@ -141,13 +217,22 @@ Test split, mean recall@1 over the four dialect pairs (en-US-UK, pt-PT-BR, es-ES
 | ALINE | 0.7270 | 0.4150 | 0.4150 [0.3742, 0.4550] | 100/100/100/100 |
 | CLTS sound vectors | 0.8157 | 0.7971 | 0.7929 [0.7844, 0.8017] | 1180/10815/712/2992 |
 | SCA | 0.7780 | 0.7995 | 0.7925 [0.7773, 0.8086] | 500/500/500/500 |
-| phonematcher, starting weights (C0) | 0.8324 | 0.8129 | 0.8082 [0.7999, 0.8168] | 1180/10815/712/2992 |
-| phonematcher, shipped library (P5) | 0.8503 | 0.8642 | 0.8777 [0.8706, 0.8851] | 1180/10815/712/2992 |
+| phonematcher, original costs | 0.8324 | 0.8129 | 0.8082 [0.7999, 0.8168] | 1180/10815/712/2992 |
+| phonematcher, released costs | 0.8503 | 0.8642 | 0.8777 [0.8706, 0.8851] | 1180/10815/712/2992 |
 <!-- whitepaper:retrieval:end -->
 
 ### 5.4 The Romance defect
 
-On Romance, P5 reached a B-cubed F of only 0.3631 at its training threshold, against 0.8660 for SCA. Our benchmark code treated two kinds of token as unreadable: a segment with a stress mark in front, such as `ˈa`, and the boundary symbols `+` and `_` of the word lists. Under the planned rule, an unreadable pair counts as distance 1. That put 3544 of the 4853 Romance words, and 91479 of its 105702 word pairs, at distance 1. Those words could join no cluster, and recall collapsed. For the stress marks the fault lies in the benchmark code alone, because the library drops a stress mark. The library does not read `+` and `_` either, but they mark word boundaries in the data, not sounds, so the benchmark code should have removed them before scoring.
+On Romance, the released library reached a B-cubed F of only 0.3631 at its training threshold, against 0.8660 for SCA.
+
+The cause is in our benchmark code. The code did not read two types of token:
+
+- a segment with a stress mark in front, for example `ˈa`;
+- the boundary symbols `+` and `_` of the word lists.
+
+The planned rule puts a pair that a system cannot read at distance 1. Thus 3544 of the 4853 Romance words, and 91479 of its 105702 word pairs, went to distance 1. These words could not join a cluster, and recall decreased very much.
+
+The fault for the stress marks is only in the benchmark code, because the library removes a stress mark. The library also does not read `+` and `_`. But these symbols are word boundaries in the data, not sounds. Thus the benchmark code must remove them before it calculates the scores.
 
 <!-- whitepaper:romance:start -->
 Test split. Words that each system cannot read; both PanPhon systems read the same words.
@@ -162,33 +247,47 @@ Test split. Words that each system cannot read; both PanPhon systems read the sa
 | Uralic | 1401 | 22 | 193 | 624 | 22 | 0 | 0 |
 <!-- whitepaper:romance:end -->
 
-The corrected benchmark code reads both kinds of token. Smaller sets lost words to `_` in the same way. Chinese and Tujia lose words to `⁰` and `∼`, which remain unread.
+The corrected benchmark code reads the two types of token. Some smaller sets also lost words because of `_`. Chinese and Tujia lose words because of `⁰` and `∼`. The corrected code does not read these symbols.
 
-We keep the recorded numbers. The rules allowed a second run only after a crash, and the fix changes no metric and no rule. A corrected Romance number would need a second test run, which the rules do not allow. The all-words column is therefore biased on Romance against every feature-based system in the benchmark. PanPhon and ALINE lose even more Romance words than phonematcher, so the all-words order among the feature systems is not a clean comparison either. Only SCA and plain edit distance read every word. The common words are the fair comparison. On the 1042 Romance words that every system reads, P5 scores an average precision of 0.9812 and SCA 0.9877.
+We keep the recorded numbers. The rules permit a second run only after a crash. The correction changes no metric and no rule. A correct Romance number needs a second test. The rules do not permit a second test.
 
-### 5.5 Choosing the word costs
+Thus the all-words column is not fair on Romance to all systems that use features. PanPhon and ALINE lose more Romance words than phonematcher. Thus the all-words order of the feature systems is also not a clean comparison. Only SCA and plain edit distance read all the words. The common words give the fair comparison. On the 1042 Romance words that all systems read, the released library scores an average precision of 0.9812 and SCA 0.9877.
 
-Six candidate costs ran on the test data. C0 kept PanPhon's weights with a gap of 1 and linear substitutions. C1 set every feature weight to 1. C2 also gave the height steps, backness and rounding one unit per dimension. C3 raised the weight of the major-class features in C2. P4 was C0 with a gap of 0.5, and P5 was P4 with square-root substitutions. A candidate first had to keep every pair of chart vowels nearer than any vowel and any obstruent of a fixed list. It then had to beat C0 on cognates and on retrieval without losing on alignment.
+### 5.5 How the test chose the word costs
+
+Six sets of costs ran on the test data:
+
+- original costs: PanPhon's weights, a gap of 1, and a substitution that costs the feature distance;
+- equal weights: each feature weight is 1;
+- one unit per dimension: as equal weights, but the height steps, backness and rounding have one unit together for each dimension;
+- heavier major classes: as one unit per dimension, with a higher weight on the features syllabic, sonorant and consonantal;
+- half gap: as the original costs, with a gap of 0.5;
+- released costs: as half gap, with a substitution that costs the square root of the feature distance.
+
+A candidate had to pass two rules:
+
+1. Each pair of chart vowels must be nearer than any vowel and any obstruent of a fixed list.
+2. The candidate must be better than the original costs on cognates and on retrieval, and not worse on alignment.
 
 <!-- whitepaper:candidates:start -->
-| Candidate | K1 holds | Cognates, AP minus C0 | Alignment, PAS minus C0 | Retrieval, recall@1 minus C0 |
+| Candidate | Passes the vowel rule | Cognates, AP minus original | Alignment, PAS minus original | Retrieval, recall@1 minus original |
 |---|---|---|---|---|
-| C1 | no | -0.0066 [-0.0082, -0.0050] | -0.0205 [-0.0462, +0.0000] | +0.0009 [-0.0016, +0.0034] |
-| C2 | no | -0.0066 [-0.0081, -0.0052] | -0.0359 [-0.0667, -0.0103] | -0.0035 [-0.0064, -0.0007] |
-| C3 | yes | -0.0061 [-0.0074, -0.0048] | -0.0205 [-0.0410, -0.0051] | -0.0039 [-0.0068, -0.0011] |
-| P4 | yes | +0.0289 [+0.0254, +0.0322] | +0.0256 [+0.0051, +0.0513] | +0.0255 [+0.0219, +0.0294] |
-| P5 | yes | +0.0709 [+0.0629, +0.0790] | +0.0564 [+0.0256, +0.0872] | +0.0696 [+0.0635, +0.0759] |
+| equal weights | no | -0.0066 [-0.0082, -0.0050] | -0.0205 [-0.0462, +0.0000] | +0.0009 [-0.0016, +0.0034] |
+| one unit per dimension | no | -0.0066 [-0.0081, -0.0052] | -0.0359 [-0.0667, -0.0103] | -0.0035 [-0.0064, -0.0007] |
+| heavier major classes | yes | -0.0061 [-0.0074, -0.0048] | -0.0205 [-0.0410, -0.0051] | -0.0039 [-0.0068, -0.0011] |
+| half gap | yes | +0.0289 [+0.0254, +0.0322] | +0.0256 [+0.0051, +0.0513] | +0.0255 [+0.0219, +0.0294] |
+| released costs | yes | +0.0709 [+0.0629, +0.0790] | +0.0564 [+0.0256, +0.0872] | +0.0696 [+0.0635, +0.0759] |
 <!-- whitepaper:candidates:end -->
 
-C1 and C2 fail the vowel constraint. C3 is worse than C0 on all three tasks. P4 and P5 both beat C0, and P5 wins on the larger cognate gain. No candidate that changed the feature weights passed, so the weights stay as PanPhon gives them, and the word costs became P5. P4 and P5 were suggested by development results, which is why only the test could decide between them and C0.
+Equal weights and one unit per dimension do not pass the vowel rule. Heavier major classes is worse than the original costs on all three tasks. Half gap and the released costs are both better than the original costs. The released costs have the larger gain on cognates, so they won. No candidate that changed the feature weights passed. Thus the weights stay as PanPhon gives them. The two winning candidates came from development results. Thus only the test could choose between them and the original costs.
 
-The Romance defect does not touch this choice. Every candidate went through the same benchmark code and lost the same words, and a paired difference compares two candidates on the same units.
+The Romance defect does not change this choice. All candidates used the same benchmark code and lost the same words. A paired difference compares two candidates on the same units.
 
 ## 6. What did not work
 
 ### 6.1 Tone
 
-Our tone distance ranks the confusions of the six Cantonese tones (Wong, Cheng and Chen 2018) no better than a baseline that knows only whether a contour rises, falls or stays level. There are 15 pairs, and the intervals are wide and overlap, so the data cannot show that the baseline is better. It does show that the tone distance is not better. The data is seen.
+We compared our tone distance with the confusions of the six Cantonese tones (Wong, Cheng and Chen 2018). The tone distance is not better than a baseline that knows only if a contour goes up, goes down or stays level. There are 15 pairs. The intervals are wide and they overlap. Thus the data does not show that the baseline is better. But it shows that the tone distance is not better. The data is seen.
 
 <!-- whitepaper:tone:start -->
 Seen data, 15 Cantonese tone pairs.
@@ -203,10 +302,10 @@ Seen data, 15 Cantonese tone pairs.
 
 ### 6.2 Height steps, scale marks and PanPhon's own features
 
-The height steps and the scale marks follow the chart, but neither improves a score. The table below changes one thing at a time. The test columns use the C0 costs, as the test run did; the development column uses the shipped costs.
+The height steps and the scale marks follow the chart. Neither improves a score. This table changes one thing at a time. The test columns use the original costs, as the test did. The development column uses the costs that we release.
 
 <!-- whitepaper:ablations:start -->
-| Variant | Test cognates, AP minus table (C0 costs) | Test alignment, PAS minus table (C0 costs) | Dev cognates, AP (P5 costs) |
+| Variant | Test cognates, AP minus table (original costs) | Test alignment, PAS minus table (original costs) | Dev cognates, AP (released costs) |
 |---|---|---|---|
 | PanPhon's 22 features | +0.0058 [+0.0044, +0.0071] | +0.0000 [+0.0000, +0.0000] | 0.7742 |
 | no height steps | -0.0002 [-0.0013, +0.0008] | +0.0000 [+0.0000, +0.0000] | 0.7725 |
@@ -215,9 +314,9 @@ The height steps and the scale marks follow the chart, but neither improves a sc
 | the table (control) | - | - | 0.7727 |
 <!-- whitepaper:ablations:end -->
 
-Removing the scale marks changes each paired test score by less than 0.0001, and the development cognate score by one unit in the fourth decimal. We keep the marks because the chart gives them a meaning, not because they help. We did not measure what they add to coverage.
+Removing the scale marks changes each paired test score by less than 0.0001. It changes the development cognate score by one unit in the fourth decimal. We keep the marks because the chart gives them a meaning, not because they help. We did not measure their effect on coverage.
 
-The height steps give no gain on test cognates either. PanPhon's 22 features alone do better there than our table, by a margin whose interval lies above zero. On development cognates at the shipped costs, removing the steps or the scale marks leaves the score almost unchanged, and PanPhon's features again score higher. On the Hillenbrand vowel confusions the full table has the higher point estimate, but that data is seen and the intervals overlap.
+The height steps give no gain on test cognates. PanPhon's 22 features alone are better than our table on test cognates, and the interval is above zero. On development cognates with the released costs, the score almost does not change when we remove the steps or the scale marks. PanPhon's features again score higher. On the Hillenbrand vowel confusions, the full table has the higher point estimate. But this data is seen, and the intervals overlap.
 
 <!-- whitepaper:confusions:start -->
 Seen data, 66 vowel pairs. Spearman correlation of the negative segment distance with confusion.
@@ -231,10 +330,12 @@ Seen data, 66 vowel pairs. Spearman correlation of the negative segment distance
 
 ### 6.3 One encoding of vowel height
 
-The table encodes height twice: in `hi` and `lo`, and in the steps. One fix sets `hi` and `lo` to zero on every vowel, so that the steps alone carry height. It keeps the distance a metric. After the test run, we accept a change only if no development task gets worse with an interval wholly below zero. Cognate detection did, so we kept the table as it is.
+The table gives height two times: in `hi` and `lo`, and in the steps. One possible correction sets `hi` and `lo` to zero on each vowel. Then only the steps give height. This correction keeps the distance a metric.
+
+After the test, we accept a change only if no development task becomes worse with an interval fully below zero. Cognate detection became worse in this way. Thus we did not make the change.
 
 <!-- whitepaper:vowel-height:start -->
-Dev split, P5 costs. One height encoding minus the table.
+Dev split, released costs. One height encoding minus the table.
 
 | Task | Paired difference [95% interval] |
 |---|---|
@@ -243,17 +344,19 @@ Dev split, P5 costs. One height encoding minus the table.
 | Retrieval, recall@1 | -0.0028 [-0.0067, +0.0010] |
 <!-- whitepaper:vowel-height:end -->
 
-A second fix drops `hi` and `lo` only when both segments are vowels. It breaks the triangle inequality. A check of the three inequalities of every triple of the 135 base letters, 1,202,985 inequalities over 400,995 triples, found 875 violated, in an audit run that is not published as a result file. We did not score it.
+A second possible correction removes `hi` and `lo` only when both segments are vowels. This correction breaks the triangle inequality. We checked the three inequalities of each triple of the 135 base letters, 1,202,985 inequalities over 400,995 triples, and found 875 violated. This check is an audit run. No result file has it. We did not score this correction.
 
 ### 6.4 Fitted weights
 
-Weights fitted to listeners' confusions did not carry over from one data set to another. We fitted one weight per feature on two of three confusion sets and scored the third. The Hillenbrand correlation rose from 0.5610 to 0.6394 and the Mandarin one from 0.2927 to 0.3395, but the Miller and Nicely one fell from 0.3495 to 0.2981. These numbers come from an audit run on seen data: we had looked at all three sets while building the table, so even the held-out scores are not clean tests. Lakretz et al. (2018) learn a perceptual metric from confusions and compare it across two English data sets and one Hebrew one. Nerbonne and Heeringa (1997, p. 11) found weighting of no use for dialect distance.
+We fitted one weight for each feature on two of three confusion sets. Then we scored the third set. The weights did not transfer from one set to a different set: the Hillenbrand correlation rose from 0.5610 to 0.6394, the Mandarin one from 0.2927 to 0.3395, but the Miller and Nicely one fell from 0.3495 to 0.2981. These numbers come from an audit run on seen data. We used all three sets when we made the table. Thus the held-out scores are also not clean tests.
+
+Lakretz et al. (2018) learn a perceptual metric from confusions. They compare it on two English data sets and one Hebrew data set. Nerbonne and Heeringa (1997, p. 11) found that weights did not help for dialect distance.
 
 ## 7. Findings about other tools
 
-PanPhon's weight file gives `tense` 0.25, `long` 0.125 and `velaric` 0.25. PanPhon's feature table reads these numbers without their names and assigns them in its own feature order, which ends with `velaric`, `tense`, `long`. A PanPhon distance therefore gives 0.25 to `velaric`, 0.125 to `tense` and 0.25 to `long`. phonematcher reads the weights by name.
+The PanPhon weight file gives `tense` 0.25, `long` 0.125 and `velaric` 0.25. The PanPhon feature table reads these numbers without their names. It gives them in its own feature order, which ends with `velaric`, `tense`, `long`. Thus a PanPhon distance gives 0.25 to `velaric`, 0.125 to `tense` and 0.25 to `long`. phonematcher reads the weights by name.
 
-A control confirms this. A variant of phonematcher with PanPhon's 22 features and the weights PanPhon actually applies agrees with PanPhon's weighted distance on every pair of segments whose values match PanPhon's. It differs elsewhere because our table changes some values: 710 of the 1207 segments that both read have at least one changed value.
+A control shows this. One variant of phonematcher has PanPhon's 22 features and the weights that PanPhon applies. This variant agrees with the weighted PanPhon distance on each pair of segments that has PanPhon's values. It differs on other pairs, because our table changes some values. 710 of the 1207 segments that both read have one or more changed values.
 
 <!-- whitepaper:control:start -->
 | Pairs | Count | Distance differs |
@@ -262,44 +365,46 @@ A control confirms this. A variant of phonematcher with PanPhon's 22 features an
 | pairs whose 22 values equal PanPhon's | 123256 | 0 |
 <!-- whitepaper:control:end -->
 
-Two of our results match earlier work. Heeringa (2004, p. 185) found that phone-based methods beat feature-based ones against perception. Sofroniev and Çöltekin (2018, p. 114) found PHOIBLE feature vectors below SCA on the same alignment benchmark.
+Two of our results agree with earlier work. Heeringa (2004, p. 185) found that methods with phones were better than methods with features, against perception. Sofroniev and Çöltekin (2018, p. 114) found PHOIBLE feature vectors below SCA on the same alignment benchmark.
 
 ## 8. Limits
 
-The test data is spent. P5 was chosen on the one test run, and every change after it was judged on development and seen data. The shipped library is P5 plus changes that leave every word distance as it was.
+We used the test data. We chose the released costs with the one test. We examined all changes after the test only on development data and seen data. There is no new test. The released library uses those costs, with later changes that do not change a word distance.
 
-On cognate detection, SCA scores higher than phonematcher on all words, with intervals that do not overlap. On the common words it scores higher on the point estimate only. Plain edit distance also has the higher point estimate on the pre-registered measure, and the files do not allow an interval for that difference.
+On cognate detection, SCA scores higher than phonematcher on all words, and the intervals do not overlap. On the common words, SCA scores higher only on the point estimate. Plain edit distance also has the higher point estimate on the pre-registered measure. The files do not let us calculate an interval for that difference.
 
-The P5 numbers come from the candidate that won on the same test run. A winner's scores on the data that chose it carry a selection effect, and no interval covers it.
+The numbers of the released library come from the candidate that won the same test. The scores of a winner on the data that chose it have a selection effect. No interval includes this effect.
 
-The common-word columns of the cognate table were defined after the results were seen. They drop the two tonal sets, Chinese and Tujia, and keep the words that the weakest reader can read.
+We defined the common words of the cognate table after we saw the results. They do not include the two tonal sets, Chinese and Tujia. They keep only the words that the weakest reader can read.
 
-Only the three test result files carry a clean commit and the hash of the written rules. The development and seen results were made on working trees, most of them with uncommitted changes.
+Only the three test result files have a clean commit and the hash of the written rules. The development and seen results come from working trees. Most of these trees had changes that were not committed.
 
-The alignment comparison rests on few pairs, and the retrieval comparison with SCA and ALINE on samples.
+The alignment comparison uses few pairs. The retrieval comparison with SCA and ALINE uses samples.
 
-The coverage counts come from three collections, and a segment outside them may not read. The height steps, the scale marks and the pharyngealized feature rest on the chart and on descriptions of articulation; no task shows that they help.
+The coverage counts come from three collections. A segment that is not in them possibly does not read. The height steps, the scale marks and the pharyngealized feature come from the chart and from descriptions of the articulation. No task shows that they help.
 
-The tone model rests on one small data set that we had already seen.
+The tone model uses one small data set that we used before.
 
 ## 9. Reproducibility
 
-The test ran at commit `f092f20c8bbe0aa49a6480946858c0354a2580a9` of `TigreGotico/phonematcher`. The written rules are `benchmarks/prereg-2.md`, with sha256 `29927d4e0e8162276cf12c68450a3b28372dc039d3a24377bbf390a64bd2df7c`. The test code stops when the file's hash differs.
+The test ran at commit `f092f20c8bbe0aa49a6480946858c0354a2580a9` of `TigreGotico/phonematcher`. The written rules are in `benchmarks/prereg-2.md`. Their sha256 is `29927d4e0e8162276cf12c68450a3b28372dc039d3a24377bbf390a64bd2df7c`. The test code stops if the hash of the file is different.
 
-The two audit runs of section 6 are outside the result files. The triangle check ran on the tree of commit `ecde385`. The weight fit ran `scripts/fit_weights.py` from commit `3a134ef` on the library at commit `9c0f5bf`. The tables of this paper are rendered from `benchmarks/results/` by `benchmarks/render.py`, and `tests/test_whitepaper.py` checks each number in the text against those files, bound to the system and the claim in its sentence. The five audit-run numbers of section 6 are typed, because no file holds them.
+The two audit runs of section 6 are not in the result files. The triangle check ran on the tree of commit `ecde385`. The weight fit ran `scripts/fit_weights.py` from commit `3a134ef` on the library at commit `9c0f5bf`.
+
+`benchmarks/render.py` makes the tables of this paper from `benchmarks/results/`. `tests/test_whitepaper.py` checks each number in the text against those files. It connects each number to the system and the claim in its sentence. The five audit-run numbers of section 6 are typed, because no file has them.
 
 The data and its licences:
 
 - cognates: the word lists of List, Greenhill and Gray (2017), Zenodo record 192607, CC BY 4.0;
-- alignment: `full.psa` and `covington.psa` of the alignment benchmark, from `github.com/SequenceComparison/SupplementaryMaterial` at a pinned commit; the repository states no licence, so the files are downloaded and never redistributed;
+- alignment: `full.psa` and `covington.psa` of the alignment benchmark, from `github.com/SequenceComparison/SupplementaryMaterial` at a pinned commit. The repository gives no licence. Thus the benchmark downloads the files and does not distribute them;
 - retrieval and coverage: the WikiPron files, Apache-2.0;
 - coverage and allophones: PHOIBLE 2.0, CC BY 4.0;
 - tone: the tables of Wong, Cheng and Chen (2018), CC BY 4.0;
-- confusions: the four sets listed in `benchmarks/tasks/confusions.py`, each with its licence.
+- confusions: the four sets in `benchmarks/tasks/confusions.py`, each with its licence.
 
-The feature table derives from PanPhon (MIT) and the Gorman CSV (Apache-2.0). SCA comes from LingPy, which is GPL-3.0, and sits in a separate optional dependency group.
+The feature table comes from PanPhon (MIT) and the CSV file of Gorman (Apache-2.0). SCA comes from LingPy, which has the GPL-3.0 licence. Thus SCA is in a separate optional dependency group.
 
-To install the benchmarks, rerun the development and seen tasks, and check that every table here matches the result files:
+To install the benchmarks, run the development and seen tasks again, and make sure that each table agrees with the result files, do these commands:
 
 ```bash
 uv venv
@@ -313,9 +418,9 @@ python benchmarks/render.py --check
 pytest --import-mode=importlib tests
 ```
 
-The test split runs only with `--final`, on a clean tree, and the rules allow it once.
+The test split runs only with `--final`, on a clean tree. The rules permit this run one time.
 
-On Python versions before 3.12, the clusters of the search depended on the hash seed, because a floating-point sum over a set changed with the order. The search uses `math.fsum`, and a test pins the clusters under two seeds.
+On Python before version 3.12, the clusters of the search changed with the hash seed. The cause was a floating-point sum over a set, which changed with the order. The search uses `math.fsum`. A test makes sure that the clusters are the same with two seeds.
 
 ## 10. References
 
