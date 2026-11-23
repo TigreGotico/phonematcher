@@ -1,5 +1,19 @@
 # Changelog
 
+## [2.3.10a1](https://github.com/TigreGotico/phonematcher/tree/2.3.10a1) (2026-11-23)
+
+[Full Changelog](https://github.com/TigreGotico/phonematcher/compare/2.3.9a1...2.3.10a1)
+
+**Merged pull requests:**
+
+- test: assert values instead of structure, share helpers in conftest [\#122](https://github.com/TigreGotico/phonematcher/pull/122) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
+- perf: cache substitution\_cost, store term segments, merge UPGMA incrementally [\#121](https://github.com/TigreGotico/phonematcher/pull/121) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
+- fix: name the C0 baseline pm-C0 and make sample\_queries honour its size [\#112](https://github.com/TigreGotico/phonematcher/pull/112) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
+
+## [2.3.9a1](https://github.com/TigreGotico/phonematcher/tree/2.3.9a1) (2026-11-23)
+
+[Full Changelog](https://github.com/TigreGotico/phonematcher/compare/2.3.8a1...2.3.9a1)
+
 ## [2.3.8a1](https://github.com/TigreGotico/phonematcher/tree/2.3.8a1) (2026-11-23)
 
 [Full Changelog](https://github.com/TigreGotico/phonematcher/compare/2.3.7a1...2.3.8a1)
@@ -383,17 +397,9 @@
 
 [Full Changelog](https://github.com/TigreGotico/phonematcher/compare/0.1.0a1...0.2.0a1)
 
-**Merged pull requests:**
-
-- feat: read unlisted tied segments by rule, and breathy release [\#12](https://github.com/TigreGotico/phonematcher/pull/12) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
-
 ## [0.1.0a1](https://github.com/TigreGotico/phonematcher/tree/0.1.0a1) (2026-11-19)
 
 [Full Changelog](https://github.com/TigreGotico/phonematcher/compare/0.0.0a2...0.1.0a1)
-
-**Merged pull requests:**
-
-- feat: read tone as pitch-level segments [\#10](https://github.com/TigreGotico/phonematcher/pull/10) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
 
 ## [0.0.0a2](https://github.com/TigreGotico/phonematcher/tree/0.0.0a2) (2026-11-19)
 
