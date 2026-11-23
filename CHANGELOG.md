@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.3.6a1](https://github.com/TigreGotico/phonematcher/tree/2.3.6a1) (2026-11-23)
+
+[Full Changelog](https://github.com/TigreGotico/phonematcher/compare/2.3.5a1...2.3.6a1)
+
+**Merged pull requests:**
+
+- fix: write benchmark results outside the tree [\#110](https://github.com/TigreGotico/phonematcher/pull/110) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
+
 ## [2.3.5a1](https://github.com/TigreGotico/phonematcher/tree/2.3.5a1) (2026-11-23)
 
 [Full Changelog](https://github.com/TigreGotico/phonematcher/compare/2.3.4a3...2.3.5a1)
@@ -373,7 +381,6 @@
 - ci: run the test suite in CI [\#6](https://github.com/TigreGotico/phonematcher/pull/6) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
 - docs: rewrite README in Simplified Technical English [\#4](https://github.com/TigreGotico/phonematcher/pull/4) ([JarbasAl](https://github.com/JarbasAl))
 - docs: add docs guide and runnable examples [\#3](https://github.com/TigreGotico/phonematcher/pull/3) ([JarbasAl](https://github.com/JarbasAl))
-- chore: Configure Renovate [\#1](https://github.com/TigreGotico/phonematcher/pull/1) ([renovate[bot]](https://github.com/apps/renovate))
 
 
 
