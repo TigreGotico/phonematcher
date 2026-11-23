@@ -4,6 +4,8 @@
     python benchmarks/run.py --task <task> --system <name> --split dev --cache DIR
 
 The test split runs only with ``--final`` on a clean git tree; the result then records the commit.
+A run writes ``<task>-<split>.json`` into ``--out``, which defaults to ``<cache>/results``, so the
+tree stays clean. ``benchmarks/copy_results.py`` copies the files into ``benchmarks/results``.
 """
 import argparse
 import json
@@ -82,6 +84,11 @@ def write_result(path: Path, payload: dict, task: str, system: str, split: str, 
     path.write_text(json.dumps(record, ensure_ascii=False, indent=1) + "\n", encoding="utf8")
 
 
+def result_path(args: argparse.Namespace) -> Path:
+    """The result file of a run: ``<task>-<split>.json`` in ``--out``, by default ``<cache>/results``."""
+    return (args.out or args.cache / "results") / f"{args.task}-{args.split}.json"
+
+
 def run_suite(module, args, names: List[str], commit: Optional[str], repo: Path) -> int:
     """Build every system, run the task once on all of them and write the result file."""
     if args.split not in module.SPLITS:
@@ -98,7 +105,7 @@ def run_suite(module, args, names: List[str], commit: Optional[str], repo: Path)
     git = ["git", "-C", str(repo)]
     sha = subprocess.run([*git, "rev-parse", "HEAD"], capture_output=True, text=True, check=True).stdout.strip()
     dirty = bool(subprocess.run([*git, "status", "--porcelain"], capture_output=True, text=True, check=True).stdout.strip())
-    out = args.out or RESULTS / f"{args.task}-{args.split}.json"
+    out = result_path(args)
     write_result(out, {"head": sha, "tree_dirty": dirty, **payload}, args.task, ",".join(names), args.split, commit)
     print(f"wrote {out}")
     return 0
@@ -110,7 +117,7 @@ def main(argv: Optional[List[str]] = None, repo: Path = ROOT) -> int:
     parser.add_argument("--system", required=True, help=f"one of {', '.join([*NAMES, *VARIANTS])}, all, or variants (phonematcher and the ablation variants)")
     parser.add_argument("--split", default="dev", choices=SPLITS)
     parser.add_argument("--cache", type=Path, default=DEFAULT_CACHE)
-    parser.add_argument("--out", type=Path, help="result file of a suite task; default benchmarks/results/<task>-<split>.json")
+    parser.add_argument("--out", type=Path, help="directory for <task>-<split>.json; default <cache>/results")
     parser.add_argument("--final", action="store_true", help="allow the test split; needs a clean git tree")
     parser.add_argument("--dry-run", action="store_true", help="walk the --final path on the dev split, capped at --limit units, and write nothing")
     parser.add_argument("--limit", type=int, default=0, help="with --dry-run: units per data set, language pair or file")
@@ -136,8 +143,8 @@ def main(argv: Optional[List[str]] = None, repo: Path = ROOT) -> int:
             raise SystemExit("--final scores every system, the C10 variants and the candidates; pass --system all")
         record = final.run_final(args.task, args.cache, args.split)
         print("\n".join(final.report(args.task, args.split, record)))
-        out = args.out or RESULTS / f"{args.task}-test.json"
-        write_result(out, {"head": commit, **record}, args.task, ",".join(final.final_names()), args.split, commit)
+        out = result_path(args)
+        write_result(out, {"head": commit, "tree_dirty": False, **record}, args.task, ",".join(final.final_names()), args.split, commit)
         print(f"wrote {out}")
         return 0
     if args.task in SUITE_TASKS:
@@ -150,7 +157,7 @@ def main(argv: Optional[List[str]] = None, repo: Path = ROOT) -> int:
         names = WHOLE_TASKS[args.task] if args.system == "all" else [args.system]
         head = subprocess.run(["git", "-C", str(repo), "rev-parse", "HEAD"], capture_output=True, text=True).stdout.strip()
         payload = task(names, args.cache, args.split)
-        out = repo / "benchmarks" / "results" / f"{args.task}-{args.split}.json"
+        out = result_path(args)
         write_result(out, payload, args.task, ",".join(names), args.split, commit or head)
         print(f"wrote {out}")
         return 0

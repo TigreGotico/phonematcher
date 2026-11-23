@@ -362,9 +362,8 @@ def head_of(repo):
 
 
 def test_final_writes_the_test_file_with_commit_prereg_hash_systems_and_differences(repo, tmp_path, fixture_run, capsys):
-    out = tmp_path / "alignment-test.json"
-    assert run.main(["--task", "alignment", "--system", "all", "--split", "test", "--final", "--out", str(out)], repo=repo) == 0
-    record = json.loads(out.read_text(encoding="utf8"))
+    assert run.main(["--task", "alignment", "--system", "all", "--split", "test", "--final", "--out", str(tmp_path)], repo=repo) == 0
+    record = json.loads((tmp_path / "alignment-test.json").read_text(encoding="utf8"))
     assert record["split"] == "test" and record["commit"] == head_of(repo)
     assert record["prereg_sha256"] == REGISTERED
     assert record["task"] == "alignment" and record["system"] == "phonematcher,pm-C1"
@@ -380,10 +379,9 @@ def test_final_refuses_a_page_that_differs_before_it_scores(repo, tmp_path, fixt
     page = tmp_path / "prereg-2.md"
     page.write_bytes(b"changed")
     monkeypatch.setattr(final, "PREREG", page)
-    out = tmp_path / "x.json"
     with pytest.raises(SystemExit, match="not the registered"):
-        run.main(["--task", "alignment", "--system", "all", "--split", "test", "--final", "--out", str(out)], repo=repo)
-    assert fixture_run == [] and not out.exists()
+        run.main(["--task", "alignment", "--system", "all", "--split", "test", "--final", "--out", str(tmp_path)], repo=repo)
+    assert fixture_run == [] and not (tmp_path / "alignment-test.json").exists()
 
 
 def test_final_keeps_its_clean_tree_check_for_the_three_tasks(repo, fixture_run):
@@ -396,7 +394,18 @@ def test_final_keeps_its_clean_tree_check_for_the_three_tasks(repo, fixture_run)
 
 def test_final_scores_every_system_and_nothing_less(repo, tmp_path, fixture_run):
     with pytest.raises(SystemExit, match="pass --system all"):
-        run.main(["--task", "alignment", "--system", "phonematcher", "--split", "test", "--final", "--out", str(tmp_path / "x.json")], repo=repo)
+        run.main(["--task", "alignment", "--system", "phonematcher", "--split", "test", "--final", "--out", str(tmp_path)], repo=repo)
+
+
+def test_two_final_runs_in_a_row_from_a_clean_tree_both_start_and_record_head(repo, tmp_path, fixture_run, monkeypatch):
+    # The committed results directory sits inside the tree; a run must not write there.
+    monkeypatch.setattr(run, "RESULTS", repo / "benchmarks" / "results")
+    cache = tmp_path / "cache"
+    for _ in range(2):
+        assert run.main(["--task", "alignment", "--system", "all", "--split", "test", "--final", "--cache", str(cache)], repo=repo) == 0
+    assert fixture_run == [("test", 0), ("test", 0)]
+    record = json.loads((cache / "results" / "alignment-test.json").read_text(encoding="utf8"))
+    assert record["commit"] == record["head"] == head_of(repo) and record["tree_dirty"] is False
 
 
 def test_the_final_systems_are_the_seven_the_variants_and_the_candidates():

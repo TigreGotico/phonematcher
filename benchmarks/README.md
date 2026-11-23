@@ -63,7 +63,7 @@ python benchmarks/run.py --task alignment --system all --split dev
 
 The task aligns the word pairs of the Benchmark Database of Phonetic Alignments (List and Prokić 2014) and compares each alignment with the gold alignment. It uses `full.psa` and `covington.psa` of `github.com/SequenceComparison/SupplementaryMaterial`, at a pinned commit, fetched into the cache on first use. The repository states no licence, so the data stays in the cache.
 
-The split key is the file name and the pair index, such as `full.psa:17`. `--system all` runs `phonematcher`, `levenshtein`, `aline` and `sca`. The run writes `benchmarks/results/alignment-dev.json`.
+The split key is the file name and the pair index, such as `full.psa:17`. `--system all` runs `phonematcher`, `levenshtein`, `aline` and `sca`. The run writes `alignment-dev.json` into the result directory (see [Where a run writes](#where-a-run-writes)).
 
 Two scores, as List (2014) defines them. The perfect alignments score is the share of pairs whose alignment equals the gold alignment. The column score is `2 * |Ct & Cr| / (|Cr| + |Ct|)` for the columns of one alignment, averaged over the pairs. A system that cannot read a segment skips the item. The all-items score gives a skipped item 0 for both scores.
 
@@ -82,7 +82,7 @@ python benchmarks/run.py --task tone --system phonematcher --split seen
 
 `coverage` counts the segments of PHOIBLE, WikiPron and the orthography2ipa inventories that each system reads. `allophones` asks whether an allophone lies nearer to its phoneme than the other phonemes of the inventory do. `confusions` correlates the segment distance with four sets of listener confusions.
 
-Each run downloads its data into `~/.cache/phonematcher-bench/C1`, `C2` or `C3` and writes `benchmarks/results/<task>-seen.json`. The scripts print one line per system. Pass `--out FILE` to write the result elsewhere. A task scores all its systems in one run, because the common subset needs every system.
+Each run downloads its data into `~/.cache/phonematcher-bench/C1`, `C2` or `C3` and writes `<task>-seen.json` into the result directory. The scripts print one line per system. A task scores all its systems in one run, because the common subset needs every system.
 
 `tone` correlates the tone distance with the confusions of the six Cantonese tones (15 pairs, Wong, Cheng and Chen 2018) and scores a contour-direction baseline beside it. It needs no download. The other systems have no tone model, so only phonematcher and the baseline are scored.
 
@@ -115,7 +115,7 @@ python benchmarks/run.py --task ablations --system variants-p5 --split seen
 python benchmarks/run.py --task ablations --system variants-p5 --split dev
 ```
 
-The `seen` run covers coverage, allophones and confusions, and the control. The `dev` run covers cognates, toneless cognates, alignment and retrieval. Retrieval scores every system by brute force on the fixed sample of 500 queries per language pair, with no fuzzy search. The runs write `benchmarks/results/ablations-seen.json` and `ablations-dev.json`; the committed files hold the `variants-p5` runs. The test run scored the `pm-` variants at the C0 costs, and those rows are in the test result files. Retrieval keeps its records in the cache, so give it a cache of its own: the TSV files of `C6` may be links to another cache.
+The `seen` run covers coverage, allophones and confusions, and the control. The `dev` run covers cognates, toneless cognates, alignment and retrieval. Retrieval scores every system by brute force on the fixed sample of 500 queries per language pair, with no fuzzy search. The runs write `ablations-seen.json` and `ablations-dev.json`; the committed files hold the `variants-p5` runs. The test run scored the `pm-` variants at the C0 costs, and those rows are in the test result files. Retrieval keeps its records in the cache, so give it a cache of its own: the TSV files of `C6` may be links to another cache.
 
 The control compares `pm-panphon22` with `panphon-weighted`: `python benchmarks/variants.py control`. It prints the pair counts for every PHOIBLE segment that both systems read. A variant is a diagnostic and not a candidate.
 
@@ -124,6 +124,20 @@ The control compares `pm-panphon22` with `panphon-weighted`: `python benchmarks/
 `split.is_test(key)` is true for one key in five, by the SHA-1 of the key. Each task names its key.
 
 The `dev` and `seen` splits run freely. The `test` split runs only with `--final`, on a clean git tree. The result records the commit.
+
+## Where a run writes
+
+A run writes `<task>-<split>.json` into the result directory. The directory is `--out DIR`, or `results` in the cache directory when `--out` is not given. The tree stays clean, so every run records the commit it ran on in `head` with `tree_dirty` false, and a second `--final` run starts after the first.
+
+To publish results, run from a clean tree, copy the files into `benchmarks/results` and commit them:
+
+```bash
+python benchmarks/run.py --task coverage --system all --split seen
+python benchmarks/copy_results.py coverage-seen.json
+python benchmarks/render.py
+```
+
+`copy_results.py` copies the named files, or every `.json` file, from `--from DIR` (default `~/.cache/phonematcher-bench/results`). It prints the number of files in and the number copied. The commit that adds the files is a child of the commit that the files name.
 
 ## The test run
 
@@ -135,11 +149,12 @@ The `dev` and `seen` splits run freely. The `test` split runs only with `--final
 python benchmarks/run.py --task cognates  --system all --split test --final
 python benchmarks/run.py --task alignment --system all --split test --final
 python benchmarks/run.py --task retrieval --system all --split test --final
+python benchmarks/copy_results.py cognates-test.json alignment-test.json retrieval-test.json
 python benchmarks/final.py decide
 python benchmarks/render.py
 ```
 
-`--final` needs a clean git tree and `--system all`. It scores the seven systems, the six C10 variants and the five candidates, and writes `benchmarks/results/<task>-test.json` with the commit, the hash of the page, each system's main metric with its 95% interval, and each system's difference to phonematcher on the same units with its interval. The intervals come from 1,000 resamples of the unit with seed 0. The units are the concepts of each test set for cognates, the pairs that every aligning system reads for alignment, and the queries of each dialect pair for retrieval. Every system sees the same resamples.
+`--final` needs a clean git tree and `--system all`. It scores the seven systems, the six C10 variants and the five candidates, and writes `<task>-test.json` into the result directory with the commit, the hash of the page, each system's main metric with its 95% interval, and each system's difference to phonematcher on the same units with its interval. The intervals come from 1,000 resamples of the unit with seed 0. The units are the concepts of each test set for cognates, the pairs that every aligning system reads for alignment, and the queries of each dialect pair for retrieval. Every system sees the same resamples.
 
 `final.decide` applies rules 1 to 5 to the paired differences. `python benchmarks/final.py decide` prints the winner and the reasons from the three test files.
 
