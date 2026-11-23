@@ -1,4 +1,4 @@
-"""Strict input raises on an unread segment; without it, an unread segment costs as much as a missing one."""
+"""Strict input raises on an unread segment; without it, an unread segment is at distance 1 from every other segment."""
 import math
 import random
 
@@ -100,7 +100,7 @@ def test_a_strict_search_raises_on_an_unread_term_and_query_and_indexes_nothing(
         search.search(f"ba{seg}")
 
 
-def test_an_unread_segment_costs_as_much_as_a_missing_one():
+def test_an_unread_segment_is_at_distance_1_from_every_other_segment():
     # Substituting an unread segment costs one deletion plus one insertion, 0.5 + 0.5, the price of
     # a segment that is missing on one side and extra on the other.
     assert ipa_distance("ʅ", "a") == ipa_distance("k̃", "a") == ipa_distance("ʅ", "k̃") == 0.5 + 0.5

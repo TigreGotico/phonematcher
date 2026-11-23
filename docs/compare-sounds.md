@@ -71,7 +71,7 @@ feature_distance("t", "tʰ")  # 0.013
 
 ## 4. A segment the table cannot read
 
-`vectorize_phones` raises `ValueError` for a segment that is not in the table. `feature_distance` does not raise. It puts the segment at distance 1 from every other segment. A word distance treats it the same way, so an unread segment costs as much as a missing one. Pass `strict=True` to a word distance to raise instead: see [Design choices and limits](design.md#an-unread-segment-is-at-distance-1).
+`vectorize_phones` raises `ValueError` for a segment that is not in the table. `feature_distance` does not raise. It puts the segment at distance 1 from every other segment. A word distance treats it the same way. Pass `strict=True` to a word distance to raise instead: see [Design choices and limits](design.md#an-unread-segment-is-at-distance-1).
 
 ```python
 try:

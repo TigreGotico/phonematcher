@@ -132,7 +132,7 @@ def substitution_cost(a: str, b: str) -> float:
 
 
 def check_readable(segs: Sequence[str], source: str) -> None:
-    """Raise ``ValueError`` naming the first segment of *segs* that the feature table cannot read.
+    """Raise ``ValueError`` naming the first segment of *segs* that phonematcher cannot read.
     A space and a tone are always readable. *source* is the input the segments came from."""
     for seg in segs:
         if seg != " " and not is_tone(seg):
@@ -162,8 +162,7 @@ def edit_distance(
     :func:`ipa_distance` on strings. A string is read as one segment per character, so it is not
     split into the segments of :func:`segments`.
 
-    An unread segment is at distance 1 from every other segment, so it costs as much as a missing
-    one. With *strict*, an unread segment raises ``ValueError`` instead. *substitution* and *gap*
+    A segment that phonematcher cannot read is at distance 1 from every other segment. With *strict*, an unread segment raises ``ValueError`` instead. *substitution* and *gap*
     replace the cost of a substitution and of one deletion or insertion.
     """
     _check_sequences("edit_distance", a, b)
@@ -237,8 +236,8 @@ def ipa_distance(a: str, b: str, normalized: bool = False, *, strict: bool = Fal
     With *normalized*, the distance is divided by the segment count of the longer string, so it
     falls between 0 and 1. Two empty strings are at distance 0.
 
-    A segment that the feature table cannot read costs as much as a missing one. With *strict*,
-    it raises ``ValueError`` that names the segment and the string.
+    A segment that phonematcher cannot read is at distance 1 from every other segment. With
+    *strict*, it raises ``ValueError`` that names the segment and the string.
     """
     for name, value in (("a", a), ("b", b)):
         if not isinstance(value, str):

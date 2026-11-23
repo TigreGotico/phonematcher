@@ -132,7 +132,7 @@ The sensitivity controls the size of the clusters. It is a share between 0 and 1
 
 We chose the default share, 0.08, on the development data. We took the share with the best mean recall@1 that also kept the lists of candidates short. The shares 0.08 and 0.12 both have a mean recall@1 of 0.8521 over the four dialect pairs. We took the smaller share, because it gives fewer candidates.
 
-A segment that the table cannot read costs the same as a missing segment. The library gives no warning. With `strict=True`, the distance, alignment and search functions stop with an error. The error gives the segment. Strict mode cannot find the ASCII letters `c`, `y`, `j` and `r`, because they are also IPA letters.
+A segment that phonematcher cannot read is at distance 1 from every other segment. The library gives no warning. With `strict=True`, the distance, alignment and search functions stop with an error. The error gives the segment. Strict mode cannot find the ASCII letters `c`, `y`, `j` and `r`, because they are also IPA letters.
 
 ## 5. Evaluation
 
