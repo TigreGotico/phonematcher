@@ -1,8 +1,20 @@
 # Changelog
 
+## [2.4.0a3](https://github.com/TigreGotico/phonematcher/tree/2.4.0a3) (2026-11-23)
+
+[Full Changelog](https://github.com/TigreGotico/phonematcher/compare/2.4.0a2...2.4.0a3)
+
+**Merged pull requests:**
+
+- docs: an unread segment is at distance 1, not the cost of a missing one [\#129](https://github.com/TigreGotico/phonematcher/pull/129) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
+
 ## [2.4.0a2](https://github.com/TigreGotico/phonematcher/tree/2.4.0a2) (2026-11-23)
 
-[Full Changelog](https://github.com/TigreGotico/phonematcher/compare/2.3.10a3...2.4.0a2)
+[Full Changelog](https://github.com/TigreGotico/phonematcher/compare/2.4.0a1...2.4.0a2)
+
+## [2.4.0a1](https://github.com/TigreGotico/phonematcher/tree/2.4.0a1) (2026-11-23)
+
+[Full Changelog](https://github.com/TigreGotico/phonematcher/compare/2.3.10a3...2.4.0a1)
 
 **Merged pull requests:**
 
@@ -375,11 +387,6 @@
 ## [0.5.0a1](https://github.com/TigreGotico/phonematcher/tree/0.5.0a1) (2026-11-21)
 
 [Full Changelog](https://github.com/TigreGotico/phonematcher/compare/0.4.0a2...0.5.0a1)
-
-**Merged pull requests:**
-
-- test: hold the distances to metric properties [\#21](https://github.com/TigreGotico/phonematcher/pull/21) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
-- feat: read non-IPA spellings as the IPA letter they stand for [\#20](https://github.com/TigreGotico/phonematcher/pull/20) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
 
 ## [0.4.0a2](https://github.com/TigreGotico/phonematcher/tree/0.4.0a2) (2026-11-21)
 
