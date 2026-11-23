@@ -1,0 +1,361 @@
+"""whitepaper.md: each table is a fresh render, and each number in the prose comes from a file.
+
+The tables between ``<!-- whitepaper:<name>:start -->`` and ``<!-- whitepaper:<name>:end -->`` are
+written by ``benchmarks/render.py --whitepaper``, and ``render.py --check`` compares them with a fresh
+render. The prose is written by hand. This test computes each prose number from a result file or from
+the library, asserts that the prose holds it, and binds each key number to the system and claim of
+its sentence. It fails on any number in the prose that it did not compute or list below as an
+identifier or as an audit-run number, which no file holds.
+"""
+import csv
+import json
+import math
+import re
+import sys
+from importlib import metadata
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(ROOT / "benchmarks"))
+
+import render  # noqa: E402
+
+from phonematcher import PhoneticFuzzySearch  # noqa: E402
+from phonematcher.distance import GAP_COST  # noqa: E402
+from phonematcher.clustering import _letter_costs  # noqa: E402
+from phonematcher.features import FEATURES, WEIGHTS  # noqa: E402
+
+PAPER = render.WHITEPAPER.read_text(encoding="utf8")
+RESULTS = render.RESULTS
+ROMANCE = "Romance-110-43"
+
+#: Numbers that name a thing rather than measure it: a version, a licence, a record, a confidence level.
+IDENTIFIERS = {
+    "0", "1",            # the ends of the distance scale, and seed 0
+    "0.22.2",            # the PanPhon version, checked below against the installed package
+    "2.0",               # PHOIBLE 2.0
+    "4.0",               # CC BY 4.0
+    "95",                # the 95% interval, and pull request 95
+    "192607",            # the Zenodo record, checked below against the cognate test file
+    "3.12",              # the Python version of the hash-seed note
+    "7",                 # rule 7 of the pre-registration
+    "21",                # the feature count the PanPhon paper states on p. 3477
+}
+
+#: Numbers from an audit run that no result file holds. The paper names the audit beside each.
+AUDIT = {
+    "875": "triangle check of the per-pair height form at ecde385: violations",
+    "400,995": "triangle check of the per-pair height form at ecde385: unordered triples",
+    "0.6394": "scripts/fit_weights.py at 3a134ef: Hillenbrand, fitted, leave one set out (seen)",
+    "0.3395": "scripts/fit_weights.py at 3a134ef: Mandarin, fitted, leave one set out (seen)",
+    "0.2981": "scripts/fit_weights.py at 3a134ef: Miller and Nicely, fitted, leave one set out (seen)",
+}
+
+
+def results(name):
+    return json.loads((RESULTS / name).read_text(encoding="utf8"))
+
+
+def f4(value):
+    return f"{value:.4f}"
+
+
+def prose(text=PAPER):
+    """The hand-written part of the paper: no rendered table, code, comment, heading number or reference."""
+    text = re.sub(r"<!-- whitepaper:([\w-]+):start -->.*?<!-- whitepaper:\1:end -->", "", text, flags=re.S)
+    text = text.split("## 10. References")[0]
+    text = re.sub(r"<!--.*?-->", "", text, flags=re.S)
+    text = re.sub(r"```.*?```", "", text, flags=re.S)
+    text = re.sub(r"`[^`]*`", "", text)
+    text = re.sub(r"(?m)^#+ [\d.]+ ", "", text)
+    text = re.sub(r"(?i)section \d+(\.\d+)?", "", text)
+    return re.sub(r"\b(19|20)\d\d\b(, pp?\. [\d–]+)?", "", text)
+
+
+def numbers(text):
+    return re.findall(r"(?<![\w@.-])\d+(?:[.,]\d+)*", text)
+
+
+def scale_mark_bound():
+    """The least power of ten above every paired test difference of the variant with no scale marks."""
+    diffs = [abs(results(f"{task}-test.json")["paired"]["pm-flat-diacritics"]["diff"]) for task in ("cognates", "alignment")]
+    exponent = math.floor(math.log10(max(d for d in diffs if d))) + 1
+    return f"{10.0 ** exponent:.{-exponent}f}"
+
+
+#: Within one sentence: any text without a full stop, except the point of a decimal.
+GAP = r"(?:[^.\n]|\.\d)*?"
+
+
+def anchored(*parts):
+    """A pattern for the parts in order, inside one sentence; a value is escaped, a word is literal."""
+    return re.compile(GAP.join(re.escape(part) for part in parts))
+
+
+def anchors():
+    """Each key number with the system and claim it belongs to, in the order of its sentence."""
+    cognates, retrieval = results("cognates-test.json"), results("retrieval-test.json")
+    iv = {name: f4(row["estimate"]) for name, row in cognates["intervals"].items()}
+    p5, sca = cognates["systems"]["pm-P5"], cognates["systems"]["sca"]
+    seen = results("confusions-seen.json")["systems"]["phonematcher"]
+    control = results("ablations-seen.json")["control"]
+    letters = len(_letter_costs()[0])
+    triples = math.comb(letters, 3)
+    return [
+        anchored("highest recall@1", f4(retrieval["intervals"]["pm-P5"]["estimate"])),
+        anchored("precision is", iv["pm-P5"], "below SCA at", iv["sca"], "below plain edit distance at", iv["levenshtein"]),
+        anchored("Plain edit distance also has the higher point estimate", iv["levenshtein"], "against", iv["pm-P5"]),
+        anchored("P5 reached a B-cubed F", f4(p5["bcubed_f_at_training_threshold"]["bcubed_f"][ROMANCE]),
+                 "against", f4(sca["bcubed_f_at_training_threshold"]["bcubed_f"][ROMANCE]), "for SCA"),
+        anchored(str(p5["skipped"]["words"][ROMANCE]), "of the", str(cognates["words"][ROMANCE]), "Romance words",
+                 str(p5["skipped"]["pairs"][ROMANCE]), "of its", str(p5["skipped"]["pairs_in"][ROMANCE]), "word pairs"),
+        anchored(str(p5["common"]["words_out"][ROMANCE]), "Romance words", "P5 scores", f4(p5["common"]["average_precision"][ROMANCE]),
+                 "SCA", f4(sca["common"]["average_precision"][ROMANCE])),
+        anchored("Hillenbrand correlation rose from", f4(seen["hillenbrand"]["unread_at_1"]["score"]), "to 0.6394",
+                 "Mandarin one from", f4(seen["mandarin"]["unread_at_1"]["score"]), "to 0.3395",
+                 "Miller and Nicely one fell from", f4(seen["miller_nicely"]["unread_at_1"]["score"]), "to 0.2981"),
+        anchored(str(control["segments_with_vector_difference"]), "of the", str(control["segments_read_by_both"]), "segments"),
+        anchored("total weight,", f"{sum(WEIGHTS):g}"),
+        anchored("vector of", str(len(FEATURES)), "features"),
+        anchored(str(letters), "base letters", f"{3 * triples:,}", "inequalities over", f"{triples:,}", "triples", "875 violated"),
+        anchored("scale marks changes each paired test score by less than", scale_mark_bound()),
+        anchored("deletion or an insertion costs", f"{GAP_COST:g}"),
+        anchored("default share,", f"{PhoneticFuzzySearch().cluster_sensitivity:g}"),
+    ]
+
+
+def anchor_failures(text):
+    return [pattern.pattern for pattern in anchors() if not pattern.search(text)]
+
+
+def prose_values():
+    """Each prose number, computed from a result file or the library, with what it is."""
+    cognates, alignment, retrieval = (results(f"{task}-test.json") for task in ("cognates", "alignment", "retrieval"))
+    values = {
+        f4(retrieval["intervals"]["pm-P5"]["estimate"]): "retrieval, P5, test",
+        f4(cognates["intervals"]["pm-P5"]["estimate"]): "cognates, P5, test",
+        f4(cognates["intervals"]["sca"]["estimate"]): "cognates, SCA, test",
+        str(len(FEATURES)): "features in the table",
+        str(FEATURES.index("velaric") + 1): "PanPhon columns of the table",
+        f"{sum(WEIGHTS):g}": "total feature weight",
+        f"{GAP_COST:g}": "gap cost",
+        f"{PhoneticFuzzySearch().cluster_sensitivity:g}": "default sensitivity",
+        str(cognates["resamples"]): "bootstrap resamples",
+    }
+    with open(ROOT / "scripts" / "sources" / "ipa-vowel-chart.csv", encoding="utf8") as handle:
+        values[str(len(list(csv.DictReader(handle))))] = "vowel letters of the chart"
+
+    dev = results("retrieval-dev.json")["pairs"]
+    by_share = {}
+    for pair in dev.values():
+        for row in pair["fuzzy_search"]:
+            by_share.setdefault(row["sensitivity"], []).append(row["recall@1"])
+    means = {share: math.fsum(r) / len(r) for share, r in by_share.items()}
+    best = max(round(m, 4) for m in means.values())
+    tied = sorted(share for share, m in means.items() if round(m, 4) == best)
+    assert tied[0] == PhoneticFuzzySearch().cluster_sensitivity
+    values.update({f"{share:g}": "sensitivity tied at the best dev recall@1" for share in tied})
+    values[f4(best)] = "best mean dev recall@1 of the fuzzy search"
+
+    samples = {system: {p["systems"][system]["sample"] for p in retrieval["pairs"].values()} for system in ("sca", "aline")}
+    values.update({str(n): f"{system} retrieval sample" for system, (n,) in samples.items()})
+
+    p5 = cognates["systems"]["pm-P5"]
+    values[f4(p5["bcubed_f_at_training_threshold"]["bcubed_f"][ROMANCE])] = "Romance B-cubed F of P5"
+    values[f4(cognates["systems"]["sca"]["bcubed_f_at_training_threshold"]["bcubed_f"][ROMANCE])] = "Romance B-cubed F of SCA"
+    values[str(p5["skipped"]["words"][ROMANCE])] = "Romance words unread"
+    values[str(cognates["words"][ROMANCE])] = "Romance words"
+    values[str(p5["skipped"]["pairs"][ROMANCE])] = "Romance pairs at distance 1"
+    values[str(p5["skipped"]["pairs_in"][ROMANCE])] = "Romance pairs"
+    values[str(p5["common"]["words_out"][ROMANCE])] = "Romance words every system reads"
+    values[f4(p5["common"]["average_precision"][ROMANCE])] = "Romance common AP of P5"
+    values[f4(cognates["systems"]["sca"]["common"]["average_precision"][ROMANCE])] = "Romance common AP of SCA"
+
+    values[str(results("tone-seen.json")["pairs"])] = "tone pairs"
+    values[scale_mark_bound()] = "bound on the paired test differences of the scale-mark variant"
+    confusions = results("confusions-seen.json")["systems"]["phonematcher"]
+    for name in ("hillenbrand", "mandarin", "miller_nicely"):
+        values[f4(confusions[name]["unread_at_1"]["score"])] = f"{name} correlation of the library (seen)"
+    control = results("ablations-seen.json")["control"]
+    values[str(control["segments_with_vector_difference"])] = "segments with a changed PanPhon value"
+    values[str(control["segments_read_by_both"])] = "segments both read"
+    letters = len(_letter_costs()[0])
+    triples = math.comb(letters, 3)
+    values[str(letters)] = "base letters of the table"
+    values[f"{triples:,}"] = "unordered triples of the base letters"
+    values[f"{3 * triples:,}"] = "triangle inequalities of those triples"
+    values[f"{cognates['intervals']['levenshtein']['estimate']:.4f}"] = "cognates, plain edit distance, test"
+    weights = dict(zip(FEATURES, WEIGHTS))
+    values.update({f"{weights['tense']:g}": "weight of tense", f"{weights['long']:g}": "weight of long"})
+    return values
+
+
+def test_the_tables_equal_a_fresh_render():
+    assert render.fill_whitepaper(PAPER, render.whitepaper_blocks()) == PAPER
+    assert render.main(["--check"]) == 0
+
+
+def test_every_table_has_its_markers_and_holds_its_numbers():
+    blocks = render.whitepaper_blocks()
+    for name, block in blocks.items():
+        assert f"<!-- whitepaper:{name}:start -->\n{block}<!-- whitepaper:{name}:end -->" in PAPER
+    cognates = results("cognates-test.json")
+    row = cognates["intervals"]["pm-P5"]
+    assert f"{row['estimate']:.4f} [{row['low']:.4f}, {row['high']:.4f}]" in blocks["cognates"]
+    assert f4(cognates["systems"]["pm-P5"]["common"]["average_precision"]["mean"]) in blocks["cognates"]
+
+
+def test_check_fails_when_one_rendered_number_is_changed(tmp_path, capsys):
+    cell = "| phonematcher, shipped library (P5) | 0.9179 |"
+    assert PAPER.count(cell) == 1
+    changed = tmp_path / "whitepaper.md"
+    changed.write_text(PAPER.replace(cell, cell.replace("0.9179", "0.9180")), encoding="utf8")
+    assert render.main(["--check", "--whitepaper-file", str(render.WHITEPAPER)]) == 0
+    assert render.main(["--check", "--whitepaper-file", str(changed)]) == 1
+    assert "differs from a fresh render" in capsys.readouterr().err
+    assert render.main(["--whitepaper", "--whitepaper-file", str(changed)]) == 0
+    assert changed.read_text(encoding="utf8") == PAPER
+
+
+def test_check_fails_when_a_marker_is_missing(tmp_path):
+    changed = tmp_path / "whitepaper.md"
+    changed.write_text(PAPER.replace("<!-- whitepaper:tone:end -->", ""), encoding="utf8")
+    try:
+        render.main(["--check", "--whitepaper-file", str(changed)])
+    except SystemExit as stop:
+        assert "whitepaper:tone:end" in str(stop)
+    else:
+        raise AssertionError("a missing marker passed the check")
+
+
+def test_each_prose_number_is_computed_from_a_file_and_is_in_the_prose():
+    text = prose()
+    found = set(numbers(text))
+    values = prose_values()
+    for value, what in values.items():
+        assert value in found, f"{what}: {value} is not in the prose"
+    stray = found - set(values) - IDENTIFIERS - set(AUDIT)
+    assert not stray, f"numbers in the prose with no file behind them: {sorted(stray)}"
+
+
+def test_each_key_number_sits_beside_its_system_and_claim():
+    assert anchor_failures(PAPER) == []
+
+
+def test_a_swapped_system_or_value_fails_the_anchors():
+    swaps = [
+        ("precision is 0.8035, below SCA at 0.8835", "precision is 0.8835, above SCA at 0.8035"),
+        ("P5 scores an average precision of 0.9812 and SCA 0.9877", "P5 scores an average precision of 0.9877 and SCA 0.9812"),
+        ("0.8234 against 0.8035", "0.8035 against 0.8234"),
+        ("0.3631 at its training threshold, against 0.8660 for SCA", "0.8660 at its training threshold, against 0.3631 for SCA"),
+    ]
+    for old, new in swaps:
+        assert PAPER.count(old) == 1, old
+        assert anchor_failures(PAPER.replace(old, new)), f"the swap {new!r} passed"
+
+
+def test_each_audit_number_is_marked_and_its_run_is_named():
+    paragraphs = prose().split("\n\n")
+    for value, source in AUDIT.items():
+        paragraph = next(p for p in paragraphs if value in numbers(p))
+        assert "audit run" in paragraph, f"{value} ({source}) is stated without saying it is an audit run"
+    reproducibility = PAPER.split("## 9. Reproducibility")[1].split("## 10.")[0]
+    assert "`ecde385`" in reproducibility and "`3a134ef`" in reproducibility and "scripts/fit_weights.py" in reproducibility
+
+
+def test_the_identifiers_match_their_sources():
+    assert metadata.version("panphon") == "0.22.2" and "PanPhon 0.22.2" in PAPER
+    assert "192607" in results("cognates-test.json")["source"]
+    assert "Zenodo record 192607" in PAPER
+
+
+def test_panphon_applies_its_weights_in_its_own_order():
+    import panphon
+
+    data = Path(panphon.__file__).parent / "data" / "feature_weights.csv"
+    names, weights = data.read_text(encoding="utf8").split()
+    by_name = dict(zip(names.split(","), map(float, weights.split(","))))
+    applied = dict(zip(panphon.FeatureTable().names, panphon.FeatureTable().weights))
+    assert (by_name["tense"], by_name["long"], by_name["velaric"]) == (0.25, 0.125, 0.25)
+    assert (applied["velaric"], applied["tense"], applied["long"]) == (0.25, 0.125, 0.25)
+    assert "`tense` 0.25, `long` 0.125 and `velaric` 0.25" in PAPER
+    assert "0.25 to `velaric`, 0.125 to `tense` and 0.25 to `long`" in PAPER
+    assert dict(zip(FEATURES, WEIGHTS))["tense"] == by_name["tense"]
+
+
+def test_the_stated_orders_hold_in_the_test_files():
+    cognates, alignment, retrieval = (results(f"{task}-test.json") for task in ("cognates", "alignment", "retrieval"))
+    systems = [name for name, _ in render.README_SYSTEMS]
+    # Cognates: P5 trails SCA with no overlap; it overlaps plain edit distance; on the common words only SCA is above it.
+    iv = cognates["intervals"]
+    assert iv["pm-P5"]["high"] < iv["sca"]["low"]
+    assert iv["pm-P5"]["high"] > iv["levenshtein"]["low"]
+    common = {s: cognates["systems"][s]["common"]["average_precision"]["mean"] for s in systems}
+    assert sorted(common, key=common.get)[-2:] == ["pm-P5", "sca"]
+    # Alignment: P5 below SCA and ALINE with overlap; above plain edit distance with no overlap.
+    av = alignment["intervals"]
+    for other in ("sca", "aline"):
+        assert av["pm-P5"]["estimate"] < av[other]["estimate"] and av["pm-P5"]["high"] > av[other]["low"]
+    assert av["pm-P5"]["low"] > av["levenshtein"]["high"]
+    # Retrieval: P5 highest on all, common and shared queries.
+    pairs = retrieval["pairs"].values()
+    for view in ("all_items_unread_at_1", "common_subset", "on_shared_queries"):
+        mean = {s: math.fsum(p["systems"][s][view]["recall@1"] for p in pairs) for s in systems}
+        assert max(mean, key=mean.get) == "pm-P5", view
+    assert "pm-P5" in retrieval["paired"] and "sca" not in retrieval["paired"] and "aline" not in retrieval["paired"]
+    # P5 gained more than P4 on each task, and C3 lost on each.
+    for payload in (cognates, alignment, retrieval):
+        assert payload["paired"]["pm-P5"]["diff"] > payload["paired"]["pm-P4"]["diff"] > 0
+        assert payload["paired"]["pm-C3"]["high"] < 0
+    # Seven systems ran beside the variants and candidates.
+    assert len([s for s in systems if s != "pm-P5"]) == 7 and "Seven systems ran" in PAPER
+
+
+def test_the_null_and_negative_results_hold():
+    cognates, alignment = results("cognates-test.json"), results("alignment-test.json")
+    flat = [cognates["paired"]["pm-flat-diacritics"], alignment["paired"]["pm-flat-diacritics"]]
+    assert all(abs(row["diff"]) < 1e-4 for row in flat)
+    assert cognates["paired"]["pm-panphon22"]["low"] > 0
+    tone = results("tone-seen.json")["scored"]["main"]
+    assert tone["phonematcher"]["score"] < tone["direction_baseline"]["score"]
+    assert tone["phonematcher"]["interval"]["high"] > tone["direction_baseline"]["interval"]["low"]
+    height = json.loads((RESULTS / "ablations" / "vowel-height-dev.json").read_text(encoding="utf8"))
+    assert height["cognates"]["paired"]["pm-F1-segment"]["high"] < 0
+    seen = results("ablations-seen.json")["tasks"]["confusions"]["systems"]
+    spans = [seen[s]["hillenbrand"]["unread_at_1"]["interval"] for s in ("phonematcher", "pm-p5-panphon22")]
+    assert spans[0]["low"] < spans[1]["high"]
+
+
+def test_only_the_test_files_carry_a_clean_commit():
+    for path in sorted(RESULTS.glob("*-*.json")):
+        payload = json.loads(path.read_text(encoding="utf8"))
+        if payload.get("split") == "test":
+            assert payload["commit"] == "f092f20c8bbe0aa49a6480946858c0354a2580a9"
+            assert payload["prereg_sha256"] == "29927d4e0e8162276cf12c68450a3b28372dc039d3a24377bbf390a64bd2df7c"
+        else:
+            assert "prereg_sha256" not in payload, path.name
+    development = [json.loads(p.read_text(encoding="utf8")) for p in sorted(RESULTS.glob("*-*.json"))]
+    development = [p for p in development if p.get("split") in ("seen", "dev")]
+    assert sum(p.get("tree_dirty") is True for p in development) > len(development) / 2
+    assert "`f092f20c8bbe0aa49a6480946858c0354a2580a9`" in PAPER
+    assert "`29927d4e0e8162276cf12c68450a3b28372dc039d3a24377bbf390a64bd2df7c`" in PAPER
+
+
+def test_each_reference_is_cited_and_each_citation_has_a_reference():
+    body, references = PAPER.split("## 10. References")
+    entries = re.findall(r"^- (.+)$", references, flags=re.M)
+    assert entries == sorted(entries)
+    listed = set()
+    for entry in entries:
+        surname, year = re.match(r"[\w-]+", entry).group(), re.search(r"\b((?:19|20)\d\d)\.", entry).group(1)
+        listed.add((surname, year))
+        assert re.search(re.escape(surname) + r"[^()\d]{0,40}?\(?" + year, body), f"{surname} {year} is not cited"
+        assert re.search(r"<https?://[^>]+>$", entry), f"{surname} {year} has no link"
+    cited = set(re.findall(r"([A-Z][\w-]+)(?: et al\.)?[^()\d.]{0,40}?\(?((?:19|20)\d\d)\b", body))
+    assert len(cited) == len(listed)
+    assert cited <= listed, f"cited with no reference: {sorted(cited - listed)}"
+
+
+def test_the_readme_and_the_index_link_the_paper():
+    assert "(whitepaper.md)" in (ROOT / "README.md").read_text(encoding="utf8")
+    assert "(../whitepaper.md)" in (ROOT / "docs" / "index.md").read_text(encoding="utf8")

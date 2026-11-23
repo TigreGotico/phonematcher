@@ -22,4 +22,6 @@ These pages teach phonematcher in the order below. The first six are walk-throug
 | [API reference](api.md) | Every public name. |
 | [Benchmarks](benchmarks.md) | Every result file, rendered, for phonematcher and the systems it is compared with. |
 
+The [whitepaper](../whitepaper.md) gives the method and the evidence as one paper: the feature table, the costs, the pre-registered test and its limits.
+
 [Index](index.md) · Next: [Quickstart](quickstart.md)

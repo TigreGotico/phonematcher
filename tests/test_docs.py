@@ -104,6 +104,7 @@ def test_the_index_lists_every_page():
     index = (ROOT / "docs" / "index.md").read_text(encoding="utf-8")
     linked = set(re.findall(r"\]\(([\w-]+\.md)\)", index))
     assert linked - {"index.md"} == {p.name for p in PAGES[1:]} - {"index.md"}
+    assert "](../whitepaper.md)" in index and (ROOT / "whitepaper.md").exists()
 
 
 @pytest.mark.parametrize("page", PAGES, ids=lambda p: p.name)
