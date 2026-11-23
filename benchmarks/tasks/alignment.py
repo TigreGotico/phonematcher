@@ -56,7 +56,7 @@ def parse(text: str) -> List[Tuple[Row, Row]]:
 
 
 def load(directory: Path, split: str) -> Tuple[List[Item], int]:
-    """The items of *split* (``dev`` or ``seen``) and the number of items left out for the other side."""
+    """The items of *split* (``dev`` or ``test``) and the number of items left out for the other side."""
     items: List[Item] = []
     left_out = 0
     for name in FILES:

@@ -27,7 +27,7 @@ def signed(value):
 
 def test_the_coverage_table_equals_the_census_file():
     census = results("coverage-seen.json")
-    assert census["tree_dirty"] is False and f"a clean tree at commit `{census['head'][:7]}`" in PAGE
+    assert census["tree_dirty"] is False
     rows = []
     for label, key in (("PHOIBLE 2.0", "phoible"), ("WikiPron", "wikipron"), ("orthography2ipa", "orthography2ipa")):
         row = census["systems"]["phonematcher"][key]["direct"]

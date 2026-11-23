@@ -121,14 +121,8 @@ def segments(ipa: str) -> List[str]:
 def substitution_cost(a: str, b: str) -> float:
     """Cost of replacing segment *a* by *b*, from 0 to 1, so a substitution never costs more than a
     deletion plus an insertion: the square root of the tone distance of two tones, 1 for a tone and
-    a phone, and the square root of the feature distance of two phones.
-
-    This is the one segment cost of the package: :func:`edit_distance`, :func:`align`,
-    :func:`ipa_distance` and the clusters of :class:`~phonematcher.clustering.PhoneticFuzzySearch`
-    all use it.
-
-    The square root keeps the cost a metric and makes a near substitution dearer against a gap, as
-    the pre-registered test of ``benchmarks/prereg-2.md`` selected (``docs/benchmarks.md``).
+    a phone, and the square root of the feature distance of two phones. The square root keeps the
+    cost a metric.
     """
     a_tone, b_tone = is_tone(a), is_tone(b)
     if a_tone and b_tone:
@@ -158,8 +152,7 @@ def _check_sequences(function: str, a: Sequence[str], b: Sequence[str]) -> None:
 def edit_distance(a: Sequence[str], b: Sequence[str], *, strict: bool = False) -> float:
     """Levenshtein distance between two segment sequences, with feature-weighted substitutions.
 
-    Deletion and insertion cost 0.5, the value that the pre-registered test of
-    ``benchmarks/prereg-2.md`` selected (``docs/benchmarks.md``). Pass the output of :func:`segments`, or call
+    Deletion and insertion cost ``GAP_COST``, 0.5. Pass the output of :func:`segments`, or call
     :func:`ipa_distance` on strings. A string is read as one segment per character, so it is not
     split into the segments of :func:`segments`.
 

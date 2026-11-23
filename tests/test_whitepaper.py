@@ -49,6 +49,9 @@ AUDIT = {
     "0.6394": "scripts/fit_weights.py at 3a134ef: Hillenbrand, fitted, leave one set out (seen)",
     "0.3395": "scripts/fit_weights.py at 3a134ef: Mandarin, fitted, leave one set out (seen)",
     "0.2981": "scripts/fit_weights.py at 3a134ef: Miller and Nicely, fitted, leave one set out (seen)",
+    "0.1": "dev retrieval, share 0.08 against the absolute threshold of f092f20: that threshold",
+    "0.0000": "dev retrieval, share 0.08 against the absolute threshold of f092f20: paired recall@1 difference and its interval",
+    "23": "dev retrieval, share 0.08 against the absolute threshold of f092f20: most fewer candidates, in percent",
 }
 
 
