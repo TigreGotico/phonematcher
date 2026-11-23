@@ -20,7 +20,7 @@ from operator import itemgetter
 from typing import Dict, Hashable, List, Sequence, Set, Tuple, Union
 
 from phonematcher.distance import check_readable, edit_distance, segments, substitution_cost
-from phonematcher.features import phone_features
+from phonematcher.features import TIES, phone_features
 from phonematcher.phonex import phonex
 from phonematcher.tone import is_tone
 
@@ -64,7 +64,7 @@ def _letter_costs() -> Tuple[Tuple[str, ...], Dict[Tuple[str, str], float], Tupl
     letters = tuple(sorted(
         p for p in phone_features
         if (len(p) == 1 and unicodedata.category(p).startswith("L"))
-        or (len(p) == 3 and p[1] in "\u0361\u035c")
+        or (len(p) == 3 and p[1] in TIES)
     ))
     costs = {(a, b): substitution_cost(a, b) for a in letters for b in letters if a < b}
     return letters, costs, tuple(sorted(costs.values()))

@@ -50,9 +50,10 @@ def test_orthography2ipa_drops_the_stress_marks_and_keeps_bare_length_and_palata
     inventory.phoneme_inventory = lambda code: inventories[code]
     monkeypatch.setitem(sys.modules, "orthography2ipa", package)
     monkeypatch.setitem(sys.modules, "orthography2ipa.inventory", inventory)
-    counts, specs = coverage.orthography2ipa_inventories()
+    counts, examples, specs = coverage.orthography2ipa_inventories()
     assert specs == 2
     assert counts == {"p": 2, "ː": 1, "ʲ": 1, "ˈa": 1}
+    assert examples == {"p": "aa", "ː": "aa", "ʲ": "bb", "ˈa": "bb"}
 
 
 def test_the_segments_only_rule_leaves_tones_to_the_system():

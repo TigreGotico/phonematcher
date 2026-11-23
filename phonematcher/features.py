@@ -49,7 +49,8 @@ PRE_DIACRITICS = {
     **{marker: (marker, "pre") for marker, position in _DIACRITICS if position == "pre"},
     "ⁿ": ("ⁿ", "post"), "ᵐ": ("ⁿ", "post"), "ᵑ": ("ⁿ", "post"), "ʰ": ("ʰ", "post"),
 }
-_TIES = ("͡", "͜")
+#: The tie bars, above and below; the table writes the first.
+TIES = ("͡", "͜")
 #: Unicode categories of a base letter, as against a modifier letter or a combining mark.
 _LETTER_CATEGORIES = {"Ll", "Lu", "Lo"}
 #: Click letters, and the velar and uvular letters that write a click's accompaniment (voicing,
@@ -67,7 +68,7 @@ _COMPOSED_LETTERS = {**SPELLINGS, **str.maketrans({"ɚ": "ə˞", "ɝ": "ɜ˞", "
 
 
 def _is_diphthong(seg: str) -> bool:
-    plain = seg.replace(_TIES[0], "").replace(_TIES[1], "").replace("\u032f", "")
+    plain = seg.replace(TIES[0], "").replace(TIES[1], "").replace("\u032f", "")
     return any(_is_listed_vowel(plain[:i]) and _is_listed_vowel(plain[i:]) for i in range(1, len(plain)))
 
 
@@ -98,7 +99,7 @@ def vectorize_phones(segment: str) -> Vector:
     seg = unicodedata.normalize("NFD", segment).translate(_COMPOSED_LETTERS)
     if seg in phone_features:
         return phone_features[seg]
-    untied = seg.replace(_TIES[1], _TIES[0])
+    untied = seg.replace(TIES[1], TIES[0])
     if untied in phone_features:
         return phone_features[untied]
 
@@ -114,9 +115,9 @@ def vectorize_phones(segment: str) -> Vector:
             for marker in seg[end:]:
                 vec = _apply_if(_DIACRITICS[marker, "post"], vec, segment)
             return vec
-    if _TIES[0] in untied:
+    if TIES[0] in untied:
         try:
-            return compose_tie([vectorize_phones(part) for part in untied.split(_TIES[0])])
+            return compose_tie([vectorize_phones(part) for part in untied.split(TIES[0])])
         except ValueError:
             pass
     if start:
@@ -127,7 +128,7 @@ def vectorize_phones(segment: str) -> Vector:
         for marker in seg[:start]:
             vec = _apply_pre(marker, vec, segment)
         return vec
-    if seg and _TIES[0] not in untied:
+    if seg and TIES[0] not in untied:
         clusters: List[str] = []  # a base letter and the combining marks after it
         for c in seg:
             if unicodedata.category(c) in _LETTER_CATEGORIES or not clusters:
@@ -140,7 +141,7 @@ def vectorize_phones(segment: str) -> Vector:
         for before, cluster in zip(clusters, clusters[1:]):
             joins = (unicodedata.category(cluster[0]) in _LETTER_CATEGORIES and cluster != before
                      and (cluster[0] not in _CLICKS or before[0] in _REAR_CLOSURES))
-            tied += (_TIES[0] if joins else "") + cluster
+            tied += (TIES[0] if joins else "") + cluster
         if tied != seg:
             return vectorize_phones(tied)
     raise _unrecognized(segment, ": a diphthong is two segments" if _is_diphthong(seg) else "")

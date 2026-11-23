@@ -20,9 +20,10 @@ from pathlib import Path
 from typing import Callable, Dict, List, NamedTuple, Optional, Tuple
 
 from phonematcher import segments
+from phonematcher.features import TIES
 
 from systems import System
-from tasks.common import PHOIBLE_URL, TIE, fetch, sha256
+from tasks.common import PHOIBLE_URL, fetch, sha256
 
 CACHE_NAME = "C2"
 SPLITS = ("seen",)
@@ -60,7 +61,7 @@ def form_of(system: System, segment: str, tie_retry: bool) -> Optional[str]:
     the segment tied between the pieces that ``segments`` finds in it."""
     if segment and system.reads(segment):
         return segment
-    tied = TIE.join(segments(segment)) if tie_retry else ""
+    tied = TIES[0].join(segments(segment)) if tie_retry else ""
     return tied if tied and system.reads(tied) else None
 
 

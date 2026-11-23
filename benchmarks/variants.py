@@ -40,7 +40,8 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from phonematcher import features
 from phonematcher.tone import tone_distance
-from systems import PhoneMatcher, System, edit_alignment, edit_distance, per_length  # noqa: E402
+from phonematcher import align, edit_distance
+from systems import PhoneMatcher, System, per_length  # noqa: E402
 
 NAMES = ["pm-panphon22", "pm-no-height", "pm-flat-diacritics", "pm-uniform", "pm-indel-0.5", "pm-indel-1.5"]
 #: the same variants on the shipped P5 costs
@@ -140,7 +141,7 @@ class Variant(PhoneMatcher):
         if vectorize is not None:
             self._vectorize = vectorize
         self._substitution = self.substitution
-        self._align_pairs = lambda a, b: edit_alignment(a, b, self.substitution, self.indel)
+        self._align_pairs = lambda a, b: align(a, b, substitution=self.substitution, gap=self.indel)
 
     def phone_distance(self, a: str, b: str) -> float:
         """The package's ``feature_distance`` on this variant's weights and vectors."""
@@ -167,7 +168,7 @@ class Variant(PhoneMatcher):
     def _word_distance(self, a, b, normalized: bool) -> float:
         left = [p for s in a for p in self._parts(s)]
         right = [p for s in b for p in self._parts(s)]
-        return per_length(edit_distance(left, right, self.substitution, self.indel), left, right, normalized)
+        return per_length(edit_distance(left, right, substitution=self.substitution, gap=self.indel), left, right, normalized)
 
 
 def build_variant(name: str) -> Variant:

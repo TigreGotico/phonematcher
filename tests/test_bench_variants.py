@@ -15,7 +15,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "benchmarks"))
 import run  # noqa: E402
 import systems  # noqa: E402
 import variants  # noqa: E402
-from phonematcher import features, feature_distance  # noqa: E402
+from phonematcher import align, edit_distance, features, feature_distance  # noqa: E402
 
 BUILT = {name: variants.build_variant(name) for name in variants.NAMES}
 
@@ -194,12 +194,15 @@ def test_all_leaves_the_variants_out_and_variants_adds_them(capsys):
     assert printed == ["phonematcher", *variants.P5_NAMES]
 
 
-def test_the_default_edit_distance_keeps_unit_indels():
+def test_the_package_edit_distance_takes_the_substitution_and_gap_costs():
     sub = lambda a, b: 0.0 if a == b else 1.0  # noqa: E731
-    assert systems.edit_distance(["a", "b"], [], sub) == 2.0
-    assert systems.edit_distance(["a", "b"], [], sub, indel=0.5) == 1.0
-    assert systems.edit_distance(["a"], ["b"], sub, indel=0.5) == 1.0
-    assert systems.edit_alignment(["a", "b"], ["b"], sub, indel=0.5) == [("a", None), ("b", "b")]
+    assert edit_distance(["a", "b"], [], substitution=sub, gap=1.0) == 2.0
+    assert edit_distance(["a", "b"], [], substitution=sub, gap=0.5) == 1.0
+    assert edit_distance(["a"], ["b"], substitution=sub, gap=0.5) == 1.0
+    assert align(["a", "b"], ["b"], substitution=sub, gap=0.5) == [("a", None), ("b", "b")]
+    assert align(["a", "b"], ["c"], substitution=sub, gap=1.0) == [("a", None), ("b", "c")]
+    # unit costs: levenshtein prices a substitution of two different segments at 1, a gap at 1
+    assert systems.Levenshtein().word_distance(["k", "a", "t"], ["k", "o"]) == 2.0
 
 
 def test_control_on_a_tiny_inventory(tmp_path):

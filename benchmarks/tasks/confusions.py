@@ -31,6 +31,7 @@ from typing import Dict, List, Optional, Tuple
 
 import numpy as np
 
+from phonematcher import align
 from systems import System
 from tasks.common import bootstrap_interval, fetch, sha256, similarity_score
 
@@ -92,22 +93,11 @@ def hillenbrand(text: str) -> Pairs:
     return symmetric_rates([HILLENBRAND[k] for k in keys], counts)
 
 
-def align(a: List[str], b: List[str]) -> List[Tuple[str, str]]:
-    """The substitution pairs of one unit-cost alignment of *a* and *b*, chosen deterministically."""
-    rows = [[max(i, j) if not i * j else 0 for j in range(len(b) + 1)] for i in range(len(a) + 1)]
-    for i in range(1, len(a) + 1):
-        for j in range(1, len(b) + 1):
-            rows[i][j] = min(rows[i - 1][j] + 1, rows[i][j - 1] + 1, rows[i - 1][j - 1] + (a[i - 1] != b[j - 1]))
-    pairs, i, j = [], len(a), len(b)
-    while i and j:
-        if rows[i][j] == rows[i - 1][j - 1] + (a[i - 1] != b[j - 1]):
-            pairs.append((a[i - 1], b[j - 1]))
-            i, j = i - 1, j - 1
-        elif rows[i][j] == rows[i - 1][j] + 1:
-            i -= 1
-        else:
-            j -= 1
-    return pairs
+def substitution_pairs(a: List[str], b: List[str]) -> List[Tuple[str, str]]:
+    """The substitution pairs of one unit-cost alignment of *a* and *b*, chosen deterministically,
+    from the end of the words back."""
+    pairs = align(a, b, substitution=lambda x, y: float(x != y), gap=1.0)
+    return [(x, y) for x, y in reversed(pairs) if x is not None and y is not None]
 
 
 def substitutions(text: str) -> Tuple[Counter, List[str]]:
@@ -119,7 +109,7 @@ def substitutions(text: str) -> Tuple[Counter, List[str]]:
         target = [SPANISH_SPELLING.get(s, s) for s in row["Target-IPA"].split() if s not in NOT_SEGMENTS]
         heard = [SPANISH_SPELLING.get(s, s) for s in row["Confusion-IPA"].split() if s not in NOT_SEGMENTS]
         inventory.update(target)
-        for a, b in align(target, heard):
+        for a, b in substitution_pairs(target, heard):
             if a != b:
                 counts[min(a, b), max(a, b)] += int(row["Consistency"])
     return counts, sorted(inventory)
