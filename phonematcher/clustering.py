@@ -109,8 +109,8 @@ class PhoneticFuzzySearch:
     segment costs over all pairs of letters, so a higher share puts more phones in one cluster,
     which finds more candidates.
 
-    A segment that the feature table cannot read costs as much as a missing one. With *strict*,
-    :meth:`add_term` and :meth:`search` raise ``ValueError`` for a term or query that holds one.
+    A segment that phonematcher cannot read is at distance 1 from every other segment. With
+    *strict*, :meth:`add_term` and :meth:`search` raise ``ValueError`` for a term or query that holds one.
     """
 
     def __init__(self, cluster_sensitivity: float = 0.08, *, strict: bool = False):
