@@ -15,10 +15,10 @@ These data were inspected while the weights were fitted. The scores are descript
 
 ### coverage
 
-Commit `fe3944f052dd`.
+Commit `5a6f2a05597a`.
 
 ```text
-phonematcher: phoible types 0.9055 tokens 0.9944; wikipron types 0.7198 tokens 0.9939; orthography2ipa types 0.8439 tokens 0.9889
+phonematcher: phoible types 0.9055 tokens 0.9944; wikipron types 0.7228 tokens 0.9939; orthography2ipa types 0.8501 tokens 0.9898
 levenshtein: phoible types 1.0000 tokens 1.0000; wikipron types 1.0000 tokens 1.0000; orthography2ipa types 1.0000 tokens 1.0000
 panphon-weighted: phoible types 0.3254 tokens 0.8706; wikipron types 0.3088 tokens 0.9300; orthography2ipa types 0.3702 tokens 0.8960
 panphon-hamming: phoible types 0.3254 tokens 0.8706; wikipron types 0.3088 tokens 0.9300; orthography2ipa types 0.3702 tokens 0.8960

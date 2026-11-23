@@ -67,8 +67,8 @@ Coverage shows how much real transcription the table can read. We counted covera
 | Corpus | Segment types | Types read | Share of types | Share of tokens |
 |---|---|---|---|---|
 | PHOIBLE 2.0 | 4158 | 3765 | 0.9055 | 0.9944 |
-| WikiPron | 3604 | 2594 | 0.7198 | 0.9939 |
-| orthography2ipa | 2569 | 2168 | 0.8439 | 0.9889 |
+| WikiPron | 3604 | 2605 | 0.7228 | 0.9939 |
+| orthography2ipa | 2569 | 2184 | 0.8501 | 0.9898 |
 <!-- whitepaper:coverage:end -->
 
 Most segments that the table cannot read are rare. Thus the token share is much higher than the type share. The table cannot read these types of segment:
@@ -103,7 +103,7 @@ The tie rule increases coverage. This table gives the PHOIBLE types that read wi
 <!-- whitepaper:readings:start -->
 | Reading of a PHOIBLE segment | Types read | Share of types |
 |---|---|---|
-| the segment as written | 2534 of 4158 | 0.6094 |
+| the segment as written | 2663 of 4158 | 0.6405 |
 | as written, or with a tie bar between its pieces | 2692 of 4158 | 0.6474 |
 | as the library reads a word: whole, split into segments, tones included | 3765 of 4158 | 0.9055 |
 <!-- whitepaper:readings:end -->
