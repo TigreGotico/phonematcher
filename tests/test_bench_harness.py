@@ -134,22 +134,6 @@ def test_a_system_whose_package_is_missing_is_an_error(monkeypatch, capsys):
     assert "error: system sca" in capsys.readouterr().err
 
 
-def git(repo, *args):
-    subprocess.run(
-        ["git", "-C", str(repo), "-c", "user.name=t", "-c", "user.email=t@example.org", *args],
-        check=True, capture_output=True,
-    )
-
-
-@pytest.fixture
-def repo(tmp_path):
-    git(tmp_path, "init", "-q")
-    (tmp_path / "f.txt").write_text("one\n")
-    git(tmp_path, "add", "f.txt")
-    git(tmp_path, "commit", "-q", "-m", "first")
-    return tmp_path
-
-
 def test_the_test_split_needs_final(repo):
     with pytest.raises(SystemExit, match="only with --final"):
         run.main(["--task", "selfcheck", "--system", "levenshtein", "--split", "test"], repo=repo)

@@ -6,15 +6,8 @@ and from PanPhon's own segment rows, not from the rules under test.
 """
 import pytest
 
-from phonematcher.features import FEATURES, feature_distance, vectorize_phones
-
-
-def feature(segment, name):
-    return vectorize_phones(segment)[FEATURES.index(name)]
-
-
-def differs(a, b):
-    return {f for f in FEATURES if feature(a, f) is not feature(b, f)}
+from phonematcher.features import feature_distance, vectorize_phones
+from tests.conftest import feature, differs
 
 
 # IPA chart, note under the diacritics: "Some diacritics may be placed above a symbol with a

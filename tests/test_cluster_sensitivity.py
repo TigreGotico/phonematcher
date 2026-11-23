@@ -105,7 +105,7 @@ def test_feature_distance_does_not_warn():
         feature_distance("p", "b")
 
 
-def test_the_deprecated_name_still_imports_from_the_distance_module():
+def test_phonetic_distance_imports_from_the_distance_module():
     from phonematcher.distance import phonetic_distance as old
     from phonematcher.features import phonetic_distance
     assert old is phonetic_distance

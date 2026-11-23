@@ -9,15 +9,8 @@ import re
 
 import pytest
 
-from phonematcher.features import FEATURES, vectorize_phones
-
-
-def feature(segment, name):
-    return vectorize_phones(segment)[FEATURES.index(name)]
-
-
-def differs(a, b):
-    return {f for f in FEATURES if feature(a, f) is not feature(b, f)}
+from phonematcher.features import vectorize_phones
+from tests.conftest import feature, differs
 
 
 # IPA chart, diacritics: "Nasalized" with the example ẽ, a vowel. The chart ties the mark to no

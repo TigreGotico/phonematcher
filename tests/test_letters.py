@@ -7,12 +7,9 @@ written out below, not read back from the table under test.
 import pytest
 
 from phonematcher.features import FEATURES, vectorize_phones
+from tests.conftest import feature
 
 PLACE = ("ant", "cor", "distr", "hi", "lo", "back", "front")
-
-
-def feature(segment, name):
-    return vectorize_phones(segment)[FEATURES.index(name)]
 
 
 # Curl letter, its plain letter, and the values PHOIBLE 2.0 gives for the features that carry the

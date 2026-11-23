@@ -14,14 +14,11 @@ import pytest
 from phonematcher import ipa_distance, segments, vectorize_phones
 from phonematcher.distance import GAP_COST, substitution_cost
 from phonematcher.features import FEATURES, feature_distance
+from tests.conftest import results
 
 ROOT = Path(__file__).resolve().parent.parent
 PAGE = (ROOT / "docs" / "design.md").read_text(encoding="utf-8")
 RESULTS = ROOT / "benchmarks" / "results"
-
-
-def results(name):
-    return json.loads((RESULTS / name).read_text(encoding="utf-8"))
 
 
 def signed(value):

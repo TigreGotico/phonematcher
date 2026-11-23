@@ -15,13 +15,18 @@ PROGRAM = (
 SEEDS = ("0", "1")
 
 
-def clusters_under(seed):
+def start(seed):
     env = {**os.environ, "PYTHONHASHSEED": seed, "PYTHONPATH": str(ROOT)}
-    done = subprocess.run([sys.executable, "-c", PROGRAM], env=env, cwd=ROOT, capture_output=True, text=True, check=True)
-    return json.loads(done.stdout)
+    return subprocess.Popen([sys.executable, "-c", PROGRAM], env=env, cwd=ROOT, stdout=subprocess.PIPE, text=True)
 
 
 def test_the_clusters_are_the_same_under_two_hash_seeds():
-    first, second = (clusters_under(seed) for seed in SEEDS)
+    # both processes run at once
+    outputs = []
+    for process in [start(seed) for seed in SEEDS]:
+        out, _ = process.communicate()
+        assert process.returncode == 0
+        outputs.append(json.loads(out))
+    first, second = outputs
     assert first == second
     assert len(set(first["0.08"].values())) == 25
