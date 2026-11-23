@@ -10,14 +10,14 @@ from collections import defaultdict
 from typing import List
 
 from phonematcher import vectorize_phones
-from phonematcher.features import phone_features
+from phonematcher.features import TIES, phone_features
 
 
 def base_letters() -> List[str]:
     """The IPA letters and tied affricates of the table."""
     return sorted(p for p in phone_features
                   if (len(p) == 1 and unicodedata.category(p).startswith("L"))
-                  or (len(p) == 3 and p[1] in "͜͡"))
+                  or (len(p) == 3 and p[1] in TIES))
 
 
 def same_vector_groups() -> List[List[str]]:

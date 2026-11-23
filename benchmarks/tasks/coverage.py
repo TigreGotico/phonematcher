@@ -27,9 +27,10 @@ from pathlib import Path
 from typing import Dict, List, Mapping, Tuple
 
 from phonematcher import segments, vectorize_phones
+from phonematcher.features import TIES
 
 from systems import System
-from tasks.common import PHOIBLE_URL, TIE, fetch, sha256
+from tasks.common import PHOIBLE_URL, fetch, sha256
 
 CACHE_NAME = "C1"
 STRESS_MARKS = ("ˈ", "ˌ")
@@ -51,9 +52,10 @@ class SegmentsOnly(System):
         return True
 
 
-def phoible(cache: Path) -> Tuple[Dict[str, int], int, int]:
+def phoible(cache: Path) -> Tuple[Dict[str, int], Dict[str, str], int, int]:
     """Segments of PHOIBLE, each Phoneme and each item of Allophones, with the inventories that
-    list them. Returns the counts, the number of rows and the number of inventories."""
+    list them. Returns the counts, the lowest inventory id of each segment, the number of rows and
+    the number of inventories."""
     text = fetch(PHOIBLE_URL, cache / "phoible.csv").read_text(encoding="utf-8")
     rows = list(csv.DictReader(io.StringIO(text)))
     inventories: Dict[str, set] = {}
@@ -63,11 +65,14 @@ def phoible(cache: Path) -> Tuple[Dict[str, int], int, int]:
             items += row["Allophones"].split()
         for item in items:
             inventories.setdefault(item, set()).add(row["InventoryID"])
-    return {s: len(ids) for s, ids in inventories.items()}, len(rows), len({r["InventoryID"] for r in rows})
+    counts = {s: len(ids) for s, ids in inventories.items()}
+    examples = {s: min(ids, key=int) for s, ids in inventories.items()}
+    return counts, examples, len(rows), len({r["InventoryID"] for r in rows})
 
 
-def wikipron(cache: Path) -> Tuple[Dict[str, int], int]:
-    """Segments of column 2 of every WikiPron TSV, split on spaces, with their occurrences."""
+def wikipron(cache: Path) -> Tuple[Dict[str, int], Dict[str, str], int]:
+    """Segments of column 2 of every WikiPron TSV, split on spaces, with their occurrences and the
+    first ``file:word`` that holds each."""
     repo = cache / "wikipron"
     if not repo.exists():
         subprocess.run(
@@ -75,26 +80,34 @@ def wikipron(cache: Path) -> Tuple[Dict[str, int], int]:
         )
         subprocess.run(["git", "-C", str(repo), "sparse-checkout", "set", "data/scrape/tsv"], check=True)
     counts: Counter = Counter()
+    examples: Dict[str, str] = {}
     files = sorted((repo / "data" / "scrape" / "tsv").glob("*.tsv"))
     for path in files:
         with open(path, encoding="utf-8") as handle:
             for line in handle:
                 fields = line.rstrip("\n").split("\t")
                 if len(fields) >= 2:
-                    counts.update(fields[1].split())
-    return dict(counts), len(files)
+                    for segment in fields[1].split():
+                        counts[segment] += 1
+                        examples.setdefault(segment, f"{path.stem}:{fields[0]}")
+    return dict(counts), examples, len(files)
 
 
-def orthography2ipa_inventories() -> Tuple[Dict[str, int], int]:
-    """Segments of ``phoneme_inventory`` of every orthography2ipa spec, with the specs that list them."""
+def orthography2ipa_inventories() -> Tuple[Dict[str, int], Dict[str, str], int]:
+    """Segments of ``phoneme_inventory`` of every orthography2ipa spec, with the specs that list them
+    and the first spec code of each."""
     from orthography2ipa import registry
     from orthography2ipa.inventory import phoneme_inventory
 
     codes = registry.available_codes()
     counts: Counter = Counter()
+    examples: Dict[str, str] = {}
     for code in codes:
-        counts.update(s for s in phoneme_inventory(registry.get(code)) if s not in STRESS_MARKS)
-    return dict(counts), len(codes)
+        for segment in phoneme_inventory(registry.get(code)):
+            if segment not in STRESS_MARKS:
+                counts[segment] += 1
+                examples.setdefault(segment, code)
+    return dict(counts), examples, len(codes)
 
 
 def reads(system: System, segment: str, tie_retry: bool = False) -> bool:
@@ -103,7 +116,7 @@ def reads(system: System, segment: str, tie_retry: bool = False) -> bool:
         return True
     if not tie_retry:
         return False
-    tied = TIE.join(segments(segment))
+    tied = TIES[0].join(segments(segment))
     return bool(tied) and system.reads(tied)
 
 
@@ -132,9 +145,9 @@ def common(systems: List[System], counts: Counts, tie_retry: bool = False) -> di
 def run(systems: List[System], split: str, cache: Path) -> dict:
     cache = Path(cache) / CACHE_NAME
     cache.mkdir(parents=True, exist_ok=True)
-    phoible_counts, rows, inventories = phoible(cache)
-    wikipron_counts, files = wikipron(cache)
-    o2i_counts, specs = orthography2ipa_inventories()
+    phoible_counts, _, rows, inventories = phoible(cache)
+    wikipron_counts, _, files = wikipron(cache)
+    o2i_counts, _, specs = orthography2ipa_inventories()
     corpora = {
         "phoible": (phoible_counts, True),
         "wikipron": (wikipron_counts, False),

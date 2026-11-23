@@ -8,9 +8,7 @@ reads. Metric 1 is the average precision of ``-distance`` for "same cognate set"
 pairs of one concept. Metric 2 is the B-cubed F-score of a flat UPGMA cut per concept, at the
 threshold with the best mean F-score over the dev sets (List et al. 2017, Table 6).
 """
-import hashlib
 import json
-import urllib.request
 import zipfile
 from pathlib import Path
 from typing import Dict, List, NamedTuple, Sequence, Tuple
@@ -18,6 +16,7 @@ from typing import Dict, List, NamedTuple, Sequence, Tuple
 import numpy as np
 
 from systems import System
+from tasks.common import fetch as fetch_file
 
 URL = "https://zenodo.org/api/records/192607/files/glottobank/potential-of-cognate-detection-v1.0.zip/content"
 MD5 = "d270e3803e5be2f018c9a2975b750ce8"
@@ -43,11 +42,7 @@ def fetch(cache: Path) -> Path:
     code = next(root.glob("x/*/code"), None) if root.exists() else None
     if code is not None:
         return code
-    root.mkdir(parents=True, exist_ok=True)
-    archive = root / "pkg.zip"
-    urllib.request.urlretrieve(URL, archive)
-    if hashlib.md5(archive.read_bytes()).hexdigest() != MD5:
-        raise SystemExit(f"{archive} does not match md5 {MD5}")
+    archive = fetch_file(URL, root / "pkg.zip", md5=MD5)
     with zipfile.ZipFile(archive) as bundle:
         bundle.extractall(root / "x")
     return next(root.glob("x/*/code"))

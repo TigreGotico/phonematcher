@@ -30,7 +30,7 @@ def test_symmetric_rates():
 
 
 def test_align_lists_substitutions_from_the_end():
-    assert confusions.align(list("abc"), list("axc")) == [("c", "c"), ("b", "x"), ("a", "a")]
+    assert confusions.substitution_pairs(list("abc"), list("axc")) == [("c", "c"), ("b", "x"), ("a", "a")]
 
 
 def test_substitutions_weight_by_listeners_and_respell():

@@ -2,9 +2,9 @@
 import math
 import unicodedata
 from functools import lru_cache
-from typing import List, Optional, Sequence, Tuple
+from typing import Callable, List, Optional, Sequence, Tuple
 
-from phonematcher.features import POST_DIACRITICS, PRE_DIACRITICS, SPELLINGS, feature_distance, is_vowel_phone, phonetic_distance, vectorize_phones  # noqa: F401 (deprecated path)
+from phonematcher.features import POST_DIACRITICS, PRE_DIACRITICS, SPELLINGS, TIES, feature_distance, is_vowel_phone, phonetic_distance, vectorize_phones  # noqa: F401 (deprecated path)
 from phonematcher.tone import DIACRITIC_TONES, LEVELS, NUMERALS, PHRASE_MARKS, is_tone, tone_distance
 
 #: Stress, syllable and boundary marks: they carry no segment of their own.
@@ -13,7 +13,6 @@ SUPRASEGMENTALS = frozenset("ˈˌ.‿|‖") | PHRASE_MARKS
 #: Cost of one deletion or insertion.
 GAP_COST = 0.5
 
-_TIES = ("͡", "͜")
 NON_SYLLABIC = "\u032f"
 
 
@@ -89,13 +88,13 @@ def segments(ipa: str) -> List[str]:
             if out and out[-1] != " ":
                 out.append(" ")
             continue
-        if ch in _TIES:
+        if ch in TIES:
             join_next = bool(out) and out[-1] != " "
             if join_next:
                 carried, tone = carried + tone, ""
                 out[-1] += ch
             continue
-        if join_next and out[-1][-1] in _TIES and is_vowel_phone(out[-1][:-1].replace(NON_SYLLABIC, "")) and is_vowel_phone(ch):
+        if join_next and out[-1][-1] in TIES and is_vowel_phone(out[-1][:-1].replace(NON_SYLLABIC, "")) and is_vowel_phone(ch):
             out[-1] = out[-1][:-1]
             join_next = False
         starts_word = not out or out[-1] == " "
@@ -155,7 +154,14 @@ def _check_sequences(function: str, a: Sequence[str], b: Sequence[str]) -> None:
             raise TypeError(f"{function}() argument {name} must be a list of segments, not {type(value).__name__}")
 
 
-def edit_distance(a: Sequence[str], b: Sequence[str], *, strict: bool = False) -> float:
+def edit_distance(
+    a: Sequence[str],
+    b: Sequence[str],
+    *,
+    strict: bool = False,
+    substitution: Callable[[str, str], float] = substitution_cost,
+    gap: float = GAP_COST,
+) -> float:
     """Levenshtein distance between two segment sequences, with feature-weighted substitutions.
 
     Deletion and insertion cost 0.5, the value that the pre-registered test of
@@ -164,28 +170,38 @@ def edit_distance(a: Sequence[str], b: Sequence[str], *, strict: bool = False) -
     split into the segments of :func:`segments`.
 
     An unread segment is at distance 1 from every other segment, so it costs as much as a missing
-    one. With *strict*, an unread segment raises ``ValueError`` instead.
+    one. With *strict*, an unread segment raises ``ValueError`` instead. *substitution* and *gap*
+    replace the cost of a substitution and of one deletion or insertion.
     """
     _check_sequences("edit_distance", a, b)
     if strict:
         check_readable(a, " ".join(a))
         check_readable(b, " ".join(b))
-    row = [j * GAP_COST for j in range(len(b) + 1)]
+    row = [j * gap for j in range(len(b) + 1)]
     for i, seg in enumerate(a, start=1):
-        prev, row[0] = row[0], i * GAP_COST
+        prev, row[0] = row[0], i * gap
         for j in range(1, len(b) + 1):
-            cur = min(row[j] + GAP_COST, row[j - 1] + GAP_COST, prev + substitution_cost(seg, b[j - 1]))
+            cur = min(row[j] + gap, row[j - 1] + gap, prev + substitution(seg, b[j - 1]))
             prev, row[j] = row[j], cur
     return row[-1]
 
 
-def align(a: Sequence[str], b: Sequence[str], *, strict: bool = False) -> List[Tuple[Optional[str], Optional[str]]]:
+def align(
+    a: Sequence[str],
+    b: Sequence[str],
+    *,
+    strict: bool = False,
+    substitution: Callable[[str, str], float] = substitution_cost,
+    gap: float = GAP_COST,
+) -> List[Tuple[Optional[str], Optional[str]]]:
     """One least-cost alignment of two segment sequences, as pairs ``(left, right)``.
 
-    ``None`` marks a gap. The costs are those of :func:`edit_distance`. The traceback starts at
-    the end and prefers a substitution, then a deletion (a gap in *b*), then an insertion, so the
-    result is deterministic. With *strict*, an unread segment raises ``ValueError``, as in
-    :func:`edit_distance`.
+    ``None`` marks a gap. The costs, with *substitution* and *gap*, are those of
+    :func:`edit_distance`. The traceback starts at the end and prefers a substitution, then a
+    deletion (a gap in *b*), then an insertion, so the result is deterministic. Two costs are
+    equal in the traceback when they differ by less than 1e-9 (``math.isclose`` with
+    ``rel_tol=0`` and ``abs_tol=1e-9``). With *strict*, an unread segment raises ``ValueError``, as
+    in :func:`edit_distance`.
     """
     _check_sequences("align", a, b)
     if strict:
@@ -194,25 +210,25 @@ def align(a: Sequence[str], b: Sequence[str], *, strict: bool = False) -> List[T
     n, m = len(a), len(b)
     cost = [[0.0] * (m + 1) for _ in range(n + 1)]
     for i in range(1, n + 1):
-        cost[i][0] = i * GAP_COST
+        cost[i][0] = i * gap
     for j in range(1, m + 1):
-        cost[0][j] = j * GAP_COST
+        cost[0][j] = j * gap
     for i in range(1, n + 1):
         for j in range(1, m + 1):
             cost[i][j] = min(
-                cost[i - 1][j] + GAP_COST,
-                cost[i][j - 1] + GAP_COST,
-                cost[i - 1][j - 1] + substitution_cost(a[i - 1], b[j - 1]),
+                cost[i - 1][j] + gap,
+                cost[i][j - 1] + gap,
+                cost[i - 1][j - 1] + substitution(a[i - 1], b[j - 1]),
             )
     pairs: List[Tuple[Optional[str], Optional[str]]] = []
     i, j = n, m
     while i or j:
         if i and j and math.isclose(
-            cost[i][j], cost[i - 1][j - 1] + substitution_cost(a[i - 1], b[j - 1]), abs_tol=1e-9
+            cost[i][j], cost[i - 1][j - 1] + substitution(a[i - 1], b[j - 1]), rel_tol=0, abs_tol=1e-9
         ):
             pairs.append((a[i - 1], b[j - 1]))
             i, j = i - 1, j - 1
-        elif i and math.isclose(cost[i][j], cost[i - 1][j] + GAP_COST, abs_tol=1e-9):
+        elif i and math.isclose(cost[i][j], cost[i - 1][j] + gap, rel_tol=0, abs_tol=1e-9):
             pairs.append((a[i - 1], None))
             i -= 1
         else:

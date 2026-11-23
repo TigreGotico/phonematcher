@@ -7,16 +7,18 @@ from typing import Dict, Optional, Sequence
 import numpy as np
 from scipy.stats import spearmanr
 
-TIE = "͡"
 PHOIBLE_URL = "https://raw.githubusercontent.com/phoible/dev/master/data/phoible.csv"
 
 
-def fetch(url: str, path: Path) -> Path:
-    """Download *url* to *path* unless the file exists."""
+def fetch(url: str, path: Path, md5: Optional[str] = None) -> Path:
+    """Download *url* to *path* unless the file exists. With *md5*, raise ``SystemExit`` when the
+    file has another md5."""
     if not path.exists():
         path.parent.mkdir(parents=True, exist_ok=True)
         with urllib.request.urlopen(url) as response:
             path.write_bytes(response.read())
+    if md5 is not None and hashlib.md5(path.read_bytes()).hexdigest() != md5:
+        raise SystemExit(f"{path} does not match md5 {md5}")
     return path
 
 

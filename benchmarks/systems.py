@@ -16,6 +16,8 @@ import subprocess
 from pathlib import Path
 from typing import Callable, Dict, List, Optional, Sequence, Tuple
 
+from phonematcher import align, edit_distance
+
 CLTS_URL = "https://github.com/cldf-clts/clts"
 CLTS_TAG = "v2.3.1"
 
@@ -25,41 +27,6 @@ Pairs = List[Tuple[Optional[str], Optional[str]]]
 
 class UnreadSegment(ValueError):
     """A word holds a segment that the system cannot read."""
-
-
-def edit_distance(a: Word, b: Word, substitution: Callable[[str, str], float], indel: float = 1.0) -> float:
-    """Edit distance with the given substitution cost and one cost for deletion and insertion."""
-    row = [j * indel for j in range(len(b) + 1)]
-    for i, x in enumerate(a, start=1):
-        prev, row[0] = row[0], i * indel
-        for j, y in enumerate(b, start=1):
-            prev, row[j] = row[j], min(row[j] + indel, row[j - 1] + indel, prev + substitution(x, y))
-    return row[-1]
-
-
-def edit_alignment(a: Word, b: Word, substitution: Callable[[str, str], float], indel: float = 1.0) -> Pairs:
-    """One least-cost alignment under :func:`edit_distance`'s costs. The traceback starts at the
-    end and prefers a substitution, then a gap in *b*, then a gap in *a*."""
-    n, m = len(a), len(b)
-    cost = [[(i + j) * indel if not i * j else 0.0 for j in range(m + 1)] for i in range(n + 1)]
-    for i in range(1, n + 1):
-        for j in range(1, m + 1):
-            cost[i][j] = min(
-                cost[i - 1][j] + indel, cost[i][j - 1] + indel, cost[i - 1][j - 1] + substitution(a[i - 1], b[j - 1])
-            )
-    pairs: Pairs = []
-    i, j = n, m
-    while i or j:
-        if i and j and abs(cost[i][j] - cost[i - 1][j - 1] - substitution(a[i - 1], b[j - 1])) < 1e-9:
-            pairs.append((a[i - 1], b[j - 1]))
-            i, j = i - 1, j - 1
-        elif i and abs(cost[i][j] - cost[i - 1][j] - indel) < 1e-9:
-            pairs.append((a[i - 1], None))
-            i -= 1
-        else:
-            pairs.append((None, b[j - 1]))
-            j -= 1
-    return pairs[::-1]
 
 
 class System:
@@ -216,10 +183,10 @@ class Levenshtein(System):
         return 0.0 if a == b else 1.0
 
     def _word_distance(self, a: Word, b: Word, normalized: bool) -> float:
-        return per_length(edit_distance(a, b, self.segment_distance), a, b, normalized)
+        return per_length(edit_distance(a, b, substitution=self.segment_distance, gap=1.0), a, b, normalized)
 
     def _align(self, a: Word, b: Word) -> Pairs:
-        return edit_alignment(a, b, self.segment_distance)
+        return align(a, b, substitution=self.segment_distance, gap=1.0)
 
 
 class PanPhon(System):
@@ -410,7 +377,7 @@ class SoundVectors(System):
         return sum(x != y for x, y in zip(va, vb)) / len(va)
 
     def _word_distance(self, a: Word, b: Word, normalized: bool) -> float:
-        return per_length(edit_distance(a, b, self.segment_distance), a, b, normalized)
+        return per_length(edit_distance(a, b, substitution=self.segment_distance, gap=1.0), a, b, normalized)
 
 
 class Sca(System):

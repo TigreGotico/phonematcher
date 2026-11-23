@@ -20,7 +20,6 @@ import json
 import random
 import sys
 import time
-import urllib.request
 from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Dict, List, Optional, Sequence, Tuple
@@ -31,6 +30,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from split import is_test  # noqa: E402
 from systems import NAMES, PhoneMatcher, downey  # noqa: E402
+from tasks.common import fetch  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent.parent
 WIKIPRON_REPO = "https://github.com/CUNY-CL/wikipron"
@@ -76,10 +76,7 @@ def download(cache: Path) -> Path:
     folder = Path(cache) / "C6"
     folder.mkdir(parents=True, exist_ok=True)
     for name in {n for pair in PAIRS.values() for n in pair}:
-        target = folder / f"{name}.tsv"
-        if not target.exists():
-            with urllib.request.urlopen(WIKIPRON_RAW + f"{name}.tsv") as response:
-                target.write_bytes(response.read())
+        fetch(WIKIPRON_RAW + f"{name}.tsv", folder / f"{name}.tsv")
     return folder
 
 
@@ -180,7 +177,9 @@ def retrieval_scores(ranks: Sequence[Tuple[int, int]]) -> Dict[str, float]:
 
 class Batched:
     """Distances from one query to every index pronunciation, from the system's own segment
-    distances. Equal to ``system.word_distance_or_one(..., normalized=True)``; ``check`` proves it."""
+    distances. Equal to ``system.word_distance_or_one(..., normalized=True)``; ``check`` proves it.
+    It keeps its own DP because a word with an unread segment is at distance 1 here, where the
+    package's edit distance prices the segment."""
 
     def __init__(self, system, pair: Pair):
         self.system = system
