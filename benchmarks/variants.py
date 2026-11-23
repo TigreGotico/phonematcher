@@ -17,9 +17,11 @@ sum of the weights that the variant keeps. A variant is a diagnostic; none is a 
 
 Each variant exists under two cost rules. The ``pm-`` names keep the C0 costs: gap 1 and linear
 substitutions, the rule of the pre-registered test run. The ``pm-p5-`` names keep the shipped P5
-costs: gap 0.5 and substitutions at the square root of the feature distance. ``phonematcher`` is
-on the P5 costs, so it is compared with the ``pm-p5-`` names, and the ``pm-`` names are compared
-with each other. ``pm-p5-indel-0.5`` is the shipped costs again and serves as a control.
+costs: gap 0.5 and substitutions at the square root of the feature distance. ``pm-C0`` is the
+table on the C0 costs, and ``phonematcher`` is the shipped library on the P5 costs. The ``pm-`` names
+are compared with ``pm-C0``, and the ``pm-p5-`` names with ``phonematcher``. ``pm-p5-indel-0.5`` is
+the shipped costs again and serves as a control. The test result files were written when the
+library used the C0 costs, so their row ``phonematcher`` is ``pm-C0``.
 
     python benchmarks/variants.py control --cache DIR
 
@@ -43,7 +45,9 @@ from systems import PhoneMatcher, System, edit_alignment, edit_distance, per_len
 NAMES = ["pm-panphon22", "pm-no-height", "pm-flat-diacritics", "pm-uniform", "pm-indel-0.5", "pm-indel-1.5"]
 #: the same variants on the shipped P5 costs
 P5_NAMES = [f"pm-p5-{name.removeprefix('pm-')}" for name in NAMES]
-#: the weight candidates of ``prereg-2.md``; C0 is the ``phonematcher`` system
+#: the starting costs of ``prereg-2.md``: the table, gap 1 and linear substitutions
+C0 = "pm-C0"
+#: the weight candidates of ``prereg-2.md``, each compared with C0
 CANDIDATES = ["pm-C1", "pm-C2", "pm-C3", "pm-P4", "pm-P5"]
 HEIGHT_STEPS = tuple(f"h{k}" for k in range(1, 7))
 HALF_WEIGHT = ("front", "back", "round", "lab")
@@ -167,12 +171,14 @@ class Variant(PhoneMatcher):
 
 
 def build_variant(name: str) -> Variant:
+    if name == C0:
+        return Variant(name)
     if name in CANDIDATES:
         return build_candidate(name)
     p5 = name in P5_NAMES
     base = "pm-" + name.removeprefix("pm-p5-") if p5 else name
     if base not in NAMES:
-        raise KeyError(f"unknown variant {name!r}; known: {', '.join(NAMES + P5_NAMES + CANDIDATES)}")
+        raise KeyError(f"unknown variant {name!r}; known: {', '.join([C0, *NAMES, *P5_NAMES, *CANDIDATES])}")
     costs = {"indel": 0.5, "power": 0.5} if p5 else {}
     if base == "pm-panphon22":
         return Variant(name, weights=panphon_weights(), **costs)

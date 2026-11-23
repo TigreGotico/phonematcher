@@ -143,7 +143,7 @@ python benchmarks/render.py
 
 `benchmarks/prereg-2.md` fixes the systems, metrics, candidates and decision rules of the single test run. Its sha256 is a constant in `benchmarks/final.py`. A run reads the page, compares its hash with the constant and stops on a difference.
 
-`benchmarks/variants.py` builds the five weight candidates as systems: `pm-C1`, `pm-C2`, `pm-C3`, `pm-P4` and `pm-P5`. The `phonematcher` system is P5, the winner of the pre-registered test, so `pm-P5` and `phonematcher` give the same distances. The C0 candidate, the table with gap cost 1 and linear substitutions, is the library before that change; no variant rebuilds it. `k1(system)` applies rule 1. `c3_weight()` finds the weight of `syl`, `son` and `cons` in C3 by bisection of [1, 10] to 0.01.
+`benchmarks/variants.py` builds the five weight candidates as systems: `pm-C1`, `pm-C2`, `pm-C3`, `pm-P4` and `pm-P5`. The `phonematcher` system is P5, the winner of the pre-registered test, so `pm-P5` and `phonematcher` give the same distances. `pm-C0` is the C0 costs: the table with gap cost 1 and linear substitutions. The test result files were written when the library used the C0 costs, so their `phonematcher` row is `pm-C0`, and `final.BASELINE` is `pm-C0`. `k1(system)` applies rule 1. `c3_weight()` finds the weight of `syl`, `son` and `cons` in C3 by bisection of [1, 10] to 0.01.
 
 ```bash
 python benchmarks/run.py --task cognates  --system all --split test --final

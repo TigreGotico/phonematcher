@@ -139,7 +139,10 @@ def build_pair(
 
 def sample_queries(queries: Sequence, size: int = SAMPLE_SIZE, seed: int = SAMPLE_SEED) -> List[int]:
     """Sorted indices of a fixed random sample; all indices when there are fewer than *size*.
-    A smaller *size* takes the first draws of the larger sample, so the samples are nested."""
+    A smaller *size* takes the first draws of the larger sample, so the samples are nested.
+    Raises ``ValueError`` when *size* is above ``SAMPLE_SIZE``, the size of the larger sample."""
+    if size > SAMPLE_SIZE:
+        raise ValueError(f"a sample holds at most {SAMPLE_SIZE} queries, not {size}")
     if len(queries) <= size:
         return list(range(len(queries)))
     draw = random.Random(seed).sample(range(len(queries)), min(len(queries), SAMPLE_SIZE))

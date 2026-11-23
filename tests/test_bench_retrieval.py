@@ -204,6 +204,13 @@ def test_a_diphthong_given_as_one_segment_is_two_segments_for_phonematcher():
     assert engine.check(pair) > 0
 
 
+def test_a_sample_above_the_cap_raises_instead_of_shrinking():
+    queries = list(range(5000))
+    with pytest.raises(ValueError, match="at most 500"):
+        retrieval.sample_queries(queries, 1000)
+    assert len(retrieval.sample_queries(queries, 500)) == 500
+
+
 def test_a_smaller_sample_is_inside_the_larger_one():
     queries = list(range(700))
     assert set(retrieval.sample_queries(queries, 100)) <= set(retrieval.sample_queries(queries, 500))

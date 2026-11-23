@@ -31,6 +31,7 @@ sys.path.insert(0, str(BENCHMARKS))
 import final  # noqa: E402
 import run  # noqa: E402
 import variants  # noqa: E402
+import systems  # noqa: E402
 from systems import System  # noqa: E402
 from tasks import cognates  # noqa: E402
 
@@ -333,10 +334,10 @@ def fixture_run(monkeypatch):
     def adapter(systems, split, cache, limit):
         calls.append((split, limit))
         a, b = [1.0, 0.0, 1.0, 0.0], [1.0, 1.0, 1.0, 0.0]
-        metrics = {"phonematcher": mean_of(a), "pm-C1": mean_of(b)}
-        return {"payload_key": 1}, {"all": (list(metrics), metrics, [4])}, {"phonematcher": 0.5, "pm-C1": 0.75}
+        metrics = {"pm-C0": mean_of(a), "pm-C1": mean_of(b)}
+        return {"payload_key": 1}, {"all": (list(metrics), metrics, [4])}, {"pm-C0": 0.5, "pm-C1": 0.75}
 
-    monkeypatch.setattr(final, "final_names", lambda: ["phonematcher", "pm-C1"])
+    monkeypatch.setattr(final, "final_names", lambda: ["pm-C0", "pm-C1"])
     monkeypatch.setattr(final, "build", lambda name, cache: SimpleNamespace(name=name))
     monkeypatch.setitem(final.ADAPTERS, "alignment", adapter)
     return calls
@@ -366,9 +367,9 @@ def test_final_writes_the_test_file_with_commit_prereg_hash_systems_and_differen
     record = json.loads((tmp_path / "alignment-test.json").read_text(encoding="utf8"))
     assert record["split"] == "test" and record["commit"] == head_of(repo)
     assert record["prereg_sha256"] == REGISTERED
-    assert record["task"] == "alignment" and record["system"] == "phonematcher,pm-C1"
+    assert record["task"] == "alignment" and record["system"] == "pm-C0,pm-C1"
     assert record["paired"]["pm-C1"]["diff"] == pytest.approx(0.25)
-    assert record["intervals"]["phonematcher"]["estimate"] == 0.5
+    assert record["intervals"]["pm-C0"]["estimate"] == 0.5
     assert record["candidates"]["C3"]["major_class_weight"] == 1.38
     assert {n: c["k1"] for n, c in record["candidates"].items()} == {"C1": False, "C2": False, "C3": True, "P4": True, "P5": True}
     assert fixture_run == [("test", 0)]
@@ -408,9 +409,21 @@ def test_two_final_runs_in_a_row_from_a_clean_tree_both_start_and_record_head(re
     assert record["commit"] == record["head"] == head_of(repo) and record["tree_dirty"] is False
 
 
-def test_the_final_systems_are_the_seven_the_variants_and_the_candidates():
-    assert final.final_names() == [*run.NAMES, *variants.NAMES, *variants.CANDIDATES]
-    assert len(final.final_names()) == 18
+def test_the_final_systems_are_the_seven_c0_the_variants_and_the_candidates():
+    assert final.final_names() == [*run.NAMES, "pm-C0", *variants.NAMES, *variants.CANDIDATES]
+    assert len(final.final_names()) == 19
+
+
+def test_the_baseline_is_the_c0_costs_and_not_the_shipped_library():
+    assert final.BASELINE == "pm-C0"
+    c0, shipped = variants.build_variant(final.BASELINE), systems.build("phonematcher", None)
+    # C0: one deletion costs 1 and a substitution costs the feature distance itself.
+    # The shipped P5 costs: a deletion costs 0.5 and a substitution the square root.
+    # p and b differ in [voice] only, 0.125 of the 9.5 weight total.
+    assert c0.word_distance(["p", "a"], ["a"]) == 1.0
+    assert shipped.word_distance(["p", "a"], ["a"]) == 0.5
+    assert c0.word_distance(["p"], ["b"]) == pytest.approx(0.125 / 9.5)
+    assert shipped.word_distance(["p"], ["b"]) == pytest.approx((0.125 / 9.5) ** 0.5)
 
 
 def test_the_test_split_still_needs_final_for_the_three_tasks(repo):
@@ -427,7 +440,7 @@ def test_a_dry_run_walks_the_path_on_dev_and_writes_nothing(tmp_path, fixture_ru
     assert fixture_run == [("dev", 7)]
     assert sorted(p.name for p in tmp_path.iterdir()) == before and not results.exists()
     text = capsys.readouterr().out
-    assert "pm-C1 - phonematcher: +0.2500" in text and "dry run: nothing written" in text and REGISTERED in text
+    assert "pm-C1 - pm-C0: +0.2500" in text and "dry run: nothing written" in text and REGISTERED in text
 
 
 @pytest.mark.parametrize("args", [["--split", "test"], ["--split", "dev", "--final"]])
@@ -513,11 +526,11 @@ def test_the_retrieval_adapter_pairs_systems_on_the_same_queries_of_each_pair(tm
     from systems import Levenshtein
 
     write_pairs(tmp_path)
-    built = [variants.Variant("phonematcher"), variants.build_variant("pm-C1"), Levenshtein()]
+    built = [variants.build_variant("pm-C0"), variants.build_variant("pm-C1"), Levenshtein()]
     payload, groups, expected = final.retrieval_final(built, "dev", tmp_path, limit=2)
     assert list(groups) and len(groups) == 1
     (names, metrics, strata), = groups.values()
-    assert names == ["phonematcher", "pm-C1", "levenshtein"] and strata == [2, 2, 2, 2]
+    assert names == ["pm-C0", "pm-C1", "levenshtein"] and strata == [2, 2, 2, 2]
     intervals, paired = final._bootstrap_groups(groups)
     # every query has its gold word strictly nearest under unit costs: recall@1 is 1 on both queries of each pair
     assert intervals["levenshtein"] == {"estimate": 1.0, "low": 1.0, "high": 1.0}

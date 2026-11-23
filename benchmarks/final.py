@@ -24,7 +24,9 @@ from tasks import alignment, cognates, retrieval  # noqa: E402
 HERE = Path(__file__).resolve().parent
 PREREG = HERE / "prereg-2.md"
 PREREG_SHA256 = "29927d4e0e8162276cf12c68450a3b28372dc039d3a24377bbf390a64bd2df7c"
-BASELINE = "phonematcher"
+#: the system every candidate is paired with. The test result files were written when the
+#: library used the C0 costs, so their baseline row is named ``phonematcher``.
+BASELINE = variants.C0
 RESAMPLES = 1000
 SEED = 0
 TASKS = ("cognates", "alignment", "retrieval")
@@ -47,8 +49,8 @@ def prereg_sha256() -> str:
 
 
 def final_names() -> List[str]:
-    """Every system of the test run: the seven systems, the C10 variants and the candidates."""
-    return [*NAMES, *variants.NAMES, *variants.CANDIDATES]
+    """Every system of the test run: the seven systems, C0, the C10 variants and the candidates."""
+    return [*NAMES, variants.C0, *variants.NAMES, *variants.CANDIDATES]
 
 
 def interval(values: np.ndarray) -> Dict[str, float]:
