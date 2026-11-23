@@ -79,7 +79,15 @@ A segment that cannot be read is at distance 1 from every other segment, and a w
 
 The two views differ. On 12716 allophone items, the main view scores 0.8959. The view that skips the 224 items with an unread segment scores 0.9097 on the remaining 12492.
 
-A segment that phonematcher cannot read is at distance 1 from every other segment: its substitution against any other segment costs 1, the price of a deletion plus an insertion, and its insertion or deletion costs 0.5. Nothing signals that a segment went unread. Pass `strict=True` to `ipa_distance`, `edit_distance`, `align` or `PhoneticFuzzySearch` to get a `ValueError` that names the segment and the input:
+A segment that phonematcher cannot read is at distance 1 from every other segment: its substitution against any other segment costs 1, the price of a deletion plus an insertion, and its insertion or deletion costs 0.5. The first time such a segment is priced against another segment, phonematcher issues one `UserWarning` that names the segment and its code points. Each segment warns once per process. A segment that only meets a gap costs 0.5, as any segment does, and does not warn. To silence the warning, use the standard `warnings` filter:
+
+```python
+import warnings
+
+warnings.filterwarnings("ignore", message="Unrecognized phone", category=UserWarning)
+```
+
+Pass `strict=True` to `ipa_distance`, `edit_distance`, `align` or `PhoneticFuzzySearch` to get a `ValueError` that names the segment and the input:
 
 ```python
 from phonematcher import ipa_distance

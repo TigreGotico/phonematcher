@@ -66,7 +66,7 @@ The sections below describe the stable names first, then the internal names that
 - The cost of `ipa_distance`, `edit_distance` and `align` grows with the product of the two segment counts: see [Split long input](compare-words.md#6-split-long-input).
 - `ipa_distance(a, b, normalized=False, *, strict=False) -> float`: `edit_distance` between two IPA strings. With `normalized=True` the distance is divided by the segment count of the longer string, so it falls between 0 and 1, and two empty strings give 0.0.
 - `GAP_COST`: the cost of an insertion or a deletion in `edit_distance` and `align`, 0.5.
-- `strict=True` on `ipa_distance`, `edit_distance` and `align`: a segment that phonematcher cannot read raises `ValueError` that names the segment and the input. Without it, such a segment is at distance 1 from every other segment. See [Design choices and limits](design.md#an-unread-segment-is-at-distance-1).
+- `strict=True` on `ipa_distance`, `edit_distance` and `align`: a segment that phonematcher cannot read raises `ValueError` that names the segment and the input. Without it, such a segment is at distance 1 from every other segment, and the first time it is priced against another segment it issues one `UserWarning` per process. The warning names the segment and its code points. Silence it with `warnings.filterwarnings("ignore", message="Unrecognized phone", category=UserWarning)`. See [Design choices and limits](design.md#an-unread-segment-is-at-distance-1).
 
 ## `phonematcher.tone`
 

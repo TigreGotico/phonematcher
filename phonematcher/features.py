@@ -233,6 +233,10 @@ def _signs(segment: str) -> Tuple[int, ...]:
     return tuple(_NUMBER[value] for value in vectorize_phones(segment))
 
 
+#: Unread segments that have already raised their warning in this process.
+_WARNED: set = set()
+
+
 @lru_cache(maxsize=65536)
 def feature_distance(a: str, b: str) -> float:
     """Weighted feature distance between two segments, from 0 (same features) to 1.
@@ -240,7 +244,8 @@ def feature_distance(a: str, b: str) -> float:
     Each feature contributes its PanPhon weight times half the difference of its values, with
     + = 1, 0 = 0 and − = −1, so a +/− mismatch costs the full weight and a 0 against + or − costs
     half. The sum is divided by the total weight. A segment that cannot be read is at distance 1
-    from every other segment. A space matches only a space.
+    from every other segment, and the first time it is priced in the process it issues a
+    ``UserWarning`` that names it. A space matches only a space.
     """
     if a == b:
         return 0.0
@@ -249,6 +254,15 @@ def feature_distance(a: str, b: str) -> float:
     try:
         va, vb = _signs(a), _signs(b)
     except ValueError:
+        for seg in (a, b):
+            if seg not in _WARNED:
+                try:
+                    _signs(seg)
+                except ValueError:
+                    _WARNED.add(seg)
+                    points = " ".join(f"U+{ord(c):04X}" for c in seg)
+                    warnings.warn(f"Unrecognized phone {seg!r} ({points}) costs 1 against every other"
+                                  " segment; pass strict=True to raise instead", UserWarning, stacklevel=2)
         return 1.0
     diff = sum(w * abs(x - y) / 2 for w, x, y in zip(WEIGHTS, va, vb))
     return diff / _TOTAL_WEIGHT
