@@ -24,7 +24,11 @@ def segments(ipa: str) -> List[str]:
     vowels: a diphthong is two segments, so ``a͡i`` gives ``a`` and ``i``. Spaces become a
     ``" "`` segment between words; stress, syllable and phrase-tone marks are dropped. A tone is
     one segment of tone letters after its syllable: a tone diacritic or a tone numeral is written
-    as tone letters after the segment that carries it.
+    as tone letters after the segment that carries it. A tone diacritic on a tone letter adds its
+    levels to that tone. A tone diacritic before a tie bar's second symbol, or at the start of a
+    word, belongs to the next base symbol. A tie bar with no symbol before it in its word is dropped,
+    so it never joins across a space. Format characters (Unicode category Cf, such as U+200B and
+    U+FEFF) are dropped.
     """
     out: List[str] = []
     join_next = False
@@ -41,6 +45,7 @@ def segments(ipa: str) -> List[str]:
             pending = ""
 
     tone = ""  # a tone diacritic, written out after the segment that carries it
+    carried = ""  # a tone diacritic that belongs to the next base symbol
 
     def release_tone() -> None:
         nonlocal tone
@@ -50,9 +55,15 @@ def segments(ipa: str) -> List[str]:
 
     for ch in unicodedata.normalize("NFD", ipa).translate(SPELLINGS):
         ch = NUMERALS.get(ch, ch)
-        if ch in SUPRASEGMENTALS:
+        if ch in SUPRASEGMENTALS or unicodedata.category(ch) == "Cf":
             continue
-        if ch in DIACRITIC_TONES and out and out[-1] != " ":
+        if ch in DIACRITIC_TONES and (not out or out[-1] == " "):
+            carried += DIACRITIC_TONES[ch]
+            continue
+        if ch in DIACRITIC_TONES and is_tone(out[-1]) and not tone:
+            out[-1] += DIACRITIC_TONES[ch]
+            continue
+        if ch in DIACRITIC_TONES:
             tone += DIACRITIC_TONES[ch]
             continue
         if ch in LEVELS and tone:
@@ -70,14 +81,17 @@ def segments(ipa: str) -> List[str]:
         if not attaches:
             release_tone()
         if ch.isspace():
+            tone += carried
+            carried = ""
             release_tone()
             release_pending()
             if out and out[-1] != " ":
                 out.append(" ")
             continue
         if ch in _TIES:
-            join_next = bool(out)
+            join_next = bool(out) and out[-1] != " "
             if join_next:
+                carried, tone = carried + tone, ""
                 out[-1] += ch
             continue
         if join_next and out[-1][-1] in _TIES and is_vowel_phone(out[-1][:-1].replace(NON_SYLLABIC, "")) and is_vowel_phone(ch):
@@ -92,8 +106,10 @@ def segments(ipa: str) -> List[str]:
         else:
             out.append(pending + ch)
             pending = ""
+            tone, carried = tone + carried, ""
         join_next = False
     release_pending()
+    tone += carried
     release_tone()
     if out and out[-1] == " ":
         out.pop()
