@@ -1,5 +1,14 @@
 # Changelog
 
+## [2.3.9a1](https://github.com/TigreGotico/phonematcher/tree/2.3.9a1) (2026-11-23)
+
+[Full Changelog](https://github.com/TigreGotico/phonematcher/compare/2.3.7a1...2.3.9a1)
+
+**Merged pull requests:**
+
+- fix: order tied search results by id type and check n\_results [\#114](https://github.com/TigreGotico/phonematcher/pull/114) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
+- fix: refuse malformed entries in overrides.json at build time [\#111](https://github.com/TigreGotico/phonematcher/pull/111) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
+
 ## [2.3.7a1](https://github.com/TigreGotico/phonematcher/tree/2.3.7a1) (2026-11-23)
 
 [Full Changelog](https://github.com/TigreGotico/phonematcher/compare/2.3.6a2...2.3.7a1)
@@ -389,11 +398,6 @@
 ## [0.0.0a2](https://github.com/TigreGotico/phonematcher/tree/0.0.0a2) (2026-11-19)
 
 [Full Changelog](https://github.com/TigreGotico/phonematcher/compare/fd33c5b3b4cc760519be5fb376a6299f5c710a26...0.0.0a2)
-
-**Merged pull requests:**
-
-- feat!: IPA-only matcher on a PanPhon and Hayes feature table [\#8](https://github.com/TigreGotico/phonematcher/pull/8) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
-- fix: do not decompose an IPA letter that Unicode writes as base plus diacritic [\#7](https://github.com/TigreGotico/phonematcher/pull/7) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
 
 
 
