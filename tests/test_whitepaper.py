@@ -103,7 +103,7 @@ def anchors():
     letters = len(_letter_costs()[0])
     triples = math.comb(letters, 3)
     return [
-        anchored("highest recall@1", f4(retrieval["intervals"]["pm-P5"]["estimate"])),
+        anchored(f"{retrieval_leader()} has the highest recall@1", f4(retrieval["intervals"]["pm-P5"]["estimate"])),
         anchored("precision is", iv["pm-P5"], "below SCA at", iv["sca"], "below plain edit distance at", iv["levenshtein"]),
         anchored("Plain edit distance also has the higher point estimate", iv["levenshtein"], "against", iv["pm-P5"]),
         anchored("released library reached a B-cubed F", f4(p5["bcubed_f_at_training_threshold"]["bcubed_f"][ROMANCE]),
@@ -123,6 +123,67 @@ def anchors():
         anchored("deletion or an insertion costs", f"{GAP_COST:g}"),
         anchored("default share,", f"{PhoneticFuzzySearch().cluster_sensitivity:g}"),
     ]
+
+
+#: The names the paper gives the systems whose order it states.
+PAPER_NAMES = {"pm-P5": "phonematcher", "sca": "SCA", "levenshtein": "plain edit distance", "aline": "ALINE"}
+
+
+def retrieval_leader():
+    """The paper's name for the system with the highest mean recall@1 over the test pairs, on all queries."""
+    pairs = results("retrieval-test.json")["pairs"].values()
+    systems = [name for name, _ in render.README_SYSTEMS]
+    mean = {s: math.fsum(p["systems"][s]["all_items_unread_at_1"]["recall@1"] for p in pairs) for s in systems}
+    best = max(mean, key=mean.get)
+    return PAPER_NAMES.get(best, best)
+
+
+def comparison(low_side, high_side, words):
+    """``words[0]`` when the first interval lies wholly below the second, ``words[1]`` when wholly above, else ``words[2]``."""
+    if low_side["high"] < high_side["low"]:
+        return words[0]
+    if low_side["low"] > high_side["high"]:
+        return words[1]
+    return words[2]
+
+
+def order_sentences():
+    """Each sentence of the paper that states an order between systems, with its order words taken from the files."""
+    cognates, alignment = results("cognates-test.json"), results("alignment-test.json")
+    iv, av = cognates["intervals"], alignment["intervals"]
+    p5, sca = iv["pm-P5"], iv["sca"]
+    common = {s: cognates["systems"][s]["common"]["average_precision"]["mean"] for s, _ in render.README_SYSTEMS}
+    others = [s for s in common if s not in ("pm-P5", "sca")]
+    panphon = cognates["paired"]["pm-panphon22"]
+    tone = results("tone-seen.json")["scored"]["main"]
+    skipped = {s: cognates["systems"][s]["skipped"]["words"][ROMANCE] for s in ("pm-P5", "panphon-weighted", "panphon-hamming", "aline")}
+    overlap = "do not overlap" if p5["high"] < sca["low"] or p5["low"] > sca["high"] else "overlap"
+    higher = lambda a, b: "higher" if a > b else "lower"  # noqa: E731
+    return [
+        f"{retrieval_leader()} has the highest recall@1",
+        f"PanPhon's own features scored {higher(panphon['diff'], 0)} than our full table on test cognates",
+        "PanPhon's 22 features alone are " + comparison({"low": 0, "high": 0}, panphon, ("better", "worse", "not different from"))
+        + " than our table on test cognates, and the interval is " + ("above" if panphon["low"] > 0 else "not above") + " zero",
+        "Our tone distance is " + ("not better" if tone["phonematcher"]["score"] < tone["direction_baseline"]["score"] else "better")
+        + " than a baseline",
+        "The tone distance is " + ("not better" if tone["phonematcher"]["score"] < tone["direction_baseline"]["score"] else "better")
+        + " than a baseline",
+        f"On the common words, phonematcher has a {higher(common['pm-P5'], common['sca'])} average precision than SCA. "
+        f"It has a {higher(common['pm-P5'], max(common[s] for s in others))} average precision than all other systems.",
+        f"On all words, phonematcher is {'worse' if p5['estimate'] < sca['estimate'] else 'better'} than SCA, and the intervals {overlap}.",
+        f"On alignment, phonematcher is {'below' if all(av['pm-P5']['estimate'] < av[s]['estimate'] for s in ('sca', 'aline')) else 'not below'} "
+        "SCA and ALINE on the point estimate.",
+        "phonematcher is " + comparison(av["levenshtein"], av["pm-P5"], ("clearly better", "clearly worse", "not clearly different"))
+        + " than plain edit distance.",
+        "PanPhon and ALINE lose " + ("more" if min(skipped[s] for s in skipped if s != "pm-P5") > skipped["pm-P5"] else "not more")
+        + " Romance words than phonematcher.",
+        f"On cognate detection, SCA scores {higher(sca['estimate'], p5['estimate'])} than phonematcher on all words, "
+        f"and the intervals {overlap}. On the common words, SCA scores {higher(common['sca'], common['pm-P5'])} only on the point estimate.",
+    ]
+
+
+def order_failures(text):
+    return [sentence for sentence in order_sentences() if sentence not in text]
 
 
 def anchor_failures(text):
@@ -258,6 +319,32 @@ def test_a_swapped_system_or_value_fails_the_anchors():
     for old, new in swaps:
         assert PAPER.count(old) == 1, old
         assert anchor_failures(PAPER.replace(old, new)), f"the swap {new!r} passed"
+
+
+def test_each_order_sentence_states_the_order_of_the_files():
+    assert order_failures(PAPER) == []
+
+
+def test_a_reversed_order_sentence_fails():
+    reversals = [
+        ("phonematcher has the highest recall@1, 0.8777", "SCA has the highest recall@1, 0.8777"),
+        ("PanPhon's own features scored higher than our full table", "PanPhon's own features scored lower than our full table"),
+        ("PanPhon's 22 features alone are better than our table", "PanPhon's 22 features alone are worse than our table"),
+        ("Our tone distance is not better than a baseline", "Our tone distance is better than a baseline"),
+        ("The tone distance is not better than a baseline", "The tone distance is better than a baseline"),
+        ("phonematcher has a lower average precision than SCA", "phonematcher has a higher average precision than SCA"),
+        ("It has a higher average precision than all other systems", "It has a lower average precision than all other systems"),
+        ("On all words, phonematcher is worse than SCA", "On all words, phonematcher is better than SCA"),
+        ("On alignment, phonematcher is below SCA and ALINE on the point estimate", "On alignment, phonematcher is above SCA and ALINE on the point estimate"),
+        ("phonematcher is clearly better than plain edit distance", "phonematcher is clearly worse than plain edit distance"),
+        ("PanPhon and ALINE lose more Romance words", "PanPhon and ALINE lose fewer Romance words"),
+        ("SCA scores higher than phonematcher on all words", "SCA scores lower than phonematcher on all words"),
+        ("On the common words, SCA scores higher only", "On the common words, SCA scores lower only"),
+    ]
+    for old, new in reversals:
+        assert PAPER.count(old) == 1, old
+        changed = PAPER.replace(old, new)
+        assert order_failures(changed) or anchor_failures(changed), f"the reversal {new!r} passed"
 
 
 def test_each_audit_number_is_marked_and_its_run_is_named():
