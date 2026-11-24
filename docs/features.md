@@ -142,7 +142,6 @@ A mark reads only if a chart states its meaning. These marks occur in PHOIBLE, W
 | `ʳ` `ʶ` | "r-coloring or r-offglides": the chart does not say which of the two a transcription means. |
 | `ˢ` `ˣ` `ᵡ` `ᶲ` `ᵏ` `ᵍ` | Only "≈ superscript" of the letter. A note under `ˠ` says that such modifier letters are "occasionally used in transcription of affricates". The reading is a tied affricate, which needs a reader change and not a diacritic rule, and in Finnish `eˣ` follows a vowel. |
 | `ᵊ` `ᵝ` `ᵘ` `ᶢ` | Only "≈ superscript" of the letter. `ᶢ` before a click reads (see the clicks below); elsewhere it stays unread. |
-| `ᶬ` `ᶮ` `ᶯ` `ᶰ` `ᵑ` | Only "≈ superscript" of the nasal letter. `ᵐ`, `ⁿ` and `ᵑ` read as prenasalization by the rule of `◌ⁿ`; the others have no such statement. |
 | `◌̍` | "this is not the Greek tonos", "Marshallese". The IPA chart marks a syllabic consonant with `◌̩`. |
 | `◌̵` `◌͓` `◌͠` | The Unicode chart gives no annotation. |
 | `↓` | The mark has two meanings. The IPA chart prints it as "Downstep", and the extIPA chart prints it as "ingressive airflow". `segments` drops it as a phrase mark, as it drops the other downstep and upstep marks. On a phone, no feature of the table encodes either meaning. |
@@ -155,7 +154,7 @@ A rule applies a mark only to the bases that its conditions accept. The conditio
 |---|---|---|
 | `◌̃` | `ẽ`, a vowel; `h̃` and the class of continuants (Ladefoged and Maddieson 1996, pp. 132 to 133) | voiceless stops: `k̃ p̃`; a nasal: `m̃` |
 | `◌ʰ` | `tʰ dʰ` (IPA chart), `ʰp` (extIPA chart) | vowels `aʰ`, nasals `m̥ʰ`, liquids `lʰ`, glides `jʰ`, `ʔʰ` |
-| `◌ⁿ` | `dⁿ` | vowels `aⁿ`, fricatives `ⁿs`, liquids and glides `ⁿl ⁿw` |
+| `◌ⁿ` | `dⁿ`; before a base, `ᵐb ⁿd ᵑɡ` and prenasalized fricatives (Ladefoged and Maddieson 1996) | vowels `aⁿ`, liquids and glides `ⁿl ⁿw`, glottals `ⁿh ⁿɦ` |
 | `◌ʷ` `◌ʲ` | `tʷ dʷ`, `tʲ dʲ` | vowels `uʷ ʊʷ`, `iʲ` |
 | `◌ˡ` | `dˡ`, a coronal stop | `nˡ`, `pˡ` |
 | `◌̰` | `b̰ a̰`, both voiced | voiceless bases `p̰ k̰ t̰` |
@@ -239,7 +238,7 @@ A letter that repeats the one before it is a geminate, not a tie: `nn` and `tt` 
 
 Only a segment given whole is read this way. `segments` keeps `ts` in running text as two segments, `t` and `s`, because the same two letters are two sounds in many words. Use `segments("t͡s")` or write the tie bar to make one.
 
-A mark before such a segment applies to it as to a listed one. `ʰts` is `t͡s` with `sg` +, and `ᵐɡb` is `ɡ͡b` with `nas` +. `ⁿ`, `ᵐ` and `ᵑ` before an affricate, tied or not, add `nas` + to it, as a nasal tied before it does: `ⁿd͡z` and `ⁿdz` equal `n͡d͡z`. The mark's own rule still decides elsewhere: `ⁿs` and `ⁿʃ` stay unread, because `◌ⁿ` applies to a stop.
+A mark before such a segment applies to it as to a listed one. `ʰts` is `t͡s` with `sg` +, and `ᵐɡb` is `ɡ͡b` with `nas` +. A superscript nasal letter before an affricate, tied or not, adds `nas` + to it, as a nasal tied before it does: `ⁿd͡z` and `ⁿdz` equal `n͡d͡z`.
 
 ## Other changes
 
@@ -262,7 +261,7 @@ Every IPA letter has its own vector, and a test checks this. To add a change, ad
 
 PanPhon lists 6,367 segments, many with diacritics, such as `ɐ̃` and `kʷʰ`. The table takes all of them except the 50 stacks on `ɫ`, which `vectorize_phones` reads as `l̴` with the same marks, and the 10 tone rows (the five tone letters `˩ ˨ ˧ ˦ ˥`, each also with `ˤ`), which `phonematcher.tone` reads. It adds the ten letters above: 6,317 segments. The build reads each listed segment in the same way: its longest listed base, then the rules of its marks. A listed stack thus has the same vector as an unlisted one, and a test checks this for every listed stack. A mark that has no rule takes the difference that PanPhon records between the segment and its base letter.
 
-Some marks come before their base. `ⁿ`, `ᵐ` and `ᵑ` before a stop make a prenasalized stop, as in `ⁿd`. `ʰ` before a stop makes a preaspirated stop, as in `ʰt`. Each takes the rule of the same mark after a base.
+Some marks come before their base. A superscript nasal letter (`ᵐ ⁿ ᵑ ᶬ ᶮ ᶯ ᶰ`) before an obstruent makes it prenasalized, as in `ⁿd`, `ᶮɟ` and `ⁿs`: it adds `nas` +, as a nasal tied before the obstruent does, so `ⁿs` equals `n͡s`. Ladefoged and Maddieson (1996, *The Sounds of the World's Languages*, pp. 118 to 119) name the classes: "prenasalized stops (including affricates), prenasalized fricatives, prestopped nasals, and, perhaps, prenasalized trills", "often notated by a superscript nasal symbol preceding the stop symbol". They add: "We do not know of any cases of prenasalized lateral or central approximants", so `ⁿl`, `ⁿj` and `ⁿw` stay unread. The book calls h "the voiceless approximant h" (p. 132), so `ⁿh`, `ⁿhʷ` and `ⁿɦ` also stay unread. `ʰ` before a stop makes a preaspirated stop, as in `ʰt`. Each takes the rule of the same mark after a base.
 
 A tie bar joins two symbols into one segment. `t͡ʃ` and `t͜ʃ` are the same affricate. Without a tie bar, `tʃ` is two segments.
 

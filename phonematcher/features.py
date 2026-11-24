@@ -45,10 +45,11 @@ _DIACRITICS: Dict[Tuple[str, str], dict] = {
 #: Diacritics written after their base.
 POST_DIACRITICS = {marker for marker, position in _DIACRITICS if position == "post"}
 #: Marks written before a stop: prenasalization takes PanPhon's rule for ◌ⁿ (the nasal's place
-#: is the stop's), preaspiration its rule for ◌ʰ.
+#: is the stop's), preaspiration its rule for ◌ʰ. Every superscript nasal letter is a
+#: prenasalization mark.
 PRE_DIACRITICS = {
     **{marker: (marker, "pre") for marker, position in _DIACRITICS if position == "pre"},
-    "ⁿ": ("ⁿ", "post"), "ᵐ": ("ⁿ", "post"), "ᵑ": ("ⁿ", "post"), "ʰ": ("ʰ", "post"),
+    **dict.fromkeys("ⁿᵐᵑᶬᶮᶯᶰ", ("ⁿ", "post")), "ʰ": ("ʰ", "post"),
 }
 #: The tie bars, above and below; the table writes the first.
 TIES = ("͡", "͜")
@@ -235,9 +236,11 @@ def _apply_if(diacritic: dict, vec: Vector, segment: str) -> Vector:
 
 
 def _apply_pre(marker: str, vec: Vector, segment: str) -> Vector:
-    """Apply a mark written before its base. A nasal mark on an affricate adds [+nasal] to it, as
-    a nasal tied before the affricate does."""
-    if PRE_DIACRITICS[marker][0] == "ⁿ" and vec[_DELREL] is True and vec[_SON] is False:
+    """Apply a mark written before its base. A nasal mark on an obstruent adds [+nasal] to it, as
+    a nasal tied before the obstruent does: prenasalized stops, affricates and fricatives. The
+    glottal continuants h and ɦ are approximants, which are never prenasalized."""
+    base = segment.lstrip("".join(PRE_DIACRITICS))[:1]
+    if PRE_DIACRITICS[marker][0] == "ⁿ" and vec[_SON] is False and base not in _GLOTTALS:
         return tuple(True if i == _NAS else x for i, x in enumerate(vec))
     return _apply_if(_DIACRITICS[PRE_DIACRITICS[marker]], vec, segment)
 
