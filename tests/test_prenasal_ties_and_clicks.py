@@ -93,7 +93,7 @@ def test_a_click_tie_stays_a_click_with_the_place_of_the_click_letter(segment):
         assert _value(segment, name) is click[FEATURES.index(name)]
 
 
-@pytest.mark.parametrize("segment", ["t͡ǃ", "p͡ʘ", "ǃ͡s", "ǃ͡x", "ǀ͡χ", "χ͡ǀ", "ǃ͡ʔ", "ǃ͡h", "ǃ͡ǀ", "kʷ͡ǃ", "k͡ǃ͡x", "ǃ͡q͡k"])
+@pytest.mark.parametrize("segment", ["t͡ǃ", "p͡ʘ", "ǃ͡s", "ǃ͡x", "ǃ͡ʔ", "ǃ͡h", "ǃ͡ǀ", "kʷ͡ǃ", "k͡ǃ͡x", "ǃ͡q͡k"])
 def test_a_click_tied_to_anything_but_one_velar_or_uvular_letter_before_it_stays_unread(segment):
     # The Handbook quote above names only the velar or uvular symbol beside the click. Any other
     # tie would drop a letter if it read as the click.

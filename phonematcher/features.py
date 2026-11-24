@@ -172,6 +172,15 @@ def vectorize_phones(segment: str) -> Vector:
     if TIES[0] in untied:
         parts = untied.split(TIES[0])
         if any(c in _CLICKS for part in parts for c in part):
+            click, uvular = (parts[1], parts[0]) if parts[0][:1] == "χ" else (parts[0], parts[-1])
+            if (len(parts) == 2 and uvular[:1] == "χ" and uvular[1:] in ("", "ʼ")
+                    and click[:1] in _CLICKS and all(map(unicodedata.combining, click[1:]))):
+                # Miller et al. (2009, pp. 149 and 152): a fricated release makes the click an
+                # affricate contour; an ejected release reads as an ejective, as for q.
+                out = list(vectorize_phones("q" + TIES[0] + click + uvular[1:]))
+                if uvular == "χ":
+                    out[_DELREL] = True
+                return tuple(out)
             # A click tie is one velar or uvular letter, then the click (IPA Handbook, 2.5). The
             # click takes only voi and nas from that letter, so it may carry combining marks only.
             if len(parts) == 2 and parts[0][:1] in _CLICKS and parts[1][:1] in _REAR_CLOSURES:
@@ -209,7 +218,7 @@ def vectorize_phones(segment: str) -> Vector:
         for before, cluster in zip(clusters, clusters[1:]):
             joins = (unicodedata.category(cluster[0]) in _LETTER_CATEGORIES and cluster != before
                      and not _GLOTTALS & {cluster[0], before[0]}
-                     and not (cluster[0] in _REAR_CLOSURES and _CLICKS.intersection(tied))
+                     and not (cluster[0] in _REAR_CLOSURES | {"χ"} and _CLICKS.intersection(tied))
                      and (cluster[0] not in _CLICKS or before[0] in _REAR_CLOSURES))
             tied += (TIES[0] if joins else "") + cluster
         if tied != seg:
