@@ -16,7 +16,7 @@ from tests.conftest import differs, feature
 # By hand: prenasalization adds nasal airflow before the oral part and leaves the oral part as it
 # is, so each segment differs from its base in [nasal] alone, and [nasal] is +.
 @pytest.mark.parametrize("prenasal, base", [
-    ("ⁿs", "s"), ("ⁿz", "z"), ("ⁿʃ", "ʃ"), ("ⁿʒ", "ʒ"), ("ⁿf", "f"), ("ⁿθ", "θ"), ("ⁿh", "h"),
+    ("ⁿs", "s"), ("ⁿz", "z"), ("ⁿʃ", "ʃ"), ("ⁿʒ", "ʒ"), ("ⁿf", "f"), ("ⁿθ", "θ"),
     ("ᵐv", "v"), ("ᶬv", "v"), ("ᶬf", "f"), ("ᶮʃ", "ʃ"),
     ("ᶮɟ", "ɟ"), ("ᶮc", "c"), ("ᶯɖ", "ɖ"), ("ᶰɢ", "ɢ"), ("ᶮd͡ʒ", "d͡ʒ"),
 ])
@@ -37,5 +37,12 @@ def test_a_superscript_nasal_reads_as_the_tied_nasal(prenasal, tied):
 # "We do not know of any cases of prenasalized lateral or central approximants."
 @pytest.mark.parametrize("segment", ["ⁿl", "ⁿj", "ⁿw", "ᶮj", "ᶬʋ"])
 def test_a_superscript_nasal_before_an_approximant_stays_unread(segment):
+    with pytest.raises(ValueError):
+        vectorize_phones(segment)
+
+
+# Ladefoged and Maddieson, p. 132, call h "the voiceless approximant h", so p. 119 excludes it.
+@pytest.mark.parametrize("segment", ["ⁿh", "ⁿɦ", "ⁿhʷ"])
+def test_a_superscript_nasal_before_a_glottal_continuant_stays_unread(segment):
     with pytest.raises(ValueError):
         vectorize_phones(segment)
