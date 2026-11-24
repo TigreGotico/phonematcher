@@ -216,7 +216,7 @@ def test_no_word_distance_moves_without_this_pin_and_the_whitepaper_changing():
     rng = random.Random(0)
     words = ["".join(rng.choice(letters) for _ in range(rng.randint(1, 8))) for _ in range(2000)]
     digest = hashlib.sha256("\n".join(f"{a} {b} {ipa_distance(a, b):.12f}" for a, b in zip(words[::2], words[1::2])).encode("utf8")).hexdigest()
-    assert digest == "d286cb669e1934f229856d03601acc40a3c953119f4c38d4cca1d65a0baa490d"
+    assert digest == "12eb7cec58902a8180163d4e77fe5d4dd5fb964946a93ba4dc8fa383f7e8ead3"
 
 
 def test_each_ablation_table_names_its_cost_rule():

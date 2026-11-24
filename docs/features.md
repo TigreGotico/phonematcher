@@ -52,7 +52,7 @@ Each IPA segment has a vector of 36 distinctive features. A value is `True` (+),
 | Source | What it gives |
 |---|---|
 | PanPhon (Mortensen, Littell, Bharadwaj, Goyal, Dyer and Levin 2016, "PanPhon: A Resource for Mapping IPA Segments to Articulatory Feature Vectors", *Proceedings of COLING 2016*, pp. 3475–3484, MIT licence) | 6,367 segments, features 0 to 21, their weights and the rules for diacritics. Its two tone features are not used. |
-| The CSV conversion by Kyle Gorman (github.com/kylebgorman/hayes2009, Apache-2.0, in `scripts/sources/`) of the feature tables of Hayes (2009, *Introductory Phonology*, Wiley-Blackwell). Gorman's `hayes2009.py` names them as tables 4.7 to 4.9, section 4.10. | `front`, `tap` and `trill` for consonants |
+| The CSV conversion by Kyle Gorman (github.com/kylebgorman/hayes2009, Apache-2.0, in `scripts/sources/`) of the feature tables of Hayes (2009, *Introductory Phonology*, Wiley-Blackwell). Gorman's `hayes2009.py` names them as tables 4.7 to 4.9, section 4.10. | `front`, `tap` and `trill` for consonants, and the value changes in "Other changes" |
 | The IPA chart (International Phonetic Association; the footer reads "IPA Chart revised to 2015/2005"), whose vowel quadrilateral is in `scripts/sources/ipa-vowel-chart.csv` | the height, backness and rounding of the 28 vowel letters |
 | The extIPA chart (International Clinical Phonetics and Linguistics Association; "Revised to 2015"), the Unicode Standard 18.0 code charts U0300 and U02B0, and Chang (2007) | the meaning of the marks in `◌͈ ◌͉ ◌̪ ◌̢ ◌͇ ◌̣ ◌̭ ◌̊` and `˔ ˕ ˖ ˗` |
 | `phonematcher/data/overrides.json` | every other change, each with its source and reason |
@@ -233,9 +233,9 @@ vectorize_phones("kp") == vectorize_phones("k͡p")   # True
 segments("ts")                                      # ['t', 's']
 ```
 
-The reader puts a tie bar between each two base letters and reads the result. A tie that `compose_tie` has no reading for stays unread: `ab`, `ɑi`, `ʔt`, and the three-letter `bvf` and `dzs`, because a fricative tied to a fricative has no reading. For the same reason `ʧ͡f` and `ʤ͡v` stay unread.
+The reader puts a tie bar between each two base letters and reads the result. A tie that `compose_tie` has no reading for stays unread: `ab`, `ɑi`, and the three-letter `bvf` and `dzs`, because a fricative tied to a fricative has no reading. For the same reason `ʧ͡f` and `ʤ͡v` stay unread.
 
-A letter that repeats the one before it is a geminate, not a tie: `nn` and `tt` stay unread. A click after a velar or uvular letter (`k ɡ ŋ q ɢ ɴ`) is that letter tied to the click: `kǀ` is `k͡ǀ`. The IPA Handbook says: "Since any click involves a velar or uvular closure, it is possible to symbolize factors such as voicelessness, voicing, or nasality of the click by combining the click symbol with the appropriate velar or uvular symbol" (section 2.5, p. 10). Thus a tie of a click and its velar or uvular letter is the click, with its airstream (`velaric` +) and its place, and `voi` and `nas` come from the velar or uvular letter: `ɡ͡ǃ` is voiced, `ŋ͡ǃ` is voiced and nasal, and `k͡ǃ` is voiceless. A click after any other letter stays unread. A tie of a click and any other letter, or of more than two letters, also stays unread: `t͡ǃ`, `ǃ͡s`, `ǃ͡q` and `k͡ǃ͡x` have no reading. The velar or uvular letter may carry a combining mark, as in `ŋ̊͡ǃ`, but not a modifier letter such as `ʷ`, because the tie takes only `voi` and `nas` from it.
+A letter that repeats the one before it is a geminate, not a tie: `nn` and `tt` stay unread. A glottal letter (`ʔ h ɦ`) beside another letter is two segments or glottal reinforcement, not one segment, so `ʔt`, `th` and `tɦ` stay unread. A click after a velar or uvular letter (`k ɡ ŋ q ɢ ɴ`) is that letter tied to the click: `kǀ` is `k͡ǀ`. The IPA Handbook says: "Since any click involves a velar or uvular closure, it is possible to symbolize factors such as voicelessness, voicing, or nasality of the click by combining the click symbol with the appropriate velar or uvular symbol" (section 2.5, p. 10). Thus a tie of a click and its velar or uvular letter is the click, with its airstream (`velaric` +) and its place, and `voi` and `nas` come from the velar or uvular letter: `ɡ͡ǃ` is voiced, `ŋ͡ǃ` is voiced and nasal, and `k͡ǃ` is voiceless. A click after any other letter stays unread. A tie of a click and any other letter, or of more than two letters, also stays unread: `t͡ǃ`, `ǃ͡s`, `ǃ͡q` and `k͡ǃ͡x` have no reading. The velar or uvular letter may carry a combining mark, as in `ŋ̊͡ǃ`, but not a modifier letter such as `ʷ`, because the tie takes only `voi` and `nas` from it.
 
 Only a segment given whole is read this way. `segments` keeps `ts` in running text as two segments, `t` and `s`, because the same two letters are two sounds in many words. Use `segments("t͡s")` or write the tie bar to make one.
 
@@ -247,6 +247,12 @@ A mark before such a segment applies to it as to a listed one. `ʰts` is `t͡s` 
 |---|---|---|---|
 | `ɹ` | `hi` | 0 | Hayes (2009) CSV |
 | `ɹ` | `round` | − | Hayes (2009) CSV |
+| `h` `ɦ` | `son` | − | Hayes (2009) CSV |
+| `h` `ɦ` | `cons` | − | Hayes (2009) CSV |
+| `ʔ` | `son` | − | Hayes (2009) CSV |
+| `ʔ` | `cons` | + | Hayes (2009) CSV |
+
+PanPhon gives `h` and `ɦ` [+son, +cons] and `ʔ` [+son, −cons]. With those values, `h` is nearer `ʀ` than `x`, and `ʔ` is nearer `j` than `k`. The Hayes CSV values put the three letters with the obstruents. Because `ʔ` is [−son], the rule of `◌̩` refuses `ʔ̩`, as it refuses the other syllabic stops.
 
 Every IPA letter has its own vector, and a test checks this. To add a change, add an entry to `overrides.json` and run the build. Then add a test that fails without the entry.
 

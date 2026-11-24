@@ -92,6 +92,34 @@ def test_glottal_fricatives_differ_in_voice():
     assert feature("h", "voi") is False
 
 
+HAYES = Path(__file__).resolve().parent.parent / "scripts" / "sources" / "hayes2009-features.csv"
+
+
+@pytest.mark.parametrize("letter", ["h", "ɦ", "ʔ"])
+def test_glottal_letters_take_sonorant_and_consonantal_from_the_hayes_csv(letter):
+    # The vendored Hayes (2009) CSV: h and ɦ are [-consonantal, -sonorant], ʔ is [+consonantal,
+    # -sonorant]. Each value is read from the CSV row, not from the table under test.
+    import csv
+    with open(HAYES, encoding="utf-8") as fh:
+        row = next(r for r in csv.DictReader(fh) if r[""] == letter)
+    assert feature(letter, "son") is {"+": True, "-": False}[row["sonorant"]]
+    assert feature(letter, "cons") is {"+": True, "-": False}[row["consonantal"]]
+
+
+def test_glottal_letters_sit_with_the_obstruents():
+    # Computed after the change: h ~ x 0.132 against h ~ ʀ 0.276; ʔ ~ k 0.039 against ʔ ~ j 0.355.
+    # With PanPhon's [+sonorant] they were h ~ ʀ 0.066 and ʔ ~ j 0.145, against ʔ ~ k 0.25.
+    assert feature_distance("h", "x") < feature_distance("h", "ʀ")
+    assert feature_distance("ʔ", "k") < feature_distance("ʔ", "j")
+
+
+def test_a_syllabic_glottal_stop_is_refused_as_other_syllabic_stops():
+    # The rule for ◌̩ accepts a sonorant or a fricative, not a stop, and ʔ is [-sonorant].
+    for segment in ("ʔ̩", "t̩"):
+        with pytest.raises(ValueError):
+            vectorize_phones(segment)
+
+
 def test_voicing_pairs_are_nearer_than_place_pairs():
     assert feature_distance("p", "b") < feature_distance("p", "k")
     assert feature_distance("ʁ", "χ") < feature_distance("ʁ", "k")

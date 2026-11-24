@@ -29,4 +29,4 @@ def test_the_clusters_are_the_same_under_two_hash_seeds():
         outputs.append(json.loads(out))
     first, second = outputs
     assert first == second
-    assert len(set(first["0.08"].values())) == 25
+    assert len(set(first["0.08"].values())) == 28

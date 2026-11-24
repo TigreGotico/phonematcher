@@ -8,7 +8,7 @@ from phonematcher.features import FEATURES, feature_distance, vectorize_phones
 LETTERS = sorted(phone_clusters(0.1))
 #: SHA-256 of ``a TAB b TAB repr(distance)`` lines over every ordered pair of LETTERS, as
 #: ``benchmarks/speed.py`` writes them; ``docs/benchmarks.md`` and ``results/speed.json`` state it.
-MATRIX_SHA256 = "44c7d449fc5d31f74b289e50ed0994c9741936e25a60944e08a31c400dfe14a9"
+MATRIX_SHA256 = "a8ca4788713ffab74dae3469aa7ea8d0aa34cd6d56c2b18a34a2d8a36106625d"
 
 
 def test_the_letter_set_is_135_segments():
