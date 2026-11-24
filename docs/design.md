@@ -196,6 +196,7 @@ Most unread segments are rare. The kinds of segment that do not read are these.
 | A superscript letter after a vowel | `eˣ` | The charts give the letter only as a form of the base letter. |
 | A mark on a base the charts do not print it on | `k̃`, `m̃`, `aʰ`, `ʉʰ` | The rule applies only to the bases that a chart prints. |
 | A mark that no feature encodes | `↓` | The IPA chart prints the mark as "Downstep" and the extIPA chart as "ingressive airflow". No feature encodes either meaning. |
+| A click with a breathy or glottalic mark before or on its rear letter | `ǃ͡ɢʱ`, `ᵏʼǃ` | No source writes the click that way. |
 | A letter with no row | `ʅ` | The table has no row for the letter. |
 
 A test asserts that each example raises `ValueError`.
