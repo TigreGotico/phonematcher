@@ -1,8 +1,20 @@
 # Changelog
 
+## [2.7.7a1](https://github.com/TigreGotico/phonematcher/tree/2.7.7a1) (2026-11-24)
+
+[Full Changelog](https://github.com/TigreGotico/phonematcher/compare/2.7.6a1...2.7.7a1)
+
+**Merged pull requests:**
+
+- fix: read a superscript nasal before a fricative as prenasalization [\#154](https://github.com/TigreGotico/phonematcher/pull/154) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
+
 ## [2.7.6a1](https://github.com/TigreGotico/phonematcher/tree/2.7.6a1) (2026-11-24)
 
-[Full Changelog](https://github.com/TigreGotico/phonematcher/compare/2.7.4a3...2.7.6a1)
+[Full Changelog](https://github.com/TigreGotico/phonematcher/compare/2.7.5a1...2.7.6a1)
+
+## [2.7.5a1](https://github.com/TigreGotico/phonematcher/tree/2.7.5a1) (2026-11-24)
+
+[Full Changelog](https://github.com/TigreGotico/phonematcher/compare/2.7.4a3...2.7.5a1)
 
 **Merged pull requests:**
 
@@ -384,10 +396,6 @@
 ## [0.13.1a1](https://github.com/TigreGotico/phonematcher/tree/0.13.1a1) (2026-11-22)
 
 [Full Changelog](https://github.com/TigreGotico/phonematcher/compare/0.13.0a1...0.13.1a1)
-
-**Merged pull requests:**
-
-- fix: harness scores tones, diphthongs and ALINE's ɡ as the libraries read them [\#47](https://github.com/TigreGotico/phonematcher/pull/47) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
 
 ## [0.13.0a1](https://github.com/TigreGotico/phonematcher/tree/0.13.0a1) (2026-11-22)
 
