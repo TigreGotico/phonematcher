@@ -1,5 +1,21 @@
 # Changelog
 
+## [2.7.1a2](https://github.com/TigreGotico/phonematcher/tree/2.7.1a2) (2026-11-24)
+
+[Full Changelog](https://github.com/TigreGotico/phonematcher/compare/2.7.1a1...2.7.1a2)
+
+**Merged pull requests:**
+
+- docs: describe the base rule for marks that the code applies [\#123](https://github.com/TigreGotico/phonematcher/pull/123) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
+
+## [2.7.1a1](https://github.com/TigreGotico/phonematcher/tree/2.7.1a1) (2026-11-24)
+
+[Full Changelog](https://github.com/TigreGotico/phonematcher/compare/2.7.0a1...2.7.1a1)
+
+**Merged pull requests:**
+
+- fix: read the rising-falling tone mark as ˧˦˧ and correct two citations [\#108](https://github.com/TigreGotico/phonematcher/pull/108) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
+
 ## [2.7.0a1](https://github.com/TigreGotico/phonematcher/tree/2.7.0a1) (2026-11-24)
 
 [Full Changelog](https://github.com/TigreGotico/phonematcher/compare/2.6.0a1...2.7.0a1)
@@ -376,17 +392,9 @@
 
 [Full Changelog](https://github.com/TigreGotico/phonematcher/compare/0.7.0a1...0.8.0a1)
 
-**Merged pull requests:**
-
-- feat: split a tie between two vowels so a diphthong costs two segments [\#32](https://github.com/TigreGotico/phonematcher/pull/32) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
-
 ## [0.7.0a1](https://github.com/TigreGotico/phonematcher/tree/0.7.0a1) (2026-11-21)
 
 [Full Changelog](https://github.com/TigreGotico/phonematcher/compare/0.6.0a1...0.7.0a1)
-
-**Merged pull requests:**
-
-- feat: read the strong and weak articulation marks and the other marks a chart names [\#31](https://github.com/TigreGotico/phonematcher/pull/31) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
 
 ## [0.6.0a1](https://github.com/TigreGotico/phonematcher/tree/0.6.0a1) (2026-11-21)
 
