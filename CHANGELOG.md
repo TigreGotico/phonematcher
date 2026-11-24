@@ -1,5 +1,13 @@
 # Changelog
 
+## [3.0.0a2](https://github.com/TigreGotico/phonematcher/tree/3.0.0a2) (2026-11-24)
+
+[Full Changelog](https://github.com/TigreGotico/phonematcher/compare/3.0.0a1...3.0.0a2)
+
+**Merged pull requests:**
+
+- test: pin segment\_spans on text of tone letters only [\#184](https://github.com/TigreGotico/phonematcher/pull/184) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
+
 ## [3.0.0a1](https://github.com/TigreGotico/phonematcher/tree/3.0.0a1) (2026-11-24)
 
 [Full Changelog](https://github.com/TigreGotico/phonematcher/compare/2.7.14a1...3.0.0a1)
