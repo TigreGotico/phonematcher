@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.7.0a1](https://github.com/TigreGotico/phonematcher/tree/2.7.0a1) (2026-11-24)
+
+[Full Changelog](https://github.com/TigreGotico/phonematcher/compare/2.6.0a1...2.7.0a1)
+
+**Merged pull requests:**
+
+- feat: warn once per unread segment without strict [\#134](https://github.com/TigreGotico/phonematcher/pull/134) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
+
 ## [2.6.0a1](https://github.com/TigreGotico/phonematcher/tree/2.6.0a1) (2026-11-24)
 
 [Full Changelog](https://github.com/TigreGotico/phonematcher/compare/2.5.0a1...2.6.0a1)
@@ -7,7 +15,6 @@
 **Merged pull requests:**
 
 - feat: add segment\_spans for segment offsets in the input [\#136](https://github.com/TigreGotico/phonematcher/pull/136) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
-- feat: warn once per unread segment without strict [\#134](https://github.com/TigreGotico/phonematcher/pull/134) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
 
 ## [2.5.0a1](https://github.com/TigreGotico/phonematcher/tree/2.5.0a1) (2026-11-24)
 
