@@ -12,6 +12,7 @@ of the syllable, each Chao level 1 to 5 as (level − 3) / 2. A segment with no 
 all four.
 """
 import json
+import re
 import threading
 import unicodedata
 import warnings
@@ -81,6 +82,18 @@ SPELLINGS: Dict[int, str] = str.maketrans({
     row["spelling"]: row["reads_as"] for row in json.loads(
         (Path(__file__).parent / "data" / "spellings.json").read_text(encoding="utf-8"))
 })
+#: Letters whose glyph descends below the baseline. The mark ◌̍ (U+030D) on one of them is the
+#: syllabic mark ◌̩ (U+0329) moved above the letter. The criterion is in ``docs/features.md``.
+_DESCENDERS = "gjpqyŋȴȵȶɕɖɟɠɡɣɥɧɭɮɰɱɲɳɸɻɽʂʃʄʈʐʑʒʝʮβχ"
+_ABOVE_DESCENDER = re.compile(f"(?:[{_DESCENDERS}]|c\u0327)[\u0300-\u036f]*")  # ç is c with a cedilla below
+
+
+def _read_syllabic_above(nfd: str) -> str:
+    """*nfd* with each U+030D on a letter with a descender replaced by U+0329. The result needs
+    NFD again, as the marks of a letter may change order."""
+    return _ABOVE_DESCENDER.sub(lambda m: m.group().replace("\u030d", "\u0329"), nfd)
+
+
 #: Letters that Unicode does not decompose into a base and its mark: the rhotic vowels, and [ɫ],
 #: the IPA chart's example of ◌̴ (velarized or pharyngealized). Spellings read as their IPA.
 _COMPOSED_LETTERS = {**SPELLINGS, **str.maketrans({"ɚ": "ə˞", "ɝ": "ɜ˞", "ɫ": "l\u0334"})}
@@ -137,7 +150,8 @@ def vectorize_phones(segment: str) -> Vector:
             raise _unrecognized(segment, ": a tone is carried by a vowel or a syllabic consonant")
         levels = [LEVELS[letter] for letter in tone]
         return vec[:-len(TONE_FEATURES)] + (True,) + tuple((p - 3) / 2 for p in _contour(levels))
-    seg = unicodedata.normalize("NFD", segment).translate(_COMPOSED_LETTERS)
+    seg = unicodedata.normalize("NFD", _read_syllabic_above(unicodedata.normalize("NFD", segment)))
+    seg = seg.translate(_COMPOSED_LETTERS)
     if seg[:1] in _SMALL_REAR_CLOSURES and seg[1:2] in _CLICKS:
         seg = _SMALL_REAR_CLOSURES[seg[0]] + TIES[0] + seg[1:]
     if seg in phone_features:
