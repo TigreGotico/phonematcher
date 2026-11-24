@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.7.11a1](https://github.com/TigreGotico/phonematcher/tree/2.7.11a1) (2026-11-24)
+
+[Full Changelog](https://github.com/TigreGotico/phonematcher/compare/2.7.10a1...2.7.11a1)
+
+**Merged pull requests:**
+
+- fix: read a small velar or uvular nasal before a click as the nasal click [\#165](https://github.com/TigreGotico/phonematcher/pull/165) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
+
 ## [2.7.10a1](https://github.com/TigreGotico/phonematcher/tree/2.7.10a1) (2026-11-24)
 
 [Full Changelog](https://github.com/TigreGotico/phonematcher/compare/2.7.9a2...2.7.10a1)
@@ -385,10 +393,6 @@
 ## [0.18.0a1](https://github.com/TigreGotico/phonematcher/tree/0.18.0a1) (2026-11-22)
 
 [Full Changelog](https://github.com/TigreGotico/phonematcher/compare/0.17.0a1...0.18.0a1)
-
-**Merged pull requests:**
-
-- feat: build the machinery of the single pre-registered test run [\#57](https://github.com/TigreGotico/phonematcher/pull/57) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
 
 ## [0.17.0a1](https://github.com/TigreGotico/phonematcher/tree/0.17.0a1) (2026-11-22)
 
