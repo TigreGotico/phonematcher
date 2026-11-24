@@ -145,11 +145,11 @@ A mark reads only if a chart states its meaning. These marks occur in PHOIBLE, W
 | `ᶬ` `ᶮ` `ᶯ` `ᶰ` `ᵑ` | Only "≈ superscript" of the nasal letter. `ᵐ`, `ⁿ` and `ᵑ` read as prenasalization by the rule of `◌ⁿ`; the others have no such statement. |
 | `◌̍` | "this is not the Greek tonos", "Marshallese". The IPA chart marks a syllabic consonant with `◌̩`. |
 | `◌̵` `◌͓` `◌͠` | The Unicode chart gives no annotation. |
-| `↓` | The extIPA chart prints "ingressive airflow", which no feature of the table encodes. |
+| `↓` | The mark has two meanings. The IPA chart prints it as "Downstep", and the extIPA chart prints it as "ingressive airflow". `segments` drops it as a phrase mark, as it drops the other downstep and upstep marks. On a phone, no feature of the table encodes either meaning. |
 
 ### Marks that a base refuses
 
-A rule applies a mark only to the bases a chart prints it on. A base outside that class makes `vectorize_phones` raise `ValueError`, and the segment is at distance 1 from every other. A rule widens when a chart prints the mark on the new class of base, as the IPA chart does for `◌̃` on a vowel. The Unicode chart gives a mark a name and no base, so a name alone does not widen a rule.
+A rule applies a mark only to the bases that its conditions accept. The conditions are PanPhon's, unless `overrides.json` changes them with a source, so a rule can accept more bases than a chart prints: `b̃`, `iˤ`, `aˠ` and `å` read. A base outside the class makes `vectorize_phones` raise `ValueError`, and the segment is at distance 1 from every other. A rule widens when a chart prints the mark on a base that the rule refuses, as the IPA chart does for `◌̃` on a vowel. The Unicode chart gives a mark a name and no base, so a name alone does not widen a rule.
 
 | Mark | What the charts print | Bases that stay refused |
 |---|---|---|
@@ -319,7 +319,7 @@ The IPA chart prints each tone diacritic beside a drawing of a tone letter or a 
 | `◌̂` | `˥˩` | Falling |
 | `◌᷄` | `˧˥` | High rising |
 | `◌᷅` | `˩˧` | Low rising |
-| `◌᷈` | `˧˦˨` | Rising-falling |
+| `◌᷈` | `˧˦˧` | Rising-falling |
 
 Superscript digits are tone numerals: the digit is the level, so `²¹⁴` is `˨˩˦`. The left-stem tone letters `꜒` to `꜖` have the levels of `˥` to `˩`. A run of tone letters is one tone, also after a tone diacritic: `má˥` has the tone `˦˥`.
 

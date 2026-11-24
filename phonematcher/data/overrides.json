@@ -506,7 +506,7 @@
         "nas": "+"
       },
       "source": "International Phonetic Association, The IPA Chart, IPA_Kiel.pdf at internationalphoneticassociation.org (footer 'IPA Chart revised to 2015/2005'): the diacritic is named 'Nasalized' and the chart prints it on the vowel e, as ẽ",
-      "reason": "PanPhon applies the mark only to voiced bases. The chart prints it on a vowel and ties it to no voicing, so a voiceless vowel such as [ɐ̥̃] is nasalized. The other voiceless bases stay refused: the chart prints no consonant with the mark."
+      "reason": "PanPhon applies the mark only to voiced bases. The chart prints it on a vowel and ties it to no voicing, so a voiceless vowel such as [ɐ̥̃] is nasalized. PanPhon's condition stays for consonants: a voiced consonant that is not nasal takes the mark, as [b̃ z̃ w̃], and a voiceless consonant or a nasal is refused, as [k̃ m̃]."
     },
     {
       "marker": "\u0329",
@@ -576,7 +576,7 @@
         "cont": "-",
         "voi": "-"
       },
-      "source": "International Phonetic Association, The IPA Chart, IPA_Kiel.pdf at internationalphoneticassociation.org (footer 'IPA Chart revised to 2015/2005'), Other Symbols: 'Epiglottal plosive'; Hassan, Esling, Moisik and Crevier-Buchman (2011), 'Aryepiglottic trilled variants of /ʕ, ħ/ in Iraqi Arabic', Proceedings of ICPhS XVII, Hong Kong, pp. 831-834, p. 831: 'both pharyngeals and epiglottals occur at the aryepiglottic sphincter point of stricture', and sounds described as epiglottal 'are associated either with AE trilled varieties of the simple fricative or approximant or with the default raised-larynx posture of the laryngeal sphincter'; this table takes the trilled reading",
+      "source": "International Phonetic Association, The IPA Chart, IPA_Kiel.pdf at internationalphoneticassociation.org (footer 'IPA Chart revised to 2015/2005'), Other Symbols: 'Epiglottal plosive'",
       "reason": "PanPhon does not list the symbol. The chart lists it under Other Symbols as 'Epiglottal plosive'. It is built as a voiceless stop at the pharyngeal place."
     },
     {
