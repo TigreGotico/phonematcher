@@ -66,9 +66,9 @@ Coverage shows how much real transcription the table can read. We counted covera
 <!-- whitepaper:coverage:start -->
 | Corpus | Segment types | Types read | Share of types | Share of tokens |
 |---|---|---|---|---|
-| PHOIBLE 2.0 | 4158 | 3765 | 0.9055 | 0.9944 |
-| WikiPron | 3604 | 2605 | 0.7228 | 0.9939 |
-| orthography2ipa | 2569 | 2184 | 0.8501 | 0.9898 |
+| PHOIBLE 2.0 | 4158 | 3768 | 0.9062 | 0.9944 |
+| WikiPron | 3604 | 2616 | 0.7259 | 0.9939 |
+| orthography2ipa | 2569 | 2171 | 0.8451 | 0.9895 |
 <!-- whitepaper:coverage:end -->
 
 Most segments that the table cannot read are rare. Thus the token share is much higher than the type share. The table cannot read these types of segment:
@@ -103,9 +103,9 @@ The tie rule increases coverage. This table gives the PHOIBLE types that read wi
 <!-- whitepaper:readings:start -->
 | Reading of a PHOIBLE segment | Types read | Share of types |
 |---|---|---|
-| the segment as written | 2663 of 4158 | 0.6405 |
-| as written, or with a tie bar between its pieces | 2692 of 4158 | 0.6474 |
-| as the library reads a word: whole, split into segments, tones included | 3765 of 4158 | 0.9055 |
+| the segment as written | 2614 of 4158 | 0.6287 |
+| as written, or with a tie bar between its pieces | 2691 of 4158 | 0.6472 |
+| as the library reads a word: whole, split into segments, tones included | 3768 of 4158 | 0.9062 |
 <!-- whitepaper:readings:end -->
 
 A tone is its own segment. It comes after the syllable that has the tone. Tone letters, tone diacritics and superscript digits give the same segment. Thus `má`, `ma˦` and `ma⁴` all read as `m`, `a`, `˦`. We do not use the two tone features of PanPhon. We compare two tones by their pitch at the start, the middle and the end of the syllable. The distance is the mean difference, divided by the range of the five levels. Section 6 shows that this distance is not better than a simple baseline. Thus the tone distance is experimental.
@@ -305,11 +305,11 @@ The height steps and the scale marks follow the chart. Neither improves a score.
 <!-- whitepaper:ablations:start -->
 | Variant | Test cognates, AP minus table (original costs) | Test alignment, PAS minus table (original costs) | Dev cognates, AP (released costs) |
 |---|---|---|---|
-| PanPhon's 22 features | +0.0058 [+0.0044, +0.0071] | +0.0000 [+0.0000, +0.0000] | 0.7742 |
-| no height steps | -0.0002 [-0.0013, +0.0008] | +0.0000 [+0.0000, +0.0000] | 0.7725 |
-| no scale marks | -0.0000 [-0.0000, -0.0000] | +0.0000 [+0.0000, +0.0000] | 0.7726 |
-| every weight 1 | -0.0066 [-0.0082, -0.0050] | -0.0205 [-0.0462, +0.0000] | 0.7695 |
-| the table (control) | - | - | 0.7727 |
+| PanPhon's 22 features | +0.0058 [+0.0044, +0.0071] | +0.0000 [+0.0000, +0.0000] | 0.7752 |
+| no height steps | -0.0002 [-0.0013, +0.0008] | +0.0000 [+0.0000, +0.0000] | 0.7734 |
+| no scale marks | -0.0000 [-0.0000, -0.0000] | +0.0000 [+0.0000, +0.0000] | 0.7735 |
+| every weight 1 | -0.0066 [-0.0082, -0.0050] | -0.0205 [-0.0462, +0.0000] | 0.7698 |
+| the table (control) | - | - | 0.7736 |
 <!-- whitepaper:ablations:end -->
 
 Removing the scale marks changes each paired test score by less than 0.0001. It changes the development cognate score by one unit in the fourth decimal. We keep the marks because the chart gives them a meaning, not because they help. We did not measure their effect on coverage.
@@ -354,13 +354,13 @@ Lakretz et al. (2018) learn a perceptual metric from confusions. They compare it
 
 The PanPhon weight file gives `tense` 0.25, `long` 0.125 and `velaric` 0.25. The PanPhon feature table reads these numbers without their names. It gives them in its own feature order, which ends with `velaric`, `tense`, `long`. Thus a PanPhon distance gives 0.25 to `velaric`, 0.125 to `tense` and 0.25 to `long`. phonematcher reads the weights by name.
 
-A control shows this. One variant of phonematcher has PanPhon's 22 features and the weights that PanPhon applies. This variant agrees with the weighted PanPhon distance on each pair of segments that has PanPhon's values. It differs on other pairs, because our table changes some values. 710 of the 1207 segments that both read have one or more changed values.
+A control shows this. One variant of phonematcher has PanPhon's 22 features and the weights that PanPhon applies. This variant agrees with the weighted PanPhon distance on each pair of segments that has PanPhon's values. It differs on other pairs, because our table changes some values. 725 of the 1207 segments that both read have one or more changed values.
 
 <!-- whitepaper:control:start -->
 | Pairs | Count | Distance differs |
 |---|---|---|
-| segment pairs that both read | 727821 | 556665 |
-| pairs whose 22 values equal PanPhon's | 123256 | 0 |
+| segment pairs that both read | 727821 | 561318 |
+| pairs whose 22 values equal PanPhon's | 115921 | 0 |
 <!-- whitepaper:control:end -->
 
 Two of our results agree with earlier work. Heeringa (2004, p. 185) found that methods with phones were better than methods with features, against perception. Sofroniev and Çöltekin (2018, p. 114) found PHOIBLE feature vectors below SCA on the same alignment benchmark.
@@ -375,7 +375,7 @@ The numbers of the released library come from the candidate that won the same te
 
 We defined the common words of the cognate table after we saw the results. They do not include the two tonal sets, Chinese and Tujia. They keep only the words that the weakest reader can read.
 
-Only the three test result files have a clean commit and the hash of the written rules. The development and seen results come from working trees. Most of these trees had changes that were not committed.
+Only the three test result files have the hash of the written rules. The development and seen results come from one later run on the clean tree of commit `100ff08`, which has the sourced feature values.
 
 The alignment comparison uses few pairs. The retrieval comparison with SCA and ALINE uses samples.
 
@@ -391,7 +391,7 @@ The two audit runs of section 6 are not in the result files. The triangle check 
 
 The relative sensitivity and strict mode came after the test. They do not change a word distance. A test keeps a hash of many word distances, and this hash did not change. On the development queries, each query gives the same result at the share 0.08 as with the absolute threshold 0.1 of the tested version. The paired difference in mean recall at 1 is 0.0000, with an interval from 0.0000 to 0.0000 (1000 resamples, seed 0, 500 queries in each of four pairs). A query returns from 1% to 23% fewer candidates, depending on the pair. This comparison is an audit run. No result file has its scores for each query.
 
-Some feature values of the released table differ from the values that the test scored. Each of them follows a cited source, and they change some word distances. The test numbers describe the tested library. `docs/design.md` lists these values and their sources.
+Some feature values of the released table differ from the values that the test scored. Each of them follows a cited source, and they change some word distances. The test numbers describe the tested library. `docs/design.md` lists these values and their sources. It also compares the development scores with and without them, and no paired interval lies wholly below 0, so the released table keeps them.
 
 `benchmarks/render.py` makes the tables of this paper from `benchmarks/results/`. `tests/test_whitepaper.py` checks each number in the text against those files. It connects each number to the system and the claim in its sentence. The five audit-run numbers of section 6 and the three of the sensitivity comparison above are typed, because no file has them.
 

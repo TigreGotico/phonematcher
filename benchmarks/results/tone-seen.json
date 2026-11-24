@@ -3,8 +3,8 @@
  "system": "phonematcher,levenshtein,panphon-weighted,panphon-hamming,aline,soundvectors,sca",
  "split": "seen",
  "commit": null,
- "head": "fe3944f052dd84bbf8d44333a3242ea7dbe091fa",
- "tree_dirty": true,
+ "head": "100ff08cf33c0687edcd7efa8eea10c8ef978166",
+ "tree_dirty": false,
  "data": {
   "source": "Wong, Cheng and Chen (2018), Frontiers in Psychology 9:1604, Tables 12 and 13, CC BY 4.0",
   "file": "benchmarks/data/cantonese-tone-confusions.csv",

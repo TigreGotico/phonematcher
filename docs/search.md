@@ -139,15 +139,15 @@ pairs = json.load(open("benchmarks/results/retrieval-dev.json"))["pairs"]
 rows = {r["sensitivity"]: r for r in pairs["pt-PT-BR"]["fuzzy_search"]}
 levels = (0.01, 0.02, 0.03, 0.05, 0.08, 0.12)
 
-[rows[s]["recall@1"] for s in levels]                        # [0.452, 0.737, 0.737, 0.737, 0.806, 0.806]
-[rows[s]["candidate_recall"] for s in levels]                # [0.512, 0.84, 0.84, 0.84, 0.924, 0.924]
-[round(rows[s]["mean_candidates"], 1) for s in levels]       # [14.7, 58.8, 58.8, 60.4, 156.2, 196.7]
+[rows[s]["recall@1"] for s in levels]                        # [0.452, 0.678, 0.737, 0.737, 0.749, 0.806]
+[rows[s]["candidate_recall"] for s in levels]                # [0.512, 0.768, 0.84, 0.84, 0.858, 0.924]
+[round(rows[s]["mean_candidates"], 1) for s in levels]       # [14.7, 45.4, 58.8, 60.4, 139.4, 170.1]
 ```
 
 The first list is the share of queries whose first result is the right word. The second is the share of queries whose right word is among the candidates. The third is the mean number of candidates per query. Neither recall value falls as the sensitivity rises, and the candidate count rises faster. The mean of recall at 1 over the four pairs of the benchmark (English, Portuguese, Spanish and Armenian dialects) is:
 
 ```python
-[round(sum(p["fuzzy_search"][i]["recall@1"] for p in pairs.values()) / len(pairs), 4) for i in range(6)]   # [0.7601, 0.8323, 0.8323, 0.8323, 0.8521, 0.8521]
+[round(sum(p["fuzzy_search"][i]["recall@1"] for p in pairs.values()) / len(pairs), 4) for i in range(6)]   # [0.7601, 0.8166, 0.8323, 0.8323, 0.8348, 0.8521]
 ```
 
 ## 6. Choose a sensitivity
@@ -158,7 +158,7 @@ This block gives, for each value, the largest share of the index that a query re
 
 ```python
 share = lambda p, i: p["fuzzy_search"][i]["mean_candidates"] / p["counts"]["index_prons"]
-[round(max(share(p, i) for p in pairs.values()), 4) for i in range(6)]   # [0.0038, 0.0057, 0.0057, 0.0057, 0.0144, 0.0162]
+[round(max(share(p, i) for p in pairs.values()), 4) for i in range(6)]   # [0.0038, 0.0045, 0.0057, 0.0057, 0.0134, 0.0162]
 ```
 
 Every value stays below 5%, so the cap removes none. The values 0.08 and 0.12 share the highest mean recall at 1, 0.8521. The rule does not name a tie-break. The lower share wins, because it returns fewer candidates for the same recall: at 0.08 the largest share is 1.4%, and at 0.12 it is 1.6%.

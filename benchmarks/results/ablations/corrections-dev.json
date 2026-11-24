@@ -1,0 +1,100 @@
+{
+ "about": "phonematcher on dev before and after the post-test feature corrections. 'before' and 'after' are the main metrics of the committed result files; 'paired' is an audit run of per-unit scores, library at cd2996a (before) and 100ff08 (after), with the dev benchmark code of 100ff08.",
+ "before": {
+  "files": "benchmarks/results/{cognates,alignment,retrieval}-dev.json at 100ff08",
+  "heads": {
+   "cognates": "99383979599a2ac4f5e54a65d765f1635a4cd8ff",
+   "alignment": "fe3944f052dd84bbf8d44333a3242ea7dbe091fa",
+   "retrieval": "28ef420a7654efa60546be58d9bfe439c273f2f6"
+  },
+  "cognates_ap": 0.7726677178958216,
+  "alignment_pas": 0.8315282791817088,
+  "retrieval_recall@1": 0.8800962955015018
+ },
+ "after": {
+  "files": "benchmarks/results/{cognates,alignment,retrieval}-dev.json",
+  "heads": {
+   "cognates": "100ff08cf33c0687edcd7efa8eea10c8ef978166",
+   "alignment": "100ff08cf33c0687edcd7efa8eea10c8ef978166",
+   "retrieval": "100ff08cf33c0687edcd7efa8eea10c8ef978166"
+  },
+  "cognates_ap": 0.7735639545378321,
+  "alignment_pas": 0.8315282791817088,
+  "retrieval_recall@1": 0.8801911663010207
+ },
+ "paired": {
+  "cognates": {
+   "unit": "concept",
+   "units": 977,
+   "estimates": {
+    "before": {
+     "estimate": 0.7726677178958216,
+     "low": 0.7587251964007015,
+     "high": 0.7854183728727019
+    },
+    "after": {
+     "estimate": 0.7735639545378321,
+     "low": 0.7596290751603392,
+     "high": 0.7864752595082367
+    }
+   },
+   "paired": {
+    "after": {
+     "diff": 0.0008962366420105505,
+     "low": 0.00019978160711114356,
+     "high": 0.0015082992285115697
+    }
+   }
+  },
+  "alignment": {
+   "unit": "pair both read",
+   "units": 4575,
+   "estimates": {
+    "before": {
+     "estimate": 0.8207650273224044,
+     "low": 0.8096174863387978,
+     "high": 0.8314754098360656
+    },
+    "after": {
+     "estimate": 0.820983606557377,
+     "low": 0.8100546448087431,
+     "high": 0.8316939890710382
+    }
+   },
+   "paired": {
+    "after": {
+     "diff": 0.00021857923497259346,
+     "low": -0.0006557377049180024,
+     "high": 0.0010928961748634114
+    }
+   }
+  },
+  "retrieval": {
+   "unit": "query (500 per pair)",
+   "units": 2000,
+   "estimates": {
+    "before": {
+     "estimate": 0.8733333333333333,
+     "low": 0.8597479166666667,
+     "high": 0.8872520833333333
+    },
+    "after": {
+     "estimate": 0.8735833333333333,
+     "low": 0.8599145833333334,
+     "high": 0.8875
+    }
+   },
+   "paired": {
+    "after": {
+     "diff": 0.00024999999999997247,
+     "low": 0.0,
+     "high": 0.0007500000000000284
+    }
+   }
+  },
+  "resamples": 1000,
+  "seed": 0
+ },
+ "rule": "adopt unless a dev paired 95% interval (1,000 resamples, seed 0) lies wholly below 0",
+ "adopted": true
+}

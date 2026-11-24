@@ -15,10 +15,10 @@ These data were inspected while the weights were fitted. The scores are descript
 
 ### coverage
 
-Commit `5a6f2a05597a`.
+Commit `100ff08cf33c`.
 
 ```text
-phonematcher: phoible types 0.9055 tokens 0.9944; wikipron types 0.7228 tokens 0.9939; orthography2ipa types 0.8501 tokens 0.9898
+phonematcher: phoible types 0.9062 tokens 0.9944; wikipron types 0.7259 tokens 0.9939; orthography2ipa types 0.8451 tokens 0.9895
 levenshtein: phoible types 1.0000 tokens 1.0000; wikipron types 1.0000 tokens 1.0000; orthography2ipa types 1.0000 tokens 1.0000
 panphon-weighted: phoible types 0.3254 tokens 0.8706; wikipron types 0.3088 tokens 0.9300; orthography2ipa types 0.3702 tokens 0.8960
 panphon-hamming: phoible types 0.3254 tokens 0.8706; wikipron types 0.3088 tokens 0.9300; orthography2ipa types 0.3702 tokens 0.8960
@@ -29,10 +29,10 @@ sca: phoible types 0.9875 tokens 0.9975; wikipron types 0.9528 tokens 0.9976; or
 
 ### allophones
 
-Commit `fe3944f052dd`.
+Commit `100ff08cf33c`.
 
 ```text
-phonematcher: direct unread-at-1 0.8959 read-only 0.9097; tie_retry unread-at-1 0.8959 read-only 0.9097
+phonematcher: direct unread-at-1 0.8972 read-only 0.9110; tie_retry unread-at-1 0.8972 read-only 0.9110
 levenshtein: direct unread-at-1 0.5000 read-only 0.5000; tie_retry unread-at-1 0.5000 read-only 0.5000
 panphon-weighted: direct unread-at-1 0.8687 read-only 0.9350; tie_retry unread-at-1 0.8867 read-only 0.9348
 panphon-hamming: direct unread-at-1 0.7568 read-only 0.9418; tie_retry unread-at-1 0.7656 read-only 0.9422
@@ -43,10 +43,10 @@ sca: direct unread-at-1 0.9155 read-only 0.9168; tie_retry unread-at-1 0.9155 re
 
 ### confusions
 
-Commit `fe3944f052dd`.
+Commit `100ff08cf33c`.
 
 ```text
-phonematcher: mandarin 0.293 (skipped 0); miller_nicely 0.349 (skipped 0); hillenbrand 0.561 (skipped 0); spanish 0.077 (skipped 0)
+phonematcher: mandarin 0.293 (skipped 0); miller_nicely 0.349 (skipped 0); hillenbrand 0.561 (skipped 0); spanish 0.127 (skipped 0)
 levenshtein: mandarin undefined (skipped 0); miller_nicely undefined (skipped 0); hillenbrand undefined (skipped 0); spanish undefined (skipped 0)
 panphon-weighted: mandarin 0.277 (skipped 0); miller_nicely 0.349 (skipped 0); hillenbrand 0.489 (skipped 11); spanish 0.108 (skipped 0)
 panphon-hamming: mandarin 0.354 (skipped 0); miller_nicely 0.327 (skipped 0); hillenbrand 0.315 (skipped 11); spanish 0.132 (skipped 0)
@@ -57,7 +57,7 @@ sca: mandarin 0.115 (skipped 0); miller_nicely 0.157 (skipped 0); hillenbrand 0.
 
 ### tone
 
-Commit `fe3944f052dd`.
+Commit `100ff08cf33c`.
 
 ```text
 main Chao values: direction_baseline 0.782 [0.455, 0.886] (pairs 15 in, 15 out)
@@ -69,50 +69,50 @@ not scored, no tone model: levenshtein, panphon-weighted, panphon-hamming, aline
 
 ### ablations
 
-Commit `9c0f5bfe24fe`.
+Commit `100ff08cf33c`.
 
 Cost rule: none matters here. Each score ranks pairs of segments by their segment distance, and the square root keeps that order, so the C0 costs and the P5 costs give the same rows.
 
 #### coverage
 
 ```text
-phonematcher: phoible types 0.9055 tokens 0.9944; wikipron types 0.7198 tokens 0.9939; orthography2ipa types 0.8439 tokens 0.9889
-pm-p5-panphon22: phoible types 0.9055 tokens 0.9944; wikipron types 0.7198 tokens 0.9939; orthography2ipa types 0.8439 tokens 0.9889
-pm-p5-no-height: phoible types 0.9055 tokens 0.9944; wikipron types 0.7198 tokens 0.9939; orthography2ipa types 0.8439 tokens 0.9889
-pm-p5-flat-diacritics: phoible types 0.9055 tokens 0.9944; wikipron types 0.7198 tokens 0.9939; orthography2ipa types 0.8439 tokens 0.9889
-pm-p5-uniform: phoible types 0.9055 tokens 0.9944; wikipron types 0.7198 tokens 0.9939; orthography2ipa types 0.8439 tokens 0.9889
-pm-p5-indel-0.5: phoible types 0.9055 tokens 0.9944; wikipron types 0.7198 tokens 0.9939; orthography2ipa types 0.8439 tokens 0.9889
-pm-p5-indel-1.5: phoible types 0.9055 tokens 0.9944; wikipron types 0.7198 tokens 0.9939; orthography2ipa types 0.8439 tokens 0.9889
+phonematcher: phoible types 0.9062 tokens 0.9944; wikipron types 0.7259 tokens 0.9939; orthography2ipa types 0.8451 tokens 0.9895
+pm-p5-panphon22: phoible types 0.9062 tokens 0.9944; wikipron types 0.7259 tokens 0.9939; orthography2ipa types 0.8451 tokens 0.9895
+pm-p5-no-height: phoible types 0.9062 tokens 0.9944; wikipron types 0.7259 tokens 0.9939; orthography2ipa types 0.8451 tokens 0.9895
+pm-p5-flat-diacritics: phoible types 0.9062 tokens 0.9944; wikipron types 0.7259 tokens 0.9939; orthography2ipa types 0.8451 tokens 0.9895
+pm-p5-uniform: phoible types 0.9062 tokens 0.9944; wikipron types 0.7259 tokens 0.9939; orthography2ipa types 0.8451 tokens 0.9895
+pm-p5-indel-0.5: phoible types 0.9062 tokens 0.9944; wikipron types 0.7259 tokens 0.9939; orthography2ipa types 0.8451 tokens 0.9895
+pm-p5-indel-1.5: phoible types 0.9062 tokens 0.9944; wikipron types 0.7259 tokens 0.9939; orthography2ipa types 0.8451 tokens 0.9895
 ```
 
 #### allophones
 
 ```text
-phonematcher: direct unread-at-1 0.8959 read-only 0.9097; tie_retry unread-at-1 0.8959 read-only 0.9097
-pm-p5-panphon22: direct unread-at-1 0.8929 read-only 0.9066; tie_retry unread-at-1 0.8929 read-only 0.9066
-pm-p5-no-height: direct unread-at-1 0.8926 read-only 0.9063; tie_retry unread-at-1 0.8926 read-only 0.9063
-pm-p5-flat-diacritics: direct unread-at-1 0.8960 read-only 0.9098; tie_retry unread-at-1 0.8960 read-only 0.9098
-pm-p5-uniform: direct unread-at-1 0.9049 read-only 0.9189; tie_retry unread-at-1 0.9049 read-only 0.9189
-pm-p5-indel-0.5: direct unread-at-1 0.8959 read-only 0.9097; tie_retry unread-at-1 0.8959 read-only 0.9097
-pm-p5-indel-1.5: direct unread-at-1 0.8959 read-only 0.9097; tie_retry unread-at-1 0.8959 read-only 0.9097
+phonematcher: direct unread-at-1 0.8972 read-only 0.9110; tie_retry unread-at-1 0.8972 read-only 0.9110
+pm-p5-panphon22: direct unread-at-1 0.8942 read-only 0.9079; tie_retry unread-at-1 0.8942 read-only 0.9079
+pm-p5-no-height: direct unread-at-1 0.8938 read-only 0.9075; tie_retry unread-at-1 0.8938 read-only 0.9075
+pm-p5-flat-diacritics: direct unread-at-1 0.8973 read-only 0.9111; tie_retry unread-at-1 0.8973 read-only 0.9111
+pm-p5-uniform: direct unread-at-1 0.9054 read-only 0.9193; tie_retry unread-at-1 0.9054 read-only 0.9193
+pm-p5-indel-0.5: direct unread-at-1 0.8972 read-only 0.9110; tie_retry unread-at-1 0.8972 read-only 0.9110
+pm-p5-indel-1.5: direct unread-at-1 0.8972 read-only 0.9110; tie_retry unread-at-1 0.8972 read-only 0.9110
 ```
 
 #### confusions
 
 ```text
-phonematcher: mandarin 0.293 (skipped 0); miller_nicely 0.349 (skipped 0); hillenbrand 0.561 (skipped 0); spanish 0.077 (skipped 0)
-pm-p5-panphon22: mandarin 0.277 (skipped 0); miller_nicely 0.349 (skipped 0); hillenbrand 0.415 (skipped 0); spanish 0.110 (skipped 0)
-pm-p5-no-height: mandarin 0.293 (skipped 0); miller_nicely 0.349 (skipped 0); hillenbrand 0.534 (skipped 0); spanish 0.095 (skipped 0)
-pm-p5-flat-diacritics: mandarin 0.293 (skipped 0); miller_nicely 0.349 (skipped 0); hillenbrand 0.561 (skipped 0); spanish 0.077 (skipped 0)
-pm-p5-uniform: mandarin 0.384 (skipped 0); miller_nicely 0.355 (skipped 0); hillenbrand 0.540 (skipped 0); spanish 0.093 (skipped 0)
-pm-p5-indel-0.5: mandarin 0.293 (skipped 0); miller_nicely 0.349 (skipped 0); hillenbrand 0.561 (skipped 0); spanish 0.077 (skipped 0)
-pm-p5-indel-1.5: mandarin 0.293 (skipped 0); miller_nicely 0.349 (skipped 0); hillenbrand 0.561 (skipped 0); spanish 0.077 (skipped 0)
+phonematcher: mandarin 0.293 (skipped 0); miller_nicely 0.349 (skipped 0); hillenbrand 0.561 (skipped 0); spanish 0.127 (skipped 0)
+pm-p5-panphon22: mandarin 0.277 (skipped 0); miller_nicely 0.349 (skipped 0); hillenbrand 0.415 (skipped 0); spanish 0.158 (skipped 0)
+pm-p5-no-height: mandarin 0.293 (skipped 0); miller_nicely 0.349 (skipped 0); hillenbrand 0.534 (skipped 0); spanish 0.145 (skipped 0)
+pm-p5-flat-diacritics: mandarin 0.293 (skipped 0); miller_nicely 0.349 (skipped 0); hillenbrand 0.561 (skipped 0); spanish 0.127 (skipped 0)
+pm-p5-uniform: mandarin 0.384 (skipped 0); miller_nicely 0.355 (skipped 0); hillenbrand 0.540 (skipped 0); spanish 0.118 (skipped 0)
+pm-p5-indel-0.5: mandarin 0.293 (skipped 0); miller_nicely 0.349 (skipped 0); hillenbrand 0.561 (skipped 0); spanish 0.127 (skipped 0)
+pm-p5-indel-1.5: mandarin 0.293 (skipped 0); miller_nicely 0.349 (skipped 0); hillenbrand 0.561 (skipped 0); spanish 0.127 (skipped 0)
 ```
 
 #### control
 
 ```text
-[control] pairs=727821 differing=556665 identical-vector pairs=123256 differing=0
+[control] pairs=727821 differing=561318 identical-vector pairs=115921 differing=0
 ```
 
 ## Development split
@@ -121,11 +121,11 @@ The development split holds the items that `benchmarks/split.py` assigns to dev.
 
 ### cognates
 
-Commit `99383979599a`.
+Commit `100ff08cf33c`.
 
 | System | AP, unread at 1 | F, unread at 1 | AP, common words | F, common words | Words skipped |
 |---|---|---|---|---|---|
-| phonematcher | 0.7727 | 0.8262 | 0.8542 | 0.8841 | 437 |
+| phonematcher | 0.7736 | 0.8268 | 0.8545 | 0.8838 | 437 |
 | levenshtein | 0.7514 | 0.8165 | 0.8362 | 0.8757 | 0 |
 | panphon-weighted | 0.5833 | 0.7714 | 0.8057 | 0.8505 | 5129 |
 | panphon-hamming | 0.5847 | 0.6624 | 0.7715 | 0.8358 | 5129 |
@@ -135,11 +135,11 @@ Commit `99383979599a`.
 
 ### cognates-toneless
 
-Commit `99383979599a`.
+Commit `100ff08cf33c`.
 
 | System | AP, unread at 1 | F, unread at 1 | AP, common words | F, common words | Words skipped |
 |---|---|---|---|---|---|
-| phonematcher | 0.7853 | 0.8383 | 0.8350 | 0.8780 | 397 |
+| phonematcher | 0.7863 | 0.8378 | 0.8366 | 0.8779 | 397 |
 | levenshtein | 0.7515 | 0.8117 | 0.8007 | 0.8641 | 0 |
 | panphon-weighted | 0.6403 | 0.7842 | 0.7874 | 0.8409 | 2773 |
 | panphon-hamming | 0.6505 | 0.7328 | 0.7486 | 0.8260 | 2773 |
@@ -149,24 +149,24 @@ Commit `99383979599a`.
 
 ### alignment
 
-Commit `fe3944f052dd`.
+Commit `100ff08cf33c`.
 
 Common pairs: 831 of 5748.
 
 | System | Pairs read | PAS, common pairs | CS, common pairs | PAS, unread at 0 |
 |---|---|---|---|---|
-| phonematcher | 4575 of 5748 | 0.8315 | 0.9073 | 0.6533 |
+| phonematcher | 4575 of 5748 | 0.8315 | 0.9073 | 0.6534 |
 | levenshtein | 5748 of 5748 | 0.6005 | 0.7599 | 0.4734 |
 | aline | 831 of 5748 | 0.8508 | 0.9239 | 0.1230 |
 | sca | 5748 of 5748 | 0.8893 | 0.9420 | 0.8720 |
 
 ### retrieval
 
-Commit `28ef420a7654`.
+Commit `100ff08cf33c`.
 
 | System | en-US-UK | pt-PT-BR | es-ES-LA | hy-E-W | Mean recall@1 | Mean recall@10 | Mean MRR | Queries per pair |
 |---|---|---|---|---|---|---|---|---|
-| phonematcher | 0.8163 | 0.8682 | 0.9236 | 0.9124 | 0.8801 | 0.9906 | 0.9268 | 4886/43771/2937/11918 |
+| phonematcher | 0.8166 | 0.8682 | 0.9236 | 0.9125 | 0.8802 | 0.9906 | 0.9269 | 4886/43771/2937/11918 |
 | levenshtein | 0.6549 | 0.6675 | 0.8539 | 0.5676 | 0.6860 | 0.9279 | 0.7770 | 4886/43771/2937/11918 |
 | panphon-weighted | 0.5584 | 0.7314 | 0.9178 | 0.8951 | 0.7757 | 0.8859 | 0.8202 | 4886/43771/2937/11918 |
 | panphon-hamming | 0.5193 | 0.7691 | 0.9074 | 0.8613 | 0.7643 | 0.8723 | 0.8099 | 4886/43771/2937/11918 |
@@ -179,33 +179,33 @@ Fuzzy search of phonematcher:
 | Pair | Sensitivity | Candidate recall | Mean candidates | Recall@1 |
 |---|---|---|---|---|
 | en-US-UK | 0.01 | 0.9580 | 86.5 | 0.7630 |
-| en-US-UK | 0.02 | 0.9640 | 152.3 | 0.7670 |
+| en-US-UK | 0.02 | 0.9600 | 119.4 | 0.7630 |
 | en-US-UK | 0.03 | 0.9640 | 152.3 | 0.7670 |
 | en-US-UK | 0.05 | 0.9640 | 152.3 | 0.7670 |
-| en-US-UK | 0.08 | 0.9840 | 384.9 | 0.7770 |
-| en-US-UK | 0.12 | 0.9820 | 431.9 | 0.7770 |
+| en-US-UK | 0.08 | 0.9680 | 356.9 | 0.7650 |
+| en-US-UK | 0.12 | 0.9820 | 432.2 | 0.7770 |
 | pt-PT-BR | 0.01 | 0.5120 | 14.7 | 0.4520 |
-| pt-PT-BR | 0.02 | 0.8400 | 58.8 | 0.7370 |
+| pt-PT-BR | 0.02 | 0.7680 | 45.4 | 0.6780 |
 | pt-PT-BR | 0.03 | 0.8400 | 58.8 | 0.7370 |
 | pt-PT-BR | 0.05 | 0.8400 | 60.4 | 0.7370 |
-| pt-PT-BR | 0.08 | 0.9240 | 156.2 | 0.8060 |
-| pt-PT-BR | 0.12 | 0.9240 | 196.7 | 0.8060 |
+| pt-PT-BR | 0.08 | 0.8580 | 139.4 | 0.7490 |
+| pt-PT-BR | 0.12 | 0.9240 | 170.1 | 0.8060 |
 | es-ES-LA | 0.01 | 1.0000 | 21.1 | 0.9157 |
-| es-ES-LA | 0.02 | 1.0000 | 36.4 | 0.9157 |
+| es-ES-LA | 0.02 | 1.0000 | 36.2 | 0.9157 |
 | es-ES-LA | 0.03 | 1.0000 | 36.4 | 0.9157 |
 | es-ES-LA | 0.05 | 1.0000 | 36.9 | 0.9157 |
-| es-ES-LA | 0.08 | 1.0000 | 96.2 | 0.9157 |
-| es-ES-LA | 0.12 | 1.0000 | 134.1 | 0.9157 |
+| es-ES-LA | 0.08 | 1.0000 | 93.9 | 0.9157 |
+| es-ES-LA | 0.12 | 1.0000 | 108.4 | 0.9157 |
 | hy-E-W | 0.01 | 0.9980 | 69.6 | 0.9097 |
-| hy-E-W | 0.02 | 1.0000 | 84.4 | 0.9097 |
+| hy-E-W | 0.02 | 0.9980 | 76.1 | 0.9097 |
 | hy-E-W | 0.03 | 1.0000 | 84.4 | 0.9097 |
 | hy-E-W | 0.05 | 1.0000 | 84.4 | 0.9097 |
-| hy-E-W | 0.08 | 1.0000 | 211.3 | 0.9097 |
-| hy-E-W | 0.12 | 1.0000 | 271.5 | 0.9097 |
+| hy-E-W | 0.08 | 1.0000 | 168.9 | 0.9097 |
+| hy-E-W | 0.12 | 1.0000 | 243.2 | 0.9097 |
 
 ### ablations
 
-Commit `99383979599a`.
+Commit `100ff08cf33c`.
 
 Cost rule: the shipped P5 costs, gap 0.5 and substitutions at the square root of the feature distance. `phonematcher` is the shipped library, and each `pm-p5-` row changes one thing in it. `pm-p5-indel-0.5` is the shipped costs again and serves as a control.
 
@@ -213,25 +213,25 @@ Cost rule: the shipped P5 costs, gap 0.5 and substitutions at the square root of
 
 | System | AP, unread at 1 | F, unread at 1 | AP, common words | F, common words | Words skipped |
 |---|---|---|---|---|---|
-| phonematcher | 0.7727 | 0.8262 | 0.7897 | 0.8336 | 437 |
-| pm-p5-panphon22 | 0.7742 | 0.8277 | 0.7916 | 0.8352 | 437 |
-| pm-p5-no-height | 0.7725 | 0.8264 | 0.7895 | 0.8338 | 437 |
-| pm-p5-flat-diacritics | 0.7726 | 0.8261 | 0.7896 | 0.8335 | 437 |
-| pm-p5-uniform | 0.7695 | 0.8222 | 0.7864 | 0.8297 | 437 |
-| pm-p5-indel-0.5 | 0.7727 | 0.8262 | 0.7897 | 0.8336 | 437 |
-| pm-p5-indel-1.5 | 0.7119 | 0.7666 | 0.7292 | 0.7739 | 437 |
+| phonematcher | 0.7736 | 0.8268 | 0.7909 | 0.8343 | 437 |
+| pm-p5-panphon22 | 0.7752 | 0.8274 | 0.7928 | 0.8350 | 437 |
+| pm-p5-no-height | 0.7734 | 0.8265 | 0.7907 | 0.8340 | 437 |
+| pm-p5-flat-diacritics | 0.7735 | 0.8267 | 0.7908 | 0.8341 | 437 |
+| pm-p5-uniform | 0.7698 | 0.8226 | 0.7868 | 0.8300 | 437 |
+| pm-p5-indel-0.5 | 0.7736 | 0.8268 | 0.7909 | 0.8343 | 437 |
+| pm-p5-indel-1.5 | 0.7126 | 0.7669 | 0.7302 | 0.7743 | 437 |
 
 #### cognates-toneless
 
 | System | AP, unread at 1 | F, unread at 1 | AP, common words | F, common words | Words skipped |
 |---|---|---|---|---|---|
-| phonematcher | 0.7853 | 0.8383 | 0.8064 | 0.8445 | 397 |
-| pm-p5-panphon22 | 0.7862 | 0.8387 | 0.8075 | 0.8448 | 397 |
-| pm-p5-no-height | 0.7851 | 0.8376 | 0.8063 | 0.8440 | 397 |
-| pm-p5-flat-diacritics | 0.7852 | 0.8382 | 0.8063 | 0.8444 | 397 |
-| pm-p5-uniform | 0.7817 | 0.8313 | 0.8026 | 0.8374 | 397 |
-| pm-p5-indel-0.5 | 0.7853 | 0.8383 | 0.8064 | 0.8445 | 397 |
-| pm-p5-indel-1.5 | 0.7120 | 0.7706 | 0.7301 | 0.7784 | 397 |
+| phonematcher | 0.7863 | 0.8378 | 0.8077 | 0.8442 | 397 |
+| pm-p5-panphon22 | 0.7874 | 0.8380 | 0.8090 | 0.8442 | 397 |
+| pm-p5-no-height | 0.7862 | 0.8366 | 0.8077 | 0.8430 | 397 |
+| pm-p5-flat-diacritics | 0.7862 | 0.8377 | 0.8076 | 0.8441 | 397 |
+| pm-p5-uniform | 0.7821 | 0.8315 | 0.8031 | 0.8376 | 397 |
+| pm-p5-indel-0.5 | 0.7863 | 0.8378 | 0.8077 | 0.8442 | 397 |
+| pm-p5-indel-1.5 | 0.7128 | 0.7712 | 0.7310 | 0.7790 | 397 |
 
 #### alignment
 
@@ -239,34 +239,25 @@ Common pairs: 4575 of 5748.
 
 | System | Pairs read | PAS, common pairs | CS, common pairs | PAS, unread at 0 |
 |---|---|---|---|---|
-| phonematcher | 4575 of 5748 | 0.8208 | 0.9138 | 0.6533 |
-| pm-p5-panphon22 | 4575 of 5748 | 0.8249 | 0.9148 | 0.6566 |
-| pm-p5-no-height | 4575 of 5748 | 0.8243 | 0.9147 | 0.6561 |
-| pm-p5-flat-diacritics | 4575 of 5748 | 0.8208 | 0.9138 | 0.6533 |
+| phonematcher | 4575 of 5748 | 0.8210 | 0.9139 | 0.6534 |
+| pm-p5-panphon22 | 4575 of 5748 | 0.8254 | 0.9151 | 0.6569 |
+| pm-p5-no-height | 4575 of 5748 | 0.8247 | 0.9149 | 0.6564 |
+| pm-p5-flat-diacritics | 4575 of 5748 | 0.8210 | 0.9139 | 0.6534 |
 | pm-p5-uniform | 4575 of 5748 | 0.7781 | 0.8898 | 0.6193 |
-| pm-p5-indel-0.5 | 4575 of 5748 | 0.8208 | 0.9138 | 0.6533 |
-| pm-p5-indel-1.5 | 4575 of 5748 | 0.7851 | 0.8893 | 0.6249 |
+| pm-p5-indel-0.5 | 4575 of 5748 | 0.8210 | 0.9139 | 0.6534 |
+| pm-p5-indel-1.5 | 4575 of 5748 | 0.7856 | 0.8896 | 0.6253 |
 
 #### retrieval
 
 | System | en-US-UK | pt-PT-BR | es-ES-LA | hy-E-W | Mean recall@1 | Mean recall@10 | Mean MRR | Queries per pair |
 |---|---|---|---|---|---|---|---|---|
-| phonematcher | 0.8070 | 0.8590 | 0.9157 | 0.9117 | 0.8733 | 0.9950 | 0.9242 | 500/500/500/500 |
-| pm-p5-panphon22 | 0.7900 | 0.8505 | 0.9127 | 0.9103 | 0.8659 | 0.9921 | 0.9181 | 500/500/500/500 |
-| pm-p5-no-height | 0.8013 | 0.8497 | 0.9157 | 0.9043 | 0.8678 | 0.9950 | 0.9201 | 500/500/500/500 |
-| pm-p5-flat-diacritics | 0.8070 | 0.8590 | 0.9157 | 0.9117 | 0.8733 | 0.9950 | 0.9242 | 500/500/500/500 |
+| phonematcher | 0.8080 | 0.8590 | 0.9157 | 0.9117 | 0.8736 | 0.9950 | 0.9245 | 500/500/500/500 |
+| pm-p5-panphon22 | 0.7910 | 0.8505 | 0.9127 | 0.9103 | 0.8661 | 0.9921 | 0.9183 | 500/500/500/500 |
+| pm-p5-no-height | 0.8023 | 0.8497 | 0.9157 | 0.9043 | 0.8680 | 0.9950 | 0.9203 | 500/500/500/500 |
+| pm-p5-flat-diacritics | 0.8080 | 0.8590 | 0.9157 | 0.9117 | 0.8736 | 0.9950 | 0.9245 | 500/500/500/500 |
 | pm-p5-uniform | 0.7941 | 0.8720 | 0.9107 | 0.8947 | 0.8679 | 0.9946 | 0.9197 | 500/500/500/500 |
-| pm-p5-indel-0.5 | 0.8070 | 0.8590 | 0.9157 | 0.9117 | 0.8733 | 0.9950 | 0.9242 | 500/500/500/500 |
-| pm-p5-indel-1.5 | 0.6673 | 0.8690 | 0.9137 | 0.8837 | 0.8334 | 0.9400 | 0.8780 | 500/500/500/500 |
-
-Fuzzy search of phonematcher:
-
-| Pair | Sensitivity | Candidate recall | Mean candidates | Recall@1 |
-|---|---|---|---|---|
-| en-US-UK | 0.05 | 0.9620 | 135.1 | 0.6777 |
-| pt-PT-BR | 0.05 | 0.8400 | 58.8 | 0.7300 |
-| es-ES-LA | 0.05 | 1.0000 | 36.4 | 0.9137 |
-| hy-E-W | 0.05 | 0.9980 | 83.7 | 0.9127 |
+| pm-p5-indel-0.5 | 0.8080 | 0.8590 | 0.9157 | 0.9117 | 0.8736 | 0.9950 | 0.9245 | 500/500/500/500 |
+| pm-p5-indel-1.5 | 0.6683 | 0.8690 | 0.9137 | 0.8837 | 0.8337 | 0.9400 | 0.8783 | 500/500/500/500 |
 
 ## Test split
 

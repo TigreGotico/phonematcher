@@ -432,7 +432,9 @@ def test_only_the_test_files_carry_a_clean_commit():
             assert "prereg_sha256" not in payload, path.name
     development = [json.loads(p.read_text(encoding="utf8")) for p in sorted(RESULTS.glob("*-*.json"))]
     development = [p for p in development if p.get("split") in ("seen", "dev")]
-    assert sum(p.get("tree_dirty") is True for p in development) > len(development) / 2
+    heads = {p.get("head") or p.get("commit") for p in development}
+    assert len(heads) == 1 and all(p.get("tree_dirty") is not True for p in development)
+    assert f"`{heads.pop()[:7]}`" in PAPER
     assert "`f092f20c8bbe0aa49a6480946858c0354a2580a9`" in PAPER
     assert "`29927d4e0e8162276cf12c68450a3b28372dc039d3a24377bbf390a64bd2df7c`" in PAPER
 
