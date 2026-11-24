@@ -3,7 +3,7 @@
 A tone is its own segment, written in tone letters after the syllable it belongs to: ``má`` and
 ``ma˦`` are both ``m``, ``a``, ``˦``. Levels run from 1 (extra low, ``˩``) to 5 (extra high, ``˥``).
 """
-from typing import Optional, Tuple
+from typing import Tuple
 
 #: Tone letters and their levels.
 LEVELS = {"˩": 1, "˨": 2, "˧": 3, "˦": 4, "˥": 5}
@@ -31,9 +31,19 @@ def is_tone(segment: str) -> bool:
     return bool(segment) and all(ch in LEVELS for ch in segment)
 
 
-def tone_levels(segment: str) -> Optional[Tuple[int, ...]]:
-    """The levels of a tone segment, or None for a segment that is not a tone."""
-    return tuple(LEVELS[ch] for ch in segment) if is_tone(segment) else None
+_NUMERAL_LETTERS = str.maketrans(NUMERALS)
+
+
+def tone_levels(tone: str) -> Tuple[int, ...]:
+    """The Chao levels of *tone*, in order, from 1 (extra low) to 5 (extra high): ``˧˦˧`` gives
+    ``(3, 4, 3)``. Takes tone letters, tone numerals and left-stem tone letters. Raises
+    ``ValueError`` for a string that is not a tone."""
+    if not isinstance(tone, str):
+        raise TypeError(f"tone_levels() argument must be str, not {type(tone).__name__}")
+    letters = tone.translate(_NUMERAL_LETTERS)
+    if not is_tone(letters):
+        raise ValueError(f"tone_levels() argument is not a tone: {tone!r}")
+    return tuple(LEVELS[ch] for ch in letters)
 
 
 def _contour(levels: Tuple[int, ...]) -> Tuple[float, ...]:
