@@ -123,6 +123,7 @@ PanPhon gives 6 of the 28 vowels `delrel` 0 and the rest `delrel` −. A vowel h
 | `◌̩` syllabic | `syl` +, only on a continuant without delayed release or on a sonorant | the same, and on any fricative | the Unicode chart (U0250): `ɿ` is "IPA spelling - 007A z 0329" |
 | `◌̃` nasalized | `nas` +, only on a voiced base | `nas` + on a voiced base or on a vowel, voiced or not | the IPA chart prints it on the vowel in `ẽ` and ties it to no voicing |
 | `◌̊` ring above | no rule | `voi` − on any base, as `◌̥` | the IPA chart prints `ŋ̊`, the ring of "Voiceless" above a descender |
+| `◌̍` vertical line above, on a letter with a descender | no rule | read as `◌̩` | the IPA chart: "Some diacritics may be placed above a symbol with a descender, e.g." `ŋ̊`; the placement of the syllabic mark is this table's reading |
 | `◌̪` dental | no rule | `distr` + on a coronal | the IPA chart and the Unicode chart ("IPA: dental"); PanPhon's eight dental segments differ from their letters in `distr` alone |
 | `◌̢` retroflexion | no rule | `ant` − on a coronal | the Unicode chart ("IPA: retroflexion"); the reading is this table's |
 | `◌͇` equals sign below | no rule | `ant` + on a coronal | the Unicode chart ("IPA: alveolar"); the reading is this table's |
@@ -136,6 +137,12 @@ The extIPA chart (revised to 2015) prints `◌͈` as "strong articulation" and `
 
 Korean fortis obstruents are written with `◌͈`, as `k͈ s͈ t͈`. Chang (2007, *UC Berkeley PhonLab Annual Report* 3(3), pp. 1 and 3) writes that the fortis series is "associated with glottal adduction and stiffening". The chart does not link the mark to that setting, and other languages write the mark too (Ewe `f͈` and `v͈`). So `k͈ s͈ t͈` read the same as `k s t`, and the fortis contrast is lost.
 
+### The vertical line above
+
+The IPA chart prints the note "Some diacritics may be placed above a symbol with a descender, e.g." under its diacritics, with `ŋ̊` as the example. Unicode annotates U+030D with "this is not the Greek tonos" and "Marshallese", and gives it no IPA meaning. On a letter with a descender, `◌̍` reads as the syllabic mark `◌̩` placed above the letter, so `ŋ̍` has the vector of `ŋ̩`. A tone letter or tone mark after it makes it a tone bearer, so `segments("ŋ̍˩˧")` is `["ŋ̍˩˧"]`, with the vector of `ŋ̩˩˧`. The segment keeps the mark as written. The reading applies the rule of `◌̩`, so `ɡ̍` and `p̍` are refused as `ɡ̩` and `p̩` are.
+
+A letter has a descender if its glyph has a stem, tail or hook below the baseline. The list is each letter of the feature table that has a glyph in DejaVu Sans (a font embedded in the chart) with its lowest point more than 100 font units below the baseline in a 2048-unit em, minus the clicks, plus `g`, the spelling of `ɡ`, and `ç`, a `c` with a cedilla below. The letters are `g j p q y ŋ ȴ ȵ ȶ ɕ ɖ ɟ ɠ ɡ ɣ ɥ ɧ ɭ ɮ ɰ ɱ ɲ ɳ ɸ ɻ ɽ ʂ ʃ ʄ ʈ ʐ ʑ ʒ ʝ ʮ β χ ç`. The chart prints `ʎ` and `ɬ` on the baseline, so they are not in the list. A letter with no descender does not read: on `n̍` and `a̍` the mark stays unread.
+
 ### Marks that stay unread
 
 A mark reads only if a chart states its meaning. These marks occur in PHOIBLE, WikiPron or orthography2ipa and have no statement, so they do not read.
@@ -146,7 +153,6 @@ A mark reads only if a chart states its meaning. These marks occur in PHOIBLE, W
 | `ʳ` `ʶ` | "r-coloring or r-offglides": the chart does not say which of the two a transcription means. |
 | `ˢ` `ˣ` `ᵡ` `ᶲ` `ᵏ` `ᵍ` | Only "≈ superscript" of the letter. A note under `ˠ` says that such modifier letters are "occasionally used in transcription of affricates". The reading is a tied affricate, which needs a reader change and not a diacritic rule, and in Finnish `eˣ` follows a vowel. |
 | `ᵊ` `ᵝ` `ᵘ` `ᶢ` | Only "≈ superscript" of the letter. `ᶢ` before a click reads (see the clicks below); elsewhere it stays unread. |
-| `◌̍` | "this is not the Greek tonos", "Marshallese". The IPA chart marks a syllabic consonant with `◌̩`. |
 | `◌̵` `◌͓` `◌͠` | The Unicode chart gives no annotation. |
 | `↓` | The mark has two meanings. The IPA chart prints it as "Downstep", and the extIPA chart prints it as "ingressive airflow". `segments` drops it as a phrase mark, as it drops the other downstep and upstep marks. On a phone, no feature of the table encodes either meaning. |
 

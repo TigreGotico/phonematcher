@@ -6,6 +6,7 @@ and from PanPhon's own segment rows, not from the rules under test.
 """
 import pytest
 
+from phonematcher.distance import segment_spans, segments
 from phonematcher.features import feature_distance, vectorize_phones
 from tests.conftest import feature, differs
 
@@ -94,10 +95,52 @@ def test_spacing_advanced_and_retracted_move_one_column():
 @pytest.mark.parametrize("segment", [
     "dˁ",   # U+02C1: "typographical alternate for 02BF ʿ", the Arabic ain transliteration
     "jᵊ", "ɡᵝ", "tˢ", "eˣ",   # "≈ <super>" letters: only the letter's identity
-    "ŋ̍",   # U+030D: "this is not the Greek tonos; Marshallese"
+    "n̍", "a̍", "ʔ̍", "ʎ̍", "ɬ̍",   # U+030D on a letter with no descender: "this is not the Greek tonos; Marshallese"
     "ɑʶː",  # U+02B6: "r-coloring or r-offglides"
     "ʄ̵", "ɾ͓", "a͠",   # U+0335, U+0353, U+0360: no annotation
 ])
 def test_a_mark_with_no_quoted_meaning_stays_unread(segment):
+    with pytest.raises(ValueError):
+        vectorize_phones(segment)
+
+
+# IPA chart, note under the diacritics: "Some diacritics may be placed above a symbol with a
+# descender, e.g. ŋ̊". The mark ◌̍ (U+030D) above a letter with a descender is the syllabic mark
+# ◌̩ (U+0329) of the chart, as the ring above is the ring below.
+@pytest.mark.parametrize("above, below", [("ŋ̍", "ŋ̩"), ("ɲ̍", "ɲ̩"), ("j̍", "j̩"), ("ɻ̍", "ɻ̩"), ("ç̍", "ç̩"), ("ɰ̍", "ɰ̩"), ("ɭ̍", "ɭ̩"), ("ɱ̍", "ɱ̩")])
+def test_mark_above_a_descender_reads_as_syllabic(above, below):
+    assert vectorize_phones(above) == vectorize_phones(below)
+    assert feature(above, "syl") is True
+
+
+@pytest.mark.parametrize("above, below", [("ɡ̍", "ɡ̩"), ("g̍", "ɡ̩"), ("p̍", "p̩")])
+def test_mark_above_a_descender_has_the_refusal_of_the_mark_below(above, below):
+    with pytest.raises(ValueError, match="does not apply"):
+        vectorize_phones(below)
+    with pytest.raises(ValueError, match="does not apply"):
+        vectorize_phones(above)
+
+
+def test_mark_above_a_descender_after_another_mark():
+    assert vectorize_phones("ŋ̊̍") == vectorize_phones("ŋ̩̊")
+
+
+def test_mark_above_a_descender_carries_a_tone():
+    assert segments("ŋ̍˩˧") == ["ŋ̍˩˧"]
+    assert vectorize_phones("ŋ̍˩˧") == vectorize_phones("ŋ̩˩˧")
+    assert segments("maŋ̍˩˧") == ["m", "a", "ŋ̍˩˧"]
+
+
+@pytest.mark.parametrize("text, spans", [("ŋ̍˩˧", [(0, 4)]), ("aŋ̍ˈn", [(0, 1), (1, 3), (4, 5)]),
+                                         ("ŋ̍ ɲ̍", [(0, 2), (3, 5)]), ("ŋ̊̍a", [(0, 3), (3, 4)])])
+def test_mark_above_a_descender_keeps_offsets(text, spans):
+    assert segment_spans(text) == spans
+
+
+# A spelling is read as its tied form first, so the mark reads as on t͡ʃ, which refuses it.
+@pytest.mark.parametrize("segment, tied", [("ʧ̍", "t͡ʃ̩"), ("ʤ̍", "d͡ʒ̩"), ("ʨ̍", "t͡ɕ̩"), ("ʥ̍", "d͡ʑ̩")])
+def test_mark_above_a_ligature_reads_as_on_its_tied_form(segment, tied):
+    with pytest.raises(ValueError):
+        vectorize_phones(tied)
     with pytest.raises(ValueError):
         vectorize_phones(segment)
