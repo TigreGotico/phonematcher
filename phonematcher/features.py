@@ -19,7 +19,7 @@ import warnings
 from functools import lru_cache
 from itertools import takewhile
 from pathlib import Path
-from typing import Dict, List, Optional, Tuple, Union
+from typing import Any, Dict, Iterable, List, Optional, Tuple, Union
 
 from phonematcher.scales import shift
 from phonematcher.tone import DIACRITIC_TONES, LEVELS, NUMERALS, _contour
@@ -172,6 +172,15 @@ def vectorize_phones(segment: str) -> Vector:
     if TIES[0] in untied:
         parts = untied.split(TIES[0])
         if any(c in _CLICKS for part in parts for c in part):
+            click, uvular = (parts[1], parts[0]) if parts[0][:1] == "χ" else (parts[0], parts[-1])
+            if (len(parts) == 2 and uvular[:1] == "χ" and uvular[1:] in ("", "ʼ")
+                    and click[:1] in _CLICKS and all(map(unicodedata.combining, click[1:]))):
+                # Miller et al. (2009, pp. 149 and 152): a fricated release makes the click an
+                # affricate contour; an ejected release reads as an ejective, as for q.
+                out = list(vectorize_phones("q" + TIES[0] + click + uvular[1:]))
+                if uvular == "χ":
+                    out[_DELREL] = True
+                return tuple(out)
             # A click tie is one velar or uvular letter, then the click (IPA Handbook, 2.5). The
             # click takes only voi and nas from that letter, so it may carry combining marks only.
             if len(parts) == 2 and parts[0][:1] in _CLICKS and parts[1][:1] in _REAR_CLOSURES:
@@ -179,7 +188,7 @@ def vectorize_phones(segment: str) -> Vector:
                 # stay with it, a modifier letter after it goes with the click.
                 letter = parts[1][:1] + "".join(takewhile(unicodedata.combining, parts[1][1:]))
                 return vectorize_phones(letter + TIES[0] + parts[0] + parts[1][len(letter):])
-            rear_letter = parts[0][0] in _REAR_CLOSURES and all(map(unicodedata.combining, parts[0][1:]))
+            rear_letter = parts[0][:1] in _REAR_CLOSURES and all(map(unicodedata.combining, parts[0][1:]))
             if len(parts) != 2 or not rear_letter or parts[1][0] not in _CLICKS:
                 raise _unrecognized(segment)
             rear, click = (vectorize_phones(part) for part in parts)
@@ -209,7 +218,7 @@ def vectorize_phones(segment: str) -> Vector:
         for before, cluster in zip(clusters, clusters[1:]):
             joins = (unicodedata.category(cluster[0]) in _LETTER_CATEGORIES and cluster != before
                      and not _GLOTTALS & {cluster[0], before[0]}
-                     and not (cluster[0] in _REAR_CLOSURES and _CLICKS.intersection(tied))
+                     and not (cluster[0] in _REAR_CLOSURES | {"χ"} and _CLICKS.intersection(tied))
                      and (cluster[0] not in _CLICKS or before[0] in _REAR_CLOSURES))
             tied += (TIES[0] if joins else "") + cluster
         if tied != seg:
@@ -366,3 +375,51 @@ def phonetic_distance(a: str, b: str) -> float:
         stacklevel=2,
     )
     return feature_distance(a, b)
+
+
+class PhoneFeatures:
+    """A scikit-learn transformer from segments to feature rows, with no scikit-learn dependency.
+
+    ``transform`` takes an iterable of segments and returns one row of floats per segment, in the
+    order of :data:`FEATURES`: + is 1.0, − is -1.0, 0 is 0.0, and a tone pitch is its number, with
+    0.0 for a segment that has no tone. A segment that cannot be read raises ``ValueError``, or with
+    ``strict=False`` gives a row of NaN. The rows are lists, so numpy is not needed.
+
+    The input is a one-dimensional sequence of segments. The class has ``fit``, ``transform``,
+    ``fit_transform``, ``get_feature_names_out``, ``get_params`` and ``set_params``, so ``clone``
+    and ``Pipeline`` work. It has no scikit-learn tags: ``check_estimator``, ``ColumnTransformer``,
+    ``set_output`` and a two-dimensional array input are not supported.
+    """
+
+    def __init__(self, strict: bool = True):
+        self.strict = strict
+
+    def get_params(self, deep: bool = True) -> Dict[str, bool]:
+        return {"strict": self.strict}
+
+    def set_params(self, **params: Any) -> "PhoneFeatures":
+        for name, value in params.items():
+            if name not in self.get_params():
+                raise ValueError(f"Invalid parameter {name!r} for PhoneFeatures; the parameters are 'strict'")
+            setattr(self, name, value)
+        return self
+
+    def fit(self, X: Iterable[str], y=None) -> "PhoneFeatures":
+        return self
+
+    def transform(self, X: Iterable[str]) -> List[List[float]]:
+        rows = []
+        for segment in X:
+            try:
+                rows.append([float(v) for v in _signs(segment)])
+            except ValueError:
+                if self.strict:
+                    raise
+                rows.append([float("nan")] * NUM_FEATURES)
+        return rows
+
+    def fit_transform(self, X: Iterable[str], y=None) -> List[List[float]]:
+        return self.fit(X).transform(X)
+
+    def get_feature_names_out(self, input_features=None) -> List[str]:
+        return list(FEATURES)

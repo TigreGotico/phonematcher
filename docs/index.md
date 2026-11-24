@@ -7,7 +7,7 @@ verify: pytest --import-mode=importlib tests/test_docs.py -k test_the_index_list
 see: ../README.md, quickstart.md
 -->
 
-These pages teach phonematcher in the order below. The first six are walk-throughs: each step shows real output. The last four are reference.
+These pages teach phonematcher in the order below. The first seven are walk-throughs: each step shows real output. The last four are reference.
 
 | Page | What you get |
 |---|---|
@@ -16,6 +16,7 @@ These pages teach phonematcher in the order below. The first six are walk-throug
 | [Compare two words](compare-words.md) | The edit distance, the alignment of two words and the normalized distance. |
 | [Tones](tones.md) | How a tone is written, compared and priced against a sound. |
 | [Search by sound](search.md) | An index of terms, a query, and what the sensitivity changes, with benchmark numbers. |
+| [Use with scikit-learn](scikit-learn.md) | A distance matrix for a clusterer, and feature rows for a pipeline. |
 | [Add a segment](add-a-segment.md) | An entry with its source, the rebuild of the table and the test. |
 | [The feature table](features.md) | The 36 features, their weights and sources, and every change to PanPhon. |
 | [Design choices and limits](design.md) | The contested choices, their sources, and what does not read. |

@@ -1,5 +1,26 @@
 # Changelog
 
+## [3.1.2a1](https://github.com/TigreGotico/phonematcher/tree/3.1.2a1) (2026-11-24)
+
+[Full Changelog](https://github.com/TigreGotico/phonematcher/compare/3.1.1a1...3.1.2a1)
+
+**Merged pull requests:**
+
+- fix: raise ValueError for a tie bar before a click [\#198](https://github.com/TigreGotico/phonematcher/pull/198) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
+
+## [3.1.1a1](https://github.com/TigreGotico/phonematcher/tree/3.1.1a1) (2026-11-24)
+
+[Full Changelog](https://github.com/TigreGotico/phonematcher/compare/3.1.0a1...3.1.1a1)
+
+## [3.1.0a1](https://github.com/TigreGotico/phonematcher/tree/3.1.0a1) (2026-11-24)
+
+[Full Changelog](https://github.com/TigreGotico/phonematcher/compare/3.0.2a1...3.1.0a1)
+
+**Merged pull requests:**
+
+- fix: read a click tied to χ or to an ejective uvular [\#194](https://github.com/TigreGotico/phonematcher/pull/194) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
+- feat: scikit-learn compatible PhoneFeatures and pairwise\_distances [\#191](https://github.com/TigreGotico/phonematcher/pull/191) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
+
 ## [3.0.2a1](https://github.com/TigreGotico/phonematcher/tree/3.0.2a1) (2026-11-24)
 
 [Full Changelog](https://github.com/TigreGotico/phonematcher/compare/3.0.1a2...3.0.2a1)
@@ -370,25 +391,13 @@
 
 [Full Changelog](https://github.com/TigreGotico/phonematcher/compare/2.2.0a1...2.2.0a2)
 
-**Merged pull requests:**
-
-- docs: add a "How it compares" table to the README [\#82](https://github.com/TigreGotico/phonematcher/pull/82) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
-
 ## [2.2.0a1](https://github.com/TigreGotico/phonematcher/tree/2.2.0a1) (2026-11-22)
 
 [Full Changelog](https://github.com/TigreGotico/phonematcher/compare/2.1.0a1...2.2.0a1)
 
-**Merged pull requests:**
-
-- feat: freeze the API list and export the stable names from the package root [\#83](https://github.com/TigreGotico/phonematcher/pull/83) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
-
 ## [2.1.0a1](https://github.com/TigreGotico/phonematcher/tree/2.1.0a1) (2026-11-22)
 
 [Full Changelog](https://github.com/TigreGotico/phonematcher/compare/2.0.0a1...2.1.0a1)
-
-**Merged pull requests:**
-
-- feat: strict input, and the tone distance marked experimental [\#80](https://github.com/TigreGotico/phonematcher/pull/80) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
 
 ## [2.0.0a1](https://github.com/TigreGotico/phonematcher/tree/2.0.0a1) (2026-11-22)
 
