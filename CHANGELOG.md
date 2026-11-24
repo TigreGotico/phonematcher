@@ -390,10 +390,6 @@
 
 [Full Changelog](https://github.com/TigreGotico/phonematcher/compare/0.15.0a1...0.16.0a1)
 
-**Merged pull requests:**
-
-- feat: add the Cantonese tone confusion benchmark \(C7\) [\#53](https://github.com/TigreGotico/phonematcher/pull/53) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
-
 ## [0.15.0a1](https://github.com/TigreGotico/phonematcher/tree/0.15.0a1) (2026-11-22)
 
 [Full Changelog](https://github.com/TigreGotico/phonematcher/compare/0.14.0a1...0.15.0a1)
