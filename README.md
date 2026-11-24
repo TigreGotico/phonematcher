@@ -33,7 +33,7 @@ ipa_distance("ˈpojʃ", "ˈpojs")   # 0.199: one near substitution
 
 `feature_distance` compares two segments, from 0 to 1. `substitution_cost` is the one cost of replacing a segment by another. It is the square root of the feature distance. `ipa_distance` compares two IPA strings: an edit distance where a substitution costs `substitution_cost` and an insertion or deletion costs 0.5. A substitution costs at most 1, so it never costs more than a deletion plus an insertion. The search groups sounds with the same cost. The costs are the ones that the pre-registered test in [`benchmarks/prereg-2.md`](https://github.com/TigreGotico/phonematcher/blob/dev/benchmarks/prereg-2.md) selected.
 
-A segment that phonematcher cannot read is at distance 1 from every other segment. With `strict=True`, a distance, an alignment or a search raises `ValueError` for such a segment. The table does not read every valid IPA segment. Strict mode cannot catch a spelling that uses the ASCII letters `c`, `y`, `j` and `r`. These are also IPA letters, so the spelling is read as IPA and gives a wrong score with no error.
+A segment that phonematcher cannot read is at distance 1 from every other segment. The first time such a segment is priced, phonematcher issues one `UserWarning` that names the segment. `warnings.filterwarnings("ignore", message="Unrecognized phone", category=UserWarning)` silences it. With `strict=True`, a distance, an alignment or a search raises `ValueError` for such a segment. The table does not read every valid IPA segment. Strict mode cannot catch a spelling that uses the ASCII letters `c`, `y`, `j` and `r`. These are also IPA letters, so the spelling is read as IPA and gives a wrong score with no error.
 
 ## Search by sound
 
