@@ -232,6 +232,25 @@ def test_raised_on_an_approximant_and_lowered_on_a_fricative_follow_the_chart_ex
     assert vectorize_phones("ɹ˔") == vectorize_phones("ɹ̝") and vectorize_phones("β˕") == vectorize_phones("β̞")
 
 
+def test_lowered_lateral_fricative_stays_a_lateral():
+    """Every lateral approximant in the table (l ʎ ʟ ɭ) is cons +, so ◌̞ on a lateral fricative
+    sets son + only. Weights (PanPhon): cons 1, delrel/ant/lat/cor/hi/lo/front 0.25, distr 0.125;
+    total 9.5. A 0 against + or - costs half the weight.
+
+    ɮ̞ ~ l: delrel 0.25 + ant 0.25 + hi 0.125 + lo 0.125 = 0.75 / 9.5 = 0.0789.
+    ɮ̞ ~ j: cons 1 + delrel 0.25 + lat 0.25 + cor 0.25 + distr 0.0625 + hi 0.125 + lo 0.125
+    + front 0.125 = 2.1875 / 9.5 = 0.2303.
+    """
+    assert feature("ɮ̞", "son") is True and feature("ɮ̞", "cons") is True
+    assert feature("ɮ̞", "lat") is True
+    assert feature_distance("ɮ̞", "l") == pytest.approx(0.75 / 9.5)
+    assert feature_distance("ɮ̞", "j") == pytest.approx(2.1875 / 9.5)
+    assert feature_distance("ɮ̞", "l") < feature_distance("ɮ̞", "j")
+    assert feature_distance("ɮ̞", "l") < feature_distance("ɮ", "l")
+    assert vectorize_phones("ɮ˕") == vectorize_phones("ɮ̞")
+    assert feature("ɬ̞", "cons") is True
+
+
 def test_lowered_and_raised_marks_move_a_vowel_one_chart_row():
     """◌̞ lowers and ◌̝ raises (IPA chart): lowered close-mid [e̞] is nearer open-mid [ɛ] than [e]
     is, and raised [ɛ̝] is nearer [e] than [ɛ] is."""

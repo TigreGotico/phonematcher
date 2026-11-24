@@ -104,8 +104,8 @@ def validate(changes: dict, features: list) -> None:
             raise SystemExit(f"override {o['phone']}: the segment is not a bare table letter")
     for d in changes["diacritics"]:
         check("diacritic", d["marker"], d["content"])
-        if "consonant" in d:
-            check("diacritic", d["marker"], {**d["consonant"]["when"], **d["consonant"]["set"]})
+        for reading in d.get("consonant", ()):
+            check("diacritic", d["marker"], {**reading["when"], **reading["set"]})
     for s in changes["segments"]:
         check("segments entry", s["segment"], s["set"])
 
@@ -198,9 +198,10 @@ def main(out_path: Path) -> None:
                 return None
             before = dict(vec)
             vec.update(rule.get("content", {}))
-            consonant = rule.get("consonant")
-            if consonant and all(vec[f] == v for f, v in consonant["when"].items()):
-                vec.update(consonant["set"])
+            for reading in rule.get("consonant", ()):
+                if all(vec[f] == v for f, v in reading["when"].items()):
+                    vec.update(reading["set"])
+                    break
             scales.shift(vec, rule.get("shift", {}))
             if vec["hi"] == vec["lo"] == "+":
                 vec["lo" if before["hi"] == "+" else "hi"] = "-"

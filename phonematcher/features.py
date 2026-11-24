@@ -204,10 +204,11 @@ def _apply_if(diacritic: dict, vec: Vector, segment: str) -> Vector:
     out = list(vec)
     for f, v in diacritic["content"].items():
         out[_INDEX[f]] = _VALUE[v]
-    consonant = diacritic.get("consonant")
-    if consonant and all(out[_INDEX[f]] is _VALUE[v] for f, v in consonant["when"].items()):
-        for f, v in consonant["set"].items():
-            out[_INDEX[f]] = _VALUE[v]
+    for reading in diacritic.get("consonant", ()):
+        if all(out[_INDEX[f]] is _VALUE[v] for f, v in reading["when"].items()):
+            for f, v in reading["set"].items():
+                out[_INDEX[f]] = _VALUE[v]
+            break
     if "shift" in diacritic:
         signs = {f: _SIGN[v] for f, v in zip(FEATURES, out)}
         shift(signs, diacritic["shift"])
