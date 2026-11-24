@@ -203,6 +203,14 @@ def test_chart_letters_panphon_lacks(letter, near, feat):
     assert feature(letter, feat) is expected
 
 
+def test_the_epiglottal_plosive_cites_only_the_chart():
+    """The chart prints ʡ under Other Symbols as "Epiglottal plosive". A plosive has no trilled reading."""
+    overrides = json.loads(files("phonematcher").joinpath("data/overrides.json").read_text(encoding="utf-8"))
+    entry = next(e for e in overrides["segments"] if e["segment"] == "ʡ")
+    assert "'Epiglottal plosive'" in entry["source"]
+    assert "Hassan" not in entry["source"] and "trill" not in entry["source"]
+
+
 def test_labiodental_flap_has_the_place_of_v():
     for f in ("lab", "ant", "cor"):
         assert feature("ⱱ", f) is feature("v", f)

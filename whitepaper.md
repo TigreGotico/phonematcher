@@ -40,7 +40,7 @@ The features come from these sources:
 
 - 22 features and their weights come from PanPhon 0.22.2 (Mortensen et al. 2016). The PanPhon paper counts 21 features (Mortensen et al. 2016, p. 3477). Thus the count changes with the version.
 - Three consonant features, `front`, `tap` and `trill`, come from Gorman (2022). This source is a CSV file of the feature tables in the textbook *Introductory Phonology* by Hayes. We did not read the book. Thus we cite only the CSV file.
-- Six height steps come from the IPA chart (International Phonetic Association 2015).
+- Six height steps, `h1` to `h6`, place a vowel on seven height rows. The IPA chart (International Phonetic Association 2015) prints four height labels: close, close-mid, open-mid and open. It draws `ɪ ʏ ʊ`, `ə` and `æ ɐ` between them, so the table counts seven rows. A vowel is + on one step for each row it lies below close.
 - One feature, `atr`, gives the position of the tongue root. The marks `◌̘` and `◌̙` set it.
 - Four features give a secondary articulation: palatalized, labialized, velarized and pharyngealized.
 
