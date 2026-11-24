@@ -41,9 +41,9 @@ The marks `◌̝ ◌̞ ◌̟ ◌̠ ◌̈ ◌̽ ◌̹ ◌̜` move a vowel along t
 
 The rules change no score that the benchmarks measure. Under the C0 word costs (gap 1, linear substitutions), the variant with no scale shifts differs from the shipped table by less than 0.0001 in the paired cognate difference on the test sets. On the development split, under the shipped word costs, the cognate AP of that variant is 0.7726 and the shipped table's is 0.7727. The rules stay for the sake of the chart's meaning, and the benchmarks do not support them or oppose them.
 
-### A mark reads only on the bases a chart prints it on
+### A mark reads only on the bases its rule accepts
 
-`k̃`, `m̃`, `aʰ` and `ʉʰ` do not read. The alternative is to apply every mark to every base. The table applies a mark only to the class of base that a chart prints it on, and `vectorize_phones` raises `ValueError` for any other base. The rule widens only when a chart prints the mark on the new class. A name in a code chart with no base does not widen it. The source is the IPA chart and the extIPA chart. The cost is lower coverage, listed below. The gain is that no reading is a guess.
+`k̃`, `m̃`, `aʰ` and `ʉʰ` do not read. The alternative is to apply every mark to every base. The table applies a mark only to the bases that the conditions of its rule accept, and `vectorize_phones` raises `ValueError` for any other base. The conditions are PanPhon's, unless `overrides.json` changes them with a source. Thus the class is often wider than the bases a chart prints. `◌̃` reads on any voiced base that is not nasal (`b̃ z̃ w̃`), although the IPA chart prints it only in `ẽ`. `◌ˤ` reads on any base (`iˤ`), and `◌ˠ` on any base that is not a high back vowel (`aˠ`), although the chart prints `tˤ dˤ` and `tˠ dˠ`. `◌̥` devoices any base (`å ḁ`), although the chart prints `n̥ d̥`. A rule widens only when a chart prints the mark on a base that the rule refuses, as the IPA chart does for `◌̃` on a vowel. A name in a code chart with no base does not widen it. The cost is lower coverage, listed below.
 
 ### A diphthong is two segments
 
