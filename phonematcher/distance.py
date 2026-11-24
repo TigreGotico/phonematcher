@@ -158,6 +158,11 @@ def _segments(nfd: str, track: bool = False) -> Tuple[List[str], List[List[int]]
                 if track:
                     at.append([i])
             continue
+        if ch in TIES and pending:  # a tie between two marks before a base, as in ᵑ͡ᵐk͡p
+            pending += ch
+            if track:
+                pending_at.append(i)
+            continue
         if ch in TIES:
             join_next = bool(out) and out[-1] != " "
             if join_next:

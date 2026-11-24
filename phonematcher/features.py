@@ -111,13 +111,15 @@ def vectorize_phones(segment: str) -> Vector:
         return phone_features[untied]
 
     start = 0
-    while start < len(seg) and seg[start] in PRE_DIACRITICS:
+    while start < len(seg) and (seg[start] in PRE_DIACRITICS or (
+            seg[start] in TIES and start and seg[start + 1:start + 2] in PRE_DIACRITICS)):
         start += 1
+    pre_marks = [c for c in seg[:start] if c not in TIES]  # ᵑ͡ᵐ marks a labial-velar as ᵑᵐ does
     for end in range(len(seg), start, -1):
         base = seg[start:end]
         if base in phone_features and all(m in POST_DIACRITICS for m in seg[end:]):
             vec = phone_features[base]
-            for marker in seg[:start]:
+            for marker in pre_marks:
                 vec = _apply_pre(marker, vec, segment)
             for marker in seg[end:]:
                 vec = _apply_if(_DIACRITICS[marker, "post"], vec, segment)
@@ -143,7 +145,7 @@ def vectorize_phones(segment: str) -> Vector:
             vec = vectorize_phones(seg[start:])
         except ValueError:
             raise _unrecognized(segment) from None
-        for marker in seg[:start]:
+        for marker in pre_marks:
             vec = _apply_pre(marker, vec, segment)
         return vec
     if seg and TIES[0] not in untied:
