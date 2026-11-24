@@ -106,8 +106,10 @@ def _segments(nfd: str, track: bool = False) -> Tuple[List[str], List[List[int]]
                 at.append(tone_at)
             tone, tone_at = "", []
 
-    for i, ch in enumerate(nfd):
-        ch = NUMERALS.get(ch, ch)
+    level_kind = None  # the notation of the tone letter last written: Chao, left-stem or numeral
+
+    for i, raw in enumerate(nfd):
+        ch = NUMERALS.get(raw, raw)
         if ch in SUPRASEGMENTALS or unicodedata.category(ch) == "Cf":
             continue
         if ch in DIACRITIC_TONES:
@@ -124,15 +126,20 @@ def _segments(nfd: str, track: bool = False) -> Tuple[List[str], List[List[int]]
                 tone += letters
                 if track:
                     tone_at += (min(at[-1]), i)  # the span of a tone mark holds the letter it is on
+            level_kind = None
             continue
         if ch in LEVELS:
+            # A tone run ends where its notation changes: ˨˩˦꜔꜒ is the tone 214, then the tone 35.
+            kind = 0 if raw in LEVELS else 1 if "\ua712" <= raw <= "\ua716" else 2
+            same_notation = level_kind in (None, kind)
+            level_kind = kind
             if tone:
                 tone += ch
                 if track:
                     tone_at.append(i)
                 continue
             release_pending()
-            if out and is_tone(out[-1]):
+            if out and is_tone(out[-1]) and same_notation:
                 out[-1] += ch
                 if track:
                     at[-1].append(i)
@@ -142,6 +149,7 @@ def _segments(nfd: str, track: bool = False) -> Tuple[List[str], List[List[int]]
                 if track:
                     at.append([i])
             continue
+        level_kind = None
         attaches = unicodedata.combining(ch) or ch in POST_DIACRITICS
         if not attaches:
             release_tone()

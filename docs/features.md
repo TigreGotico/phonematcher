@@ -327,7 +327,7 @@ The IPA chart prints each tone diacritic beside a drawing of a tone letter or a 
 | `◌᷅` | `˩˧` | Low rising |
 | `◌᷈` | `˧˦˧` | Rising-falling |
 
-Superscript digits are tone numerals: the digit is the level, so `²¹⁴` is `˨˩˦`. The left-stem tone letters `꜒` to `꜖` have the levels of `˥` to `˩`. A run of tone letters is one tone, also after a tone diacritic: `má˥` has the tone `˦˥`.
+Superscript digits are tone numerals: the digit is the level, so `²¹⁴` is `˨˩˦`. The left-stem tone letters `꜒` to `꜖` have the levels of `˥` to `˩`. A run of tone letters is one tone, also after a tone diacritic: `má˥` has the tone `˦˥`. A run splits where its notation changes, because two notations are never one contour. In sandhi notation, `ni˨˩˦꜔꜒` is the underlying tone `˨˩˦`, then the surface tone `˧˥`.
 
 Some marks are not read and are dropped like stress marks. The chart lists downstep `ꜜ` and upstep `ꜛ` with the level tones, but they change the pitch of the tones after them, and a tone here is the contour of one syllable only. Global rise `↗` and global fall `↘` belong to the intonation of a phrase. The neutral-tone numeral `⁰` has no level.
 
