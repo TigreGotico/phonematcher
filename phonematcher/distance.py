@@ -48,7 +48,8 @@ def segment_spans(text: str) -> List[Tuple[int, int]]:
     for seg, at in zip(*_segments("".join(ch for ch, _ in chars), track=True)):
         if seg == " ":
             continue
-        start, end = min(chars[k][1] for k in at), max(chars[k][1] for k in at) + 1
+        where = [chars[k][1] for k in at]
+        start, end = min(where), max(where) + 1
         while spans and start < spans[-1][1]:  # a segment written before one already emitted
             first, last = spans.pop()
             start, end = min(start, first), max(end, last)
@@ -109,27 +110,27 @@ def _segments(nfd: str, track: bool = False) -> Tuple[List[str], List[List[int]]
         ch = NUMERALS.get(ch, ch)
         if ch in SUPRASEGMENTALS or unicodedata.category(ch) == "Cf":
             continue
-        if ch in DIACRITIC_TONES and (not out or out[-1] == " "):
-            carried += DIACRITIC_TONES[ch]
-            if track:
-                carried_at.append(i)
-            continue
-        if ch in DIACRITIC_TONES and is_tone(out[-1]) and not tone:
-            out[-1] += DIACRITIC_TONES[ch]
-            if track:
-                at[-1].append(i)
-            continue
         if ch in DIACRITIC_TONES:
-            tone += DIACRITIC_TONES[ch]
-            if track:
-                tone_at += (min(at[-1]), i)  # the span of a tone mark holds the letter it is on
-            continue
-        if ch in LEVELS and tone:
-            tone += ch
-            if track:
-                tone_at.append(i)
+            letters = DIACRITIC_TONES[ch]
+            if not out or out[-1] == " ":
+                carried += letters
+                if track:
+                    carried_at.append(i)
+            elif is_tone(out[-1]) and not tone:
+                out[-1] += letters
+                if track:
+                    at[-1].append(i)
+            else:
+                tone += letters
+                if track:
+                    tone_at += (min(at[-1]), i)  # the span of a tone mark holds the letter it is on
             continue
         if ch in LEVELS:
+            if tone:
+                tone += ch
+                if track:
+                    tone_at.append(i)
+                continue
             release_pending()
             if out and is_tone(out[-1]):
                 out[-1] += ch

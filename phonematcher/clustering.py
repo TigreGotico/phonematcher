@@ -95,10 +95,11 @@ def phone_clusters(share: float) -> Dict[str, int]:
 
 
 def _as_readings(term: Readings, function: str, argument: str) -> Tuple[str, ...]:
-    readings = (term,) if isinstance(term, str) else tuple(term) if isinstance(term, (list, tuple)) else None
-    if readings is None or not all(isinstance(r, str) for r in readings):
-        raise TypeError(f"{function}() argument {argument} must be str or a list of str, not {type(term).__name__}")
-    return readings
+    if isinstance(term, str):
+        return (term,)
+    if isinstance(term, (list, tuple)) and all(isinstance(r, str) for r in term):
+        return tuple(term)
+    raise TypeError(f"{function}() argument {argument} must be str or a list of str, not {type(term).__name__}")
 
 
 class PhoneticFuzzySearch:
