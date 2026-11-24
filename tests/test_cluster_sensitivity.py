@@ -78,8 +78,8 @@ def test_the_cluster_of_a_segment_outside_the_letters_is_that_of_its_nearest_let
     assert search.cluster_of(segment) == search.clusters[nearest]
 
 
-def test_the_default_share_is_0_08():
-    assert PhoneticFuzzySearch().cluster_sensitivity == 0.08
+def test_the_default_share_is_0_12():
+    assert PhoneticFuzzySearch().cluster_sensitivity == 0.12
 
 
 @pytest.mark.parametrize("share", [-0.01, 1.01, 2, float("nan"), float("inf")])

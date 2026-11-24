@@ -152,7 +152,7 @@ The first list is the share of queries whose first result is the right word. The
 
 ## 6. Choose a sensitivity
 
-The default is 0.08. A rule chooses it on the development results. The rule is rule 7 of [`benchmarks/prereg-2.md`](https://github.com/TigreGotico/phonematcher/blob/dev/benchmarks/prereg-2.md), applied to these six values: 0.01, 0.02, 0.03, 0.05, 0.08 and 0.12. Take the value with the highest mean recall at 1 among the values whose mean candidate count is at most 5% of the index pronunciations in every pair. The test data played no part in the choice.
+The default is 0.12. A rule chooses it on the development results. The rule is rule 7 of [`benchmarks/prereg-2.md`](https://github.com/TigreGotico/phonematcher/blob/dev/benchmarks/prereg-2.md), applied to these six values: 0.01, 0.02, 0.03, 0.05, 0.08 and 0.12. Take the value with the highest mean recall at 1 among the values whose mean candidate count is at most 5% of the index pronunciations in every pair. The test data played no part in the choice.
 
 This block gives, for each value, the largest share of the index that a query returns over the four pairs:
 
@@ -161,6 +161,6 @@ share = lambda p, i: p["fuzzy_search"][i]["mean_candidates"] / p["counts"]["inde
 [round(max(share(p, i) for p in pairs.values()), 4) for i in range(6)]   # [0.0038, 0.0045, 0.0057, 0.0057, 0.0134, 0.0162]
 ```
 
-Every value stays below 5%, so the cap removes none. The values 0.08 and 0.12 share the highest mean recall at 1, 0.8521. The rule does not name a tie-break. The lower share wins, because it returns fewer candidates for the same recall: at 0.08 the largest share is 1.4%, and at 0.12 it is 1.6%.
+Every value stays below 5%, so the cap removes none. The value 0.12 has the highest mean recall at 1, 0.8521. The value 0.08 gives 0.8348. At 0.12 the largest share of the index that a query returns is 1.6%, against 1.3% at 0.08.
 
 [Index](index.md) · Previous: [Tones](tones.md) · Next: [Add a segment](add-a-segment.md)

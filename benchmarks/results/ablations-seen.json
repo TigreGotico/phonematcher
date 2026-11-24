@@ -3,7 +3,7 @@
  "system": "phonematcher,pm-p5-panphon22,pm-p5-no-height,pm-p5-flat-diacritics,pm-p5-uniform,pm-p5-indel-0.5,pm-p5-indel-1.5",
  "split": "seen",
  "commit": null,
- "head": "100ff08cf33c0687edcd7efa8eea10c8ef978166",
+ "head": "4f254da108460c3a56c25c482751aa0cae11fe1c",
  "tree_dirty": false,
  "systems": [
   "phonematcher",
@@ -42,43 +42,43 @@
      "phoible": {
       "direct": {
        "types": 4158,
-       "types_read": 3768,
-       "types_unread": 390,
-       "type_share": 0.9062049062049062,
+       "types_read": 3783,
+       "types_unread": 375,
+       "type_share": 0.9098124098124099,
        "tokens": 116373,
-       "tokens_read": 115726,
-       "token_share": 0.994440291132823
+       "tokens_read": 115760,
+       "token_share": 0.9947324551227519
       },
       "tie_retry": {
        "types": 4158,
-       "types_read": 3768,
-       "types_unread": 390,
-       "type_share": 0.9062049062049062,
+       "types_read": 3783,
+       "types_unread": 375,
+       "type_share": 0.9098124098124099,
        "tokens": 116373,
-       "tokens_read": 115726,
-       "token_share": 0.994440291132823
+       "tokens_read": 115760,
+       "token_share": 0.9947324551227519
       }
      },
      "wikipron": {
       "direct": {
        "types": 3604,
-       "types_read": 2616,
-       "types_unread": 988,
-       "type_share": 0.7258601553829079,
+       "types_read": 2631,
+       "types_unread": 973,
+       "type_share": 0.7300221975582686,
        "tokens": 55266303,
-       "tokens_read": 54929962,
-       "token_share": 0.9939141758767545
+       "tokens_read": 54930079,
+       "token_share": 0.9939162928991288
       }
      },
      "orthography2ipa": {
       "direct": {
        "types": 2569,
-       "types_read": 2171,
-       "types_unread": 398,
-       "type_share": 0.8450759050214091,
+       "types_read": 2269,
+       "types_unread": 300,
+       "type_share": 0.8832230439859867,
        "tokens": 58487,
-       "tokens_read": 57872,
-       "token_share": 0.9894848427855762
+       "tokens_read": 58110,
+       "token_share": 0.9935541231384752
       }
      }
     },
@@ -86,43 +86,43 @@
      "phoible": {
       "direct": {
        "types": 4158,
-       "types_read": 3768,
-       "types_unread": 390,
-       "type_share": 0.9062049062049062,
+       "types_read": 3783,
+       "types_unread": 375,
+       "type_share": 0.9098124098124099,
        "tokens": 116373,
-       "tokens_read": 115726,
-       "token_share": 0.994440291132823
+       "tokens_read": 115760,
+       "token_share": 0.9947324551227519
       },
       "tie_retry": {
        "types": 4158,
-       "types_read": 3768,
-       "types_unread": 390,
-       "type_share": 0.9062049062049062,
+       "types_read": 3783,
+       "types_unread": 375,
+       "type_share": 0.9098124098124099,
        "tokens": 116373,
-       "tokens_read": 115726,
-       "token_share": 0.994440291132823
+       "tokens_read": 115760,
+       "token_share": 0.9947324551227519
       }
      },
      "wikipron": {
       "direct": {
        "types": 3604,
-       "types_read": 2616,
-       "types_unread": 988,
-       "type_share": 0.7258601553829079,
+       "types_read": 2631,
+       "types_unread": 973,
+       "type_share": 0.7300221975582686,
        "tokens": 55266303,
-       "tokens_read": 54929962,
-       "token_share": 0.9939141758767545
+       "tokens_read": 54930079,
+       "token_share": 0.9939162928991288
       }
      },
      "orthography2ipa": {
       "direct": {
        "types": 2569,
-       "types_read": 2171,
-       "types_unread": 398,
-       "type_share": 0.8450759050214091,
+       "types_read": 2269,
+       "types_unread": 300,
+       "type_share": 0.8832230439859867,
        "tokens": 58487,
-       "tokens_read": 57872,
-       "token_share": 0.9894848427855762
+       "tokens_read": 58110,
+       "token_share": 0.9935541231384752
       }
      }
     },
@@ -130,43 +130,43 @@
      "phoible": {
       "direct": {
        "types": 4158,
-       "types_read": 3768,
-       "types_unread": 390,
-       "type_share": 0.9062049062049062,
+       "types_read": 3783,
+       "types_unread": 375,
+       "type_share": 0.9098124098124099,
        "tokens": 116373,
-       "tokens_read": 115726,
-       "token_share": 0.994440291132823
+       "tokens_read": 115760,
+       "token_share": 0.9947324551227519
       },
       "tie_retry": {
        "types": 4158,
-       "types_read": 3768,
-       "types_unread": 390,
-       "type_share": 0.9062049062049062,
+       "types_read": 3783,
+       "types_unread": 375,
+       "type_share": 0.9098124098124099,
        "tokens": 116373,
-       "tokens_read": 115726,
-       "token_share": 0.994440291132823
+       "tokens_read": 115760,
+       "token_share": 0.9947324551227519
       }
      },
      "wikipron": {
       "direct": {
        "types": 3604,
-       "types_read": 2616,
-       "types_unread": 988,
-       "type_share": 0.7258601553829079,
+       "types_read": 2631,
+       "types_unread": 973,
+       "type_share": 0.7300221975582686,
        "tokens": 55266303,
-       "tokens_read": 54929962,
-       "token_share": 0.9939141758767545
+       "tokens_read": 54930079,
+       "token_share": 0.9939162928991288
       }
      },
      "orthography2ipa": {
       "direct": {
        "types": 2569,
-       "types_read": 2171,
-       "types_unread": 398,
-       "type_share": 0.8450759050214091,
+       "types_read": 2269,
+       "types_unread": 300,
+       "type_share": 0.8832230439859867,
        "tokens": 58487,
-       "tokens_read": 57872,
-       "token_share": 0.9894848427855762
+       "tokens_read": 58110,
+       "token_share": 0.9935541231384752
       }
      }
     },
@@ -174,43 +174,43 @@
      "phoible": {
       "direct": {
        "types": 4158,
-       "types_read": 3768,
-       "types_unread": 390,
-       "type_share": 0.9062049062049062,
+       "types_read": 3783,
+       "types_unread": 375,
+       "type_share": 0.9098124098124099,
        "tokens": 116373,
-       "tokens_read": 115726,
-       "token_share": 0.994440291132823
+       "tokens_read": 115760,
+       "token_share": 0.9947324551227519
       },
       "tie_retry": {
        "types": 4158,
-       "types_read": 3768,
-       "types_unread": 390,
-       "type_share": 0.9062049062049062,
+       "types_read": 3783,
+       "types_unread": 375,
+       "type_share": 0.9098124098124099,
        "tokens": 116373,
-       "tokens_read": 115726,
-       "token_share": 0.994440291132823
+       "tokens_read": 115760,
+       "token_share": 0.9947324551227519
       }
      },
      "wikipron": {
       "direct": {
        "types": 3604,
-       "types_read": 2616,
-       "types_unread": 988,
-       "type_share": 0.7258601553829079,
+       "types_read": 2631,
+       "types_unread": 973,
+       "type_share": 0.7300221975582686,
        "tokens": 55266303,
-       "tokens_read": 54929962,
-       "token_share": 0.9939141758767545
+       "tokens_read": 54930079,
+       "token_share": 0.9939162928991288
       }
      },
      "orthography2ipa": {
       "direct": {
        "types": 2569,
-       "types_read": 2171,
-       "types_unread": 398,
-       "type_share": 0.8450759050214091,
+       "types_read": 2269,
+       "types_unread": 300,
+       "type_share": 0.8832230439859867,
        "tokens": 58487,
-       "tokens_read": 57872,
-       "token_share": 0.9894848427855762
+       "tokens_read": 58110,
+       "token_share": 0.9935541231384752
       }
      }
     },
@@ -218,43 +218,43 @@
      "phoible": {
       "direct": {
        "types": 4158,
-       "types_read": 3768,
-       "types_unread": 390,
-       "type_share": 0.9062049062049062,
+       "types_read": 3783,
+       "types_unread": 375,
+       "type_share": 0.9098124098124099,
        "tokens": 116373,
-       "tokens_read": 115726,
-       "token_share": 0.994440291132823
+       "tokens_read": 115760,
+       "token_share": 0.9947324551227519
       },
       "tie_retry": {
        "types": 4158,
-       "types_read": 3768,
-       "types_unread": 390,
-       "type_share": 0.9062049062049062,
+       "types_read": 3783,
+       "types_unread": 375,
+       "type_share": 0.9098124098124099,
        "tokens": 116373,
-       "tokens_read": 115726,
-       "token_share": 0.994440291132823
+       "tokens_read": 115760,
+       "token_share": 0.9947324551227519
       }
      },
      "wikipron": {
       "direct": {
        "types": 3604,
-       "types_read": 2616,
-       "types_unread": 988,
-       "type_share": 0.7258601553829079,
+       "types_read": 2631,
+       "types_unread": 973,
+       "type_share": 0.7300221975582686,
        "tokens": 55266303,
-       "tokens_read": 54929962,
-       "token_share": 0.9939141758767545
+       "tokens_read": 54930079,
+       "token_share": 0.9939162928991288
       }
      },
      "orthography2ipa": {
       "direct": {
        "types": 2569,
-       "types_read": 2171,
-       "types_unread": 398,
-       "type_share": 0.8450759050214091,
+       "types_read": 2269,
+       "types_unread": 300,
+       "type_share": 0.8832230439859867,
        "tokens": 58487,
-       "tokens_read": 57872,
-       "token_share": 0.9894848427855762
+       "tokens_read": 58110,
+       "token_share": 0.9935541231384752
       }
      }
     },
@@ -262,43 +262,43 @@
      "phoible": {
       "direct": {
        "types": 4158,
-       "types_read": 3768,
-       "types_unread": 390,
-       "type_share": 0.9062049062049062,
+       "types_read": 3783,
+       "types_unread": 375,
+       "type_share": 0.9098124098124099,
        "tokens": 116373,
-       "tokens_read": 115726,
-       "token_share": 0.994440291132823
+       "tokens_read": 115760,
+       "token_share": 0.9947324551227519
       },
       "tie_retry": {
        "types": 4158,
-       "types_read": 3768,
-       "types_unread": 390,
-       "type_share": 0.9062049062049062,
+       "types_read": 3783,
+       "types_unread": 375,
+       "type_share": 0.9098124098124099,
        "tokens": 116373,
-       "tokens_read": 115726,
-       "token_share": 0.994440291132823
+       "tokens_read": 115760,
+       "token_share": 0.9947324551227519
       }
      },
      "wikipron": {
       "direct": {
        "types": 3604,
-       "types_read": 2616,
-       "types_unread": 988,
-       "type_share": 0.7258601553829079,
+       "types_read": 2631,
+       "types_unread": 973,
+       "type_share": 0.7300221975582686,
        "tokens": 55266303,
-       "tokens_read": 54929962,
-       "token_share": 0.9939141758767545
+       "tokens_read": 54930079,
+       "token_share": 0.9939162928991288
       }
      },
      "orthography2ipa": {
       "direct": {
        "types": 2569,
-       "types_read": 2171,
-       "types_unread": 398,
-       "type_share": 0.8450759050214091,
+       "types_read": 2269,
+       "types_unread": 300,
+       "type_share": 0.8832230439859867,
        "tokens": 58487,
-       "tokens_read": 57872,
-       "token_share": 0.9894848427855762
+       "tokens_read": 58110,
+       "token_share": 0.9935541231384752
       }
      }
     },
@@ -306,43 +306,43 @@
      "phoible": {
       "direct": {
        "types": 4158,
-       "types_read": 3768,
-       "types_unread": 390,
-       "type_share": 0.9062049062049062,
+       "types_read": 3783,
+       "types_unread": 375,
+       "type_share": 0.9098124098124099,
        "tokens": 116373,
-       "tokens_read": 115726,
-       "token_share": 0.994440291132823
+       "tokens_read": 115760,
+       "token_share": 0.9947324551227519
       },
       "tie_retry": {
        "types": 4158,
-       "types_read": 3768,
-       "types_unread": 390,
-       "type_share": 0.9062049062049062,
+       "types_read": 3783,
+       "types_unread": 375,
+       "type_share": 0.9098124098124099,
        "tokens": 116373,
-       "tokens_read": 115726,
-       "token_share": 0.994440291132823
+       "tokens_read": 115760,
+       "token_share": 0.9947324551227519
       }
      },
      "wikipron": {
       "direct": {
        "types": 3604,
-       "types_read": 2616,
-       "types_unread": 988,
-       "type_share": 0.7258601553829079,
+       "types_read": 2631,
+       "types_unread": 973,
+       "type_share": 0.7300221975582686,
        "tokens": 55266303,
-       "tokens_read": 54929962,
-       "token_share": 0.9939141758767545
+       "tokens_read": 54930079,
+       "token_share": 0.9939162928991288
       }
      },
      "orthography2ipa": {
       "direct": {
        "types": 2569,
-       "types_read": 2171,
-       "types_unread": 398,
-       "type_share": 0.8450759050214091,
+       "types_read": 2269,
+       "types_unread": 300,
+       "type_share": 0.8832230439859867,
        "tokens": 58487,
-       "tokens_read": 57872,
-       "token_share": 0.9894848427855762
+       "tokens_read": 58110,
+       "token_share": 0.9935541231384752
       }
      }
     }
@@ -350,24 +350,24 @@
    "common_subset": {
     "phoible": {
      "direct": {
-      "types_read_by_all": 3768,
-      "tokens_read_by_all": 115726
+      "types_read_by_all": 3783,
+      "tokens_read_by_all": 115760
      },
      "tie_retry": {
-      "types_read_by_all": 3768,
-      "tokens_read_by_all": 115726
+      "types_read_by_all": 3783,
+      "tokens_read_by_all": 115760
      }
     },
     "wikipron": {
      "direct": {
-      "types_read_by_all": 2616,
-      "tokens_read_by_all": 54929962
+      "types_read_by_all": 2631,
+      "tokens_read_by_all": 54930079
      }
     },
     "orthography2ipa": {
      "direct": {
-      "types_read_by_all": 2171,
-      "tokens_read_by_all": 57872
+      "types_read_by_all": 2269,
+      "tokens_read_by_all": 58110
      }
     }
    },
@@ -376,43 +376,43 @@
      "phoible": {
       "direct": {
        "types": 4158,
-       "types_read": 2614,
-       "types_unread": 1544,
-       "type_share": 0.6286676286676287,
+       "types_read": 2627,
+       "types_unread": 1531,
+       "type_share": 0.6317941317941318,
        "tokens": 116373,
-       "tokens_read": 109712,
-       "token_share": 0.9427616371495107
+       "tokens_read": 109744,
+       "token_share": 0.9430366150223849
       },
       "tie_retry": {
        "types": 4158,
-       "types_read": 2691,
-       "types_unread": 1467,
-       "type_share": 0.6471861471861472,
+       "types_read": 2704,
+       "types_unread": 1454,
+       "type_share": 0.6503126503126503,
        "tokens": 116373,
-       "tokens_read": 110352,
-       "token_share": 0.9482611946069964
+       "tokens_read": 110384,
+       "token_share": 0.9485361724798708
       }
      },
      "wikipron": {
       "direct": {
        "types": 3604,
-       "types_read": 2017,
-       "types_unread": 1587,
-       "type_share": 0.5596559378468369,
+       "types_read": 2421,
+       "types_unread": 1183,
+       "type_share": 0.6717536071032186,
        "tokens": 55266303,
-       "tokens_read": 51927094,
-       "token_share": 0.9395796567032899
+       "tokens_read": 52264366,
+       "token_share": 0.9456823265344888
       }
      },
      "orthography2ipa": {
       "direct": {
        "types": 2569,
-       "types_read": 1607,
-       "types_unread": 962,
-       "type_share": 0.6255352277150642,
+       "types_read": 2129,
+       "types_unread": 440,
+       "type_share": 0.8287271311794473,
        "tokens": 58487,
-       "tokens_read": 56998,
-       "token_share": 0.9745413510694684
+       "tokens_read": 57942,
+       "token_share": 0.9906816899481936
       }
      }
     },
@@ -420,43 +420,43 @@
      "phoible": {
       "direct": {
        "types": 4158,
-       "types_read": 3768,
-       "types_unread": 390,
-       "type_share": 0.9062049062049062,
+       "types_read": 3783,
+       "types_unread": 375,
+       "type_share": 0.9098124098124099,
        "tokens": 116373,
-       "tokens_read": 115726,
-       "token_share": 0.994440291132823
+       "tokens_read": 115760,
+       "token_share": 0.9947324551227519
       },
       "tie_retry": {
        "types": 4158,
-       "types_read": 3768,
-       "types_unread": 390,
-       "type_share": 0.9062049062049062,
+       "types_read": 3783,
+       "types_unread": 375,
+       "type_share": 0.9098124098124099,
        "tokens": 116373,
-       "tokens_read": 115726,
-       "token_share": 0.994440291132823
+       "tokens_read": 115760,
+       "token_share": 0.9947324551227519
       }
      },
      "wikipron": {
       "direct": {
        "types": 3604,
-       "types_read": 2616,
-       "types_unread": 988,
-       "type_share": 0.7258601553829079,
+       "types_read": 2631,
+       "types_unread": 973,
+       "type_share": 0.7300221975582686,
        "tokens": 55266303,
-       "tokens_read": 54929962,
-       "token_share": 0.9939141758767545
+       "tokens_read": 54930079,
+       "token_share": 0.9939162928991288
       }
      },
      "orthography2ipa": {
       "direct": {
        "types": 2569,
-       "types_read": 2171,
-       "types_unread": 398,
-       "type_share": 0.8450759050214091,
+       "types_read": 2269,
+       "types_unread": 300,
+       "type_share": 0.8832230439859867,
        "tokens": 58487,
-       "tokens_read": 57872,
-       "token_share": 0.9894848427855762
+       "tokens_read": 58110,
+       "token_share": 0.9935541231384752
       }
      }
     }
@@ -476,17 +476,17 @@
       "all": {
        "items_in": 12716,
        "read_only": {
-        "score": 0.910991669492746,
-        "items_out": 12493,
-        "skipped": 223
+        "score": 0.9109743569640809,
+        "items_out": 12517,
+        "skipped": 199
        },
        "common_subset": {
-        "score": 0.910991669492746,
-        "items_out": 12493,
-        "skipped": 223
+        "score": 0.9109743569640809,
+        "items_out": 12517,
+        "skipped": 199
        },
        "unread_at_1": {
-        "score": 0.8972136699853313,
+        "score": 0.8988232973162151,
         "items_out": 12716,
         "skipped": 0
        }
@@ -494,17 +494,17 @@
       "odd": {
        "items_in": 6011,
        "read_only": {
-        "score": 0.9057351765951794,
-        "items_out": 5930,
-        "skipped": 81
+        "score": 0.9058890051403482,
+        "items_out": 5942,
+        "skipped": 69
        },
        "common_subset": {
-        "score": 0.9057351765951794,
-        "items_out": 5930,
-        "skipped": 81
+        "score": 0.9058890051403482,
+        "items_out": 5942,
+        "skipped": 69
        },
        "unread_at_1": {
-        "score": 0.8952803509139037,
+        "score": 0.8971582666114842,
         "items_out": 6011,
         "skipped": 0
        }
@@ -512,17 +512,17 @@
       "even": {
        "items_in": 6705,
        "read_only": {
-        "score": 0.9157411747315957,
-        "items_out": 6563,
-        "skipped": 142
+        "score": 0.9155701228251636,
+        "items_out": 6575,
+        "skipped": 130
        },
        "common_subset": {
-        "score": 0.9157411747315957,
-        "items_out": 6563,
-        "skipped": 142
+        "score": 0.9155701228251636,
+        "items_out": 6575,
+        "skipped": 130
        },
        "unread_at_1": {
-        "score": 0.8989468811618192,
+        "score": 0.9003159892723878,
         "items_out": 6705,
         "skipped": 0
        }
@@ -532,17 +532,17 @@
       "all": {
        "items_in": 12716,
        "read_only": {
-        "score": 0.910991669492746,
-        "items_out": 12493,
-        "skipped": 223
+        "score": 0.9109743569640809,
+        "items_out": 12517,
+        "skipped": 199
        },
        "common_subset": {
-        "score": 0.910991669492746,
-        "items_out": 12493,
-        "skipped": 223
+        "score": 0.9109743569640809,
+        "items_out": 12517,
+        "skipped": 199
        },
        "unread_at_1": {
-        "score": 0.8972136699853313,
+        "score": 0.8988232973162151,
         "items_out": 12716,
         "skipped": 0
        }
@@ -550,17 +550,17 @@
       "odd": {
        "items_in": 6011,
        "read_only": {
-        "score": 0.9057351765951794,
-        "items_out": 5930,
-        "skipped": 81
+        "score": 0.9058890051403482,
+        "items_out": 5942,
+        "skipped": 69
        },
        "common_subset": {
-        "score": 0.9057351765951794,
-        "items_out": 5930,
-        "skipped": 81
+        "score": 0.9058890051403482,
+        "items_out": 5942,
+        "skipped": 69
        },
        "unread_at_1": {
-        "score": 0.8952803509139037,
+        "score": 0.8971582666114842,
         "items_out": 6011,
         "skipped": 0
        }
@@ -568,17 +568,17 @@
       "even": {
        "items_in": 6705,
        "read_only": {
-        "score": 0.9157411747315957,
-        "items_out": 6563,
-        "skipped": 142
+        "score": 0.9155701228251636,
+        "items_out": 6575,
+        "skipped": 130
        },
        "common_subset": {
-        "score": 0.9157411747315957,
-        "items_out": 6563,
-        "skipped": 142
+        "score": 0.9155701228251636,
+        "items_out": 6575,
+        "skipped": 130
        },
        "unread_at_1": {
-        "score": 0.8989468811618192,
+        "score": 0.9003159892723878,
         "items_out": 6705,
         "skipped": 0
        }
@@ -590,17 +590,17 @@
       "all": {
        "items_in": 12716,
        "read_only": {
-        "score": 0.9078738364010233,
-        "items_out": 12493,
-        "skipped": 223
+        "score": 0.907864580049411,
+        "items_out": 12517,
+        "skipped": 199
        },
        "common_subset": {
-        "score": 0.9078738364010233,
-        "items_out": 12493,
-        "skipped": 223
+        "score": 0.907864580049411,
+        "items_out": 12517,
+        "skipped": 199
        },
        "unread_at_1": {
-        "score": 0.894164904213128,
+        "score": 0.8957762371458392,
         "items_out": 12716,
         "skipped": 0
        }
@@ -608,17 +608,17 @@
       "odd": {
        "items_in": 6011,
        "read_only": {
-        "score": 0.902588984822854,
-        "items_out": 5930,
-        "skipped": 81
+        "score": 0.9027466371140876,
+        "items_out": 5942,
+        "skipped": 69
        },
        "common_subset": {
-        "score": 0.902588984822854,
-        "items_out": 5930,
-        "skipped": 81
+        "score": 0.9027466371140876,
+        "items_out": 5942,
+        "skipped": 69
        },
        "unread_at_1": {
-        "score": 0.8921859845002686,
+        "score": 0.8940613007967513,
         "items_out": 6011,
         "skipped": 0
        }
@@ -626,17 +626,17 @@
       "even": {
        "items_in": 6705,
        "read_only": {
-        "score": 0.9126489651315646,
-        "items_out": 6563,
-        "skipped": 142
+        "score": 0.91248979935309,
+        "items_out": 6575,
+        "skipped": 130
        },
        "common_subset": {
-        "score": 0.9126489651315646,
-        "items_out": 6563,
-        "skipped": 142
+        "score": 0.91248979935309,
+        "items_out": 6575,
+        "skipped": 130
        },
        "unread_at_1": {
-        "score": 0.8959389961436273,
+        "score": 0.8973136692702788,
         "items_out": 6705,
         "skipped": 0
        }
@@ -646,17 +646,17 @@
       "all": {
        "items_in": 12716,
        "read_only": {
-        "score": 0.9078738364010233,
-        "items_out": 12493,
-        "skipped": 223
+        "score": 0.907864580049411,
+        "items_out": 12517,
+        "skipped": 199
        },
        "common_subset": {
-        "score": 0.9078738364010233,
-        "items_out": 12493,
-        "skipped": 223
+        "score": 0.907864580049411,
+        "items_out": 12517,
+        "skipped": 199
        },
        "unread_at_1": {
-        "score": 0.894164904213128,
+        "score": 0.8957762371458392,
         "items_out": 12716,
         "skipped": 0
        }
@@ -664,17 +664,17 @@
       "odd": {
        "items_in": 6011,
        "read_only": {
-        "score": 0.902588984822854,
-        "items_out": 5930,
-        "skipped": 81
+        "score": 0.9027466371140876,
+        "items_out": 5942,
+        "skipped": 69
        },
        "common_subset": {
-        "score": 0.902588984822854,
-        "items_out": 5930,
-        "skipped": 81
+        "score": 0.9027466371140876,
+        "items_out": 5942,
+        "skipped": 69
        },
        "unread_at_1": {
-        "score": 0.8921859845002686,
+        "score": 0.8940613007967513,
         "items_out": 6011,
         "skipped": 0
        }
@@ -682,17 +682,17 @@
       "even": {
        "items_in": 6705,
        "read_only": {
-        "score": 0.9126489651315646,
-        "items_out": 6563,
-        "skipped": 142
+        "score": 0.91248979935309,
+        "items_out": 6575,
+        "skipped": 130
        },
        "common_subset": {
-        "score": 0.9126489651315646,
-        "items_out": 6563,
-        "skipped": 142
+        "score": 0.91248979935309,
+        "items_out": 6575,
+        "skipped": 130
        },
        "unread_at_1": {
-        "score": 0.8959389961436273,
+        "score": 0.8973136692702788,
         "items_out": 6705,
         "skipped": 0
        }
@@ -704,17 +704,17 @@
       "all": {
        "items_in": 12716,
        "read_only": {
-        "score": 0.9075301755140133,
-        "items_out": 12493,
-        "skipped": 223
+        "score": 0.9075201564236908,
+        "items_out": 12517,
+        "skipped": 199
        },
        "common_subset": {
-        "score": 0.9075301755140133,
-        "items_out": 12493,
-        "skipped": 223
+        "score": 0.9075201564236908,
+        "items_out": 12517,
+        "skipped": 199
        },
        "unread_at_1": {
-        "score": 0.8938269486437127,
+        "score": 0.8954365759745966,
         "items_out": 12716,
         "skipped": 0
        }
@@ -722,17 +722,17 @@
       "odd": {
        "items_in": 6011,
        "read_only": {
-        "score": 0.9022806766859118,
-        "items_out": 5930,
-        "skipped": 81
+        "score": 0.9024421412817084,
+        "items_out": 5942,
+        "skipped": 69
        },
        "common_subset": {
-        "score": 0.9022806766859118,
-        "items_out": 5930,
-        "skipped": 81
+        "score": 0.9024421412817084,
+        "items_out": 5942,
+        "skipped": 69
        },
        "unread_at_1": {
-        "score": 0.8918886654429431,
+        "score": 0.8937665811405235,
         "items_out": 6011,
         "skipped": 0
        }
@@ -740,17 +740,17 @@
       "even": {
        "items_in": 6705,
        "read_only": {
-        "score": 0.9122733612599591,
-        "items_out": 6563,
-        "skipped": 142
+        "score": 0.9121092919329927,
+        "items_out": 6575,
+        "skipped": 130
        },
        "common_subset": {
-        "score": 0.9122733612599591,
-        "items_out": 6563,
-        "skipped": 142
+        "score": 0.9121092919329927,
+        "items_out": 6575,
+        "skipped": 130
        },
        "unread_at_1": {
-        "score": 0.8955646101380941,
+        "score": 0.8969337182486627,
         "items_out": 6705,
         "skipped": 0
        }
@@ -760,17 +760,17 @@
       "all": {
        "items_in": 12716,
        "read_only": {
-        "score": 0.9075301755140133,
-        "items_out": 12493,
-        "skipped": 223
+        "score": 0.9075201564236908,
+        "items_out": 12517,
+        "skipped": 199
        },
        "common_subset": {
-        "score": 0.9075301755140133,
-        "items_out": 12493,
-        "skipped": 223
+        "score": 0.9075201564236908,
+        "items_out": 12517,
+        "skipped": 199
        },
        "unread_at_1": {
-        "score": 0.8938269486437127,
+        "score": 0.8954365759745966,
         "items_out": 12716,
         "skipped": 0
        }
@@ -778,17 +778,17 @@
       "odd": {
        "items_in": 6011,
        "read_only": {
-        "score": 0.9022806766859118,
-        "items_out": 5930,
-        "skipped": 81
+        "score": 0.9024421412817084,
+        "items_out": 5942,
+        "skipped": 69
        },
        "common_subset": {
-        "score": 0.9022806766859118,
-        "items_out": 5930,
-        "skipped": 81
+        "score": 0.9024421412817084,
+        "items_out": 5942,
+        "skipped": 69
        },
        "unread_at_1": {
-        "score": 0.8918886654429431,
+        "score": 0.8937665811405235,
         "items_out": 6011,
         "skipped": 0
        }
@@ -796,17 +796,17 @@
       "even": {
        "items_in": 6705,
        "read_only": {
-        "score": 0.9122733612599591,
-        "items_out": 6563,
-        "skipped": 142
+        "score": 0.9121092919329927,
+        "items_out": 6575,
+        "skipped": 130
        },
        "common_subset": {
-        "score": 0.9122733612599591,
-        "items_out": 6563,
-        "skipped": 142
+        "score": 0.9121092919329927,
+        "items_out": 6575,
+        "skipped": 130
        },
        "unread_at_1": {
-        "score": 0.8955646101380941,
+        "score": 0.8969337182486627,
         "items_out": 6705,
         "skipped": 0
        }
@@ -818,17 +818,17 @@
       "all": {
        "items_in": 12716,
        "read_only": {
-        "score": 0.9110584766902972,
-        "items_out": 12493,
-        "skipped": 223
+        "score": 0.9110409186318841,
+        "items_out": 12517,
+        "skipped": 199
        },
        "common_subset": {
-        "score": 0.9110584766902972,
-        "items_out": 12493,
-        "skipped": 223
+        "score": 0.9110409186318841,
+        "items_out": 12517,
+        "skipped": 199
        },
        "unread_at_1": {
-        "score": 0.8972781511049315,
+        "score": 0.8988877784358152,
         "items_out": 12716,
         "skipped": 0
        }
@@ -836,17 +836,17 @@
       "odd": {
        "items_in": 6011,
        "read_only": {
-        "score": 0.9057971913515711,
-        "items_out": 5930,
-        "skipped": 81
+        "score": 0.9059508946565721,
+        "items_out": 5942,
+        "skipped": 69
        },
        "common_subset": {
-        "score": 0.9057971913515711,
-        "items_out": 5930,
-        "skipped": 81
+        "score": 0.9059508946565721,
+        "items_out": 5942,
+        "skipped": 69
        },
        "unread_at_1": {
-        "score": 0.8953400590531858,
+        "score": 0.8972179747507664,
         "items_out": 6011,
         "skipped": 0
        }
@@ -854,17 +854,17 @@
       "even": {
        "items_in": 6705,
        "read_only": {
-        "score": 0.9158123121403421,
-        "items_out": 6563,
-        "skipped": 142
+        "score": 0.9156409068389265,
+        "items_out": 6575,
+        "skipped": 130
        },
        "common_subset": {
-        "score": 0.9158123121403421,
-        "items_out": 6563,
-        "skipped": 142
+        "score": 0.9156409068389265,
+        "items_out": 6575,
+        "skipped": 130
        },
        "unread_at_1": {
-        "score": 0.8990156412351392,
+        "score": 0.9003847493457078,
         "items_out": 6705,
         "skipped": 0
        }
@@ -874,17 +874,17 @@
       "all": {
        "items_in": 12716,
        "read_only": {
-        "score": 0.9110584766902972,
-        "items_out": 12493,
-        "skipped": 223
+        "score": 0.9110409186318841,
+        "items_out": 12517,
+        "skipped": 199
        },
        "common_subset": {
-        "score": 0.9110584766902972,
-        "items_out": 12493,
-        "skipped": 223
+        "score": 0.9110409186318841,
+        "items_out": 12517,
+        "skipped": 199
        },
        "unread_at_1": {
-        "score": 0.8972781511049315,
+        "score": 0.8988877784358152,
         "items_out": 12716,
         "skipped": 0
        }
@@ -892,17 +892,17 @@
       "odd": {
        "items_in": 6011,
        "read_only": {
-        "score": 0.9057971913515711,
-        "items_out": 5930,
-        "skipped": 81
+        "score": 0.9059508946565721,
+        "items_out": 5942,
+        "skipped": 69
        },
        "common_subset": {
-        "score": 0.9057971913515711,
-        "items_out": 5930,
-        "skipped": 81
+        "score": 0.9059508946565721,
+        "items_out": 5942,
+        "skipped": 69
        },
        "unread_at_1": {
-        "score": 0.8953400590531858,
+        "score": 0.8972179747507664,
         "items_out": 6011,
         "skipped": 0
        }
@@ -910,17 +910,17 @@
       "even": {
        "items_in": 6705,
        "read_only": {
-        "score": 0.9158123121403421,
-        "items_out": 6563,
-        "skipped": 142
+        "score": 0.9156409068389265,
+        "items_out": 6575,
+        "skipped": 130
        },
        "common_subset": {
-        "score": 0.9158123121403421,
-        "items_out": 6563,
-        "skipped": 142
+        "score": 0.9156409068389265,
+        "items_out": 6575,
+        "skipped": 130
        },
        "unread_at_1": {
-        "score": 0.8990156412351392,
+        "score": 0.9003847493457078,
         "items_out": 6705,
         "skipped": 0
        }
@@ -932,17 +932,17 @@
       "all": {
        "items_in": 12716,
        "read_only": {
-        "score": 0.9193272439713103,
-        "items_out": 12493,
-        "skipped": 223
+        "score": 0.919293871116715,
+        "items_out": 12517,
+        "skipped": 199
        },
        "common_subset": {
-        "score": 0.9193272439713103,
-        "items_out": 12493,
-        "skipped": 223
+        "score": 0.919293871116715,
+        "items_out": 12517,
+        "skipped": 199
        },
        "unread_at_1": {
-        "score": 0.9053599246232328,
+        "score": 0.9069745137692158,
         "items_out": 12716,
         "skipped": 0
        }
@@ -950,17 +950,17 @@
       "odd": {
        "items_in": 6011,
        "read_only": {
-        "score": 0.9145001270714014,
-        "items_out": 5930,
-        "skipped": 81
+        "score": 0.9146487759053593,
+        "items_out": 5942,
+        "skipped": 69
        },
        "common_subset": {
-        "score": 0.9145001270714014,
-        "items_out": 5930,
-        "skipped": 81
+        "score": 0.9146487759053593,
+        "items_out": 5942,
+        "skipped": 69
        },
        "unread_at_1": {
-        "score": 0.9038986809551751,
+        "score": 0.9057973753574055,
         "items_out": 6011,
         "skipped": 0
        }
@@ -968,17 +968,17 @@
       "even": {
        "items_in": 6705,
        "read_only": {
-        "score": 0.9236887864391542,
-        "items_out": 6563,
-        "skipped": 142
+        "score": 0.923491765526734,
+        "items_out": 6575,
+        "skipped": 130
        },
        "common_subset": {
-        "score": 0.9236887864391542,
-        "items_out": 6563,
-        "skipped": 142
+        "score": 0.923491765526734,
+        "items_out": 6575,
+        "skipped": 130
        },
        "unread_at_1": {
-        "score": 0.9066699224888101,
+        "score": 0.9080298126496619,
         "items_out": 6705,
         "skipped": 0
        }
@@ -988,17 +988,17 @@
       "all": {
        "items_in": 12716,
        "read_only": {
-        "score": 0.9193272439713103,
-        "items_out": 12493,
-        "skipped": 223
+        "score": 0.919293871116715,
+        "items_out": 12517,
+        "skipped": 199
        },
        "common_subset": {
-        "score": 0.9193272439713103,
-        "items_out": 12493,
-        "skipped": 223
+        "score": 0.919293871116715,
+        "items_out": 12517,
+        "skipped": 199
        },
        "unread_at_1": {
-        "score": 0.9053599246232328,
+        "score": 0.9069745137692158,
         "items_out": 12716,
         "skipped": 0
        }
@@ -1006,17 +1006,17 @@
       "odd": {
        "items_in": 6011,
        "read_only": {
-        "score": 0.9145001270714014,
-        "items_out": 5930,
-        "skipped": 81
+        "score": 0.9146487759053593,
+        "items_out": 5942,
+        "skipped": 69
        },
        "common_subset": {
-        "score": 0.9145001270714014,
-        "items_out": 5930,
-        "skipped": 81
+        "score": 0.9146487759053593,
+        "items_out": 5942,
+        "skipped": 69
        },
        "unread_at_1": {
-        "score": 0.9038986809551751,
+        "score": 0.9057973753574055,
         "items_out": 6011,
         "skipped": 0
        }
@@ -1024,17 +1024,17 @@
       "even": {
        "items_in": 6705,
        "read_only": {
-        "score": 0.9236887864391542,
-        "items_out": 6563,
-        "skipped": 142
+        "score": 0.923491765526734,
+        "items_out": 6575,
+        "skipped": 130
        },
        "common_subset": {
-        "score": 0.9236887864391542,
-        "items_out": 6563,
-        "skipped": 142
+        "score": 0.923491765526734,
+        "items_out": 6575,
+        "skipped": 130
        },
        "unread_at_1": {
-        "score": 0.9066699224888101,
+        "score": 0.9080298126496619,
         "items_out": 6705,
         "skipped": 0
        }
@@ -1046,17 +1046,17 @@
       "all": {
        "items_in": 12716,
        "read_only": {
-        "score": 0.910991669492746,
-        "items_out": 12493,
-        "skipped": 223
+        "score": 0.9109743569640809,
+        "items_out": 12517,
+        "skipped": 199
        },
        "common_subset": {
-        "score": 0.910991669492746,
-        "items_out": 12493,
-        "skipped": 223
+        "score": 0.9109743569640809,
+        "items_out": 12517,
+        "skipped": 199
        },
        "unread_at_1": {
-        "score": 0.8972136699853313,
+        "score": 0.8988232973162151,
         "items_out": 12716,
         "skipped": 0
        }
@@ -1064,17 +1064,17 @@
       "odd": {
        "items_in": 6011,
        "read_only": {
-        "score": 0.9057351765951794,
-        "items_out": 5930,
-        "skipped": 81
+        "score": 0.9058890051403482,
+        "items_out": 5942,
+        "skipped": 69
        },
        "common_subset": {
-        "score": 0.9057351765951794,
-        "items_out": 5930,
-        "skipped": 81
+        "score": 0.9058890051403482,
+        "items_out": 5942,
+        "skipped": 69
        },
        "unread_at_1": {
-        "score": 0.8952803509139037,
+        "score": 0.8971582666114842,
         "items_out": 6011,
         "skipped": 0
        }
@@ -1082,17 +1082,17 @@
       "even": {
        "items_in": 6705,
        "read_only": {
-        "score": 0.9157411747315957,
-        "items_out": 6563,
-        "skipped": 142
+        "score": 0.9155701228251636,
+        "items_out": 6575,
+        "skipped": 130
        },
        "common_subset": {
-        "score": 0.9157411747315957,
-        "items_out": 6563,
-        "skipped": 142
+        "score": 0.9155701228251636,
+        "items_out": 6575,
+        "skipped": 130
        },
        "unread_at_1": {
-        "score": 0.8989468811618192,
+        "score": 0.9003159892723878,
         "items_out": 6705,
         "skipped": 0
        }
@@ -1102,17 +1102,17 @@
       "all": {
        "items_in": 12716,
        "read_only": {
-        "score": 0.910991669492746,
-        "items_out": 12493,
-        "skipped": 223
+        "score": 0.9109743569640809,
+        "items_out": 12517,
+        "skipped": 199
        },
        "common_subset": {
-        "score": 0.910991669492746,
-        "items_out": 12493,
-        "skipped": 223
+        "score": 0.9109743569640809,
+        "items_out": 12517,
+        "skipped": 199
        },
        "unread_at_1": {
-        "score": 0.8972136699853313,
+        "score": 0.8988232973162151,
         "items_out": 12716,
         "skipped": 0
        }
@@ -1120,17 +1120,17 @@
       "odd": {
        "items_in": 6011,
        "read_only": {
-        "score": 0.9057351765951794,
-        "items_out": 5930,
-        "skipped": 81
+        "score": 0.9058890051403482,
+        "items_out": 5942,
+        "skipped": 69
        },
        "common_subset": {
-        "score": 0.9057351765951794,
-        "items_out": 5930,
-        "skipped": 81
+        "score": 0.9058890051403482,
+        "items_out": 5942,
+        "skipped": 69
        },
        "unread_at_1": {
-        "score": 0.8952803509139037,
+        "score": 0.8971582666114842,
         "items_out": 6011,
         "skipped": 0
        }
@@ -1138,17 +1138,17 @@
       "even": {
        "items_in": 6705,
        "read_only": {
-        "score": 0.9157411747315957,
-        "items_out": 6563,
-        "skipped": 142
+        "score": 0.9155701228251636,
+        "items_out": 6575,
+        "skipped": 130
        },
        "common_subset": {
-        "score": 0.9157411747315957,
-        "items_out": 6563,
-        "skipped": 142
+        "score": 0.9155701228251636,
+        "items_out": 6575,
+        "skipped": 130
        },
        "unread_at_1": {
-        "score": 0.8989468811618192,
+        "score": 0.9003159892723878,
         "items_out": 6705,
         "skipped": 0
        }
@@ -1160,17 +1160,17 @@
       "all": {
        "items_in": 12716,
        "read_only": {
-        "score": 0.910991669492746,
-        "items_out": 12493,
-        "skipped": 223
+        "score": 0.9109743569640809,
+        "items_out": 12517,
+        "skipped": 199
        },
        "common_subset": {
-        "score": 0.910991669492746,
-        "items_out": 12493,
-        "skipped": 223
+        "score": 0.9109743569640809,
+        "items_out": 12517,
+        "skipped": 199
        },
        "unread_at_1": {
-        "score": 0.8972136699853313,
+        "score": 0.8988232973162151,
         "items_out": 12716,
         "skipped": 0
        }
@@ -1178,17 +1178,17 @@
       "odd": {
        "items_in": 6011,
        "read_only": {
-        "score": 0.9057351765951794,
-        "items_out": 5930,
-        "skipped": 81
+        "score": 0.9058890051403482,
+        "items_out": 5942,
+        "skipped": 69
        },
        "common_subset": {
-        "score": 0.9057351765951794,
-        "items_out": 5930,
-        "skipped": 81
+        "score": 0.9058890051403482,
+        "items_out": 5942,
+        "skipped": 69
        },
        "unread_at_1": {
-        "score": 0.8952803509139037,
+        "score": 0.8971582666114842,
         "items_out": 6011,
         "skipped": 0
        }
@@ -1196,17 +1196,17 @@
       "even": {
        "items_in": 6705,
        "read_only": {
-        "score": 0.9157411747315957,
-        "items_out": 6563,
-        "skipped": 142
+        "score": 0.9155701228251636,
+        "items_out": 6575,
+        "skipped": 130
        },
        "common_subset": {
-        "score": 0.9157411747315957,
-        "items_out": 6563,
-        "skipped": 142
+        "score": 0.9155701228251636,
+        "items_out": 6575,
+        "skipped": 130
        },
        "unread_at_1": {
-        "score": 0.8989468811618192,
+        "score": 0.9003159892723878,
         "items_out": 6705,
         "skipped": 0
        }
@@ -1216,17 +1216,17 @@
       "all": {
        "items_in": 12716,
        "read_only": {
-        "score": 0.910991669492746,
-        "items_out": 12493,
-        "skipped": 223
+        "score": 0.9109743569640809,
+        "items_out": 12517,
+        "skipped": 199
        },
        "common_subset": {
-        "score": 0.910991669492746,
-        "items_out": 12493,
-        "skipped": 223
+        "score": 0.9109743569640809,
+        "items_out": 12517,
+        "skipped": 199
        },
        "unread_at_1": {
-        "score": 0.8972136699853313,
+        "score": 0.8988232973162151,
         "items_out": 12716,
         "skipped": 0
        }
@@ -1234,17 +1234,17 @@
       "odd": {
        "items_in": 6011,
        "read_only": {
-        "score": 0.9057351765951794,
-        "items_out": 5930,
-        "skipped": 81
+        "score": 0.9058890051403482,
+        "items_out": 5942,
+        "skipped": 69
        },
        "common_subset": {
-        "score": 0.9057351765951794,
-        "items_out": 5930,
-        "skipped": 81
+        "score": 0.9058890051403482,
+        "items_out": 5942,
+        "skipped": 69
        },
        "unread_at_1": {
-        "score": 0.8952803509139037,
+        "score": 0.8971582666114842,
         "items_out": 6011,
         "skipped": 0
        }
@@ -1252,17 +1252,17 @@
       "even": {
        "items_in": 6705,
        "read_only": {
-        "score": 0.9157411747315957,
-        "items_out": 6563,
-        "skipped": 142
+        "score": 0.9155701228251636,
+        "items_out": 6575,
+        "skipped": 130
        },
        "common_subset": {
-        "score": 0.9157411747315957,
-        "items_out": 6563,
-        "skipped": 142
+        "score": 0.9155701228251636,
+        "items_out": 6575,
+        "skipped": 130
        },
        "unread_at_1": {
-        "score": 0.8989468811618192,
+        "score": 0.9003159892723878,
         "items_out": 6705,
         "skipped": 0
        }
@@ -2165,7 +2165,7 @@
  },
  "control": {
   "segments_in": 4158,
-  "read_by_pm_panphon22": 2614,
+  "read_by_pm_panphon22": 2627,
   "read_by_panphon_weighted": 1212,
   "segments_read_by_both": 1207,
   "pairs_compared": 727821,

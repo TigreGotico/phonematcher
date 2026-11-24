@@ -104,9 +104,9 @@ def test_the_tone_numbers_equal_the_tone_file():
 def test_the_allophone_views_equal_the_allophone_file():
     row = results("allophones-seen.json")["systems"]["phonematcher"]["direct"]["all"]
     assert row["unread_at_1"]["items_out"] == row["items_in"] == 12716
-    assert (row["read_only"]["items_out"], row["read_only"]["skipped"]) == (12493, 223)
+    assert (row["read_only"]["items_out"], row["read_only"]["skipped"]) == (12517, 199)
     assert f"{row['unread_at_1']['score']:.4f}" in PAGE and f"{row['read_only']['score']:.4f}" in PAGE
-    assert "12716" in PAGE and "223" in PAGE and "12493" in PAGE
+    assert "12716" in PAGE and "199" in PAGE and "12517" in PAGE
 
 
 def test_the_panphon_control_numbers_equal_the_ablation_file():
@@ -203,4 +203,4 @@ def test_the_sourced_value_table_equals_the_corrections_file():
                  f"{signed(paired['diff'])} [{signed(paired['low'])}, {signed(paired['high'])}]"]
         assert f"| {labels[task]} | " + " | ".join(cells) + " |" in PAGE
     assert data["adopted"] and all(data["paired"][t]["paired"]["after"]["high"] > 0 for t in keys)
-    assert all(head == "100ff08cf33c0687edcd7efa8eea10c8ef978166" for head in data["after"]["heads"].values())
+    assert all(head == "4f254da108460c3a56c25c482751aa0cae11fe1c" for head in data["after"]["heads"].values())

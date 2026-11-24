@@ -67,9 +67,9 @@ Coverage shows how much real transcription the table can read. We counted covera
 <!-- whitepaper:coverage:start -->
 | Corpus | Segment types | Types read | Share of types | Share of tokens |
 |---|---|---|---|---|
-| PHOIBLE 2.0 | 4158 | 3765 | 0.9055 | 0.9944 |
-| WikiPron | 3604 | 2605 | 0.7228 | 0.9939 |
-| orthography2ipa | 2569 | 2184 | 0.8501 | 0.9898 |
+| PHOIBLE 2.0 | 4158 | 3783 | 0.9098 | 0.9947 |
+| WikiPron | 3604 | 2631 | 0.7300 | 0.9939 |
+| orthography2ipa | 2569 | 2269 | 0.8832 | 0.9936 |
 <!-- whitepaper:coverage:end -->
 
 Most segments that the table cannot read are rare. Thus the token share is much higher than the type share. The table cannot read these types of segment:
@@ -104,9 +104,9 @@ The tie rule increases coverage. This table gives the PHOIBLE types that read wi
 <!-- whitepaper:readings:start -->
 | Reading of a PHOIBLE segment | Types read | Share of types |
 |---|---|---|
-| the segment as written | 2663 of 4158 | 0.6405 |
-| as written, or with a tie bar between its pieces | 2692 of 4158 | 0.6474 |
-| as the library reads a word: whole, split into segments, tones included | 3765 of 4158 | 0.9055 |
+| the segment as written | 2627 of 4158 | 0.6318 |
+| as written, or with a tie bar between its pieces | 2704 of 4158 | 0.6503 |
+| as the library reads a word: whole, split into segments, tones included | 3783 of 4158 | 0.9098 |
 <!-- whitepaper:readings:end -->
 
 A tone is four features of the vowel that has it. The tone comes after its syllable, and the library puts it on the last vowel or syllabic consonant before it in the word. Tone letters, tone diacritics and superscript digits give the same features. Thus `má`, `ma˦` and `ma⁴` all read as `m`, `a˦`, and `tam˧˧` reads as `t`, `a˧˧`, `m`. The four features are those of the tone block of phoonnx: `tone_is`, and the pitch at the start, the middle and the end of the syllable, each Chao level as `(level − 3) / 2`. We do not use the two tone features of PanPhon. The distance divides by the weight of the segment features only, so a pair with no tone keeps its distance. A tone with no vowel before it in its word stays a segment of its own. We compare two such tones by the mean difference of their three pitches, divided by the range of the five levels. Section 6 shows that this ranking of tones is not better than a simple baseline. Thus the tone model is experimental.
@@ -131,7 +131,7 @@ The search does not compare the query with each term. The index puts the letters
 
 The sensitivity controls the size of the clusters. It is a share between 0 and 1. The merge threshold is that quantile of the costs of all pairs of letters. Thus one share has the same meaning with different costs.
 
-We chose the default share, 0.08, on the development data. We took the share with the best mean recall@1 that also kept the lists of candidates short. The shares 0.08 and 0.12 both have a mean recall@1 of 0.8521 over the four dialect pairs. We took the smaller share, because it gives fewer candidates.
+We chose the default share, 0.12, on the development data. We took the share with the best mean recall@1 that also kept the lists of candidates short. The share 0.12 has a mean recall@1 of 0.8521 over the four dialect pairs, and the share 0.08 has 0.8348.
 
 A segment that phonematcher cannot read is at distance 1 from every other segment. The library gives no warning. With `strict=True`, the distance, alignment and search functions stop with an error. The error gives the segment. Strict mode cannot find the ASCII letters `c`, `y`, `j` and `r`, because they are also IPA letters.
 
@@ -355,13 +355,13 @@ Lakretz et al. (2018) learn a perceptual metric from confusions. They compare it
 
 The PanPhon weight file gives `tense` 0.25, `long` 0.125 and `velaric` 0.25. The PanPhon feature table reads these numbers without their names. It gives them in its own feature order, which ends with `velaric`, `tense`, `long`. Thus a PanPhon distance gives 0.25 to `velaric`, 0.125 to `tense` and 0.25 to `long`. phonematcher reads the weights by name.
 
-A control shows this. One variant of phonematcher has PanPhon's 22 features and the weights that PanPhon applies. This variant agrees with the weighted PanPhon distance on each pair of segments that has PanPhon's values. It differs on other pairs, because our table changes some values. 710 of the 1207 segments that both read have one or more changed values.
+A control shows this. One variant of phonematcher has PanPhon's 22 features and the weights that PanPhon applies. This variant agrees with the weighted PanPhon distance on each pair of segments that has PanPhon's values. It differs on other pairs, because our table changes some values. 725 of the 1207 segments that both read have one or more changed values.
 
 <!-- whitepaper:control:start -->
 | Pairs | Count | Distance differs |
 |---|---|---|
-| segment pairs that both read | 727821 | 556665 |
-| pairs whose 22 values equal PanPhon's | 123256 | 0 |
+| segment pairs that both read | 727821 | 561318 |
+| pairs whose 22 values equal PanPhon's | 115921 | 0 |
 <!-- whitepaper:control:end -->
 
 Two of our results agree with earlier work. Heeringa (2004, p. 185) found that methods with phones were better than methods with features, against perception. Sofroniev and Çöltekin (2018, p. 114) found PHOIBLE feature vectors below SCA on the same alignment benchmark.
@@ -376,7 +376,7 @@ The numbers of the released library come from the candidate that won the same te
 
 We defined the common words of the cognate table after we saw the results. They do not include the two tonal sets, Chinese and Tujia. They keep only the words that the weakest reader can read.
 
-Only the three test result files have a clean commit and the hash of the written rules. The development and seen results come from working trees. Most of these trees had changes that were not committed.
+Only the three test result files have the hash of the written rules. The development and seen results come from one later run on the clean tree of commit `4f254da`, which has the sourced feature values and the tone features.
 
 The alignment comparison uses few pairs. The retrieval comparison with SCA and ALINE uses samples.
 
@@ -392,7 +392,7 @@ The two audit runs of section 6 are not in the result files. The triangle check 
 
 The relative sensitivity and strict mode came after the test. They do not change a word distance. A test keeps a hash of many word distances, and this hash did not change. On the development queries, each query gives the same result at the share 0.08 as with the absolute threshold 0.1 of the tested version. The paired difference in mean recall at 1 is 0.0000, with an interval from 0.0000 to 0.0000 (1000 resamples, seed 0, 500 queries in each of four pairs). A query returns from 1% to 23% fewer candidates, depending on the pair. This comparison is an audit run. No result file has its scores for each query.
 
-Some feature values of the released table differ from the values that the test scored. Each of them follows a cited source, and they change some word distances. The test numbers describe the tested library. `docs/design.md` lists these values and their sources.
+Some feature values of the released table differ from the values that the test scored. Each of them follows a cited source, and they change some word distances. The test numbers describe the tested library. `docs/design.md` lists these values and their sources. It also compares the development scores with and without them, and no paired interval lies wholly below 0, so the released table keeps them.
 
 `benchmarks/render.py` makes the tables of this paper from `benchmarks/results/`. `tests/test_whitepaper.py` checks each number in the text against those files. It connects each number to the system and the claim in its sentence. The five audit-run numbers of section 6 and the three of the sensitivity comparison above are typed, because no file has them.
 

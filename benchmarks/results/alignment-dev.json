@@ -2,7 +2,7 @@
  "task": "alignment",
  "system": "phonematcher,levenshtein,aline,sca",
  "split": "dev",
- "commit": "100ff08cf33c0687edcd7efa8eea10c8ef978166",
+ "commit": "4f254da108460c3a56c25c482751aa0cae11fe1c",
  "data": {
   "source": "https://github.com/SequenceComparison/SupplementaryMaterial",
   "sha": "cc4bf855f9549867e86157f49ac03608717b95c2",

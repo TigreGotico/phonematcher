@@ -219,9 +219,11 @@ def prose_values():
     means = {share: math.fsum(r) / len(r) for share, r in by_share.items()}
     best = max(round(m, 4) for m in means.values())
     tied = sorted(share for share, m in means.items() if round(m, 4) == best)
-    assert tied[0] == PhoneticFuzzySearch().cluster_sensitivity
-    values.update({f"{share:g}": "sensitivity tied at the best dev recall@1" for share in tied})
+    assert tied == [PhoneticFuzzySearch().cluster_sensitivity]
+    values.update({f"{share:g}": "sensitivity with the best dev recall@1" for share in tied})
     values[f4(best)] = "best mean dev recall@1 of the fuzzy search"
+    values["0.08"] = "sensitivity that rule 7 did not pick"
+    values[f4(means[0.08])] = "mean dev recall@1 of the fuzzy search at share 0.08"
 
     samples = {system: {p["systems"][system]["sample"] for p in retrieval["pairs"].values()} for system in ("sca", "aline")}
     values.update({str(n): f"{system} retrieval sample" for system, (n,) in samples.items()})
