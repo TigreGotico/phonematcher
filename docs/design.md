@@ -37,7 +37,7 @@ The shared `atr` − encodes the overlap. The separate feature encodes the diffe
 
 ### Marks that move a vowel along a scale
 
-The marks `◌̝ ◌̞ ◌̟ ◌̠ ◌̈ ◌̽ ◌̹ ◌̜` move a vowel along the height, backness or rounding scale. PanPhon has no rule for most of them. The alternative is to read them as the bare letter. The table takes a rule for each mark, because the IPA chart names each mark and says what it moves. The size of the step, one chart row or column, is this table's own.
+The marks `◌̝ ◌̞ ◌̟ ◌̠ ◌̈ ◌̽ ◌̹ ◌̜` move a vowel along the height, backness or rounding scale. PanPhon has no rule for most of them. The alternative is to read them as the bare letter. The table takes a rule for each mark, because the IPA chart names each mark and says what it moves. The size of the step, one chart row or column, is this table's own. On a consonant, `◌̝` and `◌̞` follow the chart's own examples instead: `ɹ̝` is a fricative and `β̞` is an approximant (`docs/features.md`).
 
 The rules change no score that the benchmarks measure. Under the C0 word costs (gap 1, linear substitutions), the variant with no scale shifts differs from the shipped table by less than 0.0001 in the paired cognate difference on the test sets. On the development split, under the shipped word costs, the cognate AP of that variant is 0.7726 and the shipped table's is 0.7727. The rules stay for the sake of the chart's meaning, and the benchmarks do not support them or oppose them.
 
@@ -131,6 +131,10 @@ P5 beat C0 on all three tasks and had the largest cognate difference, so the lib
 The search clusters phones on the price that ranks its candidates, so one pair of sounds has one price. The sensitivity is a share from 0 to 1: the merge threshold is that quantile of the segment costs over all pairs of letters in the table, so a value keeps its meaning when the costs change.
 
 The default share is 0.08. Rule 7 of [`benchmarks/prereg-2.md`](https://github.com/TigreGotico/phonematcher/blob/dev/benchmarks/prereg-2.md) chooses it on the development split, and [Search](search.md#6-choose-a-sensitivity) gives the rule and the values. The costs of the word distance, the alignment and the cognate task do not depend on the clusters.
+
+### Corrections to feature values after the test run
+
+The test run scored the library once, and its numbers stay as recorded. A linguistic audit of the table came after it and found values that disagree with their sources. Each correction came after the test run and changes some word distances. The marks `◌̝ ◌̞ ˔ ˕` on a consonant follow the chart examples `ɹ̝` and `β̞` (`docs/features.md`). The development and seen result files predate these corrections.
 
 ### The feature weights stay
 
