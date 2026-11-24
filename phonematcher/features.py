@@ -19,7 +19,7 @@ import warnings
 from functools import lru_cache
 from itertools import takewhile
 from pathlib import Path
-from typing import Dict, Iterable, List, Optional, Tuple, Union
+from typing import Any, Dict, Iterable, List, Optional, Tuple, Union
 
 from phonematcher.scales import shift
 from phonematcher.tone import DIACRITIC_TONES, LEVELS, NUMERALS, _contour
@@ -375,6 +375,11 @@ class PhoneFeatures:
     order of :data:`FEATURES`: + is 1.0, − is -1.0, 0 is 0.0, and a tone pitch is its number, with
     0.0 for a segment that has no tone. A segment that cannot be read raises ``ValueError``, or with
     ``strict=False`` gives a row of NaN. The rows are lists, so numpy is not needed.
+
+    The input is a one-dimensional sequence of segments. The class has ``fit``, ``transform``,
+    ``fit_transform``, ``get_feature_names_out``, ``get_params`` and ``set_params``, so ``clone``
+    and ``Pipeline`` work. It has no scikit-learn tags: ``check_estimator``, ``ColumnTransformer``,
+    ``set_output`` and a two-dimensional array input are not supported.
     """
 
     def __init__(self, strict: bool = True):
@@ -383,7 +388,7 @@ class PhoneFeatures:
     def get_params(self, deep: bool = True) -> Dict[str, bool]:
         return {"strict": self.strict}
 
-    def set_params(self, **params) -> "PhoneFeatures":
+    def set_params(self, **params: Any) -> "PhoneFeatures":
         for name, value in params.items():
             if name not in self.get_params():
                 raise ValueError(f"Invalid parameter {name!r} for PhoneFeatures; the parameters are 'strict'")
@@ -391,7 +396,6 @@ class PhoneFeatures:
         return self
 
     def fit(self, X: Iterable[str], y=None) -> "PhoneFeatures":
-        self.n_features_out_ = NUM_FEATURES
         return self
 
     def transform(self, X: Iterable[str]) -> List[List[float]]:

@@ -59,13 +59,13 @@ dict(zip(FEATURES, rows[1]))["tone_start"]   # 1.0
 dict(zip(FEATURES, rows[0]))["tone_start"]   # 0.0
 ```
 
-A segment that cannot be read raises `ValueError`. With `strict=False` it gives a row of NaN.
+A segment that cannot be read raises `ValueError`. With `strict=False` it gives a row of NaN. `pairwise_distances` takes the same keyword: with `strict=True`, which is its default, an item that cannot be read raises `ValueError`, and with `strict=False` it is at distance 1 from every other item. `pairwise_distances` needs a list of items, and a bare string raises `TypeError`.
 
 ```python
 PhoneFeatures(strict=False).transform(["?"])[0][0] != PhoneFeatures(strict=False).transform(["?"])[0][0]   # True
 ```
 
-Because the class has `get_params` and `set_params`, it works in a `Pipeline` and with `clone`:
+The input is a one-dimensional list of segments. The class works with `get_params`, `set_params`, `clone` and `Pipeline`, and with estimators that take `metric="precomputed"`. It has no scikit-learn tags, so `check_estimator` does not accept it. `ColumnTransformer` does not accept it. `set_output` is not available. A two-dimensional array input is not supported.
 
 ```python
 from sklearn.cluster import KMeans
