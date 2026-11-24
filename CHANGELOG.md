@@ -1,5 +1,13 @@
 # Changelog
 
+## [3.0.0a1](https://github.com/TigreGotico/phonematcher/tree/3.0.0a1) (2026-11-24)
+
+[Full Changelog](https://github.com/TigreGotico/phonematcher/compare/2.7.14a1...3.0.0a1)
+
+**Breaking changes:**
+
+- feat!: read a tone as four features of the vowel that carries it [\#176](https://github.com/TigreGotico/phonematcher/pull/176) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
+
 ## [2.7.14a1](https://github.com/TigreGotico/phonematcher/tree/2.7.14a1) (2026-11-24)
 
 [Full Changelog](https://github.com/TigreGotico/phonematcher/compare/2.7.13a1...2.7.14a1)
@@ -378,17 +386,9 @@
 
 [Full Changelog](https://github.com/TigreGotico/phonematcher/compare/1.0.0a2...1.0.0a3)
 
-**Merged pull requests:**
-
-- docs: add the design and limits page [\#65](https://github.com/TigreGotico/phonematcher/pull/65) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
-
 ## [1.0.0a2](https://github.com/TigreGotico/phonematcher/tree/1.0.0a2) (2026-11-22)
 
 [Full Changelog](https://github.com/TigreGotico/phonematcher/compare/1.0.0a1...1.0.0a2)
-
-**Merged pull requests:**
-
-- docs: walk-through pages, docs index, navigation and a test that runs every example [\#66](https://github.com/TigreGotico/phonematcher/pull/66) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
 
 ## [1.0.0a1](https://github.com/TigreGotico/phonematcher/tree/1.0.0a1) (2026-11-22)
 
