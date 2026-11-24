@@ -188,7 +188,7 @@ def vectorize_phones(segment: str) -> Vector:
                 # stay with it, a modifier letter after it goes with the click.
                 letter = parts[1][:1] + "".join(takewhile(unicodedata.combining, parts[1][1:]))
                 return vectorize_phones(letter + TIES[0] + parts[0] + parts[1][len(letter):])
-            rear_letter = parts[0][0] in _REAR_CLOSURES and all(map(unicodedata.combining, parts[0][1:]))
+            rear_letter = parts[0][:1] in _REAR_CLOSURES and all(map(unicodedata.combining, parts[0][1:]))
             if len(parts) != 2 or not rear_letter or parts[1][0] not in _CLICKS:
                 raise _unrecognized(segment)
             rear, click = (vectorize_phones(part) for part in parts)
