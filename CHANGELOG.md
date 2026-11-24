@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.7.12a1](https://github.com/TigreGotico/phonematcher/tree/2.7.12a1) (2026-11-24)
+
+[Full Changelog](https://github.com/TigreGotico/phonematcher/compare/2.7.11a1...2.7.12a1)
+
+**Merged pull requests:**
+
+- fix: a superscript nasal stays unread before a glottalic consonant [\#167](https://github.com/TigreGotico/phonematcher/pull/167) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
+
 ## [2.7.11a1](https://github.com/TigreGotico/phonematcher/tree/2.7.11a1) (2026-11-24)
 
 [Full Changelog](https://github.com/TigreGotico/phonematcher/compare/2.7.10a1...2.7.11a1)
@@ -385,10 +393,6 @@
 ## [0.19.0a1](https://github.com/TigreGotico/phonematcher/tree/0.19.0a1) (2026-11-22)
 
 [Full Changelog](https://github.com/TigreGotico/phonematcher/compare/0.18.0a1...0.19.0a1)
-
-**Merged pull requests:**
-
-- feat: add the speed benchmark with a hash of the letter-pair distance matrix [\#59](https://github.com/TigreGotico/phonematcher/pull/59) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
 
 ## [0.18.0a1](https://github.com/TigreGotico/phonematcher/tree/0.18.0a1) (2026-11-22)
 
