@@ -26,8 +26,8 @@ from phonematcher.tone import DIACRITIC_TONES, LEVELS, NUMERALS
     ("ma˥˩ ta²¹⁴", [(0, 1), (1, 2), (2, 4), (5, 6), (6, 7), (7, 10)]),
     # m0 U+200B1 a2 U+FEFF3: format characters are gaps
     ("m​a﻿", [(0, 1), (2, 3)]),
-    # a0 ͡1 i2: a diphthong is two segments and the tie bar is a gap
-    ("a͡i", [(0, 1), (2, 3)]),
+    # a0 ͡1 i2: the tie bar is in the spans of a and of i̯, so the diphthong is one span
+    ("a͡i", [(0, 3)]),
     # ⁿ0 d1 a2: a prenasal mark belongs to the stop after it
     ("ⁿda", [(0, 2), (2, 3)]),
     # p0 a1 space2 tab3 t4 a5

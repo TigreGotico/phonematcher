@@ -21,7 +21,8 @@ def segments(ipa: str) -> List[str]:
 
     A segment is a base symbol with the diacritics and modifier letters that follow it. A tie bar
     joins the symbols on both sides into one segment, so ``t͡ʃ`` is one affricate, unless both are
-    vowels: a diphthong is two segments, so ``a͡i`` gives ``a`` and ``i``. Spaces become a
+    vowels: a diphthong is two segments, a vowel and a non-syllabic vowel, so ``a͡i`` gives ``a``
+    and ``i̯``, as ``ai̯`` does. Spaces become a
     ``" "`` segment between words; stress, syllable and phrase-tone marks are dropped. A tone is
     one segment of tone letters after its syllable: a tone diacritic or a tone numeral is written
     as tone letters after the segment that carries it. A tone diacritic on a tone letter adds its
@@ -79,6 +80,7 @@ def _segments(nfd: str, track: bool = False) -> Tuple[List[str], List[List[int]]
     at: List[List[int]] = []  # with track: the positions of each segment, and of the held marks below
     pending_at, tone_at, carried_at = [], [], []
     join_next = False
+    offglide = -1  # the index in out of the offglide of a tied diphthong, which holds its ◌̯
     pending = ""  # marks written before the base they belong to
 
     def release_pending() -> None:
@@ -183,9 +185,19 @@ def _segments(nfd: str, track: bool = False) -> Tuple[List[str], List[List[int]]
             continue
         if join_next and out[-1][-1] in TIES and is_vowel_phone(out[-1][:-1].replace(NON_SYLLABIC, "")) and is_vowel_phone(ch):
             out[-1] = out[-1][:-1]
+            if NON_SYLLABIC in out[-1] and offglide != len(out) - 1:  # a rising diphthong with its glide marked: i̯͡a
+                out.append(ch)
+            else:  # the second vowel of a tied diphthong is its offglide
+                out.append(ch + NON_SYLLABIC)
+                offglide = len(out) - 1
             if track:
-                at[-1].pop()
+                at.append([tie_at, i])  # the tie bar is in both spans, so the diphthong is one span
             join_next = False
+            continue
+        if ch == NON_SYLLABIC and out and offglide == len(out) - 1:
+            if track:
+                at[-1].append(i)
+            continue
         starts_word = not out or out[-1] == " "
         if ch in PRE_DIACRITICS and (starts_word or is_vowel_phone(out[-1])) and not join_next:
             pending += ch
