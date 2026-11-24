@@ -1,5 +1,13 @@
 # Changelog
 
+## [3.1.3a1](https://github.com/TigreGotico/phonematcher/tree/3.1.3a1) (2026-11-24)
+
+[Full Changelog](https://github.com/TigreGotico/phonematcher/compare/3.1.2a1...3.1.3a1)
+
+**Merged pull requests:**
+
+- fix: carry a tone with the length or combining mark written after it [\#193](https://github.com/TigreGotico/phonematcher/pull/193) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
+
 ## [3.1.2a1](https://github.com/TigreGotico/phonematcher/tree/3.1.2a1) (2026-11-24)
 
 [Full Changelog](https://github.com/TigreGotico/phonematcher/compare/3.1.1a1...3.1.2a1)
@@ -382,10 +390,6 @@
 ## [2.2.1a1](https://github.com/TigreGotico/phonematcher/tree/2.2.1a1) (2026-11-22)
 
 [Full Changelog](https://github.com/TigreGotico/phonematcher/compare/2.2.0a2...2.2.1a1)
-
-**Merged pull requests:**
-
-- fix: check the type of public arguments, add \_\_version\_\_, document silent cases [\#86](https://github.com/TigreGotico/phonematcher/pull/86) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
 
 ## [2.2.0a2](https://github.com/TigreGotico/phonematcher/tree/2.2.0a2) (2026-11-22)
 
