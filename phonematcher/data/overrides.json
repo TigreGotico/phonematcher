@@ -184,8 +184,12 @@
       "name": "Raised",
       "vowels_only": false,
       "content": {},
-      "source": "International Phonetic Association, The IPA Chart, IPA_Kiel.pdf at internationalphoneticassociation.org (footer 'IPA Chart revised to 2015/2005'): the diacritic is named 'Raised'",
-      "reason": "PanPhon's rule changes no feature. This table reads the mark as one chart row closer.",
+      "consonant": {
+        "when": {"syl": "-", "son": "+", "cont": "+", "nas": "-", "trill": "-", "tap": "-"},
+        "set": {"son": "-", "cons": "+"}
+      },
+      "source": "International Phonetic Association, The IPA Chart, IPA_Kiel.pdf at internationalphoneticassociation.org (footer 'IPA Chart revised to 2015/2005'), Diacritics: 'Raised e̝ (ɹ̝ = voiced alveolar fricative)'",
+      "reason": "PanPhon's rule changes no feature. On a vowel this table reads the mark as one chart row closer. On an approximant it gives the fricative at the same place, as the chart's example ɹ̝ shows: [-sonorant, +consonantal], the two features in which the table's rows for the fricative ʝ and the approximant j differ.",
       "shift": {
         "height": -1
       }
@@ -195,8 +199,12 @@
       "name": "Lowered",
       "vowels_only": false,
       "content": {},
-      "source": "International Phonetic Association, The IPA Chart, IPA_Kiel.pdf at internationalphoneticassociation.org (footer 'IPA Chart revised to 2015/2005'): the diacritic is named 'Lowered'",
-      "reason": "PanPhon's rule changes no feature. This table reads the mark as one chart row more open.",
+      "consonant": {
+        "when": {"syl": "-", "son": "-", "cont": "+"},
+        "set": {"son": "+", "cons": "-"}
+      },
+      "source": "International Phonetic Association, The IPA Chart, IPA_Kiel.pdf at internationalphoneticassociation.org (footer 'IPA Chart revised to 2015/2005'), Diacritics: 'Lowered e̞ (β̞ = voiced bilabial approximant)'",
+      "reason": "PanPhon's rule changes no feature. On a vowel this table reads the mark as one chart row more open. On a fricative it gives the approximant at the same place, as the chart's example β̞ shows: [+sonorant, -consonantal], the two features in which the table's rows for the approximant j and the fricative ʝ differ.",
       "shift": {
         "height": 1
       }
@@ -417,8 +425,12 @@
       "shift": {
         "height": -1
       },
+      "consonant": {
+        "when": {"syl": "-", "son": "+", "cont": "+", "nas": "-", "trill": "-", "tap": "-"},
+        "set": {"son": "-", "cons": "+"}
+      },
       "source": "The Unicode Standard 18.0 code chart U02B0, https://www.unicode.org/charts/PDF/U02B0.pdf (footer 'The Unicode Standard, Version 18.0, Copyright © 1991-2026 Unicode, Inc.'), PDF p. 4: '02D4 MODIFIER LETTER UP TACK • vowel raising or closing → 031D combining up tack below'",
-      "reason": "The chart names ˔ the spacing form of ◌̝, so it takes the rule of ◌̝."
+      "reason": "The chart names ˔ the spacing form of ◌̝, so it takes the rule of ◌̝, on a vowel and on a consonant."
     },
     {
       "marker": "˕",
@@ -433,8 +445,12 @@
       "shift": {
         "height": 1
       },
+      "consonant": {
+        "when": {"syl": "-", "son": "-", "cont": "+"},
+        "set": {"son": "+", "cons": "-"}
+      },
       "source": "The Unicode Standard 18.0 code chart U02B0, https://www.unicode.org/charts/PDF/U02B0.pdf (footer 'The Unicode Standard, Version 18.0, Copyright © 1991-2026 Unicode, Inc.'), PDF p. 4: '02D5 MODIFIER LETTER DOWN TACK • vowel lowering or opening → 031E combining down tack below'",
-      "reason": "The chart names ˕ the spacing form of ◌̞, so it takes the rule of ◌̞."
+      "reason": "The chart names ˕ the spacing form of ◌̞, so it takes the rule of ◌̞, on a vowel and on a consonant."
     },
     {
       "marker": "˖",
