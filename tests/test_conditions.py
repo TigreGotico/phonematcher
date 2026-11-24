@@ -51,8 +51,9 @@ REFUSED = {
     'ʰ': "aʰ aːʰ eʰ eːʰ iʰ jʰ lʰ l̥ʰ mʰ m̥ʰ nʰ n̥ʰ oʰ oːʰ rʰ r̥ʰ uʰ w̥ʰ yʰ øːʰ œʰ ɑʰ ɑːʰ ɔʰ əʰ ɛʰ ɪʰ ɲʰ ɵʰ ɾʰ ʊʰ ʌʰ ʔʰ ʰj ʰr̥ ŋ̊ʰ",
     # Labialized: the IPA chart prints tʷ and dʷ. These bases are vowels and a syllabic fricative.
     'ʷ': "oʷː uʷ uʷː yʷː z̩ʷ øʷː ɔʷ ʉʷ ʉʷː ʊʷ ʏʷ",
-    # Nasal release: the IPA chart prints dⁿ. These bases are vowels, fricatives, liquids, glides and a nasal.
-    'ⁿ': "aⁿ eⁿ iⁿ oⁿ uⁿ ãⁿ äⁿ ɑⁿ ᵐf ᵐfʷ ᵐm ᵐv ᵐw ᵐz ᵑɣᶣ ᵑʃ ⁿf ⁿh ⁿhʷ ⁿj ⁿl ⁿlʷ ⁿs ⁿsʷ ⁿv ⁿw ⁿz ⁿz̤ ⁿʃ ⁿʒ ⁿθ ⁿç ⁿçʷ",
+    # Nasal release: the IPA chart prints dⁿ, and Ladefoged and Maddieson (1996, p. 119) know of no
+    # prenasalized lateral or central approximant. These bases are vowels, liquids, glides and a nasal.
+    'ⁿ': "aⁿ eⁿ iⁿ oⁿ uⁿ ãⁿ äⁿ ɑⁿ ᵐm ᵐw ⁿj ⁿl ⁿlʷ ⁿw",
     # Lowered: the IPA chart prints β̞ on a fricative. These bases are stops.
     '̞': "d̞ k̞ʰ t̞ ɡ̞",
     # Palatalized: the IPA chart prints tʲ and dʲ. These bases are vowels.
