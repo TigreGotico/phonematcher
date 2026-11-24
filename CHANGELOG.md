@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.7.2a1](https://github.com/TigreGotico/phonematcher/tree/2.7.2a1) (2026-11-24)
+
+[Full Changelog](https://github.com/TigreGotico/phonematcher/compare/2.7.1a2...2.7.2a1)
+
+**Merged pull requests:**
+
+- fix: read raised and lowered marks on consonants as the IPA chart's examples [\#140](https://github.com/TigreGotico/phonematcher/pull/140) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
+
 ## [2.7.1a2](https://github.com/TigreGotico/phonematcher/tree/2.7.1a2) (2026-11-24)
 
 [Full Changelog](https://github.com/TigreGotico/phonematcher/compare/2.7.1a1...2.7.1a2)
@@ -376,17 +384,9 @@
 
 [Full Changelog](https://github.com/TigreGotico/phonematcher/compare/0.9.0a1...0.10.0a1)
 
-**Merged pull requests:**
-
-- feat: read letters with no tie bar as the tied segment, and marks before them [\#34](https://github.com/TigreGotico/phonematcher/pull/34) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
-
 ## [0.9.0a1](https://github.com/TigreGotico/phonematcher/tree/0.9.0a1) (2026-11-21)
 
 [Full Changelog](https://github.com/TigreGotico/phonematcher/compare/0.8.0a1...0.9.0a1)
-
-**Merged pull requests:**
-
-- feat: read a nasalized voiceless vowel and a syllabic fricative, and list the marks a base refuses [\#33](https://github.com/TigreGotico/phonematcher/pull/33) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
 
 ## [0.8.0a1](https://github.com/TigreGotico/phonematcher/tree/0.8.0a1) (2026-11-21)
 
