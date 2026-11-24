@@ -1,13 +1,20 @@
 # Changelog
 
+## [2.7.9a1](https://github.com/TigreGotico/phonematcher/tree/2.7.9a1) (2026-11-24)
+
+[Full Changelog](https://github.com/TigreGotico/phonematcher/compare/2.7.8a1...2.7.9a1)
+
+**Merged pull requests:**
+
+- docs: velar and uvular click ties share a vector [\#166](https://github.com/TigreGotico/phonematcher/pull/166) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
+- fix: split a tone run where its notation changes [\#162](https://github.com/TigreGotico/phonematcher/pull/162) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
+
 ## [2.7.8a1](https://github.com/TigreGotico/phonematcher/tree/2.7.8a1) (2026-11-24)
 
 [Full Changelog](https://github.com/TigreGotico/phonematcher/compare/2.7.7a1...2.7.8a1)
 
 **Merged pull requests:**
 
-- docs: velar and uvular click ties share a vector [\#166](https://github.com/TigreGotico/phonematcher/pull/166) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
-- fix: split a tone run where its notation changes [\#162](https://github.com/TigreGotico/phonematcher/pull/162) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
 - fix: keep a tied prenasal pair before its stop [\#161](https://github.com/TigreGotico/phonematcher/pull/161) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
 
 ## [2.7.7a1](https://github.com/TigreGotico/phonematcher/tree/2.7.7a1) (2026-11-24)
