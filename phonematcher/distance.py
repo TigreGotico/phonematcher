@@ -185,8 +185,11 @@ def _segments(nfd: str, track: bool = False) -> Tuple[List[str], List[List[int]]
             continue
         if join_next and out[-1][-1] in TIES and is_vowel_phone(out[-1][:-1].replace(NON_SYLLABIC, "")) and is_vowel_phone(ch):
             out[-1] = out[-1][:-1]
-            out.append(ch + NON_SYLLABIC)  # the second vowel of a tied diphthong is its offglide
-            offglide = len(out) - 1
+            if NON_SYLLABIC in out[-1] and offglide != len(out) - 1:  # a rising diphthong with its glide marked: i̯͡a
+                out.append(ch)
+            else:  # the second vowel of a tied diphthong is its offglide
+                out.append(ch + NON_SYLLABIC)
+                offglide = len(out) - 1
             if track:
                 at.append([tie_at, i])  # the tie bar is in both spans, so the diphthong is one span
             join_next = False

@@ -59,3 +59,13 @@ def test_other_unreadable_phone_does_not_mention_diphthong():
     with pytest.raises(ValueError) as err:
         vectorize_phones("l͡j")
     assert "diphthong" not in str(err.value)
+
+
+# A glide already marked on the first vowel makes a rising diphthong: the second vowel stays syllabic.
+def test_a_marked_first_glide_keeps_the_second_vowel_syllabic():
+    assert segments("i̯͡a") == segments("i̯a") == ["i̯", "a"]
+
+
+# Three tied vowels: the first is the nucleus, each later vowel an offglide.
+def test_a_tied_triphthong_reads_one_nucleus():
+    assert segments("a͡i͡u") == ["a", "i̯", "u̯"]
