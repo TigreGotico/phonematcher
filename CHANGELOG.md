@@ -1,8 +1,8 @@
 # Changelog
 
-## [2.7.5a1](https://github.com/TigreGotico/phonematcher/tree/2.7.5a1) (2026-11-24)
+## [2.7.6a1](https://github.com/TigreGotico/phonematcher/tree/2.7.6a1) (2026-11-24)
 
-[Full Changelog](https://github.com/TigreGotico/phonematcher/compare/2.7.4a3...2.7.5a1)
+[Full Changelog](https://github.com/TigreGotico/phonematcher/compare/2.7.4a3...2.7.6a1)
 
 **Merged pull requests:**
 
