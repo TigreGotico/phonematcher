@@ -1,5 +1,13 @@
 # Changelog
 
+## [3.0.2a1](https://github.com/TigreGotico/phonematcher/tree/3.0.2a1) (2026-11-24)
+
+[Full Changelog](https://github.com/TigreGotico/phonematcher/compare/3.0.1a2...3.0.2a1)
+
+**Merged pull requests:**
+
+- fix: read a click tie with the rear letter after the click [\#188](https://github.com/TigreGotico/phonematcher/pull/188) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
+
 ## [3.0.1a2](https://github.com/TigreGotico/phonematcher/tree/3.0.1a2) (2026-11-24)
 
 [Full Changelog](https://github.com/TigreGotico/phonematcher/compare/3.0.1a1...3.0.1a2)
@@ -385,10 +393,6 @@
 ## [2.0.0a1](https://github.com/TigreGotico/phonematcher/tree/2.0.0a1) (2026-11-22)
 
 [Full Changelog](https://github.com/TigreGotico/phonematcher/compare/1.0.1a1...2.0.0a1)
-
-**Breaking changes:**
-
-- feat!: one segment cost, and a cluster sensitivity that is a share [\#78](https://github.com/TigreGotico/phonematcher/pull/78) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
 
 ## [1.0.1a1](https://github.com/TigreGotico/phonematcher/tree/1.0.1a1) (2026-11-22)
 
