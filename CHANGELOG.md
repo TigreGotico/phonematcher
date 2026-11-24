@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.7.13a1](https://github.com/TigreGotico/phonematcher/tree/2.7.13a1) (2026-11-24)
+
+[Full Changelog](https://github.com/TigreGotico/phonematcher/compare/2.7.12a1...2.7.13a1)
+
+**Merged pull requests:**
+
+- fix: read a tied vowel pair as a vowel and its non-syllabic offglide [\#157](https://github.com/TigreGotico/phonematcher/pull/157) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
+
 ## [2.7.12a1](https://github.com/TigreGotico/phonematcher/tree/2.7.12a1) (2026-11-24)
 
 [Full Changelog](https://github.com/TigreGotico/phonematcher/compare/2.7.11a1...2.7.12a1)
@@ -385,10 +393,6 @@
 ## [0.20.0a1](https://github.com/TigreGotico/phonematcher/tree/0.20.0a1) (2026-11-22)
 
 [Full Changelog](https://github.com/TigreGotico/phonematcher/compare/0.19.0a1...0.20.0a1)
-
-**Merged pull requests:**
-
-- feat: add the results of the single pre-registered test run [\#61](https://github.com/TigreGotico/phonematcher/pull/61) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
 
 ## [0.19.0a1](https://github.com/TigreGotico/phonematcher/tree/0.19.0a1) (2026-11-22)
 
