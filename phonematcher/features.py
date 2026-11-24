@@ -120,8 +120,19 @@ def vectorize_phones(segment: str) -> Vector:
                 vec = _apply_if(_DIACRITICS[marker, "post"], vec, segment)
             return vec
     if TIES[0] in untied:
+        parts = untied.split(TIES[0])
+        if any(c in _CLICKS for part in parts for c in part):
+            # A click tie is one velar or uvular letter, then the click (IPA Handbook, 2.5). The
+            # click takes only voi and nas from that letter, so it may carry combining marks only.
+            rear_letter = parts[0][0] in _REAR_CLOSURES and all(map(unicodedata.combining, parts[0][1:]))
+            if len(parts) != 2 or not rear_letter or parts[1][0] not in _CLICKS:
+                raise _unrecognized(segment)
+            rear, click = (vectorize_phones(part) for part in parts)
+            out = list(click)
+            out[_VOI], out[_NAS] = rear[_VOI], rear[_NAS]
+            return tuple(out)
         try:
-            return compose_tie([vectorize_phones(part) for part in untied.split(TIES[0])])
+            return compose_tie([vectorize_phones(part) for part in parts])
         except ValueError:
             pass
     if start:
@@ -152,7 +163,8 @@ def vectorize_phones(segment: str) -> Vector:
     raise _unrecognized(segment, ": a diphthong is two segments" if _is_diphthong(seg) else "")
 
 
-_NAS, _SON, _CONT, _DELREL, _SG, _CG = (_INDEX[f] for f in ("nas", "son", "cont", "delrel", "sg", "cg"))
+_NAS, _SON, _CONT, _DELREL, _SG, _CG, _VOI = (
+    _INDEX[f] for f in ("nas", "son", "cont", "delrel", "sg", "cg", "voi"))
 #: Articulators: in a double articulation each one the parts use is used.
 _ARTICULATORS = {_INDEX[f] for f in ("lab", "cor", "hi", "back")}
 
@@ -197,7 +209,8 @@ _SIGN = {True: "+", False: "-", None: "0"}
 
 
 def _apply_if(diacritic: dict, vec: Vector, segment: str) -> Vector:
-    """Apply one diacritic. [+high, +low] is impossible, so a mark that adds one keeps the
+    """Apply one diacritic. A mark with a consonant reading sets its features on a base that
+    matches the reading's class. [+high, +low] is impossible, so a mark that adds one keeps the
     other as the base has it."""
     conditions = diacritic["conditions"]
     if conditions and not any(
@@ -207,6 +220,11 @@ def _apply_if(diacritic: dict, vec: Vector, segment: str) -> Vector:
     out = list(vec)
     for f, v in diacritic["content"].items():
         out[_INDEX[f]] = _VALUE[v]
+    for reading in diacritic.get("consonant", ()):
+        if all(out[_INDEX[f]] is _VALUE[v] for f, v in reading["when"].items()):
+            for f, v in reading["set"].items():
+                out[_INDEX[f]] = _VALUE[v]
+            break
     if "shift" in diacritic:
         signs = {f: _SIGN[v] for f, v in zip(FEATURES, out)}
         shift(signs, diacritic["shift"])

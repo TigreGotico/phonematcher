@@ -11,7 +11,7 @@ from phonematcher.tone import is_tone, tone_distance, tone_levels
 
 @pytest.mark.parametrize("mark, letters", [
     ("̋", "˥"), ("́", "˦"), ("̄", "˧"), ("̀", "˨"), ("̏", "˩"),
-    ("̌", "˩˥"), ("̂", "˥˩"), ("᷄", "˧˥"), ("᷅", "˩˧"), ("᷈", "˧˦˨"),
+    ("̌", "˩˥"), ("̂", "˥˩"), ("᷄", "˧˥"), ("᷅", "˩˧"), ("᷈", "˧˦˧"),
 ])
 def test_a_tone_diacritic_reads_as_the_tone_letters_the_chart_gives_beside_it(mark, letters):
     assert segments("ma" + mark) == segments("ma" + letters) == ["m", "a", letters]

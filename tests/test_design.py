@@ -6,6 +6,7 @@ follows. Hand values: the weights of the table sum to 9.5, so one step feature (
 is 0.125 / 9.5 of the distance; a deletion and an insertion cost 0.5 each.
 """
 import json
+import unicodedata
 from itertools import combinations
 from pathlib import Path
 
@@ -122,6 +123,16 @@ def test_every_example_of_an_unread_kind_raises_value_error():
         with pytest.raises(ValueError):
             vectorize_phones(example)
         assert feature_distance(example, "a") == 1.0
+
+
+def test_the_marks_the_page_names_as_wider_than_the_chart_read():
+    # The rule is PanPhon's conditions plus the cited changes, not the chart's examples: the chart
+    # prints ◌̃ only in ẽ, ◌ˤ and ◌ˠ on t and d, and ◌̥ on n and d, yet these bases read.
+    paper = (ROOT / "whitepaper.md").read_text(encoding="utf-8")
+    assert "### A mark reads only on the bases its rule accepts" in PAGE
+    for example in ("b̃", "z̃", "w̃", "iˤ", "aˠ", "å", "ḁ"):
+        assert example in PAGE and example in paper
+        assert feature_distance(example, unicodedata.normalize("NFD", example)[0]) > 0
 
 
 def test_pharyngealized_and_retracted_tongue_root_differ_in_one_feature():

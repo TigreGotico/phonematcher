@@ -98,7 +98,7 @@ PanPhon gives 6 of the 28 vowels `delrel` 0 and the rest `delrel` −. A vowel h
 | Mark | PanPhon | Here | Source |
 |---|---|---|---|
 | `◌̈` centralized | no change | `front` −, `back` − | the IPA chart names it; the reading is this table's |
-| `◌̝` raised, `◌̞` lowered | no change | one chart row up or down | the IPA chart names them; the reading is this table's |
+| `◌̝` raised, `◌̞` lowered | no change | on a vowel, one chart row up or down; `◌̝` on an approximant gives the fricative, `◌̞` on a fricative gives the approximant | the IPA chart names them and prints `ɹ̝` and `β̞`; the vowel step is this table's |
 | `◌̟` advanced, `◌̠` retracted | no change | on a vowel, one chart column front or back | the IPA chart names them; the reading is this table's |
 | `◌̹` more rounded, `◌̜` less rounded | no rule | on a vowel, one step on the rounding scale −, 0, + | the IPA chart names them; the reading is this table's |
 | `◌̽` mid-centralized | no rule | on a vowel, the central column and one row nearer mid | the IPA chart names it; the reading is this table's |
@@ -145,11 +145,11 @@ A mark reads only if a chart states its meaning. These marks occur in PHOIBLE, W
 | `ᶬ` `ᶮ` `ᶯ` `ᶰ` `ᵑ` | Only "≈ superscript" of the nasal letter. `ᵐ`, `ⁿ` and `ᵑ` read as prenasalization by the rule of `◌ⁿ`; the others have no such statement. |
 | `◌̍` | "this is not the Greek tonos", "Marshallese". The IPA chart marks a syllabic consonant with `◌̩`. |
 | `◌̵` `◌͓` `◌͠` | The Unicode chart gives no annotation. |
-| `↓` | The extIPA chart prints "ingressive airflow", which no feature of the table encodes. |
+| `↓` | The mark has two meanings. The IPA chart prints it as "Downstep", and the extIPA chart prints it as "ingressive airflow". `segments` drops it as a phrase mark, as it drops the other downstep and upstep marks. On a phone, no feature of the table encodes either meaning. |
 
 ### Marks that a base refuses
 
-A rule applies a mark only to the bases a chart prints it on. A base outside that class makes `vectorize_phones` raise `ValueError`, and the segment is at distance 1 from every other. A rule widens when a chart prints the mark on the new class of base, as the IPA chart does for `◌̃` on a vowel. The Unicode chart gives a mark a name and no base, so a name alone does not widen a rule.
+A rule applies a mark only to the bases that its conditions accept. The conditions are PanPhon's, unless `overrides.json` changes them with a source, so a rule can accept more bases than a chart prints: `b̃`, `iˤ`, `aˠ` and `å` read. A base outside the class makes `vectorize_phones` raise `ValueError`, and the segment is at distance 1 from every other. A rule widens when a chart prints the mark on a base that the rule refuses, as the IPA chart does for `◌̃` on a vowel. The Unicode chart gives a mark a name and no base, so a name alone does not widen a rule.
 
 | Mark | What the charts print | Bases that stay refused |
 |---|---|---|
@@ -161,13 +161,13 @@ A rule applies a mark only to the bases a chart prints it on. A base outside tha
 | `◌̰` | `b̰ a̰`, both voiced | voiceless bases `p̰ k̰ t̰` |
 | `◌̩` | `n̩`, a nasal; the Unicode chart spells `ɿ` as `z̩`, so a fricative takes it too | vowels `a̩`, stops `ɟ̰̩` |
 | `◌̆` | `ĕ`, a vowel | `ɭ̆`, `ĭ̯` |
-| `◌̞` | `β̞`, a fricative | stops `ɡ̞ k̞ʰ` |
+| `◌̞` | `β̞`, a fricative that the mark makes an approximant | stops `ɡ̞ k̞ʰ` |
 | `◌ʱ` | a name only (Unicode chart: "breathy voiced, murmured") | voiceless clicks `ǃʱ ǀʱ` |
 | `◌̼` `◌̻` | `t̼ d̼`, `t̻ d̻` | labial bases `m̼ p̼`, `m̻` |
 | `◌ˀ` `◌ː` `◌̈` `◌ʼ` | `ː` once, `ë`, `p’ t’ k’ s’` | `ɑ̰ˀ`, `kːː`, `ẅ`, `ʎʼ` |
 | `ᵡ` | "≈ superscript" of `χ` | after an affricate: `ʦᵡ ʣᵡʼ` |
 
-The marks `◌̟ ◌̠ ◌̝ ◌̞ ◌̭ ˖ ˗ ˔ ˕` move a chart vowel along a scale. On a consonant that the rule accepts they read and change nothing: `ṱ` reads as `t`, and `r˔` reads as `r`. `◌̝ ◌̞ ˔ ˕` accept only a continuant.
+The marks `◌̟ ◌̠ ◌̝ ◌̞ ◌̭ ˖ ˗ ˔ ˕` move a chart vowel along a scale. On a consonant that the rule accepts, `◌̟ ◌̠ ◌̭ ˖ ˗` read and change nothing: `ṱ` reads as `t`. `◌̝ ◌̞ ˔ ˕` accept only a continuant, and on a consonant they follow the examples that the IPA chart prints: "Raised e̝ (ɹ̝ = voiced alveolar fricative)" and "Lowered e̞ (β̞ = voiced bilabial approximant)". The table's rows for the fricative `ʝ` and the approximant `j`, at the palatal place, differ in two features: `son` and `cons`. Thus `◌̝` on an approximant (`son` +, `cont` +, not nasal, trill or tap) sets `son` − and `cons` +, and `◌̞` on a fricative (`son` −, `cont` +) sets `son` + and `cons` −. Every lateral approximant in the table (`l ʎ ʟ ɭ`) is `cons` +, so `◌̞` on a lateral fricative sets `son` + only: `ɮ̞` is a lateral approximant, nearer `l` than `j`. So `ɹ̝` differs from `z` only in `strid` and `hi`. On other consonants the marks change nothing: `r˔` reads as `r`, because a trill is not an approximant.
 
 PanPhon writes a secondary articulation with the features of primary place. The mark then overwrites the place of its base: in PanPhon, `kʲ` and `qʲ` share a vector. Here each mark sets a feature of its own, and the base keeps its place. Thus `kʲ` has the place of `k` and differs from `k` only in `palatalized`. The four feature names belong to this table.
 
@@ -235,7 +235,7 @@ segments("ts")                                      # ['t', 's']
 
 The reader puts a tie bar between each two base letters and reads the result. A tie that `compose_tie` has no reading for stays unread: `ab`, `ɑi`, and the three-letter `bvf` and `dzs`, because a fricative tied to a fricative has no reading. For the same reason `ʧ͡f` and `ʤ͡v` stay unread.
 
-A letter that repeats the one before it is a geminate, not a tie: `nn` and `tt` stay unread. A glottal letter (`ʔ h ɦ`) beside another letter is two segments or glottal reinforcement, not one segment, so `ʔt`, `th` and `tɦ` stay unread. A click after a velar or uvular letter (`k ɡ ŋ q ɢ ɴ`) is that letter tied to the click: `kǀ` is `k͡ǀ`. The IPA Handbook says: "Since any click involves a velar or uvular closure, it is possible to symbolize factors such as voicelessness, voicing, or nasality of the click by combining the click symbol with the appropriate velar or uvular symbol" (section 2.5, p. 10). A click after any other letter stays unread.
+A letter that repeats the one before it is a geminate, not a tie: `nn` and `tt` stay unread. A glottal letter (`ʔ h ɦ`) beside another letter is two segments or glottal reinforcement, not one segment, so `ʔt`, `th` and `tɦ` stay unread. A click after a velar or uvular letter (`k ɡ ŋ q ɢ ɴ`) is that letter tied to the click: `kǀ` is `k͡ǀ`. The IPA Handbook says: "Since any click involves a velar or uvular closure, it is possible to symbolize factors such as voicelessness, voicing, or nasality of the click by combining the click symbol with the appropriate velar or uvular symbol" (section 2.5, p. 10). Thus a tie of a click and its velar or uvular letter is the click, with its airstream (`velaric` +) and its place, and `voi` and `nas` come from the velar or uvular letter: `ɡ͡ǃ` is voiced, `ŋ͡ǃ` is voiced and nasal, and `k͡ǃ` is voiceless. A click after any other letter stays unread. A tie of a click and any other letter, or of more than two letters, also stays unread: `t͡ǃ`, `ǃ͡s`, `ǃ͡q` and `k͡ǃ͡x` have no reading. The velar or uvular letter may carry a combining mark, as in `ŋ̊͡ǃ`, but not a modifier letter such as `ʷ`, because the tie takes only `voi` and `nas` from it.
 
 Only a segment given whole is read this way. `segments` keeps `ts` in running text as two segments, `t` and `s`, because the same two letters are two sounds in many words. Use `segments("t͡s")` or write the tie bar to make one.
 
@@ -325,7 +325,7 @@ The IPA chart prints each tone diacritic beside a drawing of a tone letter or a 
 | `◌̂` | `˥˩` | Falling |
 | `◌᷄` | `˧˥` | High rising |
 | `◌᷅` | `˩˧` | Low rising |
-| `◌᷈` | `˧˦˨` | Rising-falling |
+| `◌᷈` | `˧˦˧` | Rising-falling |
 
 Superscript digits are tone numerals: the digit is the level, so `²¹⁴` is `˨˩˦`. The left-stem tone letters `꜒` to `꜖` have the levels of `˥` to `˩`. A run of tone letters is one tone, also after a tone diacritic: `má˥` has the tone `˦˥`.
 
