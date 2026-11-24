@@ -1,5 +1,17 @@
 # Changelog
 
+## [2.7.10a1](https://github.com/TigreGotico/phonematcher/tree/2.7.10a1) (2026-11-24)
+
+[Full Changelog](https://github.com/TigreGotico/phonematcher/compare/2.7.9a2...2.7.10a1)
+
+**Merged pull requests:**
+
+- fix: refuse the tilde on a voiceless trill [\#169](https://github.com/TigreGotico/phonematcher/pull/169) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
+
+## [2.7.9a2](https://github.com/TigreGotico/phonematcher/tree/2.7.9a2) (2026-11-24)
+
+[Full Changelog](https://github.com/TigreGotico/phonematcher/compare/2.7.9a1...2.7.9a2)
+
 ## [2.7.9a1](https://github.com/TigreGotico/phonematcher/tree/2.7.9a1) (2026-11-24)
 
 [Full Changelog](https://github.com/TigreGotico/phonematcher/compare/2.7.8a1...2.7.9a1)
@@ -381,10 +393,6 @@
 ## [0.17.0a1](https://github.com/TigreGotico/phonematcher/tree/0.17.0a1) (2026-11-22)
 
 [Full Changelog](https://github.com/TigreGotico/phonematcher/compare/0.16.0a1...0.17.0a1)
-
-**Merged pull requests:**
-
-- feat: add ablation variants of phonematcher to the benchmark suite [\#55](https://github.com/TigreGotico/phonematcher/pull/55) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
 
 ## [0.16.0a1](https://github.com/TigreGotico/phonematcher/tree/0.16.0a1) (2026-11-22)
 
