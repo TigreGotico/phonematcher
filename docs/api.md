@@ -27,6 +27,8 @@ These names are the stable API. Each one is exported from the package root, so `
 | `is_vowel_phone` | True for a syllabic segment. | `phonematcher.features` |
 | `FEATURES` | The feature names, read-only. | `phonematcher.features` |
 | `WEIGHTS` | The feature weights, read-only. | `phonematcher.features` |
+| `pairwise_distances` | The matrix of segment or word distances, for scikit-learn. | `phonematcher.distance` |
+| `PhoneFeatures` | A scikit-learn transformer from segments to feature rows. | `phonematcher.features` |
 | `tone_distance` | The distance between two tones. Experimental. | `phonematcher.tone` |
 | `is_tone` | True for a segment made only of tone letters. | `phonematcher.tone` |
 | `tone_levels` | The Chao levels of a tone, in order. | `phonematcher.tone` |
@@ -66,6 +68,7 @@ The sections below describe the stable names first, then the internal names that
 - `vectorize_phones(segment) -> tuple`: the feature vector of one segment, in the order of `FEATURES`. A vowel or a syllabic consonant may carry a tone, in tone letters (`a˥˩`), tone numerals or a tone diacritic (`â`), and the tone sets the last four values. Raises `ValueError` for a segment it cannot read, and for a tone on any other segment.
 - `is_vowel_phone(segment) -> bool`: true when the segment reads and its `syl` feature is `+`: a vowel, a syllabic consonant such as `m̩`, or a rhotic vowel such as `ɚ`. It is false for a glide, a consonant, and a segment that cannot be read (it does not raise).
 - `FEATURES`, `WEIGHTS`: the feature names and their weights, as tuples: 36 segment features, then the four tone features. Treat them as read-only.
+- `PhoneFeatures(strict=True)`: a scikit-learn transformer. `transform(segments)` returns one list of floats per segment, in the order of `FEATURES`: + is 1.0, − is -1.0, 0 is 0.0, and a tone pitch is its number. `strict=True` raises `ValueError` for a segment that cannot be read, and `strict=False` gives a row of NaN. It has `fit`, `fit_transform`, `get_feature_names_out`, `get_params` and `set_params`, and it needs no scikit-learn. See [scikit-learn.md](scikit-learn.md).
 
 ## `phonematcher.distance`
 
@@ -78,6 +81,7 @@ The sections below describe the stable names first, then the internal names that
 - A wrong type raises `TypeError` that names the function, the argument and the type: `ipa_distance` and `tone_distance` take strings (a string that is not a tone raises `ValueError`), `edit_distance` and `align` take lists of segments.
 - The cost of `ipa_distance`, `edit_distance` and `align` grows with the product of the two segment counts: see [Split long input](compare-words.md#6-split-long-input).
 - `ipa_distance(a, b, normalized=False, *, strict=False) -> float`: `edit_distance` between two IPA strings. With `normalized=True` the distance is divided by the segment count of the longer string, so it falls between 0 and 1, and two empty strings give 0.0.
+- `pairwise_distances(a, b=None, metric="segment") -> list[list[float]]`: the matrix of distances for scikit-learn's `metric="precomputed"`. `metric="segment"` gives `feature_distance` between segments, and `metric="word"` gives `ipa_distance` between IPA strings. With no `b`, the matrix is symmetric with a zero diagonal. Any other metric raises `ValueError`. See [scikit-learn.md](scikit-learn.md).
 - `GAP_COST`: the cost of an insertion or a deletion in `edit_distance` and `align`, 0.5.
 - `strict=True` on `ipa_distance`, `edit_distance` and `align`: a segment that phonematcher cannot read raises `ValueError` that names the segment and the input. Without it, such a segment is at distance 1 from every other segment, and the first time it is priced against another segment it issues one `UserWarning` per process. The warning names the segment and its code points. A segment that meets only gaps, tones or spaces does not warn. A first warning that a filter ignores or turns into an error still uses up the segment's one warning. Silence it with `warnings.filterwarnings("ignore", message="Unrecognized phone", category=UserWarning)`. See [Design choices and limits](design.md#an-unread-segment-is-at-distance-1).
 

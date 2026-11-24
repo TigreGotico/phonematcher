@@ -98,4 +98,4 @@ pytest --import-mode=importlib tests/
 
 A test for an added segment must fail without the entry. Remove the entry, rebuild, run the test, and see it fail. Put the entry back and rebuild.
 
-[Index](index.md) · Previous: [Search by sound](search.md) · Next: [The feature table](features.md)
+[Index](index.md) · Previous: [Use with scikit-learn](scikit-learn.md) · Next: [The feature table](features.md)

@@ -406,3 +406,24 @@ def ipa_distance(a: str, b: str, normalized: bool = False, *, strict: bool = Fal
         return dist
     longest = max(len(sa), len(sb))
     return dist / longest if longest else 0.0
+
+
+def pairwise_distances(a: Sequence[str], b: Optional[Sequence[str]] = None, metric: str = "segment") -> List[List[float]]:
+    """The matrix of distances between the items of *a* and the items of *b*, for scikit-learn's
+    ``metric="precomputed"``.
+
+    With *metric* ``"segment"``, each item is one segment and each cell is
+    :func:`~phonematcher.features.feature_distance`. With ``"word"``, each item is an IPA string and
+    each cell is :func:`ipa_distance`. With no *b*, the matrix is square and symmetric, with a zero
+    diagonal, and each pair is computed once.
+    """
+    distance = {"segment": feature_distance, "word": ipa_distance}.get(metric)
+    if distance is None:
+        raise ValueError(f"metric must be 'segment' or 'word', not {metric!r}")
+    if b is None:
+        matrix = [[0.0] * len(a) for _ in a]
+        for i, x in enumerate(a):
+            for j in range(i + 1, len(a)):
+                matrix[i][j] = matrix[j][i] = distance(x, a[j])
+        return matrix
+    return [[distance(x, y) for y in b] for x in a]
