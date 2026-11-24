@@ -1,5 +1,14 @@
 # Changelog
 
+## [2.7.6a1](https://github.com/TigreGotico/phonematcher/tree/2.7.6a1) (2026-11-24)
+
+[Full Changelog](https://github.com/TigreGotico/phonematcher/compare/2.7.4a3...2.7.6a1)
+
+**Merged pull requests:**
+
+- fix: read the tilde on a voiceless continuant as nasalization [\#156](https://github.com/TigreGotico/phonematcher/pull/156) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
+- fix: read a small ᶢ before a click as its voiced velar closure [\#155](https://github.com/TigreGotico/phonematcher/pull/155) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
+
 ## [2.7.4a3](https://github.com/TigreGotico/phonematcher/tree/2.7.4a3) (2026-11-24)
 
 [Full Changelog](https://github.com/TigreGotico/phonematcher/compare/2.7.4a2...2.7.4a3)
@@ -384,17 +393,9 @@
 
 [Full Changelog](https://github.com/TigreGotico/phonematcher/compare/0.12.0a1...0.13.0a1)
 
-**Merged pull requests:**
-
-- feat: add the coverage, allophone and confusion benchmark tasks on seen data [\#45](https://github.com/TigreGotico/phonematcher/pull/45) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
-
 ## [0.12.0a1](https://github.com/TigreGotico/phonematcher/tree/0.12.0a1) (2026-11-22)
 
 [Full Changelog](https://github.com/TigreGotico/phonematcher/compare/0.11.0a1...0.12.0a1)
-
-**Merged pull requests:**
-
-- feat: add the alignment benchmark task on the List and Prokic gold alignments [\#43](https://github.com/TigreGotico/phonematcher/pull/43) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
 
 ## [0.11.0a1](https://github.com/TigreGotico/phonematcher/tree/0.11.0a1) (2026-11-22)
 

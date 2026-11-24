@@ -37,9 +37,9 @@ def test_a_prenasal_affricate_is_the_affricate_with_nasal_plus():
     assert vectorize_phones("ⁿd͡z")[FEATURES.index("delrel")] is True
 
 
-def test_a_prenasal_mark_still_refuses_a_base_that_is_not_a_stop():
-    # ⁿ before a fricative or a vowel has no reading; it stays refused.
-    for segment in ("ⁿs", "ⁿa", "ⁿʃ"):
+def test_a_prenasal_mark_still_refuses_a_base_that_is_not_an_obstruent():
+    # ⁿ before an approximant or a vowel has no reading; it stays refused.
+    for segment in ("ⁿl", "ⁿa", "ⁿj"):
         with pytest.raises(ValueError):
             vectorize_phones(segment)
 
