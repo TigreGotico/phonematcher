@@ -23,12 +23,17 @@ def segments(ipa: str) -> List[str]:
     joins the symbols on both sides into one segment, so ``t͡ʃ`` is one affricate, unless both are
     vowels: a diphthong is two segments, so ``a͡i`` gives ``a`` and ``i``. Spaces become a
     ``" "`` segment between words; stress, syllable and phrase-tone marks are dropped. A tone is
-    one segment of tone letters after its syllable: a tone diacritic or a tone numeral is written
-    as tone letters after the segment that carries it. A tone diacritic on a tone letter adds its
+    read as tone letters after its syllable: a tone diacritic or a tone numeral is written as tone
+    letters after the segment that carries it. A tone diacritic on a tone letter adds its
     levels to that tone. A tone diacritic before a tie bar's second symbol, or at the start of a
     word, belongs to the next base symbol. A tie bar with no symbol before it in its word is dropped,
     so it never joins across a space. Format characters (Unicode category Cf, such as U+200B and
     U+FEFF) are dropped.
+
+    A tone then moves onto the segment that carries it: the last vowel or syllabic consonant before
+    it in the same word that carries no tone yet. ``ma˥`` gives ``m``, ``a˥``, and ``tam˧˧`` gives
+    ``t``, ``a˧˧``, ``m``. A tone with no such segment stays a segment of tone letters, as in ``˥˩``
+    and ``ɡ˩a``.
     """
     return [unicodedata.normalize("NFC", s) for s in _segments(unicodedata.normalize("NFD", ipa).translate(SPELLINGS))[0]]
 
@@ -203,14 +208,47 @@ def _segments(nfd: str, track: bool = False) -> Tuple[List[str], List[List[int]]
         out.pop()
         if track:
             at.pop()
-    return out, at
+    return _carry_tones(out, at, track)
+
+
+def carry_tones(segs: Sequence[str]) -> List[str]:
+    """*segs* with each tone moved onto the segment that carries it, as :func:`segments` does: the
+    last vowel or syllabic consonant before the tone in its word that has no tone yet. A tone with
+    no such segment stays a segment of its own. For a tokenizer whose own segments hold tones apart:
+    ``carry_tones(["m", "a", "˥"])`` gives ``["m", "a˥"]``."""
+    return _carry_tones(list(segs), [], False)[0]
+
+
+def _carry_tones(segs: List[str], at: List[List[int]], track: bool) -> Tuple[List[str], List[List[int]]]:
+    """Move each tone of *segs* onto the last vowel or syllabic consonant before it in its word that
+    has no tone yet. A tone with no such segment stays a segment of its own."""
+    out: List[str] = []
+    out_at: List[List[int]] = []
+    for k, seg in enumerate(segs):
+        carried = False
+        if is_tone(seg):
+            for j in reversed(range(len(out))):
+                if out[j] == " " or out[j][-1] in LEVELS:  # a word boundary, a tone or a toned segment
+                    break
+                if is_vowel_phone(out[j]):
+                    out[j] += seg
+                    if track:
+                        out_at[j] = out_at[j] + at[k]
+                    carried = True
+                    break
+        if not carried:
+            out.append(seg)
+            if track:
+                out_at.append(at[k])
+    return out, out_at
 
 
 @lru_cache(maxsize=65536)
 def substitution_cost(a: str, b: str) -> float:
     """Cost of replacing segment *a* by *b*, from 0 to 1, so a substitution never costs more than a
-    deletion plus an insertion: the square root of the tone distance of two tones, 1 for a tone and
-    a phone, and the square root of the feature distance of two phones. The square root keeps the
+    deletion plus an insertion: the square root of the tone distance of two tone segments, 1 for a
+    tone segment and a phone, and the square root of the feature distance of two phones, which
+    holds the tone a phone carries. The square root keeps the
     cost a metric.
     """
     a_tone, b_tone = is_tone(a), is_tone(b)

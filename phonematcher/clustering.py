@@ -20,7 +20,7 @@ from operator import itemgetter
 from typing import Dict, Hashable, List, Sequence, Set, Tuple, Union
 
 from phonematcher.distance import check_readable, edit_distance, segments, substitution_cost
-from phonematcher.features import TIES, phone_features
+from phonematcher.features import TIES, phone_and_tone, phone_features
 from phonematcher.phonex import phonex
 from phonematcher.tone import is_tone
 
@@ -148,7 +148,7 @@ class PhoneticFuzzySearch:
             if seg == " ":
                 words.append([])
             elif not is_tone(seg):
-                words[-1].append(seg)
+                words[-1].append(unicodedata.normalize("NFC", phone_and_tone(seg)[0]))
         return [w for w in words if w]
 
     def _keys(self, word: Sequence[str]) -> Set[Tuple[int, ...]]:

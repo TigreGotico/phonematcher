@@ -22,8 +22,9 @@ Tone 6 (22) (the numbers in bracket are Chao Tone Numeral, which marks the lowes
 
 A Chao digit is a level, so the digits 3 and 5 become the tone letters ˧ and ˥: 35 is ˧˥.
 
-Score: Spearman correlation of the negative ``phonematcher.tone.tone_distance`` with the pair rate,
-and the same for a baseline that has distance 0 when two tones have the same contour direction
+Score: Spearman correlation of the negative ``phonematcher.tone.tone_distance`` with the pair rate.
+The row ``phonematcher_features`` scores the feature distance of the vowel ``a`` with each tone, as
+a word distance prices two toned vowels. The same is done for a baseline that has distance 0 when two tones have the same contour direction
 (level, rising or falling, from the first and last digit) and 1 when they have not. A 95% bootstrap
 interval comes from 1,000 resamples of the 15 pairs (seed 0). With 15 pairs this is a small check.
 Only phonematcher and the baseline are scored. The other systems have no tone model.
@@ -34,6 +35,7 @@ from itertools import combinations
 from pathlib import Path
 from typing import Dict, List, Tuple
 
+from phonematcher import feature_distance
 from phonematcher.tone import tone_distance
 from systems import System
 from tasks.common import bootstrap_interval, sha256, similarity_score
@@ -90,6 +92,10 @@ def phonematcher_distance(chao: Dict[str, str], a: str, b: str) -> float:
     return tone_distance(tone_letters(chao[a]), tone_letters(chao[b]))
 
 
+def feature_row_distance(chao: Dict[str, str], a: str, b: str) -> float:
+    return feature_distance("a" + tone_letters(chao[a]), "a" + tone_letters(chao[b]))
+
+
 def direction_distance(chao: Dict[str, str], a: str, b: str) -> float:
     return 0.0 if direction(chao[a]) == direction(chao[b]) else 1.0
 
@@ -124,6 +130,7 @@ def run(systems: List[System], split: str, cache: Path) -> dict:
         row = {"direction_baseline": score([direction_distance(chao, a, b) for a, b in keys], confusion)}
         if any(s.name == "phonematcher" for s in systems):
             row["phonematcher"] = score([phonematcher_distance(chao, a, b) for a, b in keys], confusion)
+            row["phonematcher_features"] = score([feature_row_distance(chao, a, b) for a, b in keys], confusion)
         payload["scored"][name] = row
     return payload
 

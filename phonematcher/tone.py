@@ -1,9 +1,11 @@
 """Tone as a sequence of pitch levels, read from the IPA chart's tone letters and tone diacritics.
 
-A tone is its own segment, written in tone letters after the syllable it belongs to: ``má`` and
-``ma˦`` are both ``m``, ``a``, ``˦``. Levels run from 1 (extra low, ``˩``) to 5 (extra high, ``˥``).
+A tone is written in tone letters after the syllable it belongs to, and :func:`phonematcher.segments`
+puts it on the segment that carries it: ``má`` and ``ma˦`` are both ``m``, ``a˦``. A tone with no
+vowel or syllabic consonant before it in its word stays a segment of tone letters. Levels run from 1
+(extra low, ``˩``) to 5 (extra high, ``˥``).
 """
-from typing import Tuple
+from typing import Sequence, Tuple
 
 #: Tone letters and their levels.
 LEVELS = {"˩": 1, "˨": 2, "˧": 3, "˦": 4, "˥": 5}
@@ -46,7 +48,7 @@ def tone_levels(tone: str) -> Tuple[int, ...]:
     return tuple(LEVELS[ch] for ch in letters)
 
 
-def _contour(levels: Tuple[int, ...]) -> Tuple[float, ...]:
+def _contour(levels: Sequence[int]) -> Tuple[float, ...]:
     """The pitch at the start, middle and end of the syllable, by linear interpolation."""
     if len(levels) == 1:
         return (float(levels[0]),) * _POINTS
@@ -60,7 +62,8 @@ def _contour(levels: Tuple[int, ...]) -> Tuple[float, ...]:
 
 def tone_distance(a: str, b: str) -> float:
     """The mean pitch difference of two tones at the start, middle and end of the syllable,
-    divided by the range of four steps, so the result is from 0 to 1.
+    divided by the range of four steps, so the result is from 0 to 1. A word distance uses it for
+    two tone segments that no vowel carries; a tone on a vowel is compared by its features.
 
     Experimental. On 15 Cantonese tone pairs it correlates with listener confusion at Spearman
     0.2475, against 0.7817 for a baseline that compares only the direction of the contour (issue

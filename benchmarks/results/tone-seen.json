@@ -3,7 +3,7 @@
  "system": "phonematcher,levenshtein,panphon-weighted,panphon-hamming,aline,soundvectors,sca",
  "split": "seen",
  "commit": null,
- "head": "fe3944f052dd84bbf8d44333a3242ea7dbe091fa",
+ "head": "b08a707fcf0a906d0d7f298da6859adecc421925",
  "tree_dirty": true,
  "data": {
   "source": "Wong, Cheng and Chen (2018), Frontiers in Psychology 9:1604, Tables 12 and 13, CC BY 4.0",
@@ -81,6 +81,20 @@
      0.125,
      0.875
     ]
+   },
+   "phonematcher_features": {
+    "score": 0.24746170658929867,
+    "interval": {
+     "low": -0.3167377382596731,
+     "high": 0.7396463141228129,
+     "undefined": 0
+    },
+    "pairs_in": 15,
+    "pairs_out": 15,
+    "distance_range": [
+     0.004934210526315789,
+     0.03453947368421053
+    ]
    }
   },
   "alternative": {
@@ -110,6 +124,20 @@
     "distance_range": [
      0.125,
      0.875
+    ]
+   },
+   "phonematcher_features": {
+    "score": 0.3578731059988885,
+    "interval": {
+     "low": -0.2041519929840461,
+     "high": 0.8279066552023238,
+     "undefined": 0
+    },
+    "pairs_in": 15,
+    "pairs_out": 15,
+    "distance_range": [
+     0.004934210526315789,
+     0.03453947368421053
     ]
    }
   }

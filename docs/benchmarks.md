@@ -57,13 +57,15 @@ sca: mandarin 0.115 (skipped 0); miller_nicely 0.157 (skipped 0); hillenbrand 0.
 
 ### tone
 
-Commit `fe3944f052dd`.
+Commit `b08a707fcf0a`.
 
 ```text
 main Chao values: direction_baseline 0.782 [0.455, 0.886] (pairs 15 in, 15 out)
 main Chao values: phonematcher 0.247 [-0.317, 0.740] (pairs 15 in, 15 out)
+main Chao values: phonematcher_features 0.247 [-0.317, 0.740] (pairs 15 in, 15 out)
 alternative Chao values: direction_baseline 0.782 [0.455, 0.886] (pairs 15 in, 15 out)
 alternative Chao values: phonematcher 0.358 [-0.204, 0.828] (pairs 15 in, 15 out)
+alternative Chao values: phonematcher_features 0.358 [-0.204, 0.828] (pairs 15 in, 15 out)
 not scored, no tone model: levenshtein, panphon-weighted, panphon-hamming, aline, soundvectors, sca
 ```
 
@@ -121,11 +123,11 @@ The development split holds the items that `benchmarks/split.py` assigns to dev.
 
 ### cognates
 
-Commit `99383979599a`.
+Commit `b08a707fcf0a`.
 
 | System | AP, unread at 1 | F, unread at 1 | AP, common words | F, common words | Words skipped |
 |---|---|---|---|---|---|
-| phonematcher | 0.7727 | 0.8262 | 0.8542 | 0.8841 | 437 |
+| phonematcher | 0.7875 | 0.8384 | 0.8545 | 0.8838 | 437 |
 | levenshtein | 0.7514 | 0.8165 | 0.8362 | 0.8757 | 0 |
 | panphon-weighted | 0.5833 | 0.7714 | 0.8057 | 0.8505 | 5129 |
 | panphon-hamming | 0.5847 | 0.6624 | 0.7715 | 0.8358 | 5129 |

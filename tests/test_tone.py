@@ -14,7 +14,7 @@ from phonematcher.tone import is_tone, tone_distance, tone_levels
     ("̌", "˩˥"), ("̂", "˥˩"), ("᷄", "˧˥"), ("᷅", "˩˧"), ("᷈", "˧˦˧"),
 ])
 def test_a_tone_diacritic_reads_as_the_tone_letters_the_chart_gives_beside_it(mark, letters):
-    assert segments("ma" + mark) == segments("ma" + letters) == ["m", "a", letters]
+    assert segments("ma" + mark) == segments("ma" + letters) == ["m", "a" + letters]
 
 
 def test_tone_letters_give_levels_five_high_to_one_low():
@@ -25,12 +25,12 @@ def test_tone_numerals_read_as_tone_letters():
     assert segments("ma²¹⁴") == segments("ma˨˩˦")
 
 
-def test_a_run_of_tone_letters_is_one_tone_after_its_syllable():
-    assert segments("man˥˩ ta˧") == ["m", "a", "n", "˥˩", " ", "t", "a", "˧"]
+def test_a_run_of_tone_letters_is_one_tone_on_the_vowel_of_its_syllable():
+    assert segments("man˥˩ ta˧") == ["m", "a˥˩", "n", " ", "t", "a˧"]
 
 
 def test_downstep_upstep_and_global_marks_carry_no_segment():
-    assert segments("ꜜma˦ ꜛma˦↗↘") == ["m", "a", "˦", " ", "m", "a", "˦"]
+    assert segments("ꜜma˦ ꜛma˦↗↘") == ["m", "a˦", " ", "m", "a˦"]
 
 
 def test_a_tone_is_not_a_phone():
@@ -50,11 +50,20 @@ def test_tone_distance_follows_the_shape_of_the_contour():
 
 
 def test_a_tone_substitution_costs_one_quarter_per_level_step():
-    # The tone distance is 1/4 per level step; the substitution costs its square root.
-    assert ipa_distance("ma˥", "ma˦") == pytest.approx(0.5)  # sqrt(1/4)
-    assert ipa_distance("ma˥", "ma˩") == pytest.approx(1.0)  # sqrt(4/4)
-    assert ipa_distance("ma˥", "ma˧") == pytest.approx(math.sqrt(0.5))  # sqrt(2/4)
-    assert ipa_distance("ma˥", "ma") == 0.5  # one deletion
+    # Two tone segments of their own: the tone distance is 1/4 per level step; the substitution
+    # costs its square root.
+    assert ipa_distance("˥", "˦") == pytest.approx(0.5)  # sqrt(1/4)
+    assert ipa_distance("˥", "˩") == pytest.approx(1.0)  # sqrt(4/4)
+    assert ipa_distance("˥", "˧") == pytest.approx(math.sqrt(0.5))  # sqrt(2/4)
+    assert ipa_distance("˥", "") == 0.5  # one deletion
+
+
+def test_a_toned_vowel_costs_by_its_pitches():
+    # Each pitch weighs 0.125; one level step is 0.5 at each of the three points, at half weight:
+    # 3 * 0.25 * 0.125 = 0.09375 of 9.5.
+    assert ipa_distance("ma˥", "ma˦") == pytest.approx(math.sqrt(0.09375 / 9.5))
+    # tone_is (0.25) at half weight, and each pitch 1 against 0 at half weight: 0.125 + 0.1875
+    assert ipa_distance("ma˥", "ma") == pytest.approx(math.sqrt(0.3125 / 9.5))
 
 
 def test_tone_letters_are_not_listed_as_phones():
@@ -77,7 +86,7 @@ def test_a_peaking_tone_differs_from_the_level_it_starts_and_ends_on():
 
 
 def test_a_tone_diacritic_and_the_tone_letters_after_it_are_one_tone():
-    assert segments("má˥") == ["m", "a", "˦˥"]
+    assert segments("má˥") == ["m", "a˦˥"]
 
 
 def test_left_stem_tone_letters_read_as_their_levels():

@@ -22,8 +22,8 @@ from phonematcher.tone import DIACRITIC_TONES, LEVELS, NUMERALS
     ("má", [(0, 1), (1, 3)]),
     # m0 á1 (NFC)
     ("má", [(0, 1), (1, 2)]),
-    # m0 a1 ˥2 ˩3 space4 t5 a6 ²7 ¹8 ⁴9: a tone run is one span, the space a gap
-    ("ma˥˩ ta²¹⁴", [(0, 1), (1, 2), (2, 4), (5, 6), (6, 7), (7, 10)]),
+    # m0 a1 ˥2 ˩3 space4 t5 a6 ²7 ¹8 ⁴9: a tone run is in the span of its vowel, the space a gap
+    ("ma˥˩ ta²¹⁴", [(0, 1), (1, 4), (5, 6), (6, 10)]),
     # m0 U+200B1 a2 U+FEFF3: format characters are gaps
     ("m​a﻿", [(0, 1), (2, 3)]),
     # a0 ͡1 i2: a diphthong is two segments and the tie bar is a gap
