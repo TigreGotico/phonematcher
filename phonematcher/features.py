@@ -148,7 +148,8 @@ def vectorize_phones(segment: str) -> Vector:
     raise _unrecognized(segment, ": a diphthong is two segments" if _is_diphthong(seg) else "")
 
 
-_NAS, _SON, _CONT, _DELREL, _SG, _CG = (_INDEX[f] for f in ("nas", "son", "cont", "delrel", "sg", "cg"))
+_NAS, _SON, _CONT, _DELREL, _SG, _CG, _VOI, _VELARIC = (
+    _INDEX[f] for f in ("nas", "son", "cont", "delrel", "sg", "cg", "voi", "velaric"))
 #: Articulators: in a double articulation each one the parts use is used.
 _ARTICULATORS = {_INDEX[f] for f in ("lab", "cor", "hi", "back")}
 
@@ -173,6 +174,10 @@ def _tie(first: Vector, second: Vector) -> Vector:
                for i, (x, y) in enumerate(zip(first, second))]
     else:
         raise ValueError("a tie of these parts has no reading")
+    if first[_VELARIC] is not second[_VELARIC] and True in (first[_VELARIC], second[_VELARIC]):
+        click, rear = (first, second) if first[_VELARIC] else (second, first)  # as ɡ͡ǃ ŋ͡ǃ
+        out = list(click)
+        out[_VOI], out[_NAS] = rear[_VOI], rear[_NAS]
     return tuple(out)
 
 
@@ -181,7 +186,8 @@ def compose_tie(parts: List[Vector]) -> Vector:
     an obstruent prenasalizes it, a stop before a fricative makes an affricate with the glottal
     features of both, and two stops or two nasals make a double articulation: a feature one part
     leaves at 0 takes the other's value, an articulator either part uses is +, and other features
-    the parts set apart are 0. Other ties, such as two vowels, raise ``ValueError``."""
+    the parts set apart are 0. A tie of a click and its velar or uvular letter is the click,
+    with the voicing and nasality of that letter. Other ties, such as two vowels, raise ``ValueError``."""
     vec = parts[-1]
     for part in reversed(parts[:-1]):
         vec = _tie(part, vec)
