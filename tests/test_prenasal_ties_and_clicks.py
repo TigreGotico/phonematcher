@@ -93,7 +93,7 @@ def test_a_click_tie_stays_a_click_with_the_place_of_the_click_letter(segment):
         assert _value(segment, name) is click[FEATURES.index(name)]
 
 
-@pytest.mark.parametrize("segment", ["t͡ǃ", "p͡ʘ", "ǃ͡s", "ǃ͡x", "ǃ͡q", "k͡ǃ͡x", "ǃ͡ʔ", "ǃ͡h", "ǃ͡ǀ", "kʷ͡ǃ"])
+@pytest.mark.parametrize("segment", ["t͡ǃ", "p͡ʘ", "ǃ͡s", "ǃ͡x", "ǀ͡χ", "χ͡ǀ", "ǃ͡ʔ", "ǃ͡h", "ǃ͡ǀ", "kʷ͡ǃ", "k͡ǃ͡x", "ǃ͡q͡k"])
 def test_a_click_tied_to_anything_but_one_velar_or_uvular_letter_before_it_stays_unread(segment):
     # The Handbook quote above names only the velar or uvular symbol beside the click. Any other
     # tie would drop a letter if it read as the click.
@@ -106,3 +106,25 @@ def test_a_click_tie_with_a_marked_or_uvular_rear_letter_reads(segment, voiced, 
     assert _value(segment, "velaric") is True
     assert _value(segment, "voi") is voiced
     assert _value(segment, "nas") is nasal
+
+
+_CLICK_LETTERS = "ʘǀǃǂǁ"
+
+
+@pytest.mark.parametrize("rear", "kɡŋqɢɴ")
+@pytest.mark.parametrize("click", _CLICK_LETTERS)
+@pytest.mark.parametrize("marks", ["", "ʰ", "ˀ"])
+def test_a_click_tie_reads_the_same_with_the_rear_letter_after_the_click(rear, click, marks):
+    # the expected value is the letter-first tie; the mark sits on the click in that form
+    assert vectorize_phones(f"{click}\u0361{rear}{marks}") == vectorize_phones(f"{rear}\u0361{click}{marks}")
+
+
+@pytest.mark.parametrize("segment, letter_first", [("ǃ͜q", "q͡ǃ"), ("ǃ͡q̊", "q̊͡ǃ"), ("ǃ̥͡ŋ", "ŋ͡ǃ̥")])
+def test_a_click_tie_with_marks_or_the_other_tie_bar_reads_in_either_order(segment, letter_first):
+    assert vectorize_phones(segment) == vectorize_phones(letter_first)
+
+
+@pytest.mark.parametrize("segment", ["ǃq", "ǀˀq", "ǃʷŋ", "ǁʰɡ"])
+def test_an_untied_click_then_rear_letter_stays_unread(segment):
+    with pytest.raises(ValueError):
+        vectorize_phones(segment)
