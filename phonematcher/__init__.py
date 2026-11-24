@@ -1,7 +1,7 @@
 from phonematcher.clustering import Match, PhoneticFuzzySearch
 from phonematcher.distance import GAP_COST, align, edit_distance, ipa_distance, segment_spans, segments, substitution_cost
 from phonematcher.features import FEATURES, WEIGHTS, feature_distance, is_vowel_phone, phonetic_distance, vectorize_phones
-from phonematcher.tone import is_tone, tone_distance
+from phonematcher.tone import is_tone, tone_distance, tone_levels
 from phonematcher.version import VERSION_STR as __version__
 
 __all__ = [
@@ -21,5 +21,6 @@ __all__ = [
     "segments",
     "substitution_cost",
     "tone_distance",
+    "tone_levels",
     "vectorize_phones",
 ]

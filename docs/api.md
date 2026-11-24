@@ -29,6 +29,7 @@ These names are the stable API. Each one is exported from the package root, so `
 | `WEIGHTS` | The feature weights, read-only. | `phonematcher.features` |
 | `tone_distance` | The distance between two tones. Experimental. | `phonematcher.tone` |
 | `is_tone` | True for a segment made only of tone letters. | `phonematcher.tone` |
+| `tone_levels` | The Chao levels of a tone, in order. | `phonematcher.tone` |
 | `phonex` | The cluster-id key of a word. Import it with `from phonematcher.phonex import phonex`. | `phonematcher.phonex` |
 
 `phonematcher.__version__` is the version string of the installed package, such as `2.2.0a2`.
@@ -42,7 +43,7 @@ Every other name is internal. It can change or go away in any release, with no w
 - `phonematcher.clustering`: `upgma`, `phone_clusters`, `merge_threshold`.
 - `phonematcher.distance`: `check_readable`, `SUPRASEGMENTALS`, `NON_SYLLABIC`.
 - `phonematcher.features`: `compose_tie`, `phone_features`, `NUM_FEATURES`, `SOURCE`, `SPELLINGS`, `PRE_DIACRITICS`, `POST_DIACRITICS`.
-- `phonematcher.tone`: `tone_levels`, `LEVELS`, `DIACRITIC_TONES`, `NUMERALS`, `PHRASE_MARKS`.
+- `phonematcher.tone`: `LEVELS`, `DIACRITIC_TONES`, `NUMERALS`, `PHRASE_MARKS`.
 - `phonematcher.scales`: the whole module.
 
 The sections below describe the stable names first, then the internal names that the guides use.
@@ -73,6 +74,7 @@ The sections below describe the stable names first, then the internal names that
 ## `phonematcher.tone`
 
 - `is_tone(segment) -> bool`: true for a segment made only of tone letters.
+- `tone_levels(tone) -> tuple[int, ...]`: the Chao levels of a tone, in order, from 1 (extra low) to 5 (extra high), so `tone_levels("˧˦˧")` gives `(3, 4, 3)`. It takes tone letters, superscript tone numerals (`²¹⁴`) and left-stem tone letters (U+A712 to U+A716). A string that is not a tone raises `ValueError`, and a value that is not a string raises `TypeError`.
 - `tone_distance(a, b) -> float`: the distance between two tones, from 0 to 1. It is experimental: see [Tones](tones.md) and issue [#68](https://github.com/TigreGotico/phonematcher/issues/68). See [features.md](features.md#tone).
 
 ## `phonematcher.clustering`
@@ -102,7 +104,6 @@ These names can change in any release.
 - `phonematcher.features.SOURCE`: where the table comes from.
 - `phonematcher.features.phone_features`: the table, segment (NFD) to vector.
 - `phonematcher.features.POST_DIACRITICS`: the diacritics that follow their base.
-- `phonematcher.tone.tone_levels(segment) -> tuple[int, ...] | None`: the pitch levels of a tone, 1 (extra low) to 5 (extra high).
 
 ### `phonematcher.clustering.phone_clusters(share) -> dict`
 
