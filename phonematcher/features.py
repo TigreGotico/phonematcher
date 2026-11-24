@@ -59,8 +59,8 @@ _LETTER_CATEGORIES = {"Ll", "Lu", "Lo"}
 #: nasality) beside it. A click after any other letter with no tie bar is not read.
 _CLICKS = set("ʘǀǃǂǁ‼ʞ")
 _REAR_CLOSURES = set("kɡŋqɢɴ")
-#: Superscript nasal letters that are a velar or uvular letter written small.
-_SMALL_REAR_NASALS = {"ᵑ": "ŋ", "ᶰ": "ɴ"}
+#: Small letters that write a click's velar or uvular closure.
+_SMALL_REAR_CLOSURES = {"ᶢ": "ɡ", "ᵑ": "ŋ", "ᶰ": "ɴ"}
 #: Glottal letters: a glottal beside another letter is two segments or glottal reinforcement, never
 #: one tied segment, so the untied-letter rule does not tie them.
 _GLOTTALS = set("ʔhɦ")
@@ -104,8 +104,8 @@ def vectorize_phones(segment: str) -> Vector:
     Raises ``ValueError`` for a segment it cannot read.
     """
     seg = unicodedata.normalize("NFD", segment).translate(_COMPOSED_LETTERS)
-    if seg[:1] == "ᶢ" and seg[1:2] in _CLICKS:
-        seg = "ɡ" + TIES[0] + seg[1:]  # the voiced velar closure of the click, written small
+    if seg[:1] in _SMALL_REAR_CLOSURES and seg[1:2] in _CLICKS:
+        seg = _SMALL_REAR_CLOSURES[seg[0]] + TIES[0] + seg[1:]
     if seg in phone_features:
         return phone_features[seg]
     untied = seg.replace(TIES[1], TIES[0])
@@ -240,11 +240,8 @@ def _apply_if(diacritic: dict, vec: Vector, segment: str) -> Vector:
 def _apply_pre(marker: str, vec: Vector, segment: str) -> Vector:
     """Apply a mark written before its base. A nasal mark on an obstruent adds [+nasal] to it, as
     a nasal tied before the obstruent does: prenasalized stops, affricates and fricatives. The
-    glottal continuants h and ɦ are approximants, which are never prenasalized. A small velar or
-    uvular nasal before a click is that letter tied to the click, as a small ``ᶢ`` is."""
+    glottal continuants h and ɦ are approximants, which are never prenasalized."""
     base = segment.lstrip("".join(PRE_DIACRITICS))[:1]
-    if marker in _SMALL_REAR_NASALS and base in _CLICKS:
-        return vectorize_phones(_SMALL_REAR_NASALS[marker] + TIES[0] + base)
     if PRE_DIACRITICS[marker][0] == "ⁿ" and vec[_SON] is False and base not in _GLOTTALS:
         return tuple(True if i == _NAS else x for i, x in enumerate(vec))
     return _apply_if(_DIACRITICS[PRE_DIACRITICS[marker]], vec, segment)

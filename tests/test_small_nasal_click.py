@@ -36,3 +36,9 @@ def test_small_alveolar_nasal_before_a_click_is_unchanged():
 
 def test_small_nasal_before_a_stop_is_unchanged():
     assert vectorize_phones("ᵑɡ") == vectorize_phones("ŋ͡ɡ")
+
+
+# A mark after the click keeps its rule, as on the tied form.
+@pytest.mark.parametrize("mark", ["ʰ", "ʷ"])
+def test_marks_after_a_small_nasal_click_apply(mark):
+    assert vectorize_phones("ᵑǃ" + mark) == vectorize_phones("ŋ͡ǃ" + mark)
