@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.7.4a3](https://github.com/TigreGotico/phonematcher/tree/2.7.4a3) (2026-11-24)
+
+[Full Changelog](https://github.com/TigreGotico/phonematcher/compare/2.7.4a2...2.7.4a3)
+
+**Merged pull requests:**
+
+- docs: state the post-test feature values as sourced choices [\#152](https://github.com/TigreGotico/phonematcher/pull/152) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
+
 ## [2.7.4a2](https://github.com/TigreGotico/phonematcher/tree/2.7.4a2) (2026-11-24)
 
 [Full Changelog](https://github.com/TigreGotico/phonematcher/compare/2.7.4a1...2.7.4a2)
@@ -391,10 +399,6 @@
 ## [0.11.0a1](https://github.com/TigreGotico/phonematcher/tree/0.11.0a1) (2026-11-22)
 
 [Full Changelog](https://github.com/TigreGotico/phonematcher/compare/0.10.1a1...0.11.0a1)
-
-**Merged pull requests:**
-
-- feat: add the benchmark harness with seven systems and a guarded test split [\#41](https://github.com/TigreGotico/phonematcher/pull/41) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
 
 ## [0.10.1a1](https://github.com/TigreGotico/phonematcher/tree/0.10.1a1) (2026-11-22)
 
