@@ -132,9 +132,9 @@ The search clusters phones on the price that ranks its candidates, so one pair o
 
 The default share is 0.08. Rule 7 of [`benchmarks/prereg-2.md`](https://github.com/TigreGotico/phonematcher/blob/dev/benchmarks/prereg-2.md) chooses it on the development split, and [Search](search.md#6-choose-a-sensitivity) gives the rule and the values. The costs of the word distance, the alignment and the cognate task do not depend on the clusters.
 
-### Corrections to feature values after the test run
+### Feature values that follow their sources
 
-The test run scored the library once, and its numbers stay as recorded. A linguistic audit of the table came after it and found values that disagree with their sources. Each correction came after the test run and changes some word distances. The marks `◌̝ ◌̞ ˔ ˕` on a consonant follow the chart examples `ɹ̝` and `β̞` (`docs/features.md`). In a tie of a click and its velar or uvular letter, the tie is the click with the voicing and nasality of that letter (`docs/features.md`). `h` and `ɦ` take [−son, −cons] and `ʔ` takes [−son, +cons] from the Hayes CSV, as `ɹ` already does (`docs/features.md`). The development and seen result files predate these corrections.
+Three groups of feature values follow a cited source and differ from the values that the test run scored. The marks `◌̝ ◌̞ ˔ ˕` on a consonant follow the chart examples `ɹ̝` and `β̞` (`docs/features.md`). In a tie of a click and its velar or uvular letter, the tie is the click with the voicing and nasality of that letter (`docs/features.md`). `h` and `ɦ` take [−son, −cons] and `ʔ` takes [−son, +cons] from the Hayes CSV, as `ɹ` does (`docs/features.md`). These values change some word distances. The test numbers describe the library that the test run scored. The development and seen result files do not include these values.
 
 ### The feature weights stay
 
