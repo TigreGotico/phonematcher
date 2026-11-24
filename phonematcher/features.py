@@ -179,7 +179,7 @@ def vectorize_phones(segment: str) -> Vector:
                 # affricate contour; an ejected release reads as an ejective, as for q.
                 out = list(vectorize_phones("q" + TIES[0] + click + uvular[1:]))
                 if uvular == "χ":
-                    out[_DELREL] = True
+                    out[_DELREL] = out[_INDEX["strid"]] = True
                 return tuple(out)
             # A click tie is one velar or uvular letter, then the click (IPA Handbook, 2.5). The
             # click takes only voi and nas from that letter, so it may carry combining marks only.
