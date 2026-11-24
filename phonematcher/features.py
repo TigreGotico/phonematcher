@@ -144,11 +144,9 @@ def vectorize_phones(segment: str) -> Vector:
             vec = _apply_pre(marker, vec, segment)
         return vec
     if seg and TIES[0] not in untied:
-        clusters: List[str] = []  # a base letter and the combining marks after it
+        clusters: List[str] = []  # a character and the combining marks after it
         for c in seg:
-            if unicodedata.category(c) in _LETTER_CATEGORIES or not clusters:
-                clusters.append(c)
-            elif unicodedata.combining(c):
+            if clusters and unicodedata.combining(c):
                 clusters[-1] += c
             else:
                 clusters.append(c)
@@ -285,12 +283,12 @@ def feature_distance(a: str, b: str) -> float:
                 _signs(seg)
             except ValueError:
                 with _WARNED_LOCK:
-                    first = seg not in _WARNED
+                    if seg in _WARNED:
+                        continue
                     _WARNED.add(seg)
-                if first:
-                    points = " ".join(f"U+{ord(c):04X}" for c in seg)
-                    warnings.warn(f"Unrecognized phone {seg!r} ({points}) costs 1 against every other"
-                                  " segment; pass strict=True to raise instead", UserWarning, stacklevel=2)
+                points = " ".join(f"U+{ord(c):04X}" for c in seg)
+                warnings.warn(f"Unrecognized phone {seg!r} ({points}) costs 1 against every other"
+                              " segment; pass strict=True to raise instead", UserWarning, stacklevel=2)
         return 1.0
     diff = sum(w * abs(x - y) / 2 for w, x, y in zip(WEIGHTS, va, vb))
     return diff / _TOTAL_WEIGHT
