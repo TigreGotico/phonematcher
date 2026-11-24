@@ -158,7 +158,7 @@ def vectorize_phones(segment: str) -> Vector:
             tied += (TIES[0] if joins else "") + cluster
         if tied != seg:
             return vectorize_phones(tied)
-    raise _unrecognized(segment, ": a diphthong is two segments" if _is_diphthong(seg) else "")
+    raise _unrecognized(segment, ": a diphthong is two segments, a vowel and a non-syllabic vowel" if _is_diphthong(seg) else "")
 
 
 _NAS, _SON, _CONT, _DELREL, _SG, _CG, _VOI = (

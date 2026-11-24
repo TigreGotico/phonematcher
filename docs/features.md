@@ -280,13 +280,13 @@ Other ties raise `ValueError`. Two sonorants, such as `l͡j`, and a fricative be
 
 ### Diphthongs
 
-`segments` splits a tie between two vowels into the two vowels: `a͡i` gives `a` and `i`, and `ei̯` gives `e` and `i̯`. A tie between two consonants still joins them, so `t͡ʃa͡i` gives `t͡ʃ`, `a` and `i`. A diphthong thus costs as two segments in a word distance, and `ai` and `a͡i` are at distance 0. Against `a` the distance is 0.5, one deletion of `i`.
+`segments` splits a tie between two vowels into a vowel and a non-syllabic vowel: `a͡i` gives `a` and `i̯`, as `ai̯` does. The IPA chart names ◌̯ "Non-syllabic", and `i̯` takes the rule of that mark, [−syl]. A tie between two consonants still joins them, so `t͡ʃa͡i` gives `t͡ʃ`, `a` and `i̯`. A diphthong thus costs as two segments in a word distance. Against `a` the distance is 0.5, one deletion of `i̯`. A plain `ai` gives two vowels, `a` and `i`, because the string does not say whether it is a diphthong or a hiatus. So `a͡i` against `ai` or `a.i` costs 0.3244, the syllabic feature alone, and `a͡i` against `aj` costs 0.2294.
 
 Nerbonne and Heeringa (1997, pp. 11-13) compared one-symbol and two-symbol diphthongs on 40 Dutch dialects with feature vectors. The two-symbol form gave the better dialect distances. Anderson et al. (2018, p. 33) define a diphthong in CLTS as two vowels: "Diphthongs are thus defined by two vowels". A diphthong has no vector of its own, so `vectorize_phones` raises `ValueError` for `ai`, `a͡i` and `ei̯`:
 
 | Input | Result | Reason |
 |---|---|---|
-| `a͡i`, `ai`, `ei̯` as one segment | `ValueError` | a diphthong is two segments; read `a` and `i` alone |
+| `a͡i`, `ai`, `ei̯` as one segment | `ValueError` | a diphthong is two segments; read `a` and `i̯` alone |
 
 ## Distance
 

@@ -96,7 +96,7 @@ Two letters without a tie bar read as one tied segment if the tie is possible. F
 - A stop before a fricative gives an affricate.
 - Two stops or two nasals give a double articulation, as in `k͡p`.
 
-Two vowels do not combine. Thus a diphthong is two segments. The sources do not agree on this point. Nerbonne and Heeringa (1997, p. 11) found better dialect distances with two segments. Heeringa (2004, p. 188) found no difference. Rubehn et al. (2024, p. 209) use one segment with the vector of its first part.
+Two vowels do not combine. Thus a diphthong is two segments, and the second vowel of a tied pair is non-syllabic: `a͡i` reads as `a` and `i̯`. The sources do not agree on this point. Nerbonne and Heeringa (1997, p. 11) found better dialect distances with two segments. Heeringa (2004, p. 188) found no difference. Rubehn et al. (2024, p. 209) use one segment with the vector of its first part.
 
 The tie rule increases coverage. This table gives the PHOIBLE types that read with three methods.
 
