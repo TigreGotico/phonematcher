@@ -40,7 +40,8 @@ def segment_spans(text: str) -> List[Tuple[int, int]]:
     spelling is rewritten and nothing is normalized. A character that :func:`segments` drops, and
     a space between words, falls in a gap between two spans. A tone diacritic stays in the span of
     the letter it is written on, and segments that share a character share one span, so the
-    :func:`segments` of each span, in turn, are those of *text* without its spaces.
+    :func:`segments` of each span, in turn, are those of *text* without its spaces. That last
+    property fails only on malformed input with a tone mark or a tie bar on a prenasal mark.
     """
     spans: List[Tuple[int, int]] = []
     chars = _characters(text)
