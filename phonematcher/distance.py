@@ -34,7 +34,8 @@ def segments(ipa: str) -> List[str]:
     A tone then moves onto the segment that carries it: the last vowel or syllabic consonant before
     it in the same word that carries no tone yet. ``ma˥`` gives ``m``, ``a˥``, and ``tam˧˧`` gives
     ``t``, ``a˧˧``, ``m``. A tone with no such segment stays a segment of tone letters, as in ``˥˩``
-    and ``ɡ˩a``.
+    and ``ɡ˩a``. A length mark or a combining mark written after a tone belongs to the vowel right before
+    the tone, so ``a˥ː`` gives ``aː˥`` and ``a˥̃`` gives ``ã˥``.
     """
     return [unicodedata.normalize("NFC", s) for s in _segments(unicodedata.normalize("NFD", ipa).translate(SPELLINGS))[0]]
 
@@ -203,7 +204,7 @@ def _segments(nfd: str, track: bool = False) -> Tuple[List[str], List[List[int]]
             if track:
                 at[-1].append(i)
             continue
-        base = next((seg for seg in reversed(out) if not is_tone(seg)), " ")  # a tone letter does not end the vowel
+        base = next((seg for seg in reversed(out) if not _split_tone_marks(seg)[0]), " ")  # a tone letter does not end the vowel
         if ch in PRE_DIACRITICS and (base == " " or is_vowel_phone(base)) and not join_next:
             pending += ch
             if track:
@@ -244,21 +245,39 @@ def carry_tones(segs: Sequence[str]) -> List[str]:
     return _carry_tones(list(segs), [], False)[0]
 
 
+def _split_tone_marks(seg: str) -> Tuple[str, str]:
+    """The tone letters of *seg* and the length or combining marks written after them, as ``("˥", "ː")``
+    for ``˥ː``. A segment of tone letters alone gives ``(seg, "")``. Any other segment, and a tone
+    followed by any other mark, gives ``("", "")``."""
+    n = 0
+    while n < len(seg) and seg[n] in LEVELS:
+        n += 1
+    marks = seg[n:]
+    if n and all(ch in "ːˑ" or "\u0300" <= ch <= "\u036f" for ch in marks):
+        return seg[:n], marks
+    return "", ""
+
+
 def _carry_tones(segs: List[str], at: List[List[int]], track: bool) -> Tuple[List[str], List[List[int]]]:
     """Move each tone of *segs* onto the last vowel or syllabic consonant before it in its word that
     has no tone yet. A tone with no such segment stays a segment of its own. A tone written right
     after its segment joins that segment's positions; a tone written after a coda is left out of
-    them, so each segment keeps a span of its own."""
+    them, so each segment keeps a span of its own. A length or combining mark written after the
+    tone goes onto the vowel right before the tone, as if written before it; after a coda, the tone
+    and its mark stay one segment."""
     out: List[str] = []
     out_at: List[List[int]] = []
     for k, seg in enumerate(segs):
         carried = False
-        if is_tone(seg):
+        tone, marks = _split_tone_marks(seg)
+        if tone:
             for j in reversed(range(len(out))):
                 if out[j] == " " or out[j][-1] in LEVELS:  # a word boundary, a tone or a toned segment
                     break
+                if marks and j != len(out) - 1:  # a coda between: the marks cannot join the vowel's span
+                    break
                 if is_vowel_phone(out[j]):
-                    out[j] += seg
+                    out[j] += marks + tone
                     if track and j == len(out) - 1:
                         out_at[j] = out_at[j] + at[k]
                     carried = True

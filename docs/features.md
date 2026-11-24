@@ -326,6 +326,18 @@ segments("ni˨˩˦꜔꜒")  # ['n', 'i˨˩˦', '˧˥']
 
 A vowel carries one tone. A second tone after it, such as the surface tone of a sandhi form written in left-stem letters, stays a tone segment of its own.
 
+A length mark (`ː`, `ˑ`) or a combining mark (U+0300 to U+036F) written after a tone belongs to the vowel right before the tone. The tone letters mark the end of the syllable, so a mark after them can only describe the vowel that carries the tone. Thus `a˥ː` is `aː˥` and `a˥̃` is `ã˥`, with the same segments, spans and vectors:
+
+```python
+segments("a˥ː")     # ['aː˥']
+segments("a˥̃")      # ['ã˥']
+segments("ma˥ː")    # ['m', 'aː˥']
+```
+
+The span of the vowel holds the tone letters and the mark. When a coda stands between the vowel and the tone, as in `tam˧ː`, the mark cannot join the span of the vowel without covering the coda. The tone and its mark then stay one segment `˧ː`, which is not a phone and costs 1. A mark after a tone also ends the tone run, so `a˥ː˧` is `aː˥` and a tone segment `˧`.
+
+A modifier letter after a tone has no base to describe, because the letters of a tone are not a sound. Before a stop, `ʰ` or a prenasal mark belongs to that stop, as in `a˥ʰt`, which gives `a˥` and `ʰt`. With no stop after it, as in `ma˥ʰ`, `a˧ʷ` or word-final `a˧ⁿ`, it stays on the tone letters. The segment `˥ʰ` is not a phone, so it costs 1 against all other segments. No source defines a pitch for it, and the table does not guess one.
+
 The IPA chart prints each tone diacritic beside a drawing of a tone letter or a contour. This table reads each diacritic as the tone letters that match the drawing:
 
 | Diacritic | Tone letters | Chart name |
