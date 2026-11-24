@@ -64,3 +64,34 @@ def test_a_mark_that_does_not_apply_names_the_segment_and_strict():
         ipa_distance("ʰə", "a")
     message = str(caught[0].message)
     assert message.startswith("Unrecognized phone 'ʰə' (U+02B0 U+0259)") and "strict=True" in message
+
+
+def test_sixteen_threads_pricing_one_new_segment_warn_exactly_once():
+    import sys
+    import threading
+    interval = sys.getswitchinterval()
+    sys.setswitchinterval(1e-6)
+    counts = []
+    try:
+        for trial in range(100):
+            segment = chr(0x2600 + trial)  # miscellaneous symbols: no row in the table
+            features._WARNED.clear()
+            features.feature_distance.cache_clear()
+            substitution_cost.cache_clear()
+            barrier = threading.Barrier(16)
+
+            def price():
+                barrier.wait()
+                ipa_distance(segment, "a")
+
+            with warnings.catch_warnings(record=True) as caught:
+                warnings.simplefilter("always")
+                threads = [threading.Thread(target=price) for _ in range(16)]
+                for thread in threads:
+                    thread.start()
+                for thread in threads:
+                    thread.join()
+            counts.append(sum(repr(segment) in str(w.message) for w in caught))
+    finally:
+        sys.setswitchinterval(interval)
+    assert len(counts) == 100 and set(counts) == {1}, counts

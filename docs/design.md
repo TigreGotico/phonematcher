@@ -79,7 +79,13 @@ A segment that cannot be read is at distance 1 from every other segment, and a w
 
 The two views differ. On 12716 allophone items, the main view scores 0.8959. The view that skips the 224 items with an unread segment scores 0.9097 on the remaining 12492.
 
-A segment that phonematcher cannot read is at distance 1 from every other segment: its substitution against any other segment costs 1, the price of a deletion plus an insertion, and its insertion or deletion costs 0.5. The first time such a segment is priced against another segment, phonematcher issues one `UserWarning` that names the segment and its code points. Each segment warns once per process. A segment that only meets a gap costs 0.5, as any segment does, and does not warn. To silence the warning, use the standard `warnings` filter:
+A segment that phonematcher cannot read is at distance 1 from every other segment: its substitution against any other segment costs 1, the price of a deletion plus an insertion, and its insertion or deletion costs 0.5. The first time such a segment is priced against another segment, phonematcher issues one `UserWarning` that names the segment and its code points. Each segment warns once per process, also when several threads price it at the same time.
+
+The warning comes from the feature distance, so some inputs stay silent. An unread segment does not warn when it meets only gaps, tones or spaces. A gap costs 0.5 for any segment, and a tone or a space against a phone costs 1 before the features are read. Use `strict=True` to catch every unread segment.
+
+The first warning uses up the segment's one warning, even when nobody sees it. A first pricing under an "ignore" filter records the segment, so a later call with warnings on is silent. Under `-W error` or an "error" filter, the first pricing raises the warning as an exception instead of returning 1, and later calls return 1 with no warning.
+
+To silence the warning, use the standard `warnings` filter:
 
 ```python
 import warnings

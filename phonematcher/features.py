@@ -8,6 +8,7 @@ Articulatory Feature Vectors", COLING; MIT License), with the changes listed in
 A feature value is ``True`` (+), ``False`` (−) or ``None`` (0: the feature does not apply).
 """
 import json
+import threading
 import unicodedata
 import warnings
 from functools import lru_cache
@@ -235,6 +236,7 @@ def _signs(segment: str) -> Tuple[int, ...]:
 
 #: Unread segments that have already raised their warning in this process.
 _WARNED: set = set()
+_WARNED_LOCK = threading.Lock()
 
 
 @lru_cache(maxsize=65536)
@@ -255,11 +257,15 @@ def feature_distance(a: str, b: str) -> float:
         va, vb = _signs(a), _signs(b)
     except ValueError:
         for seg in (a, b):
-            if seg not in _WARNED:
-                try:
-                    _signs(seg)
-                except ValueError:
+            if seg in _WARNED:
+                continue
+            try:
+                _signs(seg)
+            except ValueError:
+                with _WARNED_LOCK:
+                    first = seg not in _WARNED
                     _WARNED.add(seg)
+                if first:
                     points = " ".join(f"U+{ord(c):04X}" for c in seg)
                     warnings.warn(f"Unrecognized phone {seg!r} ({points}) costs 1 against every other"
                                   " segment; pass strict=True to raise instead", UserWarning, stacklevel=2)
