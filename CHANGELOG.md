@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.7.14a1](https://github.com/TigreGotico/phonematcher/tree/2.7.14a1) (2026-11-24)
+
+[Full Changelog](https://github.com/TigreGotico/phonematcher/compare/2.7.13a1...2.7.14a1)
+
+**Merged pull requests:**
+
+- fix: read a pre-mark after a tone letter as a pre-mark of the next stop [\#180](https://github.com/TigreGotico/phonematcher/pull/180) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
+
 ## [2.7.13a1](https://github.com/TigreGotico/phonematcher/tree/2.7.13a1) (2026-11-24)
 
 [Full Changelog](https://github.com/TigreGotico/phonematcher/compare/2.7.12a1...2.7.13a1)
@@ -385,10 +393,6 @@
 ## [1.0.0a1](https://github.com/TigreGotico/phonematcher/tree/1.0.0a1) (2026-11-22)
 
 [Full Changelog](https://github.com/TigreGotico/phonematcher/compare/0.20.0a1...1.0.0a1)
-
-**Breaking changes:**
-
-- feat!: price a word at the costs the pre-registered test chose [\#63](https://github.com/TigreGotico/phonematcher/pull/63) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
 
 ## [0.20.0a1](https://github.com/TigreGotico/phonematcher/tree/0.20.0a1) (2026-11-22)
 
