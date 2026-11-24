@@ -32,7 +32,7 @@ def _with(segment, **features):
 @pytest.mark.parametrize("click", CLICK_LETTERS)
 @pytest.mark.parametrize("order", ["{click}͡χ", "χ͡{click}", "{click}͜χ"])
 def test_a_click_tied_to_chi_is_the_uvular_click_with_a_delayed_release(click, order):
-    assert vectorize_phones(order.format(click=click)) == _with(f"q͡{click}", delrel=True)
+    assert vectorize_phones(order.format(click=click)) == _with(f"q͡{click}", delrel=True, strid=True)
 
 
 @pytest.mark.parametrize("click", CLICK_LETTERS)
