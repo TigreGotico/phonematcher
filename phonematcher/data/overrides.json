@@ -16,6 +16,54 @@
       "value": "-",
       "source": "Gorman's CSV (github.com/kylebgorman/hayes2009, dataprep/Features.csv) of the feature tables of Hayes (2009), Introductory Phonology; Gorman's hayes2009.py names tables 4.7-9 (section 4.10)",
       "reason": "The Hayes CSV gives [ɹ] [-round]; the IPA chart symbol carries no lip rounding."
+    },
+    {
+      "phone": "h",
+      "feature": "son",
+      "panphon": "+",
+      "value": "-",
+      "source": "Gorman's CSV (github.com/kylebgorman/hayes2009, dataprep/Features.csv, vendored as scripts/sources/hayes2009-features.csv) of the feature tables of Hayes (2009), Introductory Phonology; Gorman's hayes2009.py names tables 4.7-9 (section 4.10); row 'h,-,-,-,-,-,+,+,-,-,-,-,-,+,-,-,-,-,-,0,0,0,-,-,0,0,0,0,0' (columns: syllabic, stress, long, consonantal, sonorant, ...)",
+      "reason": "The Hayes CSV gives the voiceless glottal fricative [-sonorant]. PanPhon gives the opposite value. The table takes the Hayes value, as it does for ɹ."
+    },
+    {
+      "phone": "h",
+      "feature": "cons",
+      "panphon": "+",
+      "value": "-",
+      "source": "Gorman's CSV (github.com/kylebgorman/hayes2009, dataprep/Features.csv, vendored as scripts/sources/hayes2009-features.csv) of the feature tables of Hayes (2009), Introductory Phonology; Gorman's hayes2009.py names tables 4.7-9 (section 4.10); row 'h,-,-,-,-,-,+,+,-,-,-,-,-,+,-,-,-,-,-,0,0,0,-,-,0,0,0,0,0' (columns: syllabic, stress, long, consonantal, sonorant, ...)",
+      "reason": "The Hayes CSV gives the voiceless glottal fricative [-consonantal]. PanPhon gives the opposite value. The table takes the Hayes value, as it does for ɹ."
+    },
+    {
+      "phone": "ɦ",
+      "feature": "son",
+      "panphon": "+",
+      "value": "-",
+      "source": "Gorman's CSV (github.com/kylebgorman/hayes2009, dataprep/Features.csv, vendored as scripts/sources/hayes2009-features.csv) of the feature tables of Hayes (2009), Introductory Phonology; Gorman's hayes2009.py names tables 4.7-9 (section 4.10); row 'ɦ,-,-,-,-,-,+,+,-,-,-,-,+,+,-,-,-,-,-,0,0,0,-,-,0,0,0,0,0' (columns: syllabic, stress, long, consonantal, sonorant, ...)",
+      "reason": "The Hayes CSV gives the voiced glottal fricative [-sonorant]. PanPhon gives the opposite value. The table takes the Hayes value, as it does for ɹ."
+    },
+    {
+      "phone": "ɦ",
+      "feature": "cons",
+      "panphon": "+",
+      "value": "-",
+      "source": "Gorman's CSV (github.com/kylebgorman/hayes2009, dataprep/Features.csv, vendored as scripts/sources/hayes2009-features.csv) of the feature tables of Hayes (2009), Introductory Phonology; Gorman's hayes2009.py names tables 4.7-9 (section 4.10); row 'ɦ,-,-,-,-,-,+,+,-,-,-,-,+,+,-,-,-,-,-,0,0,0,-,-,0,0,0,0,0' (columns: syllabic, stress, long, consonantal, sonorant, ...)",
+      "reason": "The Hayes CSV gives the voiced glottal fricative [-consonantal]. PanPhon gives the opposite value. The table takes the Hayes value, as it does for ɹ."
+    },
+    {
+      "phone": "ʔ",
+      "feature": "son",
+      "panphon": "+",
+      "value": "-",
+      "source": "Gorman's CSV (github.com/kylebgorman/hayes2009, dataprep/Features.csv, vendored as scripts/sources/hayes2009-features.csv) of the feature tables of Hayes (2009), Introductory Phonology; Gorman's hayes2009.py names tables 4.7-9 (section 4.10); row 'ʔ,-,-,-,+,-,-,-,-,-,-,-,-,-,+,-,-,-,-,0,0,0,-,-,0,0,0,0,0' (columns: syllabic, stress, long, consonantal, sonorant, ...)",
+      "reason": "The Hayes CSV gives the glottal stop [-sonorant]. PanPhon gives the opposite value. The table takes the Hayes value, as it does for ɹ."
+    },
+    {
+      "phone": "ʔ",
+      "feature": "cons",
+      "panphon": "-",
+      "value": "+",
+      "source": "Gorman's CSV (github.com/kylebgorman/hayes2009, dataprep/Features.csv, vendored as scripts/sources/hayes2009-features.csv) of the feature tables of Hayes (2009), Introductory Phonology; Gorman's hayes2009.py names tables 4.7-9 (section 4.10); row 'ʔ,-,-,-,+,-,-,-,-,-,-,-,-,-,+,-,-,-,-,0,0,0,-,-,0,0,0,0,0' (columns: syllabic, stress, long, consonantal, sonorant, ...)",
+      "reason": "The Hayes CSV gives the glottal stop [+consonantal]. PanPhon gives the opposite value. The table takes the Hayes value, as it does for ɹ."
     }
   ],
   "diacritics": [

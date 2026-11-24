@@ -77,8 +77,8 @@ threshold = merge_threshold(0.08)
 
 len(letters)                                  # 135
 len(costs)                                    # 9045
-round(threshold, 4)                           # 0.3035
-sum(c < threshold for c in costs) / len(costs)   # 0.0789
+round(threshold, 4)                           # 0.2924
+sum(c < threshold for c in costs) / len(costs)   # 0.0737
 ```
 
 A share outside 0 to 1 raises `ValueError`. The block below groups the letters at four shares and lists which of eight pairs of sounds share a cluster:
@@ -93,8 +93,8 @@ for sensitivity in (0.0, 0.08, 0.2, 0.5):
 ```
 
 ```text
-0.0 99 clusters; pb ʁχ
-0.08 25 clusters; pb ʁχ sʃ eɛ aɐ
+0.0 98 clusters; pb ʁχ
+0.08 28 clusters; pb ʁχ sʃ eɛ aɐ
 0.2 10 clusters; pb ʁχ sʃ eɛ aɐ pt eo
 0.5 3 clusters; pb ʁχ sʃ eɛ aɐ pt ʁk eo
 ```
@@ -121,9 +121,9 @@ for sensitivity in (0.0, 0.08, 0.2, 0.5):
 
 ```text
 0.0 1 ['dia']
-0.08 4 ['dia', 'bote', 'ponte']
+0.08 1 ['dia']
 0.2 8 ['dia', 'casa', 'bote']
-0.5 9 ['dia', 'casa', 'mesa']
+0.5 10 ['dia', 'casa', 'mesa']
 ```
 
 The word `dia` comes first at every value. A higher sensitivity returns more candidates, and the search computes an edit distance for each one. The candidates are ranked by that distance, so the nearest word stays first.

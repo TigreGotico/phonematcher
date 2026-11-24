@@ -391,6 +391,10 @@ The two audit runs of section 6 are not in the result files. The triangle check 
 
 The relative sensitivity and strict mode came after the test. They do not change a word distance. A test keeps a hash of many word distances, and this hash did not change. On the development queries, each query gives the same result at the share 0.08 as with the absolute threshold 0.1 of the tested version. The paired difference in mean recall at 1 is 0.0000, with an interval from 0.0000 to 0.0000 (1000 resamples, seed 0, 500 queries in each of four pairs). A query returns from 1% to 23% fewer candidates, depending on the pair. This comparison is an audit run. No result file has its scores for each query.
 
+Corrections of feature values from a linguistic audit came after the test, and they do change some word distances. The test numbers stay as recorded. `docs/design.md` lists the corrections.
+
+Corrections of feature values from a linguistic audit came after the test, and they do change some word distances. The test numbers stay as recorded. `docs/design.md` lists the corrections.
+
 `benchmarks/render.py` makes the tables of this paper from `benchmarks/results/`. `tests/test_whitepaper.py` checks each number in the text against those files. It connects each number to the system and the claim in its sentence. The five audit-run numbers of section 6 and the three of the sensitivity comparison above are typed, because no file has them.
 
 The data and its licences:

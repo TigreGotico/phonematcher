@@ -20,7 +20,7 @@ feature_distance("p", "b")   # 0.013
 feature_distance("p", "t")   # 0.059
 feature_distance("i", "e")   # 0.053
 feature_distance("i", "a")   # 0.132
-feature_distance("k", "ʔ")   # 0.25
+feature_distance("k", "ʔ")   # 0.039
 ```
 
 `p` and `b` differ only in voice, so they are close. `p` and `t` differ in place. `i` is nearer to `e` than to `a`. Two vowels differ on as many height steps (`h1` to `h6`) as there are chart rows between them. The next block lists the features that differ.

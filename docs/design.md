@@ -132,6 +132,14 @@ The search clusters phones on the price that ranks its candidates, so one pair o
 
 The default share is 0.08. Rule 7 of [`benchmarks/prereg-2.md`](https://github.com/TigreGotico/phonematcher/blob/dev/benchmarks/prereg-2.md) chooses it on the development split, and [Search](search.md#6-choose-a-sensitivity) gives the rule and the values. The costs of the word distance, the alignment and the cognate task do not depend on the clusters.
 
+### Corrections to feature values after the test run
+
+The test run scored the library once, and its numbers stay as recorded. A linguistic audit of the table came after it and found values that disagree with their sources. Each correction came after the test run and changes some word distances. `h` and `ɦ` take [−son, −cons] and `ʔ` takes [−son, +cons] from the Hayes CSV, as `ɹ` already does (`docs/features.md`). The development result files do not include this correction yet.
+
+### Corrections to feature values after the test run
+
+The test run scored the library once, and its numbers stay as recorded. A linguistic audit of the table came after it and found values that disagree with their sources. Each correction came after the test run and changes some word distances. `h` and `ɦ` take [−son, −cons] and `ʔ` takes [−son, +cons] from the Hayes CSV, as `ɹ` already does (`docs/features.md`). The development result files do not include this correction yet.
+
 ### The feature weights stay
 
 The weights of the 22 features in the data of PanPhon 0.22.2 are PanPhon's. The PanPhon paper counts 21 features (Mortensen et al. 2016, p. 3477); the 22 are the columns of the weight file of version 0.22.2. Fits of the weights to perceptual confusions did not transfer from one data set to the next, and the candidates C1 to C3 that changed the weights did not beat C0. No change to the feature weights passed a clean test; the test that changed the word costs kept the weights. The weights stay.
