@@ -80,9 +80,19 @@ def test_a_tone_goes_to_the_last_vowel_or_syllabic_consonant_before_it_in_its_wo
     assert segments(ipa) == expected
 
 
-def test_a_tone_after_a_coda_shares_the_span_of_its_vowel():
-    # t0 a1 m2 ˧3 ˧4: the tone moves to a, so a, m and the tone are one span
-    assert segment_spans("tam˧˧") == [(0, 1), (1, 5)]
+def test_a_tone_after_a_coda_is_a_gap_and_each_segment_keeps_its_span():
+    # t0 a1 m2 ˧3 ˧4: three segments t, a˧˧, m; the tone letters after the coda are a gap
+    assert segments("tam˧˧") == ["t", "a˧˧", "m"]
+    assert segment_spans("tam˧˧") == [(0, 1), (1, 2), (2, 3)]
+
+
+def test_a_tone_right_after_its_vowel_is_in_the_span_of_the_vowel():
+    # m0 a1 ˥2: the span of a˥ holds the tone letter
+    assert segment_spans("ma˥") == [(0, 1), (1, 3)]
+
+
+def test_a_tone_on_a_tied_diphthong_goes_to_its_nucleus():
+    assert segments("a͡i˥") == segments("ai̯˥") == ["a˥", "i̯"]
 
 
 def test_carry_tones_reads_a_token_list_as_segments_reads_a_string():

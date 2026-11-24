@@ -21,7 +21,8 @@ def segments(ipa: str) -> List[str]:
 
     A segment is a base symbol with the diacritics and modifier letters that follow it. A tie bar
     joins the symbols on both sides into one segment, so ``t͡ʃ`` is one affricate, unless both are
-    vowels: a diphthong is two segments, so ``a͡i`` gives ``a`` and ``i``. Spaces become a
+    vowels: a diphthong is two segments, a vowel and a non-syllabic vowel, so ``a͡i`` gives ``a``
+    and ``i̯``, as ``ai̯`` does. Spaces become a
     ``" "`` segment between words; stress, syllable and phrase-tone marks are dropped. A tone is
     read as tone letters after its syllable: a tone diacritic or a tone numeral is written as tone
     letters after the segment that carries it. A tone diacritic on a tone letter adds its
@@ -84,6 +85,7 @@ def _segments(nfd: str, track: bool = False) -> Tuple[List[str], List[List[int]]
     at: List[List[int]] = []  # with track: the positions of each segment, and of the held marks below
     pending_at, tone_at, carried_at = [], [], []
     join_next = False
+    offglide = -1  # the index in out of the offglide of a tied diphthong, which holds its ◌̯
     pending = ""  # marks written before the base they belong to
 
     def release_pending() -> None:
@@ -111,8 +113,10 @@ def _segments(nfd: str, track: bool = False) -> Tuple[List[str], List[List[int]]
                 at.append(tone_at)
             tone, tone_at = "", []
 
-    for i, ch in enumerate(nfd):
-        ch = NUMERALS.get(ch, ch)
+    level_kind = None  # the notation of the tone letter last written: Chao, left-stem or numeral
+
+    for i, raw in enumerate(nfd):
+        ch = NUMERALS.get(raw, raw)
         if ch in SUPRASEGMENTALS or unicodedata.category(ch) == "Cf":
             continue
         if ch in DIACRITIC_TONES:
@@ -129,15 +133,20 @@ def _segments(nfd: str, track: bool = False) -> Tuple[List[str], List[List[int]]
                 tone += letters
                 if track:
                     tone_at += (min(at[-1]), i)  # the span of a tone mark holds the letter it is on
+            level_kind = None
             continue
         if ch in LEVELS:
+            # A tone run ends where its notation changes: ˨˩˦꜔꜒ is the tone 214, then the tone 35.
+            kind = 0 if raw in LEVELS else 1 if "\ua712" <= raw <= "\ua716" else 2
+            same_notation = level_kind in (None, kind)
+            level_kind = kind
             if tone:
                 tone += ch
                 if track:
                     tone_at.append(i)
                 continue
             release_pending()
-            if out and is_tone(out[-1]):
+            if out and is_tone(out[-1]) and same_notation:
                 out[-1] += ch
                 if track:
                     at[-1].append(i)
@@ -147,6 +156,7 @@ def _segments(nfd: str, track: bool = False) -> Tuple[List[str], List[List[int]]
                 if track:
                     at.append([i])
             continue
+        level_kind = None
         attaches = unicodedata.combining(ch) or ch in POST_DIACRITICS
         if not attaches:
             release_tone()
@@ -163,6 +173,11 @@ def _segments(nfd: str, track: bool = False) -> Tuple[List[str], List[List[int]]
                 if track:
                     at.append([i])
             continue
+        if ch in TIES and pending:  # a tie between two marks before a base, as in ᵑ͡ᵐk͡p
+            pending += ch
+            if track:
+                pending_at.append(i)
+            continue
         if ch in TIES:
             join_next = bool(out) and out[-1] != " "
             if join_next:
@@ -175,9 +190,19 @@ def _segments(nfd: str, track: bool = False) -> Tuple[List[str], List[List[int]]
             continue
         if join_next and out[-1][-1] in TIES and is_vowel_phone(out[-1][:-1].replace(NON_SYLLABIC, "")) and is_vowel_phone(ch):
             out[-1] = out[-1][:-1]
+            if NON_SYLLABIC in out[-1] and offglide != len(out) - 1:  # a rising diphthong with its glide marked: i̯͡a
+                out.append(ch)
+            else:  # the second vowel of a tied diphthong is its offglide
+                out.append(ch + NON_SYLLABIC)
+                offglide = len(out) - 1
             if track:
-                at[-1].pop()
+                at.append([tie_at, i])  # the tie bar is in both spans, so the diphthong is one span
             join_next = False
+            continue
+        if ch == NON_SYLLABIC and out and offglide == len(out) - 1:
+            if track:
+                at[-1].append(i)
+            continue
         starts_word = not out or out[-1] == " "
         if ch in PRE_DIACRITICS and (starts_word or is_vowel_phone(out[-1])) and not join_next:
             pending += ch
@@ -221,7 +246,9 @@ def carry_tones(segs: Sequence[str]) -> List[str]:
 
 def _carry_tones(segs: List[str], at: List[List[int]], track: bool) -> Tuple[List[str], List[List[int]]]:
     """Move each tone of *segs* onto the last vowel or syllabic consonant before it in its word that
-    has no tone yet. A tone with no such segment stays a segment of its own."""
+    has no tone yet. A tone with no such segment stays a segment of its own. A tone written right
+    after its segment joins that segment's positions; a tone written after a coda is left out of
+    them, so each segment keeps a span of its own."""
     out: List[str] = []
     out_at: List[List[int]] = []
     for k, seg in enumerate(segs):
@@ -232,7 +259,7 @@ def _carry_tones(segs: List[str], at: List[List[int]], track: bool) -> Tuple[Lis
                     break
                 if is_vowel_phone(out[j]):
                     out[j] += seg
-                    if track:
+                    if track and j == len(out) - 1:
                         out_at[j] = out_at[j] + at[k]
                     carried = True
                     break

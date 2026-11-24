@@ -81,7 +81,7 @@ Most segments that the table cannot read are rare. Thus the token share is much 
 
 ## 3. Diacritics, ties, tone and the reading rules
 
-A diacritic applies only to the bases that its rule accepts. The rule is PanPhon's, unless `overrides.json` changes it with a source. PanPhon's rule for nasalization accepts a voiced base that is not already nasal, so `b̃`, `z̃` and `w̃` read, and `k̃` and `m̃` do not. The IPA chart prints the mark on a vowel, as in `ẽ`, so the rule also accepts a voiceless vowel. PanPhon's rule for aspiration accepts stops and voiceless fricatives. Thus `aʰ` does not read. Some rules accept any base: `iˤ`, `å` and `ḁ` read, and `aˠ` reads because `a` is not high. A refusal decreases coverage. A rule becomes wider only when a chart prints the mark on a base that the rule refuses.
+A diacritic applies only to the bases that its rule accepts. The rule is PanPhon's, unless `overrides.json` changes it with a source. PanPhon's rule for nasalization accepts a voiced base that is not already nasal, so `b̃`, `z̃` and `w̃` read, and `k̃` and `m̃` do not. The IPA chart prints the mark on a vowel, as in `ẽ`, so the rule also accepts a voiceless vowel. Ladefoged and Maddieson (1996) print `h̃` among the nasalized continuants, so the rule also accepts a voiceless continuant, as in `h̃` and `f̃`. PanPhon's rule for aspiration accepts stops and voiceless fricatives. Thus `aʰ` does not read. Some rules accept any base: `iˤ`, `å` and `ḁ` read, and `aˠ` reads because `a` is not high. A refusal decreases coverage. A rule becomes wider only when a chart prints the mark on a base that the rule refuses.
 
 Eight marks move a vowel on a scale of the chart:
 
@@ -97,7 +97,7 @@ Two letters without a tie bar read as one tied segment if the tie is possible. F
 - A stop before a fricative gives an affricate.
 - Two stops or two nasals give a double articulation, as in `k͡p`.
 
-Two vowels do not combine. Thus a diphthong is two segments. The sources do not agree on this point. Nerbonne and Heeringa (1997, p. 11) found better dialect distances with two segments. Heeringa (2004, p. 188) found no difference. Rubehn et al. (2024, p. 209) use one segment with the vector of its first part.
+Two vowels do not combine. Thus a diphthong is two segments, and the second vowel of a tied pair is non-syllabic: `a͡i` reads as `a` and `i̯`. The sources do not agree on this point. Nerbonne and Heeringa (1997, p. 11) found better dialect distances with two segments. Heeringa (2004, p. 188) found no difference. Rubehn et al. (2024, p. 209) use one segment with the vector of its first part.
 
 The tie rule increases coverage. This table gives the PHOIBLE types that read with three methods.
 
@@ -306,11 +306,11 @@ The height steps and the scale marks follow the chart. Neither improves a score.
 <!-- whitepaper:ablations:start -->
 | Variant | Test cognates, AP minus table (original costs) | Test alignment, PAS minus table (original costs) | Dev cognates, AP (released costs) |
 |---|---|---|---|
-| PanPhon's 22 features | +0.0058 [+0.0044, +0.0071] | +0.0000 [+0.0000, +0.0000] | 0.7742 |
-| no height steps | -0.0002 [-0.0013, +0.0008] | +0.0000 [+0.0000, +0.0000] | 0.7725 |
-| no scale marks | -0.0000 [-0.0000, -0.0000] | +0.0000 [+0.0000, +0.0000] | 0.7726 |
-| every weight 1 | -0.0066 [-0.0082, -0.0050] | -0.0205 [-0.0462, +0.0000] | 0.7695 |
-| the table (control) | - | - | 0.7727 |
+| PanPhon's 22 features | +0.0058 [+0.0044, +0.0071] | +0.0000 [+0.0000, +0.0000] | 0.7882 |
+| no height steps | -0.0002 [-0.0013, +0.0008] | +0.0000 [+0.0000, +0.0000] | 0.7871 |
+| no scale marks | -0.0000 [-0.0000, -0.0000] | +0.0000 [+0.0000, +0.0000] | 0.7874 |
+| every weight 1 | -0.0066 [-0.0082, -0.0050] | -0.0205 [-0.0462, +0.0000] | 0.7834 |
+| the table (control) | - | - | 0.7875 |
 <!-- whitepaper:ablations:end -->
 
 Removing the scale marks changes each paired test score by less than 0.0001. It changes the development cognate score by one unit in the fourth decimal. We keep the marks because the chart gives them a meaning, not because they help. We did not measure their effect on coverage.
@@ -435,6 +435,7 @@ On Python before version 3.12, the clusters of the search changed with the hash 
 - Hermes, Z., Barlaz, M., Shosted, R., Liang, Z.-P. and Sutton, B. 2017. Phonetic correlates of pharyngeal and pharyngealized consonants in Saudi, Lebanese, and Jordanian Arabic: an rt-MRI study. *Proceedings of Interspeech 2017*, pp. 201–205. <https://www.isca-archive.org/interspeech_2017/hermes17_interspeech.pdf>
 - International Phonetic Association. 2015. The International Phonetic Alphabet (chart, revised to 2015). <https://www.internationalphoneticassociation.org/IPAcharts/common_files/pdfs/pdfs_IPA_charts_E/IPA_Kiel.pdf>
 - Kondrak, G. 2000. A new algorithm for the alignment of phonetic sequences. *Proceedings of NAACL 2000*, pp. 288–295. <https://aclanthology.org/A00-2038.pdf>
+- Ladefoged, P. and Maddieson, I. 1996. *The Sounds of the World's Languages*. Oxford: Blackwell. ISBN 0-631-19815-6. <https://openlibrary.org/books/OL1122315M>
 - Lakretz, Y., Chechik, G., Cohen, E.-G., Treves, A. and Friedmann, N. 2018. Metric learning for phoneme perception. arXiv:1809.07824. <https://arxiv.org/pdf/1809.07824>
 - Lee, J. L., Ashby, L. F. E., Garza, M. E., Lee-Sikka, Y., Miller, S., Wong, A., McCarthy, A. D. and Gorman, K. 2020. Massively multilingual pronunciation mining with WikiPron. *Proceedings of LREC 2020*, pp. 4223–4228. <https://aclanthology.org/2020.lrec-1.521.pdf>
 - List, J.-M. 2012. LexStat: automatic detection of cognates in multilingual wordlists. *Proceedings of the EACL 2012 Joint Workshop of LINGVIS and UNCLH*, pp. 117–125. <https://aclanthology.org/W12-0216.pdf>

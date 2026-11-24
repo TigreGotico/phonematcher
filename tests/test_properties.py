@@ -96,3 +96,34 @@ def test_tone_distance_is_in_range_symmetric_and_zero_on_identity():
 def test_tone_distance_obeys_the_triangle_inequality():
     for a, b, c in itertools.product(TONES, repeat=3):
         assert tone_distance(a, c) <= tone_distance(a, b) + tone_distance(b, c) + EPS, (a, b, c)
+
+
+#: Toned segments: chart vowels and a syllabic consonant with level and contour tones, beside letters.
+TONED = [v + t for v in ("a", "i", "u", "ə", "ɛ", "z̩", "m̩") for t in ("˥", "˧", "˩", "˧˥", "˥˩", "˨˩˦")]
+
+
+def test_toned_segment_distance_is_in_range_symmetric_and_zero_on_identity():
+    sample = TONED + LETTERS[:60]
+    for a, b in itertools.product(sample, repeat=2):
+        d = feature_distance(a, b)
+        assert 0 <= d <= 1, (a, b, d)
+        assert d == feature_distance(b, a), (a, b)
+    for a in TONED:
+        assert feature_distance(a, a) == 0
+
+
+def test_toned_segment_distance_obeys_the_triangle_inequality_on_sampled_triples():
+    rng = random.Random(5)
+    sample = TONED + TABLE
+    for _ in range(20000):
+        a, b, c = (rng.choice(TONED) if rng.random() < 0.5 else rng.choice(sample) for _ in range(3))
+        assert feature_distance(a, c) <= feature_distance(a, b) + feature_distance(b, c) + EPS, (a, b, c)
+
+
+def test_edit_distance_with_toned_words_obeys_the_triangle_inequality():
+    rng = random.Random(6)
+    words = [[rng.choice(TONED) if rng.random() < 0.3 else rng.choice(LETTERS) for _ in range(rng.randint(1, 6))]
+             for _ in range(3000)]
+    for a, b, c in (rng.sample(words, 3) for _ in range(3000)):
+        assert edit_distance(a, c) <= edit_distance(a, b) + edit_distance(b, c) + EPS
+        assert edit_distance(a, b) == edit_distance(b, a)

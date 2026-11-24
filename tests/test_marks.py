@@ -93,7 +93,7 @@ def test_spacing_advanced_and_retracted_move_one_column():
 # The charts give these marks no meaning that a feature can carry, so they stay unread.
 @pytest.mark.parametrize("segment", [
     "dˁ",   # U+02C1: "typographical alternate for 02BF ʿ", the Arabic ain transliteration
-    "jᵊ", "ɡᵝ", "ᶮd", "ᶢǃ", "ᶬv", "tˢ", "eˣ",   # "≈ <super>" letters: only the letter's identity
+    "jᵊ", "ɡᵝ", "tˢ", "eˣ",   # "≈ <super>" letters: only the letter's identity
     "ŋ̍",   # U+030D: "this is not the Greek tonos; Marshallese"
     "ɑʶː",  # U+02B6: "r-coloring or r-offglides"
     "ʄ̵", "ɾ͓", "a͠",   # U+0335, U+0353, U+0360: no annotation

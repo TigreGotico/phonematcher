@@ -55,10 +55,11 @@ _DIACRITICS: Dict[Tuple[str, str], dict] = {
 #: Diacritics written after their base.
 POST_DIACRITICS = {marker for marker, position in _DIACRITICS if position == "post"}
 #: Marks written before a stop: prenasalization takes PanPhon's rule for ◌ⁿ (the nasal's place
-#: is the stop's), preaspiration its rule for ◌ʰ.
+#: is the stop's), preaspiration its rule for ◌ʰ. Every superscript nasal letter is a
+#: prenasalization mark.
 PRE_DIACRITICS = {
     **{marker: (marker, "pre") for marker, position in _DIACRITICS if position == "pre"},
-    "ⁿ": ("ⁿ", "post"), "ᵐ": ("ⁿ", "post"), "ᵑ": ("ⁿ", "post"), "ʰ": ("ʰ", "post"),
+    **dict.fromkeys("ⁿᵐᵑᶬᶮᶯᶰ", ("ⁿ", "post")), "ʰ": ("ʰ", "post"),
 }
 #: The tie bars, above and below; the table writes the first.
 TIES = ("͡", "͜")
@@ -68,9 +69,13 @@ _LETTER_CATEGORIES = {"Ll", "Lu", "Lo"}
 #: nasality) beside it. A click after any other letter with no tie bar is not read.
 _CLICKS = set("ʘǀǃǂǁ‼ʞ")
 _REAR_CLOSURES = set("kɡŋqɢɴ")
+#: Small letters that write a click's velar or uvular closure.
+_SMALL_REAR_CLOSURES = {"ᶢ": "ɡ", "ᵑ": "ŋ", "ᶰ": "ɴ"}
 #: Glottal letters: a glottal beside another letter is two segments or glottal reinforcement, never
 #: one tied segment, so the untied-letter rule does not tie them.
 _GLOTTALS = set("ʔhɦ")
+#: Implosive letters. With the ejective mark ʼ they write the glottalic consonants.
+_IMPLOSIVES = set("ɓɗʄɠʛᶑ")
 #: Non-IPA spellings (``data/spellings.json``) -> the IPA they read as.
 SPELLINGS: Dict[int, str] = str.maketrans({
     row["spelling"]: row["reads_as"] for row in json.loads(
@@ -133,6 +138,8 @@ def vectorize_phones(segment: str) -> Vector:
         levels = [LEVELS[letter] for letter in tone]
         return vec[:-len(TONE_FEATURES)] + (True,) + tuple((p - 3) / 2 for p in _contour(levels))
     seg = unicodedata.normalize("NFD", segment).translate(_COMPOSED_LETTERS)
+    if seg[:1] in _SMALL_REAR_CLOSURES and seg[1:2] in _CLICKS:
+        seg = _SMALL_REAR_CLOSURES[seg[0]] + TIES[0] + seg[1:]
     if seg in phone_features:
         return phone_features[seg]
     untied = seg.replace(TIES[1], TIES[0])
@@ -140,13 +147,15 @@ def vectorize_phones(segment: str) -> Vector:
         return phone_features[untied]
 
     start = 0
-    while start < len(seg) and seg[start] in PRE_DIACRITICS:
+    while start < len(seg) and (seg[start] in PRE_DIACRITICS or (
+            seg[start] in TIES and start and seg[start + 1:start + 2] in PRE_DIACRITICS)):
         start += 1
+    pre_marks = [c for c in seg[:start] if c not in TIES]  # ᵑ͡ᵐ marks a labial-velar as ᵑᵐ does
     for end in range(len(seg), start, -1):
         base = seg[start:end]
         if base in phone_features and all(m in POST_DIACRITICS for m in seg[end:]):
             vec = phone_features[base]
-            for marker in seg[:start]:
+            for marker in pre_marks:
                 vec = _apply_pre(marker, vec, segment)
             for marker in seg[end:]:
                 vec = _apply_if(_DIACRITICS[marker, "post"], vec, segment)
@@ -172,7 +181,7 @@ def vectorize_phones(segment: str) -> Vector:
             vec = vectorize_phones(seg[start:])
         except ValueError:
             raise _unrecognized(segment) from None
-        for marker in seg[:start]:
+        for marker in pre_marks:
             vec = _apply_pre(marker, vec, segment)
         return vec
     if seg and TIES[0] not in untied:
@@ -190,7 +199,7 @@ def vectorize_phones(segment: str) -> Vector:
             tied += (TIES[0] if joins else "") + cluster
         if tied != seg:
             return vectorize_phones(tied)
-    raise _unrecognized(segment, ": a diphthong is two segments" if _is_diphthong(seg) else "")
+    raise _unrecognized(segment, ": a diphthong is two segments, a vowel and a non-syllabic vowel" if _is_diphthong(seg) else "")
 
 
 _NAS, _SON, _CONT, _DELREL, _SG, _CG, _VOI = (
@@ -265,9 +274,15 @@ def _apply_if(diacritic: dict, vec: Vector, segment: str) -> Vector:
 
 
 def _apply_pre(marker: str, vec: Vector, segment: str) -> Vector:
-    """Apply a mark written before its base. A nasal mark on an affricate adds [+nasal] to it, as
-    a nasal tied before the affricate does."""
-    if PRE_DIACRITICS[marker][0] == "ⁿ" and vec[_DELREL] is True and vec[_SON] is False:
+    """Apply a mark written before its base. A nasal mark on an obstruent adds [+nasal] to it, as
+    a nasal tied before the obstruent does: prenasalized stops, affricates and fricatives. The
+    glottal continuants h and ɦ are approximants, which are never prenasalized. Nor is a glottalic
+    consonant (an ejective, an implosive or ʔ, all [+cg])."""
+    base = segment.lstrip("".join(PRE_DIACRITICS))[:1]
+    nasal = PRE_DIACRITICS[marker][0] == "ⁿ"
+    if nasal and (base in _IMPLOSIVES or "ʼ" in segment):
+        raise _unrecognized(segment)
+    if nasal and vec[_SON] is False and base not in _GLOTTALS:
         return tuple(True if i == _NAS else x for i, x in enumerate(vec))
     return _apply_if(_DIACRITICS[PRE_DIACRITICS[marker]], vec, segment)
 

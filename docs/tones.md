@@ -52,6 +52,12 @@ segments("˥˩")       # ['˥˩']
 segments("ɡ˩a")      # ['ɡ', '˩', 'a']
 ```
 
+A vowel carries one tone. Sandhi notation writes the underlying tone in tone letters and the surface tone after it in left-stem letters. The first tone goes onto the vowel, and the surface tone stays a tone segment of its own:
+
+```python
+segments("ni˨˩˦꜔꜒")  # ['n', 'i˨˩˦', '˧˥']
+```
+
 ## 2. Read the tone features
 
 The last four features of a vector are the tone. `tone_is` is `True` on a toned vowel. The three pitches are the start, the middle and the end of the syllable, each Chao level as (level − 3) / 2:

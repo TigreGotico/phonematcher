@@ -145,8 +145,7 @@ A mark reads only if a chart states its meaning. These marks occur in PHOIBLE, W
 | `ˁ` | The Unicode chart calls it a "typographical alternate for 02BF ʿ", the transliteration of Arabic ain. It does not name `ˤ`. |
 | `ʳ` `ʶ` | "r-coloring or r-offglides": the chart does not say which of the two a transcription means. |
 | `ˢ` `ˣ` `ᵡ` `ᶲ` `ᵏ` `ᵍ` | Only "≈ superscript" of the letter. A note under `ˠ` says that such modifier letters are "occasionally used in transcription of affricates". The reading is a tied affricate, which needs a reader change and not a diacritic rule, and in Finnish `eˣ` follows a vowel. |
-| `ᵊ` `ᵝ` `ᵘ` `ᶢ` | Only "≈ superscript" of the letter. |
-| `ᶬ` `ᶮ` `ᶯ` `ᶰ` `ᵑ` | Only "≈ superscript" of the nasal letter. `ᵐ`, `ⁿ` and `ᵑ` read as prenasalization by the rule of `◌ⁿ`; the others have no such statement. |
+| `ᵊ` `ᵝ` `ᵘ` `ᶢ` | Only "≈ superscript" of the letter. `ᶢ` before a click reads (see the clicks below); elsewhere it stays unread. |
 | `◌̍` | "this is not the Greek tonos", "Marshallese". The IPA chart marks a syllabic consonant with `◌̩`. |
 | `◌̵` `◌͓` `◌͠` | The Unicode chart gives no annotation. |
 | `↓` | The mark has two meanings. The IPA chart prints it as "Downstep", and the extIPA chart prints it as "ingressive airflow". `segments` drops it as a phrase mark, as it drops the other downstep and upstep marks. On a phone, no feature of the table encodes either meaning. |
@@ -157,9 +156,9 @@ A rule applies a mark only to the bases that its conditions accept. The conditio
 
 | Mark | What the charts print | Bases that stay refused |
 |---|---|---|
-| `◌̃` | `ẽ`, a vowel | consonants: `k̃ f̃ h̃`; a nasal: `m̃` |
+| `◌̃` | `ẽ`, a vowel; `h̃` and the class of continuants (Ladefoged and Maddieson 1996, pp. 132 to 133) | voiceless stops: `k̃ p̃`; a nasal: `m̃`; a voiceless trill or tap: `r̥̃ ʀ̥̃ ɾ̥̃ ʜ̃` (the book names fricatives and approximants, and no trill or tap; the table reads `ʜ` as trilled) |
 | `◌ʰ` | `tʰ dʰ` (IPA chart), `ʰp` (extIPA chart) | vowels `aʰ`, nasals `m̥ʰ`, liquids `lʰ`, glides `jʰ`, `ʔʰ` |
-| `◌ⁿ` | `dⁿ` | vowels `aⁿ`, fricatives `ⁿs`, liquids and glides `ⁿl ⁿw` |
+| `◌ⁿ` | `dⁿ`; before a base, `ᵐb ⁿd ᵑɡ` and prenasalized fricatives (Ladefoged and Maddieson 1996) | vowels `aⁿ`, liquids and glides `ⁿl ⁿw`, glottals `ⁿh ⁿɦ`, glottalic bases `ⁿɓ ⁿtʼ` |
 | `◌ʷ` `◌ʲ` | `tʷ dʷ`, `tʲ dʲ` | vowels `uʷ ʊʷ`, `iʲ` |
 | `◌ˡ` | `dˡ`, a coronal stop | `nˡ`, `pˡ` |
 | `◌̰` | `b̰ a̰`, both voiced | voiceless bases `p̰ k̰ t̰` |
@@ -239,11 +238,11 @@ segments("ts")                                      # ['t', 's']
 
 The reader puts a tie bar between each two base letters and reads the result. A tie that `compose_tie` has no reading for stays unread: `ab`, `ɑi`, and the three-letter `bvf` and `dzs`, because a fricative tied to a fricative has no reading. For the same reason `ʧ͡f` and `ʤ͡v` stay unread.
 
-A letter that repeats the one before it is a geminate, not a tie: `nn` and `tt` stay unread. A glottal letter (`ʔ h ɦ`) beside another letter is two segments or glottal reinforcement, not one segment, so `ʔt`, `th` and `tɦ` stay unread. A click after a velar or uvular letter (`k ɡ ŋ q ɢ ɴ`) is that letter tied to the click: `kǀ` is `k͡ǀ`. The IPA Handbook says: "Since any click involves a velar or uvular closure, it is possible to symbolize factors such as voicelessness, voicing, or nasality of the click by combining the click symbol with the appropriate velar or uvular symbol" (section 2.5, p. 10). Thus a tie of a click and its velar or uvular letter is the click, with its airstream (`velaric` +) and its place, and `voi` and `nas` come from the velar or uvular letter: `ɡ͡ǃ` is voiced, `ŋ͡ǃ` is voiced and nasal, and `k͡ǃ` is voiceless. A click after any other letter stays unread. A tie of a click and any other letter, or of more than two letters, also stays unread: `t͡ǃ`, `ǃ͡s`, `ǃ͡q` and `k͡ǃ͡x` have no reading. The velar or uvular letter may carry a combining mark, as in `ŋ̊͡ǃ`, but not a modifier letter such as `ʷ`, because the tie takes only `voi` and `nas` from it.
+A letter that repeats the one before it is a geminate, not a tie: `nn` and `tt` stay unread. A glottal letter (`ʔ h ɦ`) beside another letter is two segments or glottal reinforcement, not one segment, so `ʔt`, `th` and `tɦ` stay unread. A click after a velar or uvular letter (`k ɡ ŋ q ɢ ɴ`) is that letter tied to the click: `kǀ` is `k͡ǀ`. The IPA Handbook says: "Since any click involves a velar or uvular closure, it is possible to symbolize factors such as voicelessness, voicing, or nasality of the click by combining the click symbol with the appropriate velar or uvular symbol" (section 2.5, p. 10). Thus a tie of a click and its velar or uvular letter is the click, with its airstream (`velaric` +) and its place, and `voi` and `nas` come from the velar or uvular letter: `ɡ͡ǃ` is voiced, `ŋ͡ǃ` is voiced and nasal, and `k͡ǃ` is voiceless. A click after any other letter stays unread. A tie of a click and any other letter, or of more than two letters, also stays unread: `t͡ǃ`, `ǃ͡s`, `ǃ͡q` and `k͡ǃ͡x` have no reading. The velar or uvular letter may carry a combining mark, as in `ŋ̊͡ǃ`, but not a modifier letter such as `ʷ`, because the tie takes only `voi` and `nas` from it. A small `ᶢ` before a click is the voiced velar closure, written small: `ᶢǃ` is `ɡ͡ǃ`. A small `ᵑ` or `ᶰ` before a click is the nasal click in the same way: `ᵑǃ` is `ŋ͡ǃ` and `ᶰǃ` is `ɴ͡ǃ`, voiced and nasal. A small `ⁿ` or `ᵐ` names no velar or uvular closure, so `ⁿǃ` stays a click that is nasal and not voiced. Ladefoged and Maddieson (1996, *The Sounds of the World's Languages*, p. 264) write the back closure "by writing a symbol for a velar or uvular consonant before the symbol for the click type", and mark voicing "by choosing between, k, g, ŋ" and the other letters. The velar or uvular letter does not set the place of the click, so `k͡ǃ` and `q͡ǃ`, and `ɡ͡ǃ` and `ɢ͡ǃ`, have the same vector and distance 0. Miller, Brugman, Sands, Namaseb, Exter and Collins (2009, "Differences in airstream and posterior place of articulation among Nǀuu clicks", *Journal of the International Phonetic Association* 39(2), abstract) show with ultrasound "that the posterior constrictions in clicks are not produced at the ‘velar’ place of articulation, and that posterior place differs with anterior place". They conclude that "the contrast between ‘velar’ and ‘uvular’ clicks proposed for the related language ǃXóõ is likely also one of airstream and that a contrast solely in terms of posterior place would be articulatorily impossible". A rear place feature taken from the letter would therefore state a contrast that this source does not support, so the matcher does not add one.
 
 Only a segment given whole is read this way. `segments` keeps `ts` in running text as two segments, `t` and `s`, because the same two letters are two sounds in many words. Use `segments("t͡s")` or write the tie bar to make one.
 
-A mark before such a segment applies to it as to a listed one. `ʰts` is `t͡s` with `sg` +, and `ᵐɡb` is `ɡ͡b` with `nas` +. `ⁿ`, `ᵐ` and `ᵑ` before an affricate, tied or not, add `nas` + to it, as a nasal tied before it does: `ⁿd͡z` and `ⁿdz` equal `n͡d͡z`. The mark's own rule still decides elsewhere: `ⁿs` and `ⁿʃ` stay unread, because `◌ⁿ` applies to a stop.
+A mark before such a segment applies to it as to a listed one. `ʰts` is `t͡s` with `sg` +, and `ᵐɡb` is `ɡ͡b` with `nas` +. A superscript nasal letter before an affricate, tied or not, adds `nas` + to it, as a nasal tied before it does: `ⁿd͡z` and `ⁿdz` equal `n͡d͡z`.
 
 ## Other changes
 
@@ -266,7 +265,7 @@ Every IPA letter has its own vector, and a test checks this. To add a change, ad
 
 PanPhon lists 6,367 segments, many with diacritics, such as `ɐ̃` and `kʷʰ`. The table takes all of them except the 50 stacks on `ɫ`, which `vectorize_phones` reads as `l̴` with the same marks, and the 10 tone rows (the five tone letters `˩ ˨ ˧ ˦ ˥`, each also with `ˤ`), which `phonematcher.tone` reads. It adds the ten letters above: 6,317 segments. The build reads each listed segment in the same way: its longest listed base, then the rules of its marks. A listed stack thus has the same vector as an unlisted one, and a test checks this for every listed stack. A mark that has no rule takes the difference that PanPhon records between the segment and its base letter.
 
-Some marks come before their base. `ⁿ`, `ᵐ` and `ᵑ` before a stop make a prenasalized stop, as in `ⁿd`. `ʰ` before a stop makes a preaspirated stop, as in `ʰt`. Each takes the rule of the same mark after a base.
+Some marks come before their base. A superscript nasal letter (`ᵐ ⁿ ᵑ ᶬ ᶮ ᶯ ᶰ`) before an obstruent makes it prenasalized, as in `ⁿd`, `ᶮɟ` and `ⁿs`: it adds `nas` +, as a nasal tied before the obstruent does, so `ⁿs` equals `n͡s`. Ladefoged and Maddieson (1996, *The Sounds of the World's Languages*, pp. 118 to 119) name the classes: "prenasalized stops (including affricates), prenasalized fricatives, prestopped nasals, and, perhaps, prenasalized trills", "often notated by a superscript nasal symbol preceding the stop symbol". They add: "We do not know of any cases of prenasalized lateral or central approximants", so `ⁿl`, `ⁿj` and `ⁿw` stay unread. The book calls h "the voiceless approximant h" (p. 132), so `ⁿh`, `ⁿhʷ` and `ⁿɦ` also stay unread. The book also says: "Pre- and postnasalization do not seem to occur with glottalic consonants. We know of no cases of prenasalized implosives. Prenasalized ejectives are at best marginal" (p. 119), and it judges the Zulu strings of nasal and ejective not to be one prenasalized segment. So an implosive or an ejective after a nasal mark stays unread, as `ⁿɓ`, `ⁿɗ`, `ⁿtʼ` and `ⁿkʼ`. A creaky or glottalized pulmonic stop, as `ⁿb̰` or `ⁿdˀ`, is not glottalic and still reads. Two marks joined by a tie bar act as the two marks: `ᵑ͡ᵐk͡p` equals `ᵑᵐk͡p`. `ʰ` before a stop makes a preaspirated stop, as in `ʰt`. Each takes the rule of the same mark after a base.
 
 A tie bar joins two symbols into one segment. `t͡ʃ` and `t͜ʃ` are the same affricate. Without a tie bar, `tʃ` is two segments.
 
@@ -284,13 +283,13 @@ Other ties raise `ValueError`. Two sonorants, such as `l͡j`, and a fricative be
 
 ### Diphthongs
 
-`segments` splits a tie between two vowels into the two vowels: `a͡i` gives `a` and `i`, and `ei̯` gives `e` and `i̯`. A tie between two consonants still joins them, so `t͡ʃa͡i` gives `t͡ʃ`, `a` and `i`. A diphthong thus costs as two segments in a word distance, and `ai` and `a͡i` are at distance 0. Against `a` the distance is 0.5, one deletion of `i`.
+`segments` splits a tie between two vowels into a vowel and a non-syllabic vowel: `a͡i` gives `a` and `i̯`, as `ai̯` does. The IPA chart names ◌̯ "Non-syllabic", and `i̯` takes the rule of that mark, [−syl]. A tie reads as a falling diphthong. Write a rising diphthong with its glide marked, as `i̯a` or `i̯͡a`, and the second vowel stays syllabic. A tie between two consonants still joins them, so `t͡ʃa͡i` gives `t͡ʃ`, `a` and `i̯`. A diphthong thus costs as two segments in a word distance. Against `a` the distance is 0.5, one deletion of `i̯`. A plain `ai` gives two vowels, `a` and `i`, because the string does not say whether it is a diphthong or a hiatus. So `a͡i` against `ai` or `a.i` costs 0.3244, the syllabic feature alone, and `a͡i` against `aj` costs 0.2294.
 
 Nerbonne and Heeringa (1997, pp. 11-13) compared one-symbol and two-symbol diphthongs on 40 Dutch dialects with feature vectors. The two-symbol form gave the better dialect distances. Anderson et al. (2018, p. 33) define a diphthong in CLTS as two vowels: "Diphthongs are thus defined by two vowels". A diphthong has no vector of its own, so `vectorize_phones` raises `ValueError` for `ai`, `a͡i` and `ei̯`:
 
 | Input | Result | Reason |
 |---|---|---|
-| `a͡i`, `ai`, `ei̯` as one segment | `ValueError` | a diphthong is two segments; read `a` and `i` alone |
+| `a͡i`, `ai`, `ei̯` as one segment | `ValueError` | a diphthong is two segments; read `a` and `i̯` alone |
 
 ## Distance
 
@@ -316,7 +315,10 @@ segments("ma˦")      # ['m', 'a˦']
 segments("ma²¹⁴")    # ['m', 'a˨˩˦']
 segments("tam˧˧")    # ['t', 'a˧˧', 'm']
 segments("˥˩")       # ['˥˩']
+segments("ni˨˩˦꜔꜒")  # ['n', 'i˨˩˦', '˧˥']
 ```
+
+A vowel carries one tone. A second tone after it, such as the surface tone of a sandhi form written in left-stem letters, stays a tone segment of its own.
 
 The IPA chart prints each tone diacritic beside a drawing of a tone letter or a contour. This table reads each diacritic as the tone letters that match the drawing:
 
@@ -333,7 +335,7 @@ The IPA chart prints each tone diacritic beside a drawing of a tone letter or a 
 | `◌᷅` | `˩˧` | Low rising |
 | `◌᷈` | `˧˦˧` | Rising-falling |
 
-Superscript digits are tone numerals: the digit is the level, so `²¹⁴` is `˨˩˦`. The left-stem tone letters `꜒` to `꜖` have the levels of `˥` to `˩`. A run of tone letters is one tone, also after a tone diacritic: `má˥` has the tone `˦˥`.
+Superscript digits are tone numerals: the digit is the level, so `²¹⁴` is `˨˩˦`. The left-stem tone letters `꜒` to `꜖` have the levels of `˥` to `˩`. A run of tone letters is one tone, also after a tone diacritic: `má˥` has the tone `˦˥`. A run of tone letters splits where it changes between right-stem letters, left-stem letters and numerals. Sandhi notation uses this: in `ni˨˩˦꜔꜒`, `˨˩˦` is the underlying tone and `˧˥` is the surface tone.
 
 Some marks are not read and are dropped like stress marks. The chart lists downstep `ꜜ` and upstep `ꜛ` with the level tones, but they change the pitch of the tones after them, and a tone here is the contour of one syllable only. Global rise `↗` and global fall `↘` belong to the intonation of a phrase. The neutral-tone numeral `⁰` has no level.
 
