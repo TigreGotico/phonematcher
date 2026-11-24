@@ -7,7 +7,7 @@ verify: pytest --import-mode=importlib tests/test_docs.py -k search.md
 see: compare-words.md, benchmarks.md
 -->
 
-This page builds a small index of Portuguese words, searches it with a spelling from another dialect, and shows what the `cluster_sensitivity` setting changes. The last step gives the benchmark numbers behind the default of 0.08.
+This page builds a small index of Portuguese words, searches it with a spelling from another dialect, and shows what the `cluster_sensitivity` setting changes. The last step gives the benchmark numbers behind the default of 0.12.
 
 ## 1. Build an index and search it
 
