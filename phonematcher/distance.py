@@ -409,7 +409,7 @@ def ipa_distance(a: str, b: str, normalized: bool = False, *, strict: bool = Fal
 
 
 def pairwise_distances(
-    a: Sequence[str], b: Optional[Sequence[str]] = None, metric: str = "segment", *, strict: bool = True
+    a: Sequence[str], b: Optional[Sequence[str]] = None, metric: str = "segment", *, strict: bool = False
 ) -> List[List[float]]:
     """The matrix of distances between the items of *a* and the items of *b*, for scikit-learn's
     ``metric="precomputed"``.

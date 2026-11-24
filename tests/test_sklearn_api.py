@@ -99,12 +99,12 @@ def test_a_symmetric_matrix_computes_each_pair_once(monkeypatch):
 def test_a_strict_matrix_raises_for_an_unreadable_item_and_a_loose_one_costs_1():
     for metric, items in (("segment", ["a", "?"]), ("word", ["ka", "k?"])):
         with pytest.raises(ValueError, match="cannot read"):
-            pairwise_distances(items, metric=metric)
+            pairwise_distances(items, metric=metric, strict=True)
         with pytest.raises(ValueError, match="cannot read"):
-            pairwise_distances(items[:1], items[1:], metric=metric)
+            pairwise_distances(items[:1], items[1:], metric=metric, strict=True)
         with warnings.catch_warnings():
             warnings.simplefilter("ignore")
-            loose = pairwise_distances(items, metric=metric, strict=False)
+            loose = pairwise_distances(items, metric=metric)
         assert loose[0][1] == (1.0 if metric == "segment" else ipa_distance(*items))
     assert pairwise_distances(["ka"], metric="word") == [[0.0]]
 

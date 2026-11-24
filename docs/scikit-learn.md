@@ -59,7 +59,7 @@ dict(zip(FEATURES, rows[1]))["tone_start"]   # 1.0
 dict(zip(FEATURES, rows[0]))["tone_start"]   # 0.0
 ```
 
-A segment that cannot be read raises `ValueError`. With `strict=False` it gives a row of NaN. `pairwise_distances` takes the same keyword: with `strict=True`, which is its default, an item that cannot be read raises `ValueError`, and with `strict=False` it is at distance 1 from every other item. `pairwise_distances` needs a list of items, and a bare string raises `TypeError`.
+A segment that cannot be read raises `ValueError`. With `strict=False` it gives a row of NaN. `pairwise_distances` takes the same keyword, as `ipa_distance` does: with `strict=True` an item that cannot be read raises `ValueError`, and with `strict=False`, its default, it is at distance 1 from every other item. `pairwise_distances` needs a list of items, and a bare string raises `TypeError`.
 
 ```python
 PhoneFeatures(strict=False).transform(["?"])[0][0] != PhoneFeatures(strict=False).transform(["?"])[0][0]   # True
