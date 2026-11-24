@@ -117,8 +117,19 @@ def vectorize_phones(segment: str) -> Vector:
                 vec = _apply_if(_DIACRITICS[marker, "post"], vec, segment)
             return vec
     if TIES[0] in untied:
+        parts = untied.split(TIES[0])
+        if any(c in _CLICKS for part in parts for c in part):
+            # A click tie is one velar or uvular letter, then the click (IPA Handbook, 2.5). The
+            # click takes only voi and nas from that letter, so it may carry combining marks only.
+            rear_letter = parts[0][0] in _REAR_CLOSURES and all(map(unicodedata.combining, parts[0][1:]))
+            if len(parts) != 2 or not rear_letter or parts[1][0] not in _CLICKS:
+                raise _unrecognized(segment)
+            rear, click = (vectorize_phones(part) for part in parts)
+            out = list(click)
+            out[_VOI], out[_NAS] = rear[_VOI], rear[_NAS]
+            return tuple(out)
         try:
-            return compose_tie([vectorize_phones(part) for part in untied.split(TIES[0])])
+            return compose_tie([vectorize_phones(part) for part in parts])
         except ValueError:
             pass
     if start:
@@ -148,7 +159,8 @@ def vectorize_phones(segment: str) -> Vector:
     raise _unrecognized(segment, ": a diphthong is two segments" if _is_diphthong(seg) else "")
 
 
-_NAS, _SON, _CONT, _DELREL, _SG, _CG = (_INDEX[f] for f in ("nas", "son", "cont", "delrel", "sg", "cg"))
+_NAS, _SON, _CONT, _DELREL, _SG, _CG, _VOI = (
+    _INDEX[f] for f in ("nas", "son", "cont", "delrel", "sg", "cg", "voi"))
 #: Articulators: in a double articulation each one the parts use is used.
 _ARTICULATORS = {_INDEX[f] for f in ("lab", "cor", "hi", "back")}
 
