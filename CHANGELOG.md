@@ -1,5 +1,13 @@
 # Changelog
 
+## [3.1.4a1](https://github.com/TigreGotico/phonematcher/tree/3.1.4a1) (2026-11-24)
+
+[Full Changelog](https://github.com/TigreGotico/phonematcher/compare/3.1.3a1...3.1.4a1)
+
+**Merged pull requests:**
+
+- fix: a click tied to χ is strident, as q͡χ is [\#200](https://github.com/TigreGotico/phonematcher/pull/200) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
+
 ## [3.1.3a1](https://github.com/TigreGotico/phonematcher/tree/3.1.3a1) (2026-11-24)
 
 [Full Changelog](https://github.com/TigreGotico/phonematcher/compare/3.1.2a1...3.1.3a1)
@@ -382,10 +390,6 @@
 ## [2.2.1a2](https://github.com/TigreGotico/phonematcher/tree/2.2.1a2) (2026-11-22)
 
 [Full Changelog](https://github.com/TigreGotico/phonematcher/compare/2.2.1a1...2.2.1a2)
-
-**Merged pull requests:**
-
-- docs: cite sources for the diphthong choice, fix the WikiPron title, tie the 22 features to PanPhon's data [\#88](https://github.com/TigreGotico/phonematcher/pull/88) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
 
 ## [2.2.1a1](https://github.com/TigreGotico/phonematcher/tree/2.2.1a1) (2026-11-22)
 
