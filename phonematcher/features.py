@@ -59,6 +59,8 @@ _LETTER_CATEGORIES = {"Ll", "Lu", "Lo"}
 #: nasality) beside it. A click after any other letter with no tie bar is not read.
 _CLICKS = set("ʘǀǃǂǁ‼ʞ")
 _REAR_CLOSURES = set("kɡŋqɢɴ")
+#: Small letters that write a click's velar or uvular closure.
+_SMALL_REAR_CLOSURES = {"ᶢ": "ɡ", "ᵑ": "ŋ", "ᶰ": "ɴ"}
 #: Glottal letters: a glottal beside another letter is two segments or glottal reinforcement, never
 #: one tied segment, so the untied-letter rule does not tie them.
 _GLOTTALS = set("ʔhɦ")
@@ -102,8 +104,8 @@ def vectorize_phones(segment: str) -> Vector:
     Raises ``ValueError`` for a segment it cannot read.
     """
     seg = unicodedata.normalize("NFD", segment).translate(_COMPOSED_LETTERS)
-    if seg[:1] == "ᶢ" and seg[1:2] in _CLICKS:
-        seg = "ɡ" + TIES[0] + seg[1:]  # the voiced velar closure of the click, written small
+    if seg[:1] in _SMALL_REAR_CLOSURES and seg[1:2] in _CLICKS:
+        seg = _SMALL_REAR_CLOSURES[seg[0]] + TIES[0] + seg[1:]
     if seg in phone_features:
         return phone_features[seg]
     untied = seg.replace(TIES[1], TIES[0])
