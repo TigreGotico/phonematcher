@@ -19,7 +19,7 @@ PanPhon gives a vowel two height features, `hi` and `lo`, so it knows three heig
 
 The alternatives are `hi` and `lo` alone, or one numeric height. Steps keep every feature a plus, a minus or a zero, as PanPhon does. The source is the IPA chart, which fixes the rows (`docs/features.md`, "Vowels").
 
-The evidence is thin. On the Hillenbrand vowel confusions, the weighted table scores 0.5610. The same table with zero weight on the steps scores 0.5340. The 22 features of PanPhon 0.22.2 score 0.4153. The intervals of the three overlap, and the data was seen during the work. On the six cognate test sets, under the C0 word costs (gap 1, linear substitutions), the variant with zero weight on the steps differs from the shipped table by -0.0002, with an interval from -0.0013 to +0.0008. On the development split, under the shipped word costs (gap 0.5, square-root substitutions), the cognate AP of the variant with zero weight on the steps is 0.7725 and the shipped table's is 0.7727. The steps are kept because the chart has seven rows, not because a test showed that they help cognate detection.
+The evidence is thin. On the Hillenbrand vowel confusions, the weighted table scores 0.5610. The same table with zero weight on the steps scores 0.5340. The 22 features of PanPhon 0.22.2 score 0.4153. The intervals of the three overlap, and the data was seen during the work. On the six cognate test sets, under the C0 word costs (gap 1, linear substitutions), the variant with zero weight on the steps differs from the shipped table by -0.0002, with an interval from -0.0013 to +0.0008. On the development split, under the shipped word costs (gap 0.5, square-root substitutions), the cognate AP of the variant with zero weight on the steps is 0.7871 and the shipped table's is 0.7875. The steps are kept because the chart has seven rows, not because a test showed that they help cognate detection.
 
 The table keeps both codings, a trade-off that was measured. A form with one encoding sets `hi` and `lo` to 0 on every vowel, so the steps alone carry height and the distance stays a weighted L1 over fixed vectors. It is a metric. On the development split it changed the paired cognate AP by -0.0006, with an interval from -0.0012 to -0.0001, and the alignment PAS by +0.0039, with an interval from +0.0011 to +0.0066. On the Hillenbrand confusions it lowered the Spearman correlation from 0.5610 to 0.5474. The acceptance rule refuses a change when the interval of any development task lies wholly below 0, and the cognate interval does.
 
@@ -39,7 +39,7 @@ The shared `atr` − encodes the overlap. The separate feature encodes the diffe
 
 The marks `◌̝ ◌̞ ◌̟ ◌̠ ◌̈ ◌̽ ◌̹ ◌̜` move a vowel along the height, backness or rounding scale. PanPhon has no rule for most of them. The alternative is to read them as the bare letter. The table takes a rule for each mark, because the IPA chart names each mark and says what it moves. The size of the step, one chart row or column, is this table's own. On a consonant, `◌̝` and `◌̞` follow the chart's own examples instead: `ɹ̝` is a fricative and `β̞` is an approximant (`docs/features.md`).
 
-The rules change no score that the benchmarks measure. Under the C0 word costs (gap 1, linear substitutions), the variant with no scale shifts differs from the shipped table by less than 0.0001 in the paired cognate difference on the test sets. On the development split, under the shipped word costs, the cognate AP of that variant is 0.7726 and the shipped table's is 0.7727. The rules stay for the sake of the chart's meaning, and the benchmarks do not support them or oppose them.
+The rules change no score that the benchmarks measure. Under the C0 word costs (gap 1, linear substitutions), the variant with no scale shifts differs from the shipped table by less than 0.0001 in the paired cognate difference on the test sets. On the development split, under the shipped word costs, the cognate AP of that variant is 0.7874 and the shipped table's is 0.7875. The rules stay for the sake of the chart's meaning, and the benchmarks do not support them or oppose them.
 
 ### A mark reads only on the bases its rule accepts
 
@@ -49,19 +49,46 @@ The rules change no score that the benchmarks measure. Under the C0 word costs (
 
 A diphthong written whole, as `ai`, has no vector. `segments` splits `a͡i` into `a` and `i̯`, the same segments as `ai̯`. The second vowel is the offglide, and it takes the rule of the mark ◌̯, which the IPA chart names "Non-syllabic": [−syl]. So a diphthong differs from a hiatus `a.i` by the syllabic feature of its offglide, and it is near a vowel and a glide, `aj`. A plain `ai` reads as two vowels, because the string does not say whether it is a diphthong or a hiatus. That is a limit of the transcription, and a spec that wants the diphthong reading writes ◌̯. The alternatives are one segment with a start vector and an end vector, one segment compared by its nucleus only, and one segment aligned against two. The table takes two segments, because the word distance needs no new rule: a diphthong costs as two segments, and `a͡i` against `a` costs one deletion of `i̯`. The choice follows Nerbonne and Heeringa (1997, p. 11), who found that "two-phone representations of diphthongs provide a more satisfactory base" for dialect distance. The sources do not agree. Heeringa (2004, p. 188) found that "it seems to make no difference whether diphthongs are represented as two segments or as one segment". Rubehn et al. (2024, p. 209) take the other choice: "feature vectors for diphthongs are based on their initial segments", so a diphthong is one segment.
 
-### Tone is its own segment
+### Tone is a feature of its vowel
 
-PanPhon has two tone columns, `hitone` and `hireg`, and this table does not use them. A tone is one segment of tone letters after the syllable that carries it. `má` and `ma˦` both give `m`, `a`, `˦`. The alternatives are a tone feature on the vowel, and dropping tones. A segment keeps the feature table free of pitch and lets the edit distance align a tone with a tone. The tone letters and diacritics, and the readings of the diacritics as letters, come from the box "Tones and word accents" of the IPA chart.
+A tone is four features of the segment that carries it: `tone_is`, `tone_start`, `tone_mid` and `tone_end`. These are the four values of the tone block of phoonnx (`phoonnx_train/features_json.py`), so a TTS voice and a word distance read a tone the same way. `tone_is` is `True` on a toned segment. The other three are the pitch at the start, the middle and the end of the syllable, each Chao level as (level − 3) / 2, so level 1 is −1 and level 5 is 1. A contour of two or three levels takes its middle point by linear steps between the levels, as `tone_distance` does. A segment with no tone has `None` in all four, as a feature that does not apply.
 
-### A tone against a phone costs 1
+The segment that carries a tone is the last vowel or syllabic consonant before the tone letters, in the same word, that has no tone yet. A vowel carries one tone: a second tone after it, such as the surface tone that sandhi notation writes in left-stem letters after the underlying tone (`ni˨˩˦꜔꜒`), stays a tone segment of its own. IPA writes Chao letters after the syllable, also after a coda, so `tam˧˧` gives `t`, `a˧˧`, `m`, and `pz̩˥` gives `p`, `z̩˥`. A tone with no such segment before it in its word stays a segment of tone letters: `˥˩` alone, and `ɡ˩a`, where the tone is written on the onset. The alignment stays one segment against one segment, and a tone then differs by a scale step, as a vowel height does.
 
-A tone and a phone have no feature in common, so no feature distance exists. The substitution cost of a tone and a phone is 1. A deletion and an insertion cost 0.5 each, so the substitution ties with a deletion plus an insertion. `align` prefers the substitution on a tie, so it can pair a tone with a phone, at the same total cost, as [Tones](tones.md) shows for `ma˥` and `mab`. A missing tone costs the same as a missing sound. This is a choice of this table, and a test asserts the two equal costs.
+PanPhon has two tone columns, `hitone` and `hireg`, and this table does not use them. The tone letters and diacritics, and the readings of the diacritics as letters, come from the box "Tones and word accents" of the IPA chart.
+
+### A tone adds to the distance
+
+The feature distance divides by 9.5, the weight of the 36 segment features, and not by the weight of all 40. So a pair of segments with no tone keeps the distance it had before the tone features. A tone adds to the distance, and the distance is cut to 1. On 3,000 word pairs with no tone mark from the training word lists of the cognate task, `ipa_distance` gives the same 3,000 values, bit for bit, as with no tone features.
+
+A toned vowel against the same vowel with no tone costs `tone_is` at half its weight, plus each pitch at half its weight times its distance from 0. So a missing tone costs less than a missing sound, and a missing mid tone costs least.
+
+### The tone weights
+
+The four weights were chosen on the dev split. `tone_is` weighs 0.25, and each of the three pitches weighs 0.125, the weight of one height step. So one Chao level costs 0.09375 of the 9.5, a little less than one height step, and `˥` against `˩` costs 0.375 of the 9.5. The three pitches weigh the same, as in the tone distance, because 15 seen tone pairs cannot support another shape. With equal pitch weights, the tone task ranks the 15 pairs as the tone distance does, so its score does not depend on the weights.
+
+The weights come from the cognate task on its dev split, the six training word lists, where Bai and Chinese write tones. The mean average precision and the mean B-cubed F-score over the six lists were these, with the tone weights as `tone_is` and pitch:
+
+| Tone weights | Average precision | B-cubed F | Chinese average precision |
+|---|---|---|---|
+| tone as a segment of its own, as before | 0.7736 | 0.8268 | 0.5485 |
+| 0 and 0: the tone is read and not priced | 0.7867 | 0.8383 | 0.6297 |
+| 0.25 and 0.0625 | 0.7876 | 0.8385 | 0.6308 |
+| 0.25 and 0.125, chosen | 0.7875 | 0.8384 | 0.6286 |
+| 0.5 and 0.125 | 0.7875 | 0.8384 | 0.6288 |
+| 0.25 and 0.25 | 0.7869 | 0.8378 | 0.6236 |
+| 0.5 and 0.5 | 0.7854 | 0.8358 | 0.6135 |
+| 1 and 1 | 0.7817 | 0.8321 | 0.5928 |
+
+Nearly all of the gain over the segment model comes from carrying the tone onto its vowel, and not from the weights: with both weights at 0, the scores are already 0.7867 and 0.8383. The chosen weights add about 0.001 to that, on two tonal lists only. The row 0.25 and 0.0625 scores 0.0001 higher than the chosen row, which is less than the dev split can separate. The scores are flat up to a pitch weight of 0.125 and fall above it. The table takes the largest pitch weight in that flat range, so that a tone still separates two words, and the dev split does not show that this weight is better than a smaller one. No claim about tone weights holds beyond Bai, Chinese and the 15 Cantonese tone pairs. The test split was not run.
+
+### A tone segment against a phone costs 1
+
+A tone that stays a segment of its own has no phone features, so no feature distance exists. The substitution cost of a tone segment and a phone is 1. A deletion and an insertion cost 0.5 each, so the substitution ties with a deletion plus an insertion. Two tone segments are compared by `tone_distance`, the mean pitch difference at the start, middle and end, divided by four, and the substitution cost is its square root. A TTS voice that holds a tone as a token of its own reads it with `tone_levels`.
 
 ### The tone distance
 
-The tone distance is experimental. On the one tone data set that exists for it, it does not beat a baseline that compares only direction (issue [#68](https://github.com/TigreGotico/phonematcher/issues/68)). A word distance that holds tones uses it, so treat the cost of a tone against a tone as a first model and not as a measured one.
-
-Two tones are compared by their pitch at the start, the middle and the end of the syllable. The distance is the mean difference divided by four, the range of the five levels, and the substitution cost is its square root.
+The tone distance is experimental. On the one tone data set that exists for it, it does not beat a baseline that compares only direction (issue [#68](https://github.com/TigreGotico/phonematcher/issues/68)). With equal weights on the three pitches, the feature distance of two toned vowels ranks tone pairs as the tone distance does, so the same limit holds for both.
 
 This is a limit, not a result. The benchmark has 15 tone pairs of Cantonese. It correlates the negative distance with the rate at which listeners confuse the two tones. The tone distance scores a Spearman 0.2475, with an interval from -0.3167 to 0.7396. A baseline that compares only the direction of the contour (rising, falling or level) scores 0.7817, with an interval from 0.4554 to 0.8860. With the alternative Chao values, the tone distance scores 0.3579. The intervals overlap, so 15 pairs do not show that the baseline is better. They show that the tone distance does not beat it. The two most confused pairs, T3 with T6 and T1 with T3, are level tones one or two steps apart. The data was seen, and no other tone data was tested.
 

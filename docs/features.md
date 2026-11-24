@@ -1,15 +1,15 @@
 # The feature table
 <!-- agent-hint
-covers: the feature table: its 36 features, weights, sources, diacritic rules and the distance formula
+covers: the feature table: its 36 segment features and 4 tone features, weights, sources, diacritic rules and the distance formula
 source: phonematcher/data/features.json, phonematcher/data/overrides.json, scripts/build_features.py
 generated: no
 verify: pytest --import-mode=importlib tests/test_docs.py -k features.md
 see: add-a-segment.md, compare-sounds.md, api.md
 -->
 
-Each IPA segment has a vector of 36 distinctive features. A value is `True` (+), `False` (−) or `None` (0, the feature does not apply). The table is in `phonematcher/data/features.json`. The script `scripts/build_features.py` builds it from PanPhon, the Hayes (2009) feature tables as converted to CSV by Gorman, the IPA vowel chart and a file of cited changes.
+Each IPA segment has a vector of 36 distinctive features, then four tone features. A value is `True` (+), `False` (−) or `None` (0, the feature does not apply). A tone pitch is a number from −1 to 1. The table is in `phonematcher/data/features.json`. The script `scripts/build_features.py` builds it from PanPhon, the Hayes (2009) feature tables as converted to CSV by Gorman, the IPA vowel chart and a file of cited changes.
 
-## The 36 features, in order
+## The 40 features, in order
 
 | # | Feature | Meaning | Weight | Source |
 |---|---|---|---|---|
@@ -44,6 +44,10 @@ Each IPA segment has a vector of 36 distinctive features. A value is `True` (+),
 | 33 | `velarized` | a secondary raising of the tongue body toward the velum: `◌ˠ`; 0 for `◌̴` | 0.125 | the IPA chart names `◌ˠ`, and the feature is this table's |
 | 34 | `labialized` | a secondary rounding of the lips: `◌ʷ`, `◌ᶣ` | 0.125 | the IPA chart names `◌ʷ`, and the feature is this table's |
 | 35 | `pharyngealized` | a secondary constriction in the upper pharynx: `◌ˤ`; 0 for `◌̴` | 0.125 | McCarthy (1994); Hermes et al. (2017) |
+| 36 | `tone_is` | the segment carries a tone: `True`, or `None` with no tone | 0.25 | the tone block of phoonnx; the weight is chosen on the dev split |
+| 37 | `tone_start` | the pitch at the start of the syllable, (Chao level − 3) / 2 | 0.125 | the tone block of phoonnx; the weight is chosen on the dev split |
+| 38 | `tone_mid` | the pitch at the middle of the syllable, (Chao level − 3) / 2 | 0.125 | the tone block of phoonnx; the weight is chosen on the dev split |
+| 39 | `tone_end` | the pitch at the end of the syllable, (Chao level − 3) / 2 | 0.125 | the tone block of phoonnx; the weight is chosen on the dev split |
 
 `front` and `back` together give three positions. A front vowel is [+front, −back]. A central vowel is [−front, −back]. A back vowel is [−front, +back].
 
@@ -297,19 +301,24 @@ Nerbonne and Heeringa (1997, pp. 11-13) compared one-symbol and two-symbol dipht
 | 0 against + or − | half the weight |
 | + against − | the full weight |
 
-The total is divided by the sum of all weights, so the result is from 0 to 1. A segment that cannot be read is at distance 1 from all other segments.
+A tone pitch counts as its number, so a tone feature adds its weight times half the difference of the two pitches. The total is divided by 9.5, the sum of the weights of the 36 segment features, and a result above 1 is cut to 1. So a pair with no tone has the distance that the segment features give, and a tone adds to it. A segment that cannot be read is at distance 1 from all other segments.
 
 The weights of features 0 to 21 are PanPhon's. Two chart vowels are always nearer to each other than a vowel is to a stop or a fricative. The weights are not tuned to one language. A variant pair can thus be farther apart than a contrast: `ʁ`/`ʀ` is 0.158 but `ʁ`/`k` is 0.118, because a trill and a fricative differ in manner.
 
 ## Tone
 
-A tone is not a feature of its vowel. It is a segment of its own, a sequence of pitch levels from 1 (extra low) to 5 (extra high), written after its syllable:
+A tone is a sequence of pitch levels from 1 (extra low) to 5 (extra high), written after its syllable. It is four features of the segment that carries it: the last vowel or syllabic consonant before the tone in its word. A tone with no such segment stays a segment of tone letters:
 
 ```python
-segments("má")       # ['m', 'a', '˦']
-segments("ma˦")      # ['m', 'a', '˦']
-segments("ma²¹⁴")    # ['m', 'a', '˨˩˦']
+segments("má")       # ['m', 'a˦']
+segments("ma˦")      # ['m', 'a˦']
+segments("ma²¹⁴")    # ['m', 'a˨˩˦']
+segments("tam˧˧")    # ['t', 'a˧˧', 'm']
+segments("˥˩")       # ['˥˩']
+segments("ni˨˩˦꜔꜒")  # ['n', 'i˨˩˦', '˧˥']
 ```
+
+A vowel carries one tone. A second tone after it, such as the surface tone of a sandhi form written in left-stem letters, stays a tone segment of its own.
 
 The IPA chart prints each tone diacritic beside a drawing of a tone letter or a contour. This table reads each diacritic as the tone letters that match the drawing:
 
@@ -330,9 +339,11 @@ Superscript digits are tone numerals: the digit is the level, so `²¹⁴` is `�
 
 Some marks are not read and are dropped like stress marks. The chart lists downstep `ꜜ` and upstep `ꜛ` with the level tones, but they change the pitch of the tones after them, and a tone here is the contour of one syllable only. Global rise `↗` and global fall `↘` belong to the intonation of a phrase. The neutral-tone numeral `⁰` has no level.
 
-Two tones are compared by their contours. Each tone gives its pitch at the start, the middle and the end of the syllable, by linear steps between its levels. The tone distance is the mean difference of the three pitches, divided by four, the range from `˩` to `˥`. Thus `˥` and `˩` are at 1, `˥` and `˦` at 0.25, and `˧˥` and `˩˥` at 0.25. A tone against a phone costs 1, so a tone costs no less than deleting one segment and inserting the other (see [Tones](tones.md)), and a missing tone costs 0.5, like a missing sound.
+A tone gives its pitch at the start, the middle and the end of the syllable, by linear steps between its levels. Each pitch is the Chao level as (level − 3) / 2, from −1 to 1. These are the features `tone_start`, `tone_mid` and `tone_end`, and `tone_is` marks a toned segment. Two toned vowels are compared by their features. A toned vowel against the same vowel with no tone costs `tone_is` at half its weight and each pitch at half its weight times its distance from 0.
 
-The scale of one quarter per level is linear and not fitted to perception data. The search index ignores tones, so a query finds a word with any tone, and the score ranks the same tone first.
+Two tone segments with no vowel are compared by `tone_distance`: the mean difference of the three pitches, divided by four, the range from `˩` to `˥`. Thus `˥` and `˩` are at 1, `˥` and `˦` at 0.25, and `˧˥` and `˩˥` at 0.25. A tone segment against a phone costs 1, so it costs no less than deleting one segment and inserting the other (see [Tones](tones.md)).
+
+The pitch scale is linear and not fitted to perception data. The search index ignores tones, so a query finds a word with any tone, and the score ranks the same tone first.
 
 ## Rebuilding
 

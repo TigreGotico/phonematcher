@@ -14,7 +14,7 @@ ACUTE, GRAVE, TIE = "́", "̀", "͡"
 def test_tone_mark_typed_after_a_tie_reads_as_on_the_syllable():
     # Typed t, tie, acute, s, a: NFD orders the acute (ccc 230) before the tie (ccc 234).
     typed = "t" + TIE + ACUTE + "sa"
-    assert segments(typed) == ["t͡s", "a", "˦"]
+    assert segments(typed) == ["t͡s", "a˦"]
     assert segments(typed) == segments("t͡sá")
     assert ipa_distance(typed, "t͡sá") == 0.0
 
@@ -33,12 +33,12 @@ def test_tie_at_the_start_is_dropped():
 
 
 def test_tone_mark_after_a_tone_letter_folds_into_that_tone():
-    # ˥ then U+0301 (˦): one tone ˥˦, not two tone segments.
-    assert segments("ma˥" + ACUTE) == ["m", "a", "˥˦"]
+    # ˥ then U+0301 (˦): one tone ˥˦ on the vowel, not two tones.
+    assert segments("ma˥" + ACUTE) == ["m", "a˥˦"]
 
 
 @pytest.mark.parametrize("text, expected", [
-    (ACUTE + "a", ["a", "˦"]),
+    (ACUTE + "a", ["a˦"]),
     ("pa " + GRAVE + "ma", ["p", "a", " ", "m", "˨", "a"]),
 ])
 def test_word_initial_tone_mark_belongs_to_the_next_base(text, expected):

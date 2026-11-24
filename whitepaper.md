@@ -34,7 +34,7 @@ Two rules control the library:
 
 ## 2. The feature table and its sources
 
-A segment is a vector of 36 features. Each value is plus, minus or zero. Zero means that the feature does not apply.
+A segment is a vector of 40 features. Each value of the first 36 is plus, minus or zero. Zero means that the feature does not apply. The last four give the tone of a vowel, as numbers.
 
 The features come from these sources:
 
@@ -43,8 +43,9 @@ The features come from these sources:
 - Six height steps, `h1` to `h6`, place a vowel on seven height rows. The IPA chart (International Phonetic Association 2015) prints four height labels: close, close-mid, open-mid and open. It draws `ɪ ʏ ʊ`, `ə` and `æ ɐ` between them, so the table counts seven rows. A vowel is + on one step for each row it lies below close.
 - One feature, `atr`, gives the position of the tongue root. The marks `◌̘` and `◌̙` set it.
 - Four features give a secondary articulation: palatalized, labialized, velarized and pharyngealized.
+- Four tone features come from the tone block of phoonnx: `tone_is` and the pitch at the start, the middle and the end of the syllable.
 
-The total is 22 + 3 + 6 + 1 + 4 = 36.
+The total is 22 + 3 + 6 + 1 + 4 + 4 = 40.
 
 The vowels follow the IPA chart, not a feature table. The chart defines each vowel symbol. The chart puts 28 vowel letters on seven height rows. PanPhon's `hi` and `lo` give only three heights. Thus we add six height steps. Two vowels differ on one step for each row between them.
 
@@ -108,19 +109,19 @@ The tie rule increases coverage. This table gives the PHOIBLE types that read wi
 | as the library reads a word: whole, split into segments, tones included | 3765 of 4158 | 0.9055 |
 <!-- whitepaper:readings:end -->
 
-A tone is its own segment. It comes after the syllable that has the tone. Tone letters, tone diacritics and superscript digits give the same segment. Thus `má`, `ma˦` and `ma⁴` all read as `m`, `a`, `˦`. We do not use the two tone features of PanPhon. We compare two tones by their pitch at the start, the middle and the end of the syllable. The distance is the mean difference, divided by the range of the five levels. Section 6 shows that this distance is not better than a simple baseline. Thus the tone distance is experimental.
+A tone is four features of the vowel that has it. The tone comes after its syllable, and the library puts it on the last vowel or syllabic consonant before it in the word. Tone letters, tone diacritics and superscript digits give the same features. Thus `má`, `ma˦` and `ma⁴` all read as `m`, `a˦`, and `tam˧˧` reads as `t`, `a˧˧`, `m`. The four features are those of the tone block of phoonnx: `tone_is`, and the pitch at the start, the middle and the end of the syllable, each Chao level as `(level − 3) / 2`. We do not use the two tone features of PanPhon. The distance divides by the weight of the segment features only, so a pair with no tone keeps its distance. A tone with no vowel before it in its word stays a segment of its own. We compare two such tones by the mean difference of their three pitches, divided by the range of the five levels. Section 6 shows that this ranking of tones is not better than a simple baseline. Thus the tone model is experimental.
 
 A stress mark is not a segment. The library removes it. Thus `ˈio` and `io` are at distance 0.
 
 ## 4. Distances and search
 
-The feature distance of two segments is a weighted city-block distance between their vectors. Plus against minus costs the full weight of the feature. Zero against plus or minus costs half the weight. We divide by the total weight, 9.5. Thus the distance is between 0 and 1. A segment that the table cannot read is at distance 1 from all other segments.
+The feature distance of two segments is a weighted city-block distance between their vectors. Plus against minus costs the full weight of the feature. Zero against plus or minus costs half the weight. We divide by the total weight, 9.5, of the 36 segment features, and cut the result to 1. Thus the distance is between 0 and 1. A segment that the table cannot read is at distance 1 from all other segments.
 
 The word distance is an edit distance:
 
 - A substitution costs the square root of the feature distance.
 - A deletion or an insertion costs 0.5.
-- A tone against a phone costs 1.
+- A tone segment against a phone costs 1.
 
 Thus a substitution never costs more than a deletion and an insertion. The square root of a metric is a metric. Thus the word distance is a metric. The normalized distance divides by the number of segments in the longer word. The test chose these costs (section 5.5). We call them the released costs.
 
@@ -285,7 +286,7 @@ The Romance defect does not change this choice. All candidates used the same ben
 
 ### 6.1 Tone
 
-We compared our tone distance with the confusions of the six Cantonese tones (Wong, Cheng and Chen 2018). The tone distance is not better than a baseline that knows only if a contour goes up, goes down or stays level. There are 15 pairs. The intervals are wide and they overlap. Thus the data does not show that the baseline is better. But it shows that the tone distance is not better. The data is seen.
+We compared our tone distance with the confusions of the six Cantonese tones (Wong, Cheng and Chen 2018). The tone features weigh the three pitches equally, so they rank the pairs as the tone distance does. The tone distance is not better than a baseline that knows only if a contour goes up, goes down or stays level. There are 15 pairs. The intervals are wide and they overlap. Thus the data does not show that the baseline is better. But it shows that the tone distance is not better. The data is seen.
 
 <!-- whitepaper:tone:start -->
 Seen data, 15 Cantonese tone pairs.
@@ -305,11 +306,11 @@ The height steps and the scale marks follow the chart. Neither improves a score.
 <!-- whitepaper:ablations:start -->
 | Variant | Test cognates, AP minus table (original costs) | Test alignment, PAS minus table (original costs) | Dev cognates, AP (released costs) |
 |---|---|---|---|
-| PanPhon's 22 features | +0.0058 [+0.0044, +0.0071] | +0.0000 [+0.0000, +0.0000] | 0.7742 |
-| no height steps | -0.0002 [-0.0013, +0.0008] | +0.0000 [+0.0000, +0.0000] | 0.7725 |
-| no scale marks | -0.0000 [-0.0000, -0.0000] | +0.0000 [+0.0000, +0.0000] | 0.7726 |
-| every weight 1 | -0.0066 [-0.0082, -0.0050] | -0.0205 [-0.0462, +0.0000] | 0.7695 |
-| the table (control) | - | - | 0.7727 |
+| PanPhon's 22 features | +0.0058 [+0.0044, +0.0071] | +0.0000 [+0.0000, +0.0000] | 0.7882 |
+| no height steps | -0.0002 [-0.0013, +0.0008] | +0.0000 [+0.0000, +0.0000] | 0.7871 |
+| no scale marks | -0.0000 [-0.0000, -0.0000] | +0.0000 [+0.0000, +0.0000] | 0.7874 |
+| every weight 1 | -0.0066 [-0.0082, -0.0050] | -0.0205 [-0.0462, +0.0000] | 0.7834 |
+| the table (control) | - | - | 0.7875 |
 <!-- whitepaper:ablations:end -->
 
 Removing the scale marks changes each paired test score by less than 0.0001. It changes the development cognate score by one unit in the fourth decimal. We keep the marks because the chart gives them a meaning, not because they help. We did not measure their effect on coverage.

@@ -106,8 +106,9 @@ class PhoneMatcher(System):
     """This package: substitutions at the square root of the feature distance, deletion and insertion at 0.5.
 
     A tone is read as the library reads it in a word: ``segments`` turns a tone numeral such as
-    ``³³`` into the tone letters ``˧˧``. Those letters go to the library; ``align`` gives the
-    segments back as they came in. A diphthong given as one segment, such as ``ei``, is two
+    ``³³`` into the tone letters ``˧˧``, and a word distance moves each tone onto the vowel that
+    carries it, as ``segments`` does. ``align`` keeps a tone as a column of its own, as the gold
+    alignments write it, and gives the segments back as they came in. A diphthong given as one segment, such as ``ei``, is two
     segments to the library, so the word distance splits it with ``segments``; ``align`` cannot
     split a gold column and leaves it unread.
     """
@@ -116,12 +117,13 @@ class PhoneMatcher(System):
 
     def __init__(self):
         from phonematcher import align, edit_distance, feature_distance, vectorize_phones
-        from phonematcher.distance import segments, substitution_cost
+        from phonematcher.distance import carry_tones, segments, substitution_cost
         from phonematcher.tone import is_tone
 
         self._edit, self._distance, self._vectorize = edit_distance, feature_distance, vectorize_phones
         self._align_pairs, self._segments, self._is_tone = align, segments, is_tone
         self._substitution = substitution_cost
+        self._carry = carry_tones
 
     def _letters(self, segment: str) -> str:
         """The tone letters of a tone segment, else the segment itself."""
@@ -157,8 +159,8 @@ class PhoneMatcher(System):
         return self._substitution(self._letters(a), self._letters(b))
 
     def _word_distance(self, a: Word, b: Word, normalized: bool) -> float:
-        left = [p for s in a for p in self._parts(s)]
-        right = [p for s in b for p in self._parts(s)]
+        left = self._carry([p for s in a for p in self._parts(s)])
+        right = self._carry([p for s in b for p in self._parts(s)])
         return per_length(self._edit(left, right), left, right, normalized)
 
     def align(self, a: List[str], b: List[str]) -> Pairs:

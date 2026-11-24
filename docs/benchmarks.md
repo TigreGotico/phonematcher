@@ -57,13 +57,15 @@ sca: mandarin 0.115 (skipped 0); miller_nicely 0.157 (skipped 0); hillenbrand 0.
 
 ### tone
 
-Commit `fe3944f052dd`.
+Commit `b08a707fcf0a`.
 
 ```text
 main Chao values: direction_baseline 0.782 [0.455, 0.886] (pairs 15 in, 15 out)
 main Chao values: phonematcher 0.247 [-0.317, 0.740] (pairs 15 in, 15 out)
+main Chao values: phonematcher_features 0.247 [-0.317, 0.740] (pairs 15 in, 15 out)
 alternative Chao values: direction_baseline 0.782 [0.455, 0.886] (pairs 15 in, 15 out)
 alternative Chao values: phonematcher 0.358 [-0.204, 0.828] (pairs 15 in, 15 out)
+alternative Chao values: phonematcher_features 0.358 [-0.204, 0.828] (pairs 15 in, 15 out)
 not scored, no tone model: levenshtein, panphon-weighted, panphon-hamming, aline, soundvectors, sca
 ```
 
@@ -121,11 +123,11 @@ The development split holds the items that `benchmarks/split.py` assigns to dev.
 
 ### cognates
 
-Commit `99383979599a`.
+Commit `b08a707fcf0a`.
 
 | System | AP, unread at 1 | F, unread at 1 | AP, common words | F, common words | Words skipped |
 |---|---|---|---|---|---|
-| phonematcher | 0.7727 | 0.8262 | 0.8542 | 0.8841 | 437 |
+| phonematcher | 0.7875 | 0.8384 | 0.8545 | 0.8838 | 437 |
 | levenshtein | 0.7514 | 0.8165 | 0.8362 | 0.8757 | 0 |
 | panphon-weighted | 0.5833 | 0.7714 | 0.8057 | 0.8505 | 5129 |
 | panphon-hamming | 0.5847 | 0.6624 | 0.7715 | 0.8358 | 5129 |
@@ -213,13 +215,13 @@ Cost rule: the shipped P5 costs, gap 0.5 and substitutions at the square root of
 
 | System | AP, unread at 1 | F, unread at 1 | AP, common words | F, common words | Words skipped |
 |---|---|---|---|---|---|
-| phonematcher | 0.7727 | 0.8262 | 0.7897 | 0.8336 | 437 |
-| pm-p5-panphon22 | 0.7742 | 0.8277 | 0.7916 | 0.8352 | 437 |
-| pm-p5-no-height | 0.7725 | 0.8264 | 0.7895 | 0.8338 | 437 |
-| pm-p5-flat-diacritics | 0.7726 | 0.8261 | 0.7896 | 0.8335 | 437 |
-| pm-p5-uniform | 0.7695 | 0.8222 | 0.7864 | 0.8297 | 437 |
-| pm-p5-indel-0.5 | 0.7727 | 0.8262 | 0.7897 | 0.8336 | 437 |
-| pm-p5-indel-1.5 | 0.7119 | 0.7666 | 0.7292 | 0.7739 | 437 |
+| phonematcher | 0.7875 | 0.8383 | 0.8094 | 0.8450 | 436 |
+| pm-p5-panphon22 | 0.7882 | 0.8379 | 0.8102 | 0.8449 | 436 |
+| pm-p5-no-height | 0.7871 | 0.8368 | 0.8091 | 0.8436 | 436 |
+| pm-p5-flat-diacritics | 0.7874 | 0.8381 | 0.8093 | 0.8448 | 436 |
+| pm-p5-uniform | 0.7834 | 0.8323 | 0.8052 | 0.8386 | 436 |
+| pm-p5-indel-0.5 | 0.7875 | 0.8383 | 0.8094 | 0.8450 | 436 |
+| pm-p5-indel-1.5 | 0.7132 | 0.7707 | 0.7318 | 0.7785 | 436 |
 
 #### cognates-toneless
 

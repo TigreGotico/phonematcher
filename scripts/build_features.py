@@ -110,6 +110,11 @@ def validate(changes: dict, features: list) -> None:
         check("segments entry", s["segment"], s["set"])
 
 
+#: The tone features that end every vector, after the tone block of phoonnx_train/features_json.py,
+#: and their weights, chosen on the dev split (docs/design.md, "The tone weights").
+TONE = {"tone_is": 0.25, "tone_start": 0.125, "tone_mid": 0.125, "tone_end": 0.125}
+
+
 def main(out_path: Path) -> None:
     with open(DATA / "feature_weights.csv", encoding="utf-8") as fh:
         rows = list(csv.reader(fh))
@@ -240,6 +245,7 @@ def main(out_path: Path) -> None:
                   f"{len(changes['segments'])} segment changes from overrides.json",
         "features": features,
         "weights": weights,
+        "tone": {"features": list(TONE), "weights": list(TONE.values())},
         "phones": phones,
         "diacritics": [
             {"marker": unicodedata.normalize("NFD", d["marker"]),

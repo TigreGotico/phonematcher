@@ -47,6 +47,11 @@ NAMES = ["pm-panphon22", "pm-no-height", "pm-flat-diacritics", "pm-uniform", "pm
 #: the same variants on the shipped P5 costs
 P5_NAMES = [f"pm-p5-{name.removeprefix('pm-')}" for name in NAMES]
 #: the starting costs of ``prereg-2.md``: the table, gap 1 and linear substitutions
+#: The segment features, which the variants weigh, and the tone features, which every variant
+#: weighs as the package does.
+SEGMENT_FEATURES = features.FEATURES[: -len(features.TONE_FEATURES)]
+SEGMENT_WEIGHTS = features.WEIGHTS[: -len(features.TONE_FEATURES)]
+TONE_WEIGHTS = features.WEIGHTS[-len(features.TONE_FEATURES):]
 C0 = "pm-C0"
 #: the weight candidates of ``prereg-2.md``, each compared with C0
 CANDIDATES = ["pm-C1", "pm-C2", "pm-C3", "pm-P4", "pm-P5"]
@@ -75,11 +80,11 @@ def panphon_weights(by_file_label: bool = False) -> Tuple[float, ...]:
     values = list(map(float, values))
     if not by_file_label:
         names = panphon.FeatureTable().names[: len(values)]
-    unknown = set(names) - set(features.FEATURES)
+    unknown = set(names) - set(SEGMENT_FEATURES)
     if unknown:
         raise ValueError(f"PanPhon weights for features the table lacks: {sorted(unknown)}")
     given = dict(zip(names, values))
-    return tuple(given.get(f, 0.0) for f in features.FEATURES)
+    return tuple(given.get(f, 0.0) for f in SEGMENT_FEATURES)
 
 
 def flat_features():
@@ -131,7 +136,7 @@ class Variant(PhoneMatcher):
     """phonematcher with other feature weights, other feature vectors or another indel cost."""
 
     def __init__(
-        self, name: str, weights: Sequence[float] = features.WEIGHTS, indel: float = 1.0, vectorize=None, power: float = 1.0
+        self, name: str, weights: Sequence[float] = SEGMENT_WEIGHTS, indel: float = 1.0, vectorize=None, power: float = 1.0
     ):
         super().__init__()
         self.name = name
@@ -154,8 +159,9 @@ class Variant(PhoneMatcher):
         except ValueError:
             return 1.0
         number = {True: 1, False: -1, None: 0}
-        diff = sum(w * abs(number[x] - number[y]) / 2 for w, x, y in zip(self.weights, va, vb))
-        return diff / sum(self.weights)
+        va, vb = ([v if type(v) is float else number[v] for v in vec] for vec in (va, vb))
+        diff = sum(w * abs(x - y) / 2 for w, x, y in zip(self.weights + TONE_WEIGHTS, va, vb))
+        return min(diff / sum(self.weights), 1.0)
 
     def substitution(self, a: str, b: str) -> float:
         """The package's ``substitution_cost`` with this variant's phone distance."""
@@ -166,8 +172,8 @@ class Variant(PhoneMatcher):
         return cost ** self.power
 
     def _word_distance(self, a, b, normalized: bool) -> float:
-        left = [p for s in a for p in self._parts(s)]
-        right = [p for s in b for p in self._parts(s)]
+        left = self._carry([p for s in a for p in self._parts(s)])
+        right = self._carry([p for s in b for p in self._parts(s)])
         return per_length(edit_distance(left, right, substitution=self.substitution, gap=self.indel), left, right, normalized)
 
 
@@ -184,17 +190,17 @@ def build_variant(name: str) -> Variant:
     if base == "pm-panphon22":
         return Variant(name, weights=panphon_weights(), **costs)
     if base == "pm-no-height":
-        return Variant(name, weights=[0.0 if f in HEIGHT_STEPS else w for f, w in zip(features.FEATURES, features.WEIGHTS)], **costs)
+        return Variant(name, weights=[0.0 if f in HEIGHT_STEPS else w for f, w in zip(SEGMENT_FEATURES, SEGMENT_WEIGHTS)], **costs)
     if base == "pm-flat-diacritics":
         return Variant(name, vectorize=flat_features().vectorize_phones, **costs)
     if base == "pm-uniform":
-        return Variant(name, weights=[1.0] * features.NUM_FEATURES, **costs)
+        return Variant(name, weights=[1.0] * len(SEGMENT_FEATURES), **costs)
     return Variant(name, **{**costs, "indel": float(base.removeprefix("pm-indel-"))})
 
 
 def c2_weights() -> List[float]:
     """Every feature 1, the six height steps 1/6 each, and front, back, round and lab 1/2 each."""
-    return [1 / 6 if f in HEIGHT_STEPS else 0.5 if f in HALF_WEIGHT else 1.0 for f in features.FEATURES]
+    return [1 / 6 if f in HEIGHT_STEPS else 0.5 if f in HALF_WEIGHT else 1.0 for f in SEGMENT_FEATURES]
 
 
 def chart_vowels() -> List[str]:
@@ -210,7 +216,7 @@ def k1(system: System) -> bool:
 
 
 def with_major_class(weight: float) -> List[float]:
-    return [weight if f in MAJOR_CLASS else w for f, w in zip(features.FEATURES, c2_weights())]
+    return [weight if f in MAJOR_CLASS else w for f, w in zip(SEGMENT_FEATURES, c2_weights())]
 
 
 def c3_weight() -> float:
@@ -225,7 +231,7 @@ def c3_weight() -> float:
 
 def build_candidate(name: str) -> Variant:
     if name == "pm-C1":
-        return Variant(name, weights=[1.0] * features.NUM_FEATURES)
+        return Variant(name, weights=[1.0] * len(SEGMENT_FEATURES))
     if name == "pm-C2":
         return Variant(name, weights=c2_weights())
     if name == "pm-C3":
@@ -338,7 +344,7 @@ def vector_differences(read_by_both: Sequence[str]) -> Dict[str, List[str]]:
     found: Dict[str, List[str]] = {}
     for s in read_by_both:
         theirs = dict(zip(table.names, table.fts(s).numeric()))
-        mine = dict(zip(features.FEATURES, (number[v] for v in features.vectorize_phones(s))))
+        mine = dict(zip(SEGMENT_FEATURES, (number[v] for v in features.vectorize_phones(s))))
         differ = [n for n in table.names[:22] if mine[n] != theirs[n]]
         if differ:
             found[s] = differ
