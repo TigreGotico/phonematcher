@@ -238,9 +238,13 @@ def _apply_if(diacritic: dict, vec: Vector, segment: str) -> Vector:
 def _apply_pre(marker: str, vec: Vector, segment: str) -> Vector:
     """Apply a mark written before its base. A nasal mark on an obstruent adds [+nasal] to it, as
     a nasal tied before the obstruent does: prenasalized stops, affricates and fricatives. The
-    glottal continuants h and ɦ are approximants, which are never prenasalized."""
+    glottal continuants h and ɦ are approximants, which are never prenasalized. Nor is a glottalic
+    consonant (an ejective, an implosive or ʔ, all [+cg])."""
     base = segment.lstrip("".join(PRE_DIACRITICS))[:1]
-    if PRE_DIACRITICS[marker][0] == "ⁿ" and vec[_SON] is False and base not in _GLOTTALS:
+    nasal = PRE_DIACRITICS[marker][0] == "ⁿ"
+    if nasal and vec[_CG] is True:
+        raise _unrecognized(segment)
+    if nasal and vec[_SON] is False and base not in _GLOTTALS:
         return tuple(True if i == _NAS else x for i, x in enumerate(vec))
     return _apply_if(_DIACRITICS[PRE_DIACRITICS[marker]], vec, segment)
 
