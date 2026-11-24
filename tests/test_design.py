@@ -104,9 +104,9 @@ def test_the_tone_numbers_equal_the_tone_file():
 def test_the_allophone_views_equal_the_allophone_file():
     row = results("allophones-seen.json")["systems"]["phonematcher"]["direct"]["all"]
     assert row["unread_at_1"]["items_out"] == row["items_in"] == 12716
-    assert (row["read_only"]["items_out"], row["read_only"]["skipped"]) == (12492, 224)
+    assert (row["read_only"]["items_out"], row["read_only"]["skipped"]) == (12517, 199)
     assert f"{row['unread_at_1']['score']:.4f}" in PAGE and f"{row['read_only']['score']:.4f}" in PAGE
-    assert "12716" in PAGE and "224" in PAGE and "12492" in PAGE
+    assert "12716" in PAGE and "199" in PAGE and "12517" in PAGE
 
 
 def test_the_panphon_control_numbers_equal_the_ablation_file():
@@ -187,3 +187,20 @@ def test_the_one_encoding_form_of_vowel_height_is_not_the_table():
     i, e = vectorize_phones("i"), vectorize_phones("e")
     differing = [n for n, x, y in zip(names, i, e) if x != y]
     assert differing == ["hi", "h1", "h2"]
+
+
+def test_the_sourced_value_table_equals_the_corrections_file():
+    data = json.loads((RESULTS / "ablations" / "corrections-dev.json").read_text(encoding="utf-8"))
+    keys = {"cognates": "cognates_ap", "alignment": "alignment_pas", "retrieval": "retrieval_recall@1"}
+    labels = {"cognates": "Cognates, AP", "alignment": "Alignment, PAS", "retrieval": "Retrieval, recall@1"}
+    after = {"cognates": results("cognates-dev.json")["systems"]["phonematcher"]["unread_at_1"]["average_precision"]["mean"],
+             "alignment": results("alignment-dev.json")["all"]["systems"]["phonematcher"]["common_pas"]}
+    for task, key in keys.items():
+        assert after.get(task, data["after"][key]) == data["after"][key]
+        paired = data["paired"][task]["paired"]["after"]
+        assert paired["high"] >= 0 or not data["adopted"]
+        cells = [f"{data['before'][key]:.4f}", f"{data['after'][key]:.4f}",
+                 f"{signed(paired['diff'])} [{signed(paired['low'])}, {signed(paired['high'])}]"]
+        assert f"| {labels[task]} | " + " | ".join(cells) + " |" in PAGE
+    assert data["adopted"] and all(data["paired"][t]["paired"]["after"]["high"] > 0 for t in keys)
+    assert all(head == "4f254da108460c3a56c25c482751aa0cae11fe1c" for head in data["after"]["heads"].values())

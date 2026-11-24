@@ -219,9 +219,11 @@ def prose_values():
     means = {share: math.fsum(r) / len(r) for share, r in by_share.items()}
     best = max(round(m, 4) for m in means.values())
     tied = sorted(share for share, m in means.items() if round(m, 4) == best)
-    assert tied[0] == PhoneticFuzzySearch().cluster_sensitivity
-    values.update({f"{share:g}": "sensitivity tied at the best dev recall@1" for share in tied})
+    assert tied == [PhoneticFuzzySearch().cluster_sensitivity]
+    values.update({f"{share:g}": "sensitivity with the best dev recall@1" for share in tied})
     values[f4(best)] = "best mean dev recall@1 of the fuzzy search"
+    values["0.08"] = "sensitivity that rule 7 did not pick"
+    values[f4(means[0.08])] = "mean dev recall@1 of the fuzzy search at share 0.08"
 
     samples = {system: {p["systems"][system]["sample"] for p in retrieval["pairs"].values()} for system in ("sca", "aline")}
     values.update({str(n): f"{system} retrieval sample" for system, (n,) in samples.items()})
@@ -434,7 +436,9 @@ def test_only_the_test_files_carry_a_clean_commit():
             assert "prereg_sha256" not in payload, path.name
     development = [json.loads(p.read_text(encoding="utf8")) for p in sorted(RESULTS.glob("*-*.json"))]
     development = [p for p in development if p.get("split") in ("seen", "dev")]
-    assert sum(p.get("tree_dirty") is True for p in development) > len(development) / 2
+    heads = {p.get("head") or p.get("commit") for p in development}
+    assert len(heads) == 1 and all(p.get("tree_dirty") is not True for p in development)
+    assert f"`{heads.pop()[:7]}`" in PAPER
     assert "`f092f20c8bbe0aa49a6480946858c0354a2580a9`" in PAPER
     assert "`29927d4e0e8162276cf12c68450a3b28372dc039d3a24377bbf390a64bd2df7c`" in PAPER
 

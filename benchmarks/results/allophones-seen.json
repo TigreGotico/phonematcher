@@ -3,8 +3,8 @@
  "system": "phonematcher,levenshtein,panphon-weighted,panphon-hamming,aline,soundvectors,sca",
  "split": "seen",
  "commit": null,
- "head": "fe3944f052dd84bbf8d44333a3242ea7dbe091fa",
- "tree_dirty": true,
+ "head": "4f254da108460c3a56c25c482751aa0cae11fe1c",
+ "tree_dirty": false,
  "data": {
   "phoible": {
    "url": "https://raw.githubusercontent.com/phoible/dev/master/data/phoible.csv",
@@ -18,17 +18,17 @@
     "all": {
      "items_in": 12716,
      "read_only": {
-      "score": 0.9097211567900764,
-      "items_out": 12492,
-      "skipped": 224
+      "score": 0.9109743569640809,
+      "items_out": 12517,
+      "skipped": 199
      },
      "common_subset": {
-      "score": 0.9029492585084681,
+      "score": 0.9084456567104456,
       "items_out": 4063,
       "skipped": 8653
      },
      "unread_at_1": {
-      "score": 0.8959003197130851,
+      "score": 0.8988232973162151,
       "items_out": 12716,
       "skipped": 0
      }
@@ -36,17 +36,17 @@
     "odd": {
      "items_in": 6011,
      "read_only": {
-      "score": 0.9038356646959654,
-      "items_out": 5929,
-      "skipped": 82
+      "score": 0.9058890051403482,
+      "items_out": 5942,
+      "skipped": 69
      },
      "common_subset": {
-      "score": 0.8975876561319687,
+      "score": 0.9059192607564943,
       "items_out": 2019,
       "skipped": 3992
      },
      "unread_at_1": {
-      "score": 0.8932738467415079,
+      "score": 0.8971582666114842,
       "items_out": 6011,
       "skipped": 0
      }
@@ -54,17 +54,17 @@
     "even": {
      "items_in": 6705,
      "read_only": {
-      "score": 0.9150380976137826,
-      "items_out": 6563,
-      "skipped": 142
+      "score": 0.9155701228251636,
+      "items_out": 6575,
+      "skipped": 130
      },
      "common_subset": {
-      "score": 0.9082452835564879,
+      "score": 0.9109411525181891,
       "items_out": 2044,
       "skipped": 4661
      },
      "unread_at_1": {
-      "score": 0.8982549400012507,
+      "score": 0.9003159892723878,
       "items_out": 6705,
       "skipped": 0
      }
@@ -74,17 +74,17 @@
     "all": {
      "items_in": 12716,
      "read_only": {
-      "score": 0.9097211567900764,
-      "items_out": 12492,
-      "skipped": 224
+      "score": 0.9109743569640809,
+      "items_out": 12517,
+      "skipped": 199
      },
      "common_subset": {
-      "score": 0.9029970079507764,
+      "score": 0.9084907018977959,
       "items_out": 4065,
       "skipped": 8651
      },
      "unread_at_1": {
-      "score": 0.8959003197130851,
+      "score": 0.8988232973162151,
       "items_out": 12716,
       "skipped": 0
      }
@@ -92,17 +92,17 @@
     "odd": {
      "items_in": 6011,
      "read_only": {
-      "score": 0.9038356646959654,
-      "items_out": 5929,
-      "skipped": 82
+      "score": 0.9058890051403482,
+      "items_out": 5942,
+      "skipped": 69
      },
      "common_subset": {
-      "score": 0.8975876561319687,
+      "score": 0.9059192607564943,
       "items_out": 2019,
       "skipped": 3992
      },
      "unread_at_1": {
-      "score": 0.8932738467415079,
+      "score": 0.8971582666114842,
       "items_out": 6011,
       "skipped": 0
      }
@@ -110,17 +110,17 @@
     "even": {
      "items_in": 6705,
      "read_only": {
-      "score": 0.9150380976137826,
-      "items_out": 6563,
-      "skipped": 142
+      "score": 0.9155701228251636,
+      "items_out": 6575,
+      "skipped": 130
      },
      "common_subset": {
-      "score": 0.908334975361418,
+      "score": 0.9110282090650921,
       "items_out": 2046,
       "skipped": 4659
      },
      "unread_at_1": {
-      "score": 0.8982549400012507,
+      "score": 0.9003159892723878,
       "items_out": 6705,
       "skipped": 0
      }

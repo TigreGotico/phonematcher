@@ -114,7 +114,7 @@ class PhoneticFuzzySearch:
     *strict*, :meth:`add_term` and :meth:`search` raise ``ValueError`` for a term or query that holds one.
     """
 
-    def __init__(self, cluster_sensitivity: float = 0.08, *, strict: bool = False):
+    def __init__(self, cluster_sensitivity: float = 0.12, *, strict: bool = False):
         if isinstance(cluster_sensitivity, bool) or not isinstance(cluster_sensitivity, (int, float)):
             raise TypeError(f"cluster_sensitivity must be a number from 0 to 1, not {type(cluster_sensitivity).__name__}")
         self.cluster_sensitivity = cluster_sensitivity

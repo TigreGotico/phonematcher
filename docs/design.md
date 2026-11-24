@@ -98,13 +98,13 @@ No two base letters of the table are at distance 0. A pair at distance 0 would b
 
 ### PanPhon weights by name
 
-PanPhon's weight file names `tense 0.25`, `long 0.125` and `velaric 0.25`. PanPhon's `FeatureTable` reads the numbers without the names and gives them in its own feature order, which ends `velaric, tense, long`. A PanPhon distance thus applies 0.25 to `velaric`, 0.125 to `tense` and 0.25 to `long`. The table takes the weights by the names in the file. The ablation that uses the weights PanPhon applies agrees with PanPhon on the 123256 pairs of segments whose 22 values equal PanPhon's, and differs on none of them. On all 727821 pairs that both systems read, 556665 differ, because the table changes some of PanPhon's values.
+PanPhon's weight file names `tense 0.25`, `long 0.125` and `velaric 0.25`. PanPhon's `FeatureTable` reads the numbers without the names and gives them in its own feature order, which ends `velaric, tense, long`. A PanPhon distance thus applies 0.25 to `velaric`, 0.125 to `tense` and 0.25 to `long`. The table takes the weights by the names in the file. The ablation that uses the weights PanPhon applies agrees with PanPhon on the 115921 pairs of segments whose 22 values equal PanPhon's, and differs on none of them. On all 727821 pairs that both systems read, 561318 differ, because the table changes some of PanPhon's values.
 
 ### An unread segment is at distance 1
 
 A segment that cannot be read is at distance 1 from every other segment, and a word that holds one has no feature cost for it. The benchmarks score the unread pairs at distance 1 as the main view, and report a second view on the items that every system reads. The alternative is to drop the unread items. Dropping them would let a system that reads little score well on what it reads, so the main view charges for what a system cannot read.
 
-The two views differ. On 12716 allophone items, the main view scores 0.8959. The view that skips the 224 items with an unread segment scores 0.9097 on the remaining 12492.
+The two views differ. On 12716 allophone items, the main view scores 0.8988. The view that skips the 199 items with an unread segment scores 0.9110 on the remaining 12517.
 
 A segment that phonematcher cannot read is at distance 1 from every other segment: its substitution against any other segment costs 1, the price of a deletion plus an insertion, and its insertion or deletion costs 0.5. The first time such a segment is priced against another segment, phonematcher issues one `UserWarning` that names the segment and its code points. Each segment warns once per process, also when several threads price it at the same time.
 
@@ -157,11 +157,21 @@ P5 beat C0 on all three tasks and had the largest cognate difference, so the lib
 
 The search clusters phones on the price that ranks its candidates, so one pair of sounds has one price. The sensitivity is a share from 0 to 1: the merge threshold is that quantile of the segment costs over all pairs of letters in the table, so a value keeps its meaning when the costs change.
 
-The default share is 0.08. Rule 7 of [`benchmarks/prereg-2.md`](https://github.com/TigreGotico/phonematcher/blob/dev/benchmarks/prereg-2.md) chooses it on the development split, and [Search](search.md#6-choose-a-sensitivity) gives the rule and the values. The costs of the word distance, the alignment and the cognate task do not depend on the clusters.
+The default share is 0.12. Rule 7 of [`benchmarks/prereg-2.md`](https://github.com/TigreGotico/phonematcher/blob/dev/benchmarks/prereg-2.md) chooses it on the development split, and [Search](search.md#6-choose-a-sensitivity) gives the rule and the values. The costs of the word distance, the alignment and the cognate task do not depend on the clusters.
 
 ### Feature values that follow their sources
 
-Three groups of feature values follow a cited source and differ from the values that the test run scored. The marks `◌̝ ◌̞ ˔ ˕` on a consonant follow the chart examples `ɹ̝` and `β̞` (`docs/features.md`). In a tie of a click and its velar or uvular letter, the tie is the click with the voicing and nasality of that letter (`docs/features.md`). `h` and `ɦ` take [−son, −cons] and `ʔ` takes [−son, +cons] from the Hayes CSV, as `ɹ` does (`docs/features.md`). These values change some word distances. The test numbers describe the library that the test run scored. The development and seen result files do not include these values.
+Three groups of feature values follow a cited source and differ from the values that the test run scored. The marks `◌̝ ◌̞ ˔ ˕` on a consonant follow the chart examples `ɹ̝` and `β̞` (`docs/features.md`). In a tie of a click and its velar or uvular letter, the tie is the click with the voicing and nasality of that letter (`docs/features.md`). `h` and `ɦ` take [−son, −cons] and `ʔ` takes [−son, +cons] from the Hayes CSV, as `ɹ` does (`docs/features.md`). These values change some word distances. The test numbers describe the library that the test run scored. The development and seen result files are scored with these values.
+
+The table compares the library of the test run with the shipped library on the development split. The "without" column is the result files of the test-run library. The paired difference comes from an audit run that scores each unit with the library at `cd2996a` (without) and at `4f254da` (with). The "with" column holds every change since `cd2996a`: these values, the tone features, and the later fixes to the reading of marks. The audit uses the benchmark code of `100ff08` for "without" and of `4f254da` for "with". Its units are the 977 cognate concepts, the 4575 alignment pairs that phonematcher reads, and the 500-query sample of each of the four retrieval pairs; its interval uses 1,000 resamples with seed 0. `benchmarks/results/ablations/corrections-dev.json` holds every number of the table.
+
+| Task | Without | With | Paired difference [95% interval] |
+|---|---|---|---|
+| Cognates, AP | 0.7727 | 0.7875 | +0.0148 [+0.0122, +0.0176] |
+| Alignment, PAS | 0.8315 | 0.8315 | +0.0002 [-0.0007, +0.0011] |
+| Retrieval, recall@1 | 0.8801 | 0.8802 | +0.0002 [+0.0000, +0.0008] |
+
+The rule for a change that corrects a value is to adopt it unless a paired interval on the development split lies wholly below 0. No interval lies below 0, so the library keeps its values.
 
 ### The feature weights stay
 
@@ -173,9 +183,9 @@ The weights of the 22 features in the data of PanPhon 0.22.2 are PanPhon's. The 
 
 | Corpus | Distinct segments | Read | Unread | Share of tokens read |
 |---|---|---|---|---|
-| PHOIBLE 2.0 | 4158 | 3765 | 393 | 0.9944 |
-| WikiPron | 3604 | 2605 | 999 | 0.9939 |
-| orthography2ipa | 2569 | 2184 | 385 | 0.9898 |
+| PHOIBLE 2.0 | 4158 | 3783 | 375 | 0.9947 |
+| WikiPron | 3604 | 2631 | 973 | 0.9939 |
+| orthography2ipa | 2569 | 2269 | 300 | 0.9936 |
 
 Most unread segments are rare. The kinds of segment that do not read are these.
 

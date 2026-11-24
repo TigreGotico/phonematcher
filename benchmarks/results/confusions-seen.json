@@ -3,8 +3,8 @@
  "system": "phonematcher,levenshtein,panphon-weighted,panphon-hamming,aline,soundvectors,sca",
  "split": "seen",
  "commit": null,
- "head": "fe3944f052dd84bbf8d44333a3242ea7dbe091fa",
- "tree_dirty": true,
+ "head": "4f254da108460c3a56c25c482751aa0cae11fe1c",
+ "tree_dirty": false,
  "data": {
   "mandarin": {
    "url": "https://osf.io/download/k9qzg/",
@@ -128,15 +128,15 @@
     "pairs_in": 465,
     "skipped": 0,
     "unread_at_1": {
-     "score": 0.07704697767552594,
+     "score": 0.12698160945530187,
      "interval": {
-      "low": -0.01494652249067225,
-      "high": 0.1696809830934477,
+      "low": 0.035940824509980714,
+      "high": 0.2170748930076026,
       "undefined": 0
      },
      "pairs_out": 465,
      "distance_range": [
-      0.0,
+      0.11470786693528089,
       0.7905694150420949
      ]
     },

@@ -2,7 +2,7 @@
  "task": "alignment",
  "system": "phonematcher,levenshtein,aline,sca",
  "split": "dev",
- "commit": "fe3944f052dd84bbf8d44333a3242ea7dbe091fa",
+ "commit": "4f254da108460c3a56c25c482751aa0cae11fe1c",
  "data": {
   "source": "https://github.com/SequenceComparison/SupplementaryMaterial",
   "sha": "cc4bf855f9549867e86157f49ac03608717b95c2",
@@ -23,8 +23,8 @@
     "n_skipped": 1173,
     "common_pas": 0.8315282791817088,
     "common_cs": 0.9072604624951195,
-    "unread_at_zero_pas": 0.6532707028531664,
-    "unread_at_zero_cs": 0.727339398683918
+    "unread_at_zero_pas": 0.6534446764091858,
+    "unread_at_zero_cs": 0.7274384104739529
    },
    "levenshtein": {
     "n_in": 5748,
@@ -66,8 +66,8 @@
      "n_skipped": 1163,
      "common_pas": 0.8316708229426434,
      "common_cs": 0.9074883622888611,
-     "unread_at_zero_pas": 0.6527093596059114,
-     "unread_at_zero_cs": 0.726950876640936
+     "unread_at_zero_pas": 0.6528852920478536,
+     "unread_at_zero_cs": 0.7270510032716748
     },
     "levenshtein": {
      "n_in": 5684,
