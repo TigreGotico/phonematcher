@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.7.3a1](https://github.com/TigreGotico/phonematcher/tree/2.7.3a1) (2026-11-24)
+
+[Full Changelog](https://github.com/TigreGotico/phonematcher/compare/2.7.2a1...2.7.3a1)
+
+**Merged pull requests:**
+
+- fix: read a click tie as the click, with the voicing and nasality of its rear letter [\#141](https://github.com/TigreGotico/phonematcher/pull/141) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
+
 ## [2.7.2a1](https://github.com/TigreGotico/phonematcher/tree/2.7.2a1) (2026-11-24)
 
 [Full Changelog](https://github.com/TigreGotico/phonematcher/compare/2.7.1a2...2.7.2a1)
