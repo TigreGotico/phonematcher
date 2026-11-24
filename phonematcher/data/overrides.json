@@ -184,8 +184,11 @@
       "name": "Raised",
       "vowels_only": false,
       "content": {},
-      "source": "International Phonetic Association, The IPA Chart, IPA_Kiel.pdf at internationalphoneticassociation.org (footer 'IPA Chart revised to 2015/2005'): the diacritic is named 'Raised'",
-      "reason": "PanPhon's rule changes no feature. This table reads the mark as one chart row closer.",
+      "consonant": [
+        {"when": {"syl": "-", "son": "+", "cont": "+", "nas": "-", "trill": "-", "tap": "-"}, "set": {"son": "-", "cons": "+"}}
+      ],
+      "source": "International Phonetic Association, The IPA Chart, IPA_Kiel.pdf at internationalphoneticassociation.org (footer 'IPA Chart revised to 2015/2005'), Diacritics: 'Raised e̝ (ɹ̝ = voiced alveolar fricative)'",
+      "reason": "PanPhon's rule changes no feature. On a vowel this table reads the mark as one chart row closer. On an approximant it gives the fricative at the same place, as the chart's example ɹ̝ shows: [-sonorant, +consonantal], the two features in which the table's rows for the fricative ʝ and the approximant j differ.",
       "shift": {
         "height": -1
       }
@@ -195,8 +198,12 @@
       "name": "Lowered",
       "vowels_only": false,
       "content": {},
-      "source": "International Phonetic Association, The IPA Chart, IPA_Kiel.pdf at internationalphoneticassociation.org (footer 'IPA Chart revised to 2015/2005'): the diacritic is named 'Lowered'",
-      "reason": "PanPhon's rule changes no feature. This table reads the mark as one chart row more open.",
+      "consonant": [
+        {"when": {"syl": "-", "son": "-", "cont": "+", "lat": "-"}, "set": {"son": "+", "cons": "-"}},
+        {"when": {"syl": "-", "son": "-", "cont": "+", "lat": "+"}, "set": {"son": "+"}}
+      ],
+      "source": "International Phonetic Association, The IPA Chart, IPA_Kiel.pdf at internationalphoneticassociation.org (footer 'IPA Chart revised to 2015/2005'), Diacritics: 'Lowered e̞ (β̞ = voiced bilabial approximant)'",
+      "reason": "PanPhon's rule changes no feature. On a vowel this table reads the mark as one chart row more open. On a fricative it gives the approximant at the same place, as the chart's example β̞ shows: [+sonorant, -consonantal], the two features in which the table's rows for the approximant j and the fricative ʝ differ. Every lateral approximant in the table is [+consonantal], so on a lateral fricative the mark sets [+sonorant] only.",
       "shift": {
         "height": 1
       }
@@ -417,8 +424,11 @@
       "shift": {
         "height": -1
       },
+      "consonant": [
+        {"when": {"syl": "-", "son": "+", "cont": "+", "nas": "-", "trill": "-", "tap": "-"}, "set": {"son": "-", "cons": "+"}}
+      ],
       "source": "The Unicode Standard 18.0 code chart U02B0, https://www.unicode.org/charts/PDF/U02B0.pdf (footer 'The Unicode Standard, Version 18.0, Copyright © 1991-2026 Unicode, Inc.'), PDF p. 4: '02D4 MODIFIER LETTER UP TACK • vowel raising or closing → 031D combining up tack below'",
-      "reason": "The chart names ˔ the spacing form of ◌̝, so it takes the rule of ◌̝."
+      "reason": "The chart names ˔ the spacing form of ◌̝, so it takes the rule of ◌̝, on a vowel and on a consonant."
     },
     {
       "marker": "˕",
@@ -433,8 +443,12 @@
       "shift": {
         "height": 1
       },
+      "consonant": [
+        {"when": {"syl": "-", "son": "-", "cont": "+", "lat": "-"}, "set": {"son": "+", "cons": "-"}},
+        {"when": {"syl": "-", "son": "-", "cont": "+", "lat": "+"}, "set": {"son": "+"}}
+      ],
       "source": "The Unicode Standard 18.0 code chart U02B0, https://www.unicode.org/charts/PDF/U02B0.pdf (footer 'The Unicode Standard, Version 18.0, Copyright © 1991-2026 Unicode, Inc.'), PDF p. 4: '02D5 MODIFIER LETTER DOWN TACK • vowel lowering or opening → 031E combining down tack below'",
-      "reason": "The chart names ˕ the spacing form of ◌̞, so it takes the rule of ◌̞."
+      "reason": "The chart names ˕ the spacing form of ◌̞, so it takes the rule of ◌̞, on a vowel and on a consonant."
     },
     {
       "marker": "˖",
@@ -492,7 +506,7 @@
         "nas": "+"
       },
       "source": "International Phonetic Association, The IPA Chart, IPA_Kiel.pdf at internationalphoneticassociation.org (footer 'IPA Chart revised to 2015/2005'): the diacritic is named 'Nasalized' and the chart prints it on the vowel e, as ẽ",
-      "reason": "PanPhon applies the mark only to voiced bases. The chart prints it on a vowel and ties it to no voicing, so a voiceless vowel such as [ɐ̥̃] is nasalized. The other voiceless bases stay refused: the chart prints no consonant with the mark."
+      "reason": "PanPhon applies the mark only to voiced bases. The chart prints it on a vowel and ties it to no voicing, so a voiceless vowel such as [ɐ̥̃] is nasalized. PanPhon's condition stays for consonants: a voiced consonant that is not nasal takes the mark, as [b̃ z̃ w̃], and a voiceless consonant or a nasal is refused, as [k̃ m̃]."
     },
     {
       "marker": "\u0329",
@@ -562,7 +576,7 @@
         "cont": "-",
         "voi": "-"
       },
-      "source": "International Phonetic Association, The IPA Chart, IPA_Kiel.pdf at internationalphoneticassociation.org (footer 'IPA Chart revised to 2015/2005'), Other Symbols: 'Epiglottal plosive'; Hassan, Esling, Moisik and Crevier-Buchman (2011), 'Aryepiglottic trilled variants of /ʕ, ħ/ in Iraqi Arabic', Proceedings of ICPhS XVII, Hong Kong, pp. 831-834, p. 831: 'both pharyngeals and epiglottals occur at the aryepiglottic sphincter point of stricture', and sounds described as epiglottal 'are associated either with AE trilled varieties of the simple fricative or approximant or with the default raised-larynx posture of the laryngeal sphincter'; this table takes the trilled reading",
+      "source": "International Phonetic Association, The IPA Chart, IPA_Kiel.pdf at internationalphoneticassociation.org (footer 'IPA Chart revised to 2015/2005'), Other Symbols: 'Epiglottal plosive'",
       "reason": "PanPhon does not list the symbol. The chart lists it under Other Symbols as 'Epiglottal plosive'. It is built as a voiceless stop at the pharyngeal place."
     },
     {

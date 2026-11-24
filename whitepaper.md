@@ -40,7 +40,7 @@ The features come from these sources:
 
 - 22 features and their weights come from PanPhon 0.22.2 (Mortensen et al. 2016). The PanPhon paper counts 21 features (Mortensen et al. 2016, p. 3477). Thus the count changes with the version.
 - Three consonant features, `front`, `tap` and `trill`, come from Gorman (2022). This source is a CSV file of the feature tables in the textbook *Introductory Phonology* by Hayes. We did not read the book. Thus we cite only the CSV file.
-- Six height steps come from the IPA chart (International Phonetic Association 2015).
+- Six height steps, `h1` to `h6`, place a vowel on seven height rows. The IPA chart (International Phonetic Association 2015) prints four height labels: close, close-mid, open-mid and open. It draws `ɪ ʏ ʊ`, `ə` and `æ ɐ` between them, so the table counts seven rows. A vowel is + on one step for each row it lies below close.
 - One feature, `atr`, gives the position of the tongue root. The marks `◌̘` and `◌̙` set it.
 - Four features give a secondary articulation: palatalized, labialized, velarized and pharyngealized.
 
@@ -80,7 +80,7 @@ Most segments that the table cannot read are rare. Thus the token share is much 
 
 ## 3. Diacritics, ties, tone and the reading rules
 
-A diacritic applies only to the type of base that a chart shows it on. The chart shows nasalization on a vowel, as in `ẽ`. Thus `k̃` does not read. The chart shows aspiration on stops, as in `tʰ`. Thus `aʰ` does not read. This rule decreases coverage. But no reading is a guess. A rule becomes wider only when a chart shows the mark on a new type of base.
+A diacritic applies only to the bases that its rule accepts. The rule is PanPhon's, unless `overrides.json` changes it with a source. PanPhon's rule for nasalization accepts a voiced base that is not already nasal, so `b̃`, `z̃` and `w̃` read, and `k̃` and `m̃` do not. The IPA chart prints the mark on a vowel, as in `ẽ`, so the rule also accepts a voiceless vowel. PanPhon's rule for aspiration accepts stops and voiceless fricatives. Thus `aʰ` does not read. Some rules accept any base: `iˤ`, `å` and `ḁ` read, and `aˠ` reads because `a` is not high. A refusal decreases coverage. A rule becomes wider only when a chart prints the mark on a base that the rule refuses.
 
 Eight marks move a vowel on a scale of the chart:
 

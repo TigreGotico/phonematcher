@@ -203,9 +203,60 @@ def test_chart_letters_panphon_lacks(letter, near, feat):
     assert feature(letter, feat) is expected
 
 
+def test_the_epiglottal_plosive_cites_only_the_chart():
+    """The chart prints ʡ under Other Symbols as "Epiglottal plosive". A plosive has no trilled reading."""
+    overrides = json.loads(files("phonematcher").joinpath("data/overrides.json").read_text(encoding="utf-8"))
+    entry = next(e for e in overrides["segments"] if e["segment"] == "ʡ")
+    assert "'Epiglottal plosive'" in entry["source"]
+    assert "Hassan" not in entry["source"] and "trill" not in entry["source"]
+
+
 def test_labiodental_flap_has_the_place_of_v():
     for f in ("lab", "ant", "cor"):
         assert feature("ⱱ", f) is feature("v", f)
+
+
+def test_raised_on_an_approximant_and_lowered_on_a_fricative_follow_the_chart_examples():
+    """The IPA chart prints "Raised e̝ (ɹ̝ = voiced alveolar fricative)" and "Lowered e̞ (β̞ =
+    voiced bilabial approximant)". Weights (PanPhon): son 1, cons 1, strid 0.125, hi 0.25,
+    ant 0.25, distr 0.125; total 9.5. A 0 against + or - costs half the weight.
+
+    ɹ̝ ~ ɹ: son, cons = 2 / 9.5 = 0.2105.  β̞ ~ β: son, cons = 2 / 9.5 = 0.2105.
+    ɹ̝ ~ z: strid 0.125 + hi 0.125 = 0.25 / 9.5 = 0.0263; ɹ ~ z adds son and cons: 2.25 / 9.5 = 0.2368.
+    ɹ̝ ~ ʒ: strid 0.125 + ant 0.25 + distr 0.125 + hi 0.125 = 0.625 / 9.5 = 0.0658;
+    ɹ ~ ʒ: 2.625 / 9.5 = 0.2763.
+    """
+    assert vectorize_phones("ɹ̝") != vectorize_phones("ɹ")
+    assert feature("ɹ̝", "son") is False and feature("ɹ̝", "cons") is True
+    assert feature("β̞", "son") is True and feature("β̞", "cons") is False
+    assert feature_distance("ɹ̝", "ɹ") == pytest.approx(2 / 9.5)
+    assert feature_distance("β̞", "β") == pytest.approx(2 / 9.5)
+    assert feature_distance("ɹ̝", "z") == pytest.approx(0.25 / 9.5)
+    assert feature_distance("ɹ", "z") == pytest.approx(2.25 / 9.5)
+    assert feature_distance("ɹ̝", "ʒ") == pytest.approx(0.625 / 9.5)
+    assert feature_distance("ɹ", "ʒ") == pytest.approx(2.625 / 9.5)
+    assert feature_distance("ɹ̝", "z") < feature_distance("ɹ", "z")
+    assert feature_distance("ɹ̝", "ʒ") < feature_distance("ɹ", "ʒ")
+    assert vectorize_phones("ɹ˔") == vectorize_phones("ɹ̝") and vectorize_phones("β˕") == vectorize_phones("β̞")
+
+
+def test_lowered_lateral_fricative_stays_a_lateral():
+    """Every lateral approximant in the table (l ʎ ʟ ɭ) is cons +, so ◌̞ on a lateral fricative
+    sets son + only. Weights (PanPhon): cons 1, delrel/ant/lat/cor/hi/lo/front 0.25, distr 0.125;
+    total 9.5. A 0 against + or - costs half the weight.
+
+    ɮ̞ ~ l: delrel 0.25 + ant 0.25 + hi 0.125 + lo 0.125 = 0.75 / 9.5 = 0.0789.
+    ɮ̞ ~ j: cons 1 + delrel 0.25 + lat 0.25 + cor 0.25 + distr 0.0625 + hi 0.125 + lo 0.125
+    + front 0.125 = 2.1875 / 9.5 = 0.2303.
+    """
+    assert feature("ɮ̞", "son") is True and feature("ɮ̞", "cons") is True
+    assert feature("ɮ̞", "lat") is True
+    assert feature_distance("ɮ̞", "l") == pytest.approx(0.75 / 9.5)
+    assert feature_distance("ɮ̞", "j") == pytest.approx(2.1875 / 9.5)
+    assert feature_distance("ɮ̞", "l") < feature_distance("ɮ̞", "j")
+    assert feature_distance("ɮ̞", "l") < feature_distance("ɮ", "l")
+    assert vectorize_phones("ɮ˕") == vectorize_phones("ɮ̞")
+    assert feature("ɬ̞", "cons") is True
 
 
 def test_lowered_and_raised_marks_move_a_vowel_one_chart_row():

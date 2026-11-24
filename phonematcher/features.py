@@ -205,7 +205,8 @@ _SIGN = {True: "+", False: "-", None: "0"}
 
 
 def _apply_if(diacritic: dict, vec: Vector, segment: str) -> Vector:
-    """Apply one diacritic. [+high, +low] is impossible, so a mark that adds one keeps the
+    """Apply one diacritic. A mark with a consonant reading sets its features on a base that
+    matches the reading's class. [+high, +low] is impossible, so a mark that adds one keeps the
     other as the base has it."""
     conditions = diacritic["conditions"]
     if conditions and not any(
@@ -215,6 +216,11 @@ def _apply_if(diacritic: dict, vec: Vector, segment: str) -> Vector:
     out = list(vec)
     for f, v in diacritic["content"].items():
         out[_INDEX[f]] = _VALUE[v]
+    for reading in diacritic.get("consonant", ()):
+        if all(out[_INDEX[f]] is _VALUE[v] for f, v in reading["when"].items()):
+            for f, v in reading["set"].items():
+                out[_INDEX[f]] = _VALUE[v]
+            break
     if "shift" in diacritic:
         signs = {f: _SIGN[v] for f, v in zip(FEATURES, out)}
         shift(signs, diacritic["shift"])

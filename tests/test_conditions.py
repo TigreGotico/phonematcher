@@ -53,7 +53,7 @@ REFUSED = {
     'ʷ': "oʷː uʷ uʷː yʷː z̩ʷ øʷː ɔʷ ʉʷ ʉʷː ʊʷ ʏʷ",
     # Nasal release: the IPA chart prints dⁿ. These bases are vowels, fricatives, liquids, glides and a nasal.
     'ⁿ': "aⁿ eⁿ iⁿ oⁿ uⁿ ãⁿ äⁿ ɑⁿ ᵐf ᵐfʷ ᵐm ᵐv ᵐw ᵐz ᵑɣᶣ ᵑʃ ⁿf ⁿh ⁿhʷ ⁿj ⁿl ⁿlʷ ⁿs ⁿsʷ ⁿv ⁿw ⁿz ⁿz̤ ⁿʃ ⁿʒ ⁿθ ⁿç ⁿçʷ",
-    # Lowered: the IPA chart prints β̞, a fricative. These bases are stops.
+    # Lowered: the IPA chart prints β̞ on a fricative. These bases are stops.
     '̞': "d̞ k̞ʰ t̞ ɡ̞",
     # Palatalized: the IPA chart prints tʲ and dʲ. These bases are vowels.
     'ʲ': "aʲ eʲ iʲ ãʲ ẽʲ",
@@ -105,13 +105,15 @@ def test_superscript_chi_after_an_affricate_stays_unread(segment):
         vectorize_phones(segment)
 
 
-# The marks that move a chart vowel along a scale move nothing on a consonant, so the consonant
+# The marks that move a chart vowel along a column move nothing on a consonant, so the consonant
 # reads as its bare letter. The IPA chart prints each mark on a vowel only.
 @pytest.mark.parametrize("mark", ["̟", "̠", "̭", "˖", "˗"])
 def test_column_marks_on_a_consonant_read_as_the_bare_letter(mark):
     assert vectorize_phones("t" + mark) == vectorize_phones("t")
 
 
-@pytest.mark.parametrize("mark", ["̝", "̞", "˔", "˕"])
-def test_row_marks_on_a_continuant_read_as_the_bare_letter(mark):
-    assert vectorize_phones("s" + mark) == vectorize_phones("s")
+# The IPA chart prints ◌̝ on an approximant (ɹ̝) and ◌̞ on a fricative (β̞). Raising a fricative
+# or lowering an approximant has no consonant reading, so the consonant reads as its bare letter.
+@pytest.mark.parametrize("mark, base", [("̝", "s"), ("˔", "s"), ("̞", "ɹ"), ("˕", "ɹ")])
+def test_row_marks_with_no_consonant_reading_read_as_the_bare_letter(mark, base):
+    assert vectorize_phones(base + mark) == vectorize_phones(base)

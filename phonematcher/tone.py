@@ -11,7 +11,7 @@ LEVELS = {"˩": 1, "˨": 2, "˧": 3, "˦": 4, "˥": 5}
 #: Tone diacritics and the tone letters the IPA chart prints beside them.
 DIACRITIC_TONES = {
     "\u030b": "˥", "\u0301": "˦", "\u0304": "˧", "\u0300": "˨", "\u030f": "˩",
-    "\u030c": "˩˥", "\u0302": "˥˩", "\u1dc4": "˧˥", "\u1dc5": "˩˧", "\u1dc8": "˧˦˨",
+    "\u030c": "˩˥", "\u0302": "˥˩", "\u1dc4": "˧˥", "\u1dc5": "˩˧", "\u1dc8": "˧˦˧",
 }
 
 #: Tone numerals, written as superscript digits: the digit is the level. The left-stem tone
