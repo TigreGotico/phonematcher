@@ -163,4 +163,4 @@ share = lambda p, i: p["fuzzy_search"][i]["mean_candidates"] / p["counts"]["inde
 
 Every value stays below 5%, so the cap removes none. The value 0.12 has the highest mean recall at 1, 0.8521. The value 0.08 gives 0.8348. At 0.12 the largest share of the index that a query returns is 1.6%, against 1.3% at 0.08.
 
-[Index](index.md) · Previous: [Tones](tones.md) · Next: [Add a segment](add-a-segment.md)
+[Index](index.md) · Previous: [Tones](tones.md) · Next: [Use with scikit-learn](scikit-learn.md)
