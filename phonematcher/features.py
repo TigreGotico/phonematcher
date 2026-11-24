@@ -17,6 +17,7 @@ import threading
 import unicodedata
 import warnings
 from functools import lru_cache
+from itertools import takewhile
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple, Union
 
@@ -173,6 +174,11 @@ def vectorize_phones(segment: str) -> Vector:
         if any(c in _CLICKS for part in parts for c in part):
             # A click tie is one velar or uvular letter, then the click (IPA Handbook, 2.5). The
             # click takes only voi and nas from that letter, so it may carry combining marks only.
+            if len(parts) == 2 and parts[0][:1] in _CLICKS and parts[1][:1] in _REAR_CLOSURES:
+                # The letter after the click reads as the letter before it: its combining marks
+                # stay with it, a modifier letter after it goes with the click.
+                letter = parts[1][:1] + "".join(takewhile(unicodedata.combining, parts[1][1:]))
+                return vectorize_phones(letter + TIES[0] + parts[0] + parts[1][len(letter):])
             rear_letter = parts[0][0] in _REAR_CLOSURES and all(map(unicodedata.combining, parts[0][1:]))
             if len(parts) != 2 or not rear_letter or parts[1][0] not in _CLICKS:
                 raise _unrecognized(segment)
@@ -203,6 +209,7 @@ def vectorize_phones(segment: str) -> Vector:
         for before, cluster in zip(clusters, clusters[1:]):
             joins = (unicodedata.category(cluster[0]) in _LETTER_CATEGORIES and cluster != before
                      and not _GLOTTALS & {cluster[0], before[0]}
+                     and not (cluster[0] in _REAR_CLOSURES and _CLICKS.intersection(tied))
                      and (cluster[0] not in _CLICKS or before[0] in _REAR_CLOSURES))
             tied += (TIES[0] if joins else "") + cluster
         if tied != seg:
