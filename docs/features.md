@@ -153,7 +153,7 @@ A rule applies a mark only to the bases that its conditions accept. The conditio
 
 | Mark | What the charts print | Bases that stay refused |
 |---|---|---|
-| `◌̃` | `ẽ`, a vowel | consonants: `k̃ f̃ h̃`; a nasal: `m̃` |
+| `◌̃` | `ẽ`, a vowel; `h̃` and the class of continuants (Ladefoged and Maddieson 1996, pp. 132 to 133) | voiceless stops: `k̃ p̃`; a nasal: `m̃` |
 | `◌ʰ` | `tʰ dʰ` (IPA chart), `ʰp` (extIPA chart) | vowels `aʰ`, nasals `m̥ʰ`, liquids `lʰ`, glides `jʰ`, `ʔʰ` |
 | `◌ⁿ` | `dⁿ` | vowels `aⁿ`, fricatives `ⁿs`, liquids and glides `ⁿl ⁿw` |
 | `◌ʷ` `◌ʲ` | `tʷ dʷ`, `tʲ dʲ` | vowels `uʷ ʊʷ`, `iʲ` |
