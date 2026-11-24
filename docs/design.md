@@ -134,7 +134,7 @@ The default share is 0.08. Rule 7 of [`benchmarks/prereg-2.md`](https://github.c
 
 ### Corrections to feature values after the test run
 
-The test run scored the library once, and its numbers stay as recorded. A linguistic audit of the table came after it and found values that disagree with their sources. Each correction came after the test run and changes some word distances. In a tie of a click and its velar or uvular letter, the tie is the click with the voicing and nasality of that letter (`docs/features.md`). The development result files do not include this correction yet.
+The test run scored the library once, and its numbers stay as recorded. A linguistic audit of the table came after it and found values that disagree with their sources. Each correction came after the test run and changes some word distances. In a tie of a click and its velar or uvular letter, the tie is the click with the voicing and nasality of that letter (`docs/features.md`). The development and seen result files predate these corrections.
 
 ### The feature weights stay
 
