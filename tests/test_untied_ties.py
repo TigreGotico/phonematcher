@@ -54,7 +54,7 @@ def test_a_mark_before_untied_letters_applies_to_the_tied_segment(marked, base, 
 
 # compose_tie has no reading for most of these, so the whole segment has none. A doubled letter is
 # a geminate, not a tie of a letter with itself.
-@pytest.mark.parametrize("segment", ["ʤ͡v", "ʧ͡f", "t͡ʃ͡f", "d͡ʒ͡v", "ab", "ɑi", "ãb", "dʒ˩", "bvf", "dzs",
+@pytest.mark.parametrize("segment", ["ʤ͡v", "ʧ͡f", "t͡ʃ͡f", "d͡ʒ͡v", "ab", "ɑi", "ãb", "ʔt", "tʔ", "kʔ", "th", "tɦ", "dʒ˩", "bvf", "dzs",
                                     "nn", "tt", "kk", "ŋnn"])
 def test_ties_compose_tie_refuses_stay_unread(segment):
     with pytest.raises(ValueError):
@@ -70,8 +70,3 @@ def test_a_doubled_letter_does_not_read_as_the_single_letter(letter):
 def test_a_click_reads_with_a_tie_bar():
     vectorize_phones("k͡ǀ")
 
-
-def test_a_glottal_stop_before_a_stop_ties_as_two_stops():
-    # ʔ is [-sonorant, -continuant] in the Hayes CSV, a stop, so ʔt takes the rule for two stops,
-    # as kp does.
-    assert vectorize_phones("ʔt") == vectorize_phones("ʔ͡t")

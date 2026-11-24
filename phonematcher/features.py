@@ -58,6 +58,9 @@ _LETTER_CATEGORIES = {"Ll", "Lu", "Lo"}
 #: nasality) beside it. A click after any other letter with no tie bar is not read.
 _CLICKS = set("ʘǀǃǂǁ‼ʞ")
 _REAR_CLOSURES = set("kɡŋqɢɴ")
+#: Glottal letters: a glottal beside another letter is two segments or glottal reinforcement, never
+#: one tied segment, so the untied-letter rule does not tie them.
+_GLOTTALS = set("ʔhɦ")
 #: Non-IPA spellings (``data/spellings.json``) -> the IPA they read as.
 SPELLINGS: Dict[int, str] = str.maketrans({
     row["spelling"]: row["reads_as"] for row in json.loads(
@@ -141,6 +144,7 @@ def vectorize_phones(segment: str) -> Vector:
         tied = clusters[0]
         for before, cluster in zip(clusters, clusters[1:]):
             joins = (unicodedata.category(cluster[0]) in _LETTER_CATEGORIES and cluster != before
+                     and not _GLOTTALS & {cluster[0], before[0]}
                      and (cluster[0] not in _CLICKS or before[0] in _REAR_CLOSURES))
             tied += (TIES[0] if joins else "") + cluster
         if tied != seg:

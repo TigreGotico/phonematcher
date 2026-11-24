@@ -235,7 +235,7 @@ segments("ts")                                      # ['t', 's']
 
 The reader puts a tie bar between each two base letters and reads the result. A tie that `compose_tie` has no reading for stays unread: `ab`, `ɑi`, and the three-letter `bvf` and `dzs`, because a fricative tied to a fricative has no reading. For the same reason `ʧ͡f` and `ʤ͡v` stay unread.
 
-A letter that repeats the one before it is a geminate, not a tie: `nn` and `tt` stay unread. A click after a velar or uvular letter (`k ɡ ŋ q ɢ ɴ`) is that letter tied to the click: `kǀ` is `k͡ǀ`. The IPA Handbook says: "Since any click involves a velar or uvular closure, it is possible to symbolize factors such as voicelessness, voicing, or nasality of the click by combining the click symbol with the appropriate velar or uvular symbol" (section 2.5, p. 10). A click after any other letter stays unread.
+A letter that repeats the one before it is a geminate, not a tie: `nn` and `tt` stay unread. A glottal letter (`ʔ h ɦ`) beside another letter is two segments or glottal reinforcement, not one segment, so `ʔt`, `th` and `tɦ` stay unread. A click after a velar or uvular letter (`k ɡ ŋ q ɢ ɴ`) is that letter tied to the click: `kǀ` is `k͡ǀ`. The IPA Handbook says: "Since any click involves a velar or uvular closure, it is possible to symbolize factors such as voicelessness, voicing, or nasality of the click by combining the click symbol with the appropriate velar or uvular symbol" (section 2.5, p. 10). A click after any other letter stays unread.
 
 Only a segment given whole is read this way. `segments` keeps `ts` in running text as two segments, `t` and `s`, because the same two letters are two sounds in many words. Use `segments("t͡s")` or write the tie bar to make one.
 
@@ -252,7 +252,7 @@ A mark before such a segment applies to it as to a listed one. `ʰts` is `t͡s` 
 | `ʔ` | `son` | − | Hayes (2009) CSV |
 | `ʔ` | `cons` | + | Hayes (2009) CSV |
 
-PanPhon gives `h` and `ɦ` [+son, +cons] and `ʔ` [+son, −cons]. With those values, `h` is nearer `ʀ` than `x`, and `ʔ` is nearer `j` than `k`. The Hayes CSV values put the three letters with the obstruents. Because `ʔ` is [−son], the rule of `◌̩` refuses `ʔ̩`, as it refuses the other syllabic stops. As a stop, `ʔ` before another stop takes the rule for two stops: `ʔt` reads as `ʔ͡t`.
+PanPhon gives `h` and `ɦ` [+son, +cons] and `ʔ` [+son, −cons]. With those values, `h` is nearer `ʀ` than `x`, and `ʔ` is nearer `j` than `k`. The Hayes CSV values put the three letters with the obstruents. Because `ʔ` is [−son], the rule of `◌̩` refuses `ʔ̩`, as it refuses the other syllabic stops.
 
 Every IPA letter has its own vector, and a test checks this. To add a change, add an entry to `overrides.json` and run the build. Then add a test that fails without the entry.
 
