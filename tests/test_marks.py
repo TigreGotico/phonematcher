@@ -135,3 +135,12 @@ def test_mark_above_a_descender_carries_a_tone():
                                          ("ŋ̍ ɲ̍", [(0, 2), (3, 5)]), ("ŋ̊̍a", [(0, 3), (3, 4)])])
 def test_mark_above_a_descender_keeps_offsets(text, spans):
     assert segment_spans(text) == spans
+
+
+# A spelling is read as its tied form first, so the mark reads as on t͡ʃ, which refuses it.
+@pytest.mark.parametrize("segment, tied", [("ʧ̍", "t͡ʃ̩"), ("ʤ̍", "d͡ʒ̩"), ("ʨ̍", "t͡ɕ̩"), ("ʥ̍", "d͡ʑ̩")])
+def test_mark_above_a_ligature_reads_as_on_its_tied_form(segment, tied):
+    with pytest.raises(ValueError):
+        vectorize_phones(tied)
+    with pytest.raises(ValueError):
+        vectorize_phones(segment)
