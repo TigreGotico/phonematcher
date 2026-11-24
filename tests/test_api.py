@@ -10,7 +10,7 @@ API = (Path(__file__).resolve().parent.parent / "docs" / "api.md").read_text(enc
 
 STABLE = {
     "Match", "PhoneticFuzzySearch", "align", "edit_distance", "feature_distance", "ipa_distance",
-    "segments", "substitution_cost", "vectorize_phones", "tone_distance", "tone_levels", "is_tone", "is_vowel_phone",
+    "segments", "segment_spans", "substitution_cost", "vectorize_phones", "tone_distance", "tone_levels", "is_tone", "is_vowel_phone",
     "FEATURES", "WEIGHTS", "GAP_COST",
 }
 DEPRECATED = {"phonetic_distance"}
