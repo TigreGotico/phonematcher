@@ -548,13 +548,17 @@
         {
           "syl": "+",
           "nas": "-"
+        },
+        {
+          "cont": "+",
+          "nas": "-"
         }
       ],
       "content": {
         "nas": "+"
       },
-      "source": "International Phonetic Association, The IPA Chart, IPA_Kiel.pdf at internationalphoneticassociation.org (footer 'IPA Chart revised to 2015/2005'): the diacritic is named 'Nasalized' and the chart prints it on the vowel e, as ẽ",
-      "reason": "PanPhon applies the mark only to voiced bases. The chart prints it on a vowel and ties it to no voicing, so a voiceless vowel such as [ɐ̥̃] is nasalized. PanPhon's condition stays for consonants: a voiced consonant that is not nasal takes the mark, as [b̃ z̃ w̃], and a voiceless consonant or a nasal is refused, as [k̃ m̃]."
+      "source": "International Phonetic Association, The IPA Chart, IPA_Kiel.pdf at internationalphoneticassociation.org (footer 'IPA Chart revised to 2015/2005'): the diacritic is named 'Nasalized' and the chart prints it on the vowel e, as ẽ. Ladefoged and Maddieson (1996), The Sounds of the World's Languages, pp. 132-133: 'The second major type of nasalized consonants are oral continuants (fricatives and approximants) produced with a lowered velum so that air is also free to pass out through the nasal passage', and 'nasalized voiceless approximants do occur contrastively in some Southern Bantu languages. Both Kwangali and ThiMbukushu [...] have clear contrasts between h and h̃'",
+      "reason": "PanPhon applies the mark only to voiced bases. The chart prints it on a vowel and ties it to no voicing, so a voiceless vowel such as [ɐ̥̃] is nasalized. Ladefoged and Maddieson name oral continuants, voiced or voiceless, as the consonants that take nasalization, and print the voiceless [h̃], so a continuant that is not nasal takes the mark, as [h̃ f̃ s̃ x̃]. PanPhon's condition stays for the other consonants: a voiced stop takes the mark, as [b̃], and a voiceless stop or a nasal is refused, as [k̃ m̃]."
     },
     {
       "marker": "\u0329",

@@ -28,9 +28,9 @@ def test_nasalized_vowel_that_already_read_is_unchanged():
     assert feature("ɐ̃", "nas") is True
 
 
-# IPA chart: the chart prints "Nasalized" on a vowel only. A consonant with the mark, and a nasal
-# that is nasal already, stay refused.
-@pytest.mark.parametrize("segment", ["k̃", "f̃", "h̃", "m̃", "ñ"])
+# IPA chart: the chart prints "Nasalized" on a vowel only. Ladefoged and Maddieson (1996, p. 132)
+# add oral continuants. A voiceless stop, and a nasal that is nasal already, stay refused.
+@pytest.mark.parametrize("segment", ["k̃", "p̃", "ʔ̃", "m̃", "ñ"])
 def test_nasalized_consonant_stays_unread(segment):
     with pytest.raises(ValueError, match=re.escape("'̃' does not apply")):
         vectorize_phones(segment)
@@ -39,8 +39,9 @@ def test_nasalized_consonant_stays_unread(segment):
 # A base the chart does not print the mark on, grouped by mark. Each row of the census class
 # "condition" that a chart does not cover is here once, and its mark is the reason it fails.
 REFUSED = {
-    # Nasalized: the IPA chart prints the mark on the vowel in ẽ and on no consonant.
-    '̃': "f̃ h̃ h̃ʷ k̃ m̃ p̃ s̃ t̃ x̃ ñ ħ̃ ʔ̃ χ̃",
+    # Nasalized: the IPA chart prints the mark on the vowel in ẽ, and Ladefoged and Maddieson
+    # (1996, p. 132) on continuants. These bases are voiceless stops and nasals.
+    '̃': "k̃ m̃ p̃ t̃ ñ ʔ̃",
     # Creaky voiced: the IPA chart prints b̰ and a̰, both voiced. These bases are voiceless.
     '̰': "k̰ k̰ʲ p̰ s̰ t̰",
     # Lateral release: the IPA chart prints dˡ, a stop at the alveolar ridge. These bases are nasals and non-coronal stops.

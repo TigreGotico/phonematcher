@@ -141,7 +141,7 @@ A mark reads only if a chart states its meaning. These marks occur in PHOIBLE, W
 | `ˁ` | The Unicode chart calls it a "typographical alternate for 02BF ʿ", the transliteration of Arabic ain. It does not name `ˤ`. |
 | `ʳ` `ʶ` | "r-coloring or r-offglides": the chart does not say which of the two a transcription means. |
 | `ˢ` `ˣ` `ᵡ` `ᶲ` `ᵏ` `ᵍ` | Only "≈ superscript" of the letter. A note under `ˠ` says that such modifier letters are "occasionally used in transcription of affricates". The reading is a tied affricate, which needs a reader change and not a diacritic rule, and in Finnish `eˣ` follows a vowel. |
-| `ᵊ` `ᵝ` `ᵘ` `ᶢ` | Only "≈ superscript" of the letter. |
+| `ᵊ` `ᵝ` `ᵘ` `ᶢ` | Only "≈ superscript" of the letter. `ᶢ` before a click reads (see the clicks below); elsewhere it stays unread. |
 | `◌̍` | "this is not the Greek tonos", "Marshallese". The IPA chart marks a syllabic consonant with `◌̩`. |
 | `◌̵` `◌͓` `◌͠` | The Unicode chart gives no annotation. |
 | `↓` | The mark has two meanings. The IPA chart prints it as "Downstep", and the extIPA chart prints it as "ingressive airflow". `segments` drops it as a phrase mark, as it drops the other downstep and upstep marks. On a phone, no feature of the table encodes either meaning. |
@@ -152,7 +152,7 @@ A rule applies a mark only to the bases that its conditions accept. The conditio
 
 | Mark | What the charts print | Bases that stay refused |
 |---|---|---|
-| `◌̃` | `ẽ`, a vowel | consonants: `k̃ f̃ h̃`; a nasal: `m̃` |
+| `◌̃` | `ẽ`, a vowel; `h̃` and the class of continuants (Ladefoged and Maddieson 1996, pp. 132 to 133) | voiceless stops: `k̃ p̃`; a nasal: `m̃` |
 | `◌ʰ` | `tʰ dʰ` (IPA chart), `ʰp` (extIPA chart) | vowels `aʰ`, nasals `m̥ʰ`, liquids `lʰ`, glides `jʰ`, `ʔʰ` |
 | `◌ⁿ` | `dⁿ`; before a base, `ᵐb ⁿd ᵑɡ` and prenasalized fricatives (Ladefoged and Maddieson 1996) | vowels `aⁿ`, liquids and glides `ⁿl ⁿw`, glottals `ⁿh ⁿɦ` |
 | `◌ʷ` `◌ʲ` | `tʷ dʷ`, `tʲ dʲ` | vowels `uʷ ʊʷ`, `iʲ` |
@@ -234,7 +234,7 @@ segments("ts")                                      # ['t', 's']
 
 The reader puts a tie bar between each two base letters and reads the result. A tie that `compose_tie` has no reading for stays unread: `ab`, `ɑi`, and the three-letter `bvf` and `dzs`, because a fricative tied to a fricative has no reading. For the same reason `ʧ͡f` and `ʤ͡v` stay unread.
 
-A letter that repeats the one before it is a geminate, not a tie: `nn` and `tt` stay unread. A glottal letter (`ʔ h ɦ`) beside another letter is two segments or glottal reinforcement, not one segment, so `ʔt`, `th` and `tɦ` stay unread. A click after a velar or uvular letter (`k ɡ ŋ q ɢ ɴ`) is that letter tied to the click: `kǀ` is `k͡ǀ`. The IPA Handbook says: "Since any click involves a velar or uvular closure, it is possible to symbolize factors such as voicelessness, voicing, or nasality of the click by combining the click symbol with the appropriate velar or uvular symbol" (section 2.5, p. 10). Thus a tie of a click and its velar or uvular letter is the click, with its airstream (`velaric` +) and its place, and `voi` and `nas` come from the velar or uvular letter: `ɡ͡ǃ` is voiced, `ŋ͡ǃ` is voiced and nasal, and `k͡ǃ` is voiceless. A click after any other letter stays unread. A tie of a click and any other letter, or of more than two letters, also stays unread: `t͡ǃ`, `ǃ͡s`, `ǃ͡q` and `k͡ǃ͡x` have no reading. The velar or uvular letter may carry a combining mark, as in `ŋ̊͡ǃ`, but not a modifier letter such as `ʷ`, because the tie takes only `voi` and `nas` from it.
+A letter that repeats the one before it is a geminate, not a tie: `nn` and `tt` stay unread. A glottal letter (`ʔ h ɦ`) beside another letter is two segments or glottal reinforcement, not one segment, so `ʔt`, `th` and `tɦ` stay unread. A click after a velar or uvular letter (`k ɡ ŋ q ɢ ɴ`) is that letter tied to the click: `kǀ` is `k͡ǀ`. The IPA Handbook says: "Since any click involves a velar or uvular closure, it is possible to symbolize factors such as voicelessness, voicing, or nasality of the click by combining the click symbol with the appropriate velar or uvular symbol" (section 2.5, p. 10). Thus a tie of a click and its velar or uvular letter is the click, with its airstream (`velaric` +) and its place, and `voi` and `nas` come from the velar or uvular letter: `ɡ͡ǃ` is voiced, `ŋ͡ǃ` is voiced and nasal, and `k͡ǃ` is voiceless. A click after any other letter stays unread. A tie of a click and any other letter, or of more than two letters, also stays unread: `t͡ǃ`, `ǃ͡s`, `ǃ͡q` and `k͡ǃ͡x` have no reading. The velar or uvular letter may carry a combining mark, as in `ŋ̊͡ǃ`, but not a modifier letter such as `ʷ`, because the tie takes only `voi` and `nas` from it. A small `ᶢ` before a click is the voiced velar closure, written small: `ᶢǃ` is `ɡ͡ǃ`. Ladefoged and Maddieson (1996, *The Sounds of the World's Languages*, p. 264) write the back closure "by writing a symbol for a velar or uvular consonant before the symbol for the click type", and mark voicing "by choosing between, k, g, ŋ" and the other letters.
 
 Only a segment given whole is read this way. `segments` keeps `ts` in running text as two segments, `t` and `s`, because the same two letters are two sounds in many words. Use `segments("t͡s")` or write the tie bar to make one.
 

@@ -102,6 +102,8 @@ def vectorize_phones(segment: str) -> Vector:
     Raises ``ValueError`` for a segment it cannot read.
     """
     seg = unicodedata.normalize("NFD", segment).translate(_COMPOSED_LETTERS)
+    if seg[:1] == "ᶢ" and seg[1:2] in _CLICKS:
+        seg = "ɡ" + TIES[0] + seg[1:]  # the voiced velar closure of the click, written small
     if seg in phone_features:
         return phone_features[seg]
     untied = seg.replace(TIES[1], TIES[0])
