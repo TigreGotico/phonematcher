@@ -1,5 +1,13 @@
 # Changelog
 
+## [3.0.1a1](https://github.com/TigreGotico/phonematcher/tree/3.0.1a1) (2026-11-24)
+
+[Full Changelog](https://github.com/TigreGotico/phonematcher/compare/3.0.0a2...3.0.1a1)
+
+**Merged pull requests:**
+
+- fix: read U+030D above a letter with a descender as the syllabic mark [\#186](https://github.com/TigreGotico/phonematcher/pull/186) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
+
 ## [3.0.0a2](https://github.com/TigreGotico/phonematcher/tree/3.0.0a2) (2026-11-24)
 
 [Full Changelog](https://github.com/TigreGotico/phonematcher/compare/3.0.0a1...3.0.0a2)
@@ -385,10 +393,6 @@
 ## [1.0.0a4](https://github.com/TigreGotico/phonematcher/tree/1.0.0a4) (2026-11-22)
 
 [Full Changelog](https://github.com/TigreGotico/phonematcher/compare/1.0.0a3...1.0.0a4)
-
-**Merged pull requests:**
-
-- refactor: simplify the package, scripts and benchmarks [\#71](https://github.com/TigreGotico/phonematcher/pull/71) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
 
 ## [1.0.0a3](https://github.com/TigreGotico/phonematcher/tree/1.0.0a3) (2026-11-22)
 
