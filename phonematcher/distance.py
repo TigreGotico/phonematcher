@@ -2,8 +2,7 @@
 import math
 import unicodedata
 from functools import lru_cache
-from itertools import repeat
-from typing import Callable, Iterable, List, Optional, Sequence, Tuple
+from typing import Callable, List, Optional, Sequence, Tuple
 
 from phonematcher.features import POST_DIACRITICS, PRE_DIACRITICS, SPELLINGS, TIES, feature_distance, is_vowel_phone, phonetic_distance, vectorize_phones  # noqa: F401 (deprecated path)
 from phonematcher.tone import DIACRITIC_TONES, LEVELS, NUMERALS, PHRASE_MARKS, is_tone, tone_distance
@@ -31,8 +30,7 @@ def segments(ipa: str) -> List[str]:
     so it never joins across a space. Format characters (Unicode category Cf, such as U+200B and
     U+FEFF) are dropped.
     """
-    chars = zip(unicodedata.normalize("NFD", ipa).translate(SPELLINGS), repeat(0))
-    return [unicodedata.normalize("NFC", s) for s in _segments(chars)[0]]
+    return [unicodedata.normalize("NFC", s) for s in _segments(unicodedata.normalize("NFD", ipa).translate(SPELLINGS))[0]]
 
 
 def segment_spans(text: str) -> List[Tuple[int, int]]:
@@ -45,10 +43,11 @@ def segment_spans(text: str) -> List[Tuple[int, int]]:
     :func:`segments` of each span, in turn, are those of *text* without its spaces.
     """
     spans: List[Tuple[int, int]] = []
-    for seg, at in zip(*_segments(_characters(text))):
+    chars = _characters(text)
+    for seg, at in zip(*_segments("".join(ch for ch, _ in chars), track=True)):
         if seg == " ":
             continue
-        start, end = min(at), max(at) + 1
+        start, end = min(chars[k][1] for k in at), max(chars[k][1] for k in at) + 1
         while spans and start < spans[-1][1]:  # a segment written before one already emitted
             first, last = spans.pop()
             start, end = min(start, first), max(end, last)
@@ -71,14 +70,14 @@ def _characters(ipa: str) -> List[Tuple[str, int]]:
     return [(t, i) for d, i in chars for t in d.translate(SPELLINGS)]
 
 
-def _segments(chars: Iterable[Tuple[str, int]]) -> Tuple[List[str], List[List[int]]]:
-    """The segments of the NFD characters *chars*, and for each segment the indices that *chars*
-    gives its characters."""
+def _segments(nfd: str, track: bool = False) -> Tuple[List[str], List[List[int]]]:
+    """The segments of the NFD string *nfd*. With *track*, also the positions in *nfd* of the
+    characters of each segment; without it, the second list is empty."""
     out: List[str] = []
-    at: List[List[int]] = []
+    at: List[List[int]] = []  # with track: the positions of each segment, and of the held marks below
+    pending_at, tone_at, carried_at = [], [], []
     join_next = False
-    tie_at = 0  # the index of the tie bar that sets join_next
-    pending, pending_at = "", []  # marks written before the base they belong to
+    pending = ""  # marks written before the base they belong to
 
     def release_pending() -> None:
         """A held mark with no following base belongs to the segment before it, if any."""
@@ -86,100 +85,122 @@ def _segments(chars: Iterable[Tuple[str, int]]) -> Tuple[List[str], List[List[in
         if pending:
             if out and out[-1] != " ":
                 out[-1] += pending
-                at[-1] += pending_at
+                if track:
+                    at[-1] += pending_at
             else:
                 out.append(pending)
-                at.append(pending_at)
+                if track:
+                    at.append(pending_at)
             pending, pending_at = "", []
 
-    tone, tone_at = "", []  # a tone diacritic, written out after the segment that carries it
-    carried, carried_at = "", []  # a tone diacritic that belongs to the next base symbol
+    tone = ""  # a tone diacritic, written out after the segment that carries it
+    carried = ""  # a tone diacritic that belongs to the next base symbol
 
     def release_tone() -> None:
         nonlocal tone, tone_at
         if tone:
             out.append(tone)
-            at.append(tone_at)
+            if track:
+                at.append(tone_at)
             tone, tone_at = "", []
 
-    for ch, i in chars:
+    for i, ch in enumerate(nfd):
         ch = NUMERALS.get(ch, ch)
         if ch in SUPRASEGMENTALS or unicodedata.category(ch) == "Cf":
             continue
         if ch in DIACRITIC_TONES and (not out or out[-1] == " "):
             carried += DIACRITIC_TONES[ch]
-            carried_at.append(i)
+            if track:
+                carried_at.append(i)
             continue
         if ch in DIACRITIC_TONES and is_tone(out[-1]) and not tone:
             out[-1] += DIACRITIC_TONES[ch]
-            at[-1].append(i)
+            if track:
+                at[-1].append(i)
             continue
         if ch in DIACRITIC_TONES:
             tone += DIACRITIC_TONES[ch]
-            tone_at += (min(at[-1]), i)  # the span of a tone mark holds the letter it is on
+            if track:
+                tone_at += (min(at[-1]), i)  # the span of a tone mark holds the letter it is on
             continue
         if ch in LEVELS and tone:
             tone += ch
-            tone_at.append(i)
+            if track:
+                tone_at.append(i)
             continue
         if ch in LEVELS:
             release_pending()
             if out and is_tone(out[-1]):
                 out[-1] += ch
-                at[-1].append(i)
+                if track:
+                    at[-1].append(i)
             else:
                 release_tone()
                 out.append(ch)
-                at.append([i])
+                if track:
+                    at.append([i])
             continue
         attaches = unicodedata.combining(ch) or ch in POST_DIACRITICS
         if not attaches:
             release_tone()
         if ch.isspace():
             tone += carried
-            tone_at += carried_at
-            carried, carried_at = "", []
+            carried = ""
+            if track:
+                tone_at += carried_at
+                carried_at = []
             release_tone()
             release_pending()
             if out and out[-1] != " ":
                 out.append(" ")
-                at.append([i])
+                if track:
+                    at.append([i])
             continue
         if ch in TIES:
             join_next = bool(out) and out[-1] != " "
             if join_next:
                 carried, tone = carried + tone, ""
-                carried_at, tone_at = carried_at + tone_at, []
                 out[-1] += ch
-                at[-1].append(i)
-                tie_at = i
+                if track:
+                    carried_at, tone_at = carried_at + tone_at, []
+                    at[-1].append(i)
+                    tie_at = i  # the tie bar that sets join_next
             continue
         if join_next and out[-1][-1] in TIES and is_vowel_phone(out[-1][:-1].replace(NON_SYLLABIC, "")) and is_vowel_phone(ch):
             out[-1] = out[-1][:-1]
-            at[-1].pop()
+            if track:
+                at[-1].pop()
             join_next = False
         starts_word = not out or out[-1] == " "
         if ch in PRE_DIACRITICS and (starts_word or is_vowel_phone(out[-1])) and not join_next:
             pending += ch
-            pending_at.append(i)
+            if track:
+                pending_at.append(i)
             continue
         if not pending and out and out[-1] != " " and (attaches or join_next):
             out[-1] += ch
-            at[-1] += (i, tie_at) if join_next else (i,)
+            if track:
+                at[-1].append(i)
+                if join_next:
+                    at[-1].append(tie_at)
         else:
             out.append(pending + ch)
-            at.append(pending_at + [i])
-            pending, pending_at = "", []
+            pending = ""
             tone, carried = tone + carried, ""
-            tone_at, carried_at = tone_at + carried_at, []
+            if track:
+                at.append(pending_at + [i])
+                pending_at = []
+                tone_at, carried_at = tone_at + carried_at, []
         join_next = False
     release_pending()
     tone += carried
-    tone_at += carried_at
+    if track:
+        tone_at += carried_at
     release_tone()
     if out and out[-1] == " ":
         out.pop()
-        at.pop()
+        if track:
+            at.pop()
     return out, at
 
 
