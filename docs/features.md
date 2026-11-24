@@ -152,7 +152,7 @@ A rule applies a mark only to the bases that its conditions accept. The conditio
 
 | Mark | What the charts print | Bases that stay refused |
 |---|---|---|
-| `◌̃` | `ẽ`, a vowel; `h̃` and the class of continuants (Ladefoged and Maddieson 1996, pp. 132 to 133) | voiceless stops: `k̃ p̃`; a nasal: `m̃` |
+| `◌̃` | `ẽ`, a vowel; `h̃` and the class of continuants (Ladefoged and Maddieson 1996, pp. 132 to 133) | voiceless stops: `k̃ p̃`; a nasal: `m̃`; a voiceless trill or tap: `r̥̃ ʀ̥̃ ɾ̥̃ ʜ̃` (the book names fricatives and approximants, and no trill or tap; the table reads `ʜ` as trilled) |
 | `◌ʰ` | `tʰ dʰ` (IPA chart), `ʰp` (extIPA chart) | vowels `aʰ`, nasals `m̥ʰ`, liquids `lʰ`, glides `jʰ`, `ʔʰ` |
 | `◌ⁿ` | `dⁿ`; before a base, `ᵐb ⁿd ᵑɡ` and prenasalized fricatives (Ladefoged and Maddieson 1996) | vowels `aⁿ`, liquids and glides `ⁿl ⁿw`, glottals `ⁿh ⁿɦ` |
 | `◌ʷ` `◌ʲ` | `tʷ dʷ`, `tʲ dʲ` | vowels `uʷ ʊʷ`, `iʲ` |

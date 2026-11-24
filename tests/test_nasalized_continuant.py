@@ -27,3 +27,11 @@ def test_tilde_on_a_voiceless_continuant_adds_only_nasal(nasalized, plain):
 def test_tilde_on_a_voiceless_stop_stays_unread(segment):
     with pytest.raises(ValueError):
         vectorize_phones(segment)
+
+
+# The source names fricatives and approximants. It names no trill or tap, and PanPhon marks both [+cont].
+# The table reads ʜ as a trill.
+@pytest.mark.parametrize("segment", ["r̥̃", "ʀ̥̃", "ʙ̥̃", "ɾ̥̃", "ʜ̃"])
+def test_tilde_on_a_voiceless_trill_or_tap_stays_unread(segment):
+    with pytest.raises(ValueError):
+        vectorize_phones(segment)
