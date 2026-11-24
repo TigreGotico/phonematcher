@@ -5,7 +5,11 @@ Articulatory Feature Vectors", COLING; MIT License), with the changes listed in
 ``data/overrides.json``, each of which names its source. ``scripts/build_features.py`` builds
 ``data/features.json`` from both.
 
-A feature value is ``True`` (+), ``False`` (−) or ``None`` (0: the feature does not apply).
+A feature value is ``True`` (+), ``False`` (−) or ``None`` (0: the feature does not apply). The
+four tone features at the end of every vector are numbers: ``tone_is`` is ``True`` on a segment with
+a tone, and ``tone_start``, ``tone_mid`` and ``tone_end`` are its pitch at the start, middle and end
+of the syllable, each Chao level 1 to 5 as (level − 3) / 2. A segment with no tone has ``None`` in
+all four.
 """
 import json
 import threading
@@ -13,30 +17,36 @@ import unicodedata
 import warnings
 from functools import lru_cache
 from pathlib import Path
-from typing import Dict, List, Optional, Tuple
+from typing import Dict, List, Optional, Tuple, Union
 
 from phonematcher.scales import shift
+from phonematcher.tone import DIACRITIC_TONES, LEVELS, NUMERALS, _contour
 from phonematcher.version import VERSION_MAJOR
 
 _DATA = json.loads((Path(__file__).parent / "data" / "features.json").read_text(encoding="utf-8"))
 
+#: The tone features, which end every vector.
+TONE_FEATURES: Tuple[str, ...] = tuple(_DATA["tone"]["features"])
 #: Feature names, in vector order.
-FEATURES: Tuple[str, ...] = tuple(_DATA["features"])
-#: PanPhon's weight for each feature.
-WEIGHTS: Tuple[float, ...] = tuple(_DATA["weights"])
-_TOTAL_WEIGHT = sum(WEIGHTS)
+FEATURES: Tuple[str, ...] = tuple(_DATA["features"]) + TONE_FEATURES
+#: PanPhon's weight for each segment feature, then the weight of each tone feature.
+WEIGHTS: Tuple[float, ...] = tuple(_DATA["weights"]) + tuple(_DATA["tone"]["weights"])
+#: The divisor of a feature distance: the weight of the segment features. A tone adds to the
+#: distance of two segments without changing the distance of two segments with no tone.
+_TOTAL_WEIGHT = sum(_DATA["weights"])
 NUM_FEATURES = len(FEATURES)
 _INDEX = {name: i for i, name in enumerate(FEATURES)}
 SOURCE: str = _DATA["source"]
 
-Vector = Tuple[Optional[bool], ...]
+Vector = Tuple[Union[None, bool, float], ...]
 
 _VALUE = {"+": True, "-": False, "0": None}
 _NUMBER = {True: 1, False: -1, None: 0}
+_NO_TONE = (None,) * len(TONE_FEATURES)
 
 #: Segment (NFD) -> feature vector.
 phone_features: Dict[str, Vector] = {
-    seg: tuple(_VALUE[c] for c in vec) for seg, vec in _DATA["phones"].items()
+    seg: tuple(_VALUE[c] for c in vec) + _NO_TONE for seg, vec in _DATA["phones"].items()
 }
 
 _DIACRITICS: Dict[Tuple[str, str], dict] = {
@@ -45,10 +55,11 @@ _DIACRITICS: Dict[Tuple[str, str], dict] = {
 #: Diacritics written after their base.
 POST_DIACRITICS = {marker for marker, position in _DIACRITICS if position == "post"}
 #: Marks written before a stop: prenasalization takes PanPhon's rule for ◌ⁿ (the nasal's place
-#: is the stop's), preaspiration its rule for ◌ʰ.
+#: is the stop's), preaspiration its rule for ◌ʰ. Every superscript nasal letter is a
+#: prenasalization mark.
 PRE_DIACRITICS = {
     **{marker: (marker, "pre") for marker, position in _DIACRITICS if position == "pre"},
-    "ⁿ": ("ⁿ", "post"), "ᵐ": ("ⁿ", "post"), "ᵑ": ("ⁿ", "post"), "ʰ": ("ʰ", "post"),
+    **dict.fromkeys("ⁿᵐᵑᶬᶮᶯᶰ", ("ⁿ", "post")), "ʰ": ("ʰ", "post"),
 }
 #: The tie bars, above and below; the table writes the first.
 TIES = ("͡", "͜")
@@ -58,9 +69,13 @@ _LETTER_CATEGORIES = {"Ll", "Lu", "Lo"}
 #: nasality) beside it. A click after any other letter with no tie bar is not read.
 _CLICKS = set("ʘǀǃǂǁ‼ʞ")
 _REAR_CLOSURES = set("kɡŋqɢɴ")
+#: Small letters that write a click's velar or uvular closure.
+_SMALL_REAR_CLOSURES = {"ᶢ": "ɡ", "ᵑ": "ŋ", "ᶰ": "ɴ"}
 #: Glottal letters: a glottal beside another letter is two segments or glottal reinforcement, never
 #: one tied segment, so the untied-letter rule does not tie them.
 _GLOTTALS = set("ʔhɦ")
+#: Implosive letters. With the ejective mark ʼ they write the glottalic consonants.
+_IMPLOSIVES = set("ɓɗʄɠʛᶑ")
 #: Non-IPA spellings (``data/spellings.json``) -> the IPA they read as.
 SPELLINGS: Dict[int, str] = str.maketrans({
     row["spelling"]: row["reads_as"] for row in json.loads(
@@ -88,9 +103,24 @@ def _unrecognized(segment: str, note: str = "") -> ValueError:
                       " takes strict=True to raise on such a segment instead of costing it 1")
 
 
+_TONE_MARKS = {**DIACRITIC_TONES, **NUMERALS, **{letter: letter for letter in LEVELS}}
+
+
+def phone_and_tone(segment: str) -> Tuple[str, str]:
+    """The phone of *segment* and its tone as tone letters: ``a˥˩`` and ``â`` both give ``a`` and
+    ``˥˩``. A segment with no tone gives an empty tone. The phone is in NFD."""
+    seg = unicodedata.normalize("NFD", segment)
+    tone = "".join(_TONE_MARKS.get(ch, "") for ch in seg)
+    return ("".join(ch for ch in seg if ch not in _TONE_MARKS), tone) if tone else (seg, "")
+
+
 @lru_cache(maxsize=4096)
 def vectorize_phones(segment: str) -> Vector:
     """The feature vector of one IPA *segment*.
+
+    A vowel or a syllabic consonant may carry a tone, in tone letters, tone numerals or tone
+    diacritics: ``a˥˩`` and ``â`` have the vector of ``a`` with the four tone features set. A tone
+    on any other segment, or a tone with no segment, raises ``ValueError``.
 
     A segment in the table is read as listed. Otherwise the longest listed base in it takes the
     diacritics around it, each by PanPhon's rule for that diacritic, as long as the rule's
@@ -100,7 +130,16 @@ def vectorize_phones(segment: str) -> Vector:
     that repeats the one before it (a geminate) and a click get no tie bar.
     Raises ``ValueError`` for a segment it cannot read.
     """
+    phone, tone = phone_and_tone(segment)
+    if tone:
+        vec = vectorize_phones(phone) if phone else None
+        if vec is None or vec[0] is not True:
+            raise _unrecognized(segment, ": a tone is carried by a vowel or a syllabic consonant")
+        levels = [LEVELS[letter] for letter in tone]
+        return vec[:-len(TONE_FEATURES)] + (True,) + tuple((p - 3) / 2 for p in _contour(levels))
     seg = unicodedata.normalize("NFD", segment).translate(_COMPOSED_LETTERS)
+    if seg[:1] in _SMALL_REAR_CLOSURES and seg[1:2] in _CLICKS:
+        seg = _SMALL_REAR_CLOSURES[seg[0]] + TIES[0] + seg[1:]
     if seg in phone_features:
         return phone_features[seg]
     untied = seg.replace(TIES[1], TIES[0])
@@ -108,13 +147,15 @@ def vectorize_phones(segment: str) -> Vector:
         return phone_features[untied]
 
     start = 0
-    while start < len(seg) and seg[start] in PRE_DIACRITICS:
+    while start < len(seg) and (seg[start] in PRE_DIACRITICS or (
+            seg[start] in TIES and start and seg[start + 1:start + 2] in PRE_DIACRITICS)):
         start += 1
+    pre_marks = [c for c in seg[:start] if c not in TIES]  # ᵑ͡ᵐ marks a labial-velar as ᵑᵐ does
     for end in range(len(seg), start, -1):
         base = seg[start:end]
         if base in phone_features and all(m in POST_DIACRITICS for m in seg[end:]):
             vec = phone_features[base]
-            for marker in seg[:start]:
+            for marker in pre_marks:
                 vec = _apply_pre(marker, vec, segment)
             for marker in seg[end:]:
                 vec = _apply_if(_DIACRITICS[marker, "post"], vec, segment)
@@ -140,7 +181,7 @@ def vectorize_phones(segment: str) -> Vector:
             vec = vectorize_phones(seg[start:])
         except ValueError:
             raise _unrecognized(segment) from None
-        for marker in seg[:start]:
+        for marker in pre_marks:
             vec = _apply_pre(marker, vec, segment)
         return vec
     if seg and TIES[0] not in untied:
@@ -158,7 +199,7 @@ def vectorize_phones(segment: str) -> Vector:
             tied += (TIES[0] if joins else "") + cluster
         if tied != seg:
             return vectorize_phones(tied)
-    raise _unrecognized(segment, ": a diphthong is two segments" if _is_diphthong(seg) else "")
+    raise _unrecognized(segment, ": a diphthong is two segments, a vowel and a non-syllabic vowel" if _is_diphthong(seg) else "")
 
 
 _NAS, _SON, _CONT, _DELREL, _SG, _CG, _VOI = (
@@ -233,9 +274,15 @@ def _apply_if(diacritic: dict, vec: Vector, segment: str) -> Vector:
 
 
 def _apply_pre(marker: str, vec: Vector, segment: str) -> Vector:
-    """Apply a mark written before its base. A nasal mark on an affricate adds [+nasal] to it, as
-    a nasal tied before the affricate does."""
-    if PRE_DIACRITICS[marker][0] == "ⁿ" and vec[_DELREL] is True and vec[_SON] is False:
+    """Apply a mark written before its base. A nasal mark on an obstruent adds [+nasal] to it, as
+    a nasal tied before the obstruent does: prenasalized stops, affricates and fricatives. The
+    glottal continuants h and ɦ are approximants, which are never prenasalized. Nor is a glottalic
+    consonant (an ejective, an implosive or ʔ, all [+cg])."""
+    base = segment.lstrip("".join(PRE_DIACRITICS))[:1]
+    nasal = PRE_DIACRITICS[marker][0] == "ⁿ"
+    if nasal and (base in _IMPLOSIVES or "ʼ" in segment):
+        raise _unrecognized(segment)
+    if nasal and vec[_SON] is False and base not in _GLOTTALS:
         return tuple(True if i == _NAS else x for i, x in enumerate(vec))
     return _apply_if(_DIACRITICS[PRE_DIACRITICS[marker]], vec, segment)
 
@@ -249,9 +296,9 @@ def is_vowel_phone(segment: str) -> bool:
 
 
 @lru_cache(maxsize=4096)
-def _signs(segment: str) -> Tuple[int, ...]:
-    """The vector of *segment* with + = 1, 0 = 0 and − = −1."""
-    return tuple(_NUMBER[value] for value in vectorize_phones(segment))
+def _signs(segment: str) -> Tuple[float, ...]:
+    """The vector of *segment* with + = 1, 0 = 0 and − = −1. A tone pitch stays a number."""
+    return tuple(value if type(value) is float else _NUMBER[value] for value in vectorize_phones(segment))
 
 
 #: Unread segments that have already raised their warning in this process.
@@ -263,11 +310,12 @@ _WARNED_LOCK = threading.Lock()
 def feature_distance(a: str, b: str) -> float:
     """Weighted feature distance between two segments, from 0 (same features) to 1.
 
-    Each feature contributes its PanPhon weight times half the difference of its values, with
+    Each feature contributes its weight times half the difference of its values, with
     + = 1, 0 = 0 and − = −1, so a +/− mismatch costs the full weight and a 0 against + or − costs
-    half. The sum is divided by the total weight. A segment that cannot be read is at distance 1
-    from every other segment, and the first time it is priced in the process it issues a
-    ``UserWarning`` that names it. A space matches only a space.
+    half. A tone pitch is its number, from −1 to 1. The sum is divided by the total weight of the
+    segment features, so a tone adds to the distance, and the result is capped at 1. A segment
+    that cannot be read is at distance 1 from every other segment, and the first time it is
+    priced in the process it issues a ``UserWarning`` that names it. A space matches only a space.
     """
     if a == b:
         return 0.0
@@ -291,7 +339,7 @@ def feature_distance(a: str, b: str) -> float:
                               " segment; pass strict=True to raise instead", UserWarning, stacklevel=2)
         return 1.0
     diff = sum(w * abs(x - y) / 2 for w, x, y in zip(WEIGHTS, va, vb))
-    return diff / _TOTAL_WEIGHT
+    return min(diff / _TOTAL_WEIGHT, 1.0)
 
 
 def phonetic_distance(a: str, b: str) -> float:

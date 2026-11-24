@@ -39,7 +39,7 @@ From `i` to `e` the chart has two rows, so two steps differ. From `e` to `a` it 
 
 ## 2. Read the features behind a number
 
-Each segment is a vector of 36 features. `vectorize_phones` returns it. Put the vectors of `p` and `b` side by side and keep the features that differ:
+Each segment is a vector of 40 features: 36 segment features, then four tone features. `vectorize_phones` returns it. Put the vectors of `p` and `b` side by side and keep the features that differ:
 
 ```python
 from phonematcher.features import FEATURES, WEIGHTS, vectorize_phones
@@ -48,16 +48,18 @@ p, b = vectorize_phones("p"), vectorize_phones("b")
 [(f, x, y, w) for f, x, y, w in zip(FEATURES, p, b, WEIGHTS) if x != y]   # [('voi', False, True, 0.125)]
 ```
 
-One feature differs: voice (`voi`). Its weight is 0.125. All weights add up to 9.5, so the distance is the weight divided by that sum:
+One feature differs: voice (`voi`). Its weight is 0.125. The weights of the 36 segment features add up to 9.5, so the distance is the weight divided by that sum:
 
 ```python
-sum(WEIGHTS)           # 9.5
-0.125 / sum(WEIGHTS)   # 0.013
+sum(WEIGHTS[:36])           # 9.5
+0.125 / sum(WEIGHTS[:36])   # 0.013
 ```
+
+The four tone features are not in the sum. A tone adds to the distance of two segments, and a pair with no tone keeps its distance.
 
 ## 3. Count a feature that does not apply
 
-A feature has three values: `True` (+), `False` (−) and `None` (0, it does not apply). A difference between + and − costs the full weight. A difference between 0 and + or − costs half the weight. The total is divided by the sum of all weights.
+A feature has three values: `True` (+), `False` (−) and `None` (0, it does not apply). A difference between + and − costs the full weight. A difference between 0 and + or − costs half the weight. The total is divided by 9.5, the sum of the weights of the segment features.
 
 The vowel `a` and its nasal `ã` differ in the feature `nas` only. The nasal mark sets it from − to +:
 
@@ -88,6 +90,6 @@ Unrecognized phone 'ʞ' (U+029E). A word distance or a search takes strict=True 
 
 ## Next
 
-[The feature table](features.md) lists all 36 features with their weights and sources. [Compare two words](compare-words.md) uses this distance for whole words.
+[The feature table](features.md) lists all 40 features with their weights and sources. [Compare two words](compare-words.md) uses this distance for whole words.
 
 [Index](index.md) · Previous: [Quickstart](quickstart.md) · Next: [Compare two words](compare-words.md)

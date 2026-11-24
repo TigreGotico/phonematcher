@@ -71,6 +71,8 @@ def test_run_scores_both_chao_sets_on_fifteen_pairs_and_names_the_unscored_syste
     payload = tone.run([Fake("phonematcher", ""), Fake("sca", "")], "seen", Path("."))
     assert set(payload["scored"]) == {"main", "alternative"}
     for row in payload["scored"].values():
-        assert set(row) == {"direction_baseline", "phonematcher"}
+        assert set(row) == {"direction_baseline", "phonematcher", "phonematcher_features"}
         assert row["phonematcher"]["pairs_in"] == row["phonematcher"]["pairs_out"] == 15
+        # equal weights on the three pitches rank the pairs as the tone distance does
+        assert row["phonematcher_features"]["score"] == row["phonematcher"]["score"]
     assert payload["not_scored"] == ["sca"]

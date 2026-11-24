@@ -1,5 +1,103 @@
 # Changelog
 
+## [3.0.0a1](https://github.com/TigreGotico/phonematcher/tree/3.0.0a1) (2026-11-24)
+
+[Full Changelog](https://github.com/TigreGotico/phonematcher/compare/2.7.14a1...3.0.0a1)
+
+**Breaking changes:**
+
+- feat!: read a tone as four features of the vowel that carries it [\#176](https://github.com/TigreGotico/phonematcher/pull/176) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
+
+## [2.7.14a1](https://github.com/TigreGotico/phonematcher/tree/2.7.14a1) (2026-11-24)
+
+[Full Changelog](https://github.com/TigreGotico/phonematcher/compare/2.7.13a1...2.7.14a1)
+
+**Merged pull requests:**
+
+- fix: read a pre-mark after a tone letter as a pre-mark of the next stop [\#180](https://github.com/TigreGotico/phonematcher/pull/180) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
+
+## [2.7.13a1](https://github.com/TigreGotico/phonematcher/tree/2.7.13a1) (2026-11-24)
+
+[Full Changelog](https://github.com/TigreGotico/phonematcher/compare/2.7.12a1...2.7.13a1)
+
+**Merged pull requests:**
+
+- fix: read a tied vowel pair as a vowel and its non-syllabic offglide [\#157](https://github.com/TigreGotico/phonematcher/pull/157) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
+
+## [2.7.12a1](https://github.com/TigreGotico/phonematcher/tree/2.7.12a1) (2026-11-24)
+
+[Full Changelog](https://github.com/TigreGotico/phonematcher/compare/2.7.11a1...2.7.12a1)
+
+**Merged pull requests:**
+
+- fix: a superscript nasal stays unread before a glottalic consonant [\#167](https://github.com/TigreGotico/phonematcher/pull/167) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
+
+## [2.7.11a1](https://github.com/TigreGotico/phonematcher/tree/2.7.11a1) (2026-11-24)
+
+[Full Changelog](https://github.com/TigreGotico/phonematcher/compare/2.7.10a1...2.7.11a1)
+
+**Merged pull requests:**
+
+- fix: read a small velar or uvular nasal before a click as the nasal click [\#165](https://github.com/TigreGotico/phonematcher/pull/165) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
+
+## [2.7.10a1](https://github.com/TigreGotico/phonematcher/tree/2.7.10a1) (2026-11-24)
+
+[Full Changelog](https://github.com/TigreGotico/phonematcher/compare/2.7.9a2...2.7.10a1)
+
+**Merged pull requests:**
+
+- fix: refuse the tilde on a voiceless trill [\#169](https://github.com/TigreGotico/phonematcher/pull/169) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
+
+## [2.7.9a2](https://github.com/TigreGotico/phonematcher/tree/2.7.9a2) (2026-11-24)
+
+[Full Changelog](https://github.com/TigreGotico/phonematcher/compare/2.7.9a1...2.7.9a2)
+
+## [2.7.9a1](https://github.com/TigreGotico/phonematcher/tree/2.7.9a1) (2026-11-24)
+
+[Full Changelog](https://github.com/TigreGotico/phonematcher/compare/2.7.8a1...2.7.9a1)
+
+**Merged pull requests:**
+
+- docs: velar and uvular click ties share a vector [\#166](https://github.com/TigreGotico/phonematcher/pull/166) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
+- fix: split a tone run where its notation changes [\#162](https://github.com/TigreGotico/phonematcher/pull/162) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
+
+## [2.7.8a1](https://github.com/TigreGotico/phonematcher/tree/2.7.8a1) (2026-11-24)
+
+[Full Changelog](https://github.com/TigreGotico/phonematcher/compare/2.7.7a1...2.7.8a1)
+
+**Merged pull requests:**
+
+- fix: keep a tied prenasal pair before its stop [\#161](https://github.com/TigreGotico/phonematcher/pull/161) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
+
+## [2.7.7a1](https://github.com/TigreGotico/phonematcher/tree/2.7.7a1) (2026-11-24)
+
+[Full Changelog](https://github.com/TigreGotico/phonematcher/compare/2.7.6a1...2.7.7a1)
+
+**Merged pull requests:**
+
+- fix: read a superscript nasal before a fricative as prenasalization [\#154](https://github.com/TigreGotico/phonematcher/pull/154) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
+
+## [2.7.6a1](https://github.com/TigreGotico/phonematcher/tree/2.7.6a1) (2026-11-24)
+
+[Full Changelog](https://github.com/TigreGotico/phonematcher/compare/2.7.5a1...2.7.6a1)
+
+## [2.7.5a1](https://github.com/TigreGotico/phonematcher/tree/2.7.5a1) (2026-11-24)
+
+[Full Changelog](https://github.com/TigreGotico/phonematcher/compare/2.7.4a3...2.7.5a1)
+
+**Merged pull requests:**
+
+- fix: read the tilde on a voiceless continuant as nasalization [\#156](https://github.com/TigreGotico/phonematcher/pull/156) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
+- fix: read a small ᶢ before a click as its voiced velar closure [\#155](https://github.com/TigreGotico/phonematcher/pull/155) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
+
+## [2.7.4a3](https://github.com/TigreGotico/phonematcher/tree/2.7.4a3) (2026-11-24)
+
+[Full Changelog](https://github.com/TigreGotico/phonematcher/compare/2.7.4a2...2.7.4a3)
+
+**Merged pull requests:**
+
+- docs: state the post-test feature values as sourced choices [\#152](https://github.com/TigreGotico/phonematcher/pull/152) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
+
 ## [2.7.4a2](https://github.com/TigreGotico/phonematcher/tree/2.7.4a2) (2026-11-24)
 
 [Full Changelog](https://github.com/TigreGotico/phonematcher/compare/2.7.4a1...2.7.4a2)
@@ -288,113 +386,57 @@
 
 [Full Changelog](https://github.com/TigreGotico/phonematcher/compare/1.0.0a2...1.0.0a3)
 
-**Merged pull requests:**
-
-- docs: add the design and limits page [\#65](https://github.com/TigreGotico/phonematcher/pull/65) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
-
 ## [1.0.0a2](https://github.com/TigreGotico/phonematcher/tree/1.0.0a2) (2026-11-22)
 
 [Full Changelog](https://github.com/TigreGotico/phonematcher/compare/1.0.0a1...1.0.0a2)
-
-**Merged pull requests:**
-
-- docs: walk-through pages, docs index, navigation and a test that runs every example [\#66](https://github.com/TigreGotico/phonematcher/pull/66) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
 
 ## [1.0.0a1](https://github.com/TigreGotico/phonematcher/tree/1.0.0a1) (2026-11-22)
 
 [Full Changelog](https://github.com/TigreGotico/phonematcher/compare/0.20.0a1...1.0.0a1)
 
-**Breaking changes:**
-
-- feat!: price a word at the costs the pre-registered test chose [\#63](https://github.com/TigreGotico/phonematcher/pull/63) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
-
 ## [0.20.0a1](https://github.com/TigreGotico/phonematcher/tree/0.20.0a1) (2026-11-22)
 
 [Full Changelog](https://github.com/TigreGotico/phonematcher/compare/0.19.0a1...0.20.0a1)
-
-**Merged pull requests:**
-
-- feat: add the results of the single pre-registered test run [\#61](https://github.com/TigreGotico/phonematcher/pull/61) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
 
 ## [0.19.0a1](https://github.com/TigreGotico/phonematcher/tree/0.19.0a1) (2026-11-22)
 
 [Full Changelog](https://github.com/TigreGotico/phonematcher/compare/0.18.0a1...0.19.0a1)
 
-**Merged pull requests:**
-
-- feat: add the speed benchmark with a hash of the letter-pair distance matrix [\#59](https://github.com/TigreGotico/phonematcher/pull/59) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
-
 ## [0.18.0a1](https://github.com/TigreGotico/phonematcher/tree/0.18.0a1) (2026-11-22)
 
 [Full Changelog](https://github.com/TigreGotico/phonematcher/compare/0.17.0a1...0.18.0a1)
-
-**Merged pull requests:**
-
-- feat: build the machinery of the single pre-registered test run [\#57](https://github.com/TigreGotico/phonematcher/pull/57) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
 
 ## [0.17.0a1](https://github.com/TigreGotico/phonematcher/tree/0.17.0a1) (2026-11-22)
 
 [Full Changelog](https://github.com/TigreGotico/phonematcher/compare/0.16.0a1...0.17.0a1)
 
-**Merged pull requests:**
-
-- feat: add ablation variants of phonematcher to the benchmark suite [\#55](https://github.com/TigreGotico/phonematcher/pull/55) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
-
 ## [0.16.0a1](https://github.com/TigreGotico/phonematcher/tree/0.16.0a1) (2026-11-22)
 
 [Full Changelog](https://github.com/TigreGotico/phonematcher/compare/0.15.0a1...0.16.0a1)
-
-**Merged pull requests:**
-
-- feat: add the Cantonese tone confusion benchmark \(C7\) [\#53](https://github.com/TigreGotico/phonematcher/pull/53) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
 
 ## [0.15.0a1](https://github.com/TigreGotico/phonematcher/tree/0.15.0a1) (2026-11-22)
 
 [Full Changelog](https://github.com/TigreGotico/phonematcher/compare/0.14.0a1...0.15.0a1)
 
-**Merged pull requests:**
-
-- feat: add the variant retrieval benchmark on WikiPron dialect pairs [\#51](https://github.com/TigreGotico/phonematcher/pull/51) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
-
 ## [0.14.0a1](https://github.com/TigreGotico/phonematcher/tree/0.14.0a1) (2026-11-22)
 
 [Full Changelog](https://github.com/TigreGotico/phonematcher/compare/0.13.1a1...0.14.0a1)
-
-**Merged pull requests:**
-
-- feat: add the cognate detection benchmark \(C4\) [\#49](https://github.com/TigreGotico/phonematcher/pull/49) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
 
 ## [0.13.1a1](https://github.com/TigreGotico/phonematcher/tree/0.13.1a1) (2026-11-22)
 
 [Full Changelog](https://github.com/TigreGotico/phonematcher/compare/0.13.0a1...0.13.1a1)
 
-**Merged pull requests:**
-
-- fix: harness scores tones, diphthongs and ALINE's ɡ as the libraries read them [\#47](https://github.com/TigreGotico/phonematcher/pull/47) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
-
 ## [0.13.0a1](https://github.com/TigreGotico/phonematcher/tree/0.13.0a1) (2026-11-22)
 
 [Full Changelog](https://github.com/TigreGotico/phonematcher/compare/0.12.0a1...0.13.0a1)
-
-**Merged pull requests:**
-
-- feat: add the coverage, allophone and confusion benchmark tasks on seen data [\#45](https://github.com/TigreGotico/phonematcher/pull/45) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
 
 ## [0.12.0a1](https://github.com/TigreGotico/phonematcher/tree/0.12.0a1) (2026-11-22)
 
 [Full Changelog](https://github.com/TigreGotico/phonematcher/compare/0.11.0a1...0.12.0a1)
 
-**Merged pull requests:**
-
-- feat: add the alignment benchmark task on the List and Prokic gold alignments [\#43](https://github.com/TigreGotico/phonematcher/pull/43) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
-
 ## [0.11.0a1](https://github.com/TigreGotico/phonematcher/tree/0.11.0a1) (2026-11-22)
 
 [Full Changelog](https://github.com/TigreGotico/phonematcher/compare/0.10.1a1...0.11.0a1)
-
-**Merged pull requests:**
-
-- feat: add the benchmark harness with seven systems and a guarded test split [\#41](https://github.com/TigreGotico/phonematcher/pull/41) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
 
 ## [0.10.1a1](https://github.com/TigreGotico/phonematcher/tree/0.10.1a1) (2026-11-22)
 

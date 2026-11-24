@@ -71,9 +71,9 @@ def test_panphon22_divides_by_panphons_weight_total():
 def test_panphon22_ignores_the_features_panphon_lacks():
     # [tap] is one of the four features that PanPhon lacks, so its weight is 0 here and 0.25 in the
     # uniform variant's 1.
-    assert features.FEATURES.index("tap") >= 22
+    assert variants.SEGMENT_FEATURES.index("tap") >= 22
     assert BUILT["pm-panphon22"].segment_distance("ɾ", "ɹ") != BUILT["pm-uniform"].segment_distance("ɾ", "ɹ")
-    assert BUILT["pm-panphon22"].weights[features.FEATURES.index("tap")] == 0.0
+    assert BUILT["pm-panphon22"].weights[variants.SEGMENT_FEATURES.index("tap")] == 0.0
     assert sum(BUILT["pm-panphon22"].weights) == 7.25
 
 
@@ -84,10 +84,10 @@ def test_panphon22_weights_are_the_ones_panphon_applies():
 
     table = FeatureTable()
     applied = dict(zip(table.names, table.weights))
-    weights = dict(zip(features.FEATURES, variants.panphon_weights()))
+    weights = dict(zip(variants.SEGMENT_FEATURES, variants.panphon_weights()))
     assert applied["velaric"] == 0.25 and applied["tense"] == 0.125 and applied["long"] == 0.25
     assert {n: weights[n] for n in applied} == applied
-    by_label = dict(zip(features.FEATURES, variants.panphon_weights(by_file_label=True)))
+    by_label = dict(zip(variants.SEGMENT_FEATURES, variants.panphon_weights(by_file_label=True)))
     assert (by_label["tense"], by_label["long"], by_label["velaric"]) == (0.25, 0.125, 0.25)
 
 

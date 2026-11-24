@@ -23,7 +23,7 @@ import render  # noqa: E402
 from phonematcher import PhoneticFuzzySearch  # noqa: E402
 from phonematcher.distance import GAP_COST  # noqa: E402
 from phonematcher.clustering import _letter_costs  # noqa: E402
-from phonematcher.features import FEATURES, WEIGHTS  # noqa: E402
+from phonematcher.features import FEATURES, TONE_FEATURES, WEIGHTS  # noqa: E402
 
 PAPER = render.WHITEPAPER.read_text(encoding="utf8")
 RESULTS = render.RESULTS
@@ -119,7 +119,7 @@ def anchors():
                  "Mandarin one from", f4(seen["mandarin"]["unread_at_1"]["score"]), "to 0.3395",
                  "Miller and Nicely one fell from", f4(seen["miller_nicely"]["unread_at_1"]["score"]), "to 0.2981"),
         anchored(str(control["segments_with_vector_difference"]), "of the", str(control["segments_read_by_both"]), "segments"),
-        anchored("total weight,", f"{sum(WEIGHTS):g}"),
+        anchored("total weight,", f"{sum(WEIGHTS[:-len(TONE_FEATURES)]):g}"),
         anchored("vector of", str(len(FEATURES)), "features"),
         anchored(str(letters), "base letters", f"{3 * triples:,}", "inequalities over", f"{triples:,}", "triples", "875 violated"),
         anchored("scale marks changes each paired test score by less than", scale_mark_bound()),
@@ -201,8 +201,9 @@ def prose_values():
         f4(cognates["intervals"]["pm-P5"]["estimate"]): "cognates, P5, test",
         f4(cognates["intervals"]["sca"]["estimate"]): "cognates, SCA, test",
         str(len(FEATURES)): "features in the table",
+        str(len(FEATURES) - len(TONE_FEATURES)): "segment features in the table",
         str(FEATURES.index("velaric") + 1): "PanPhon columns of the table",
-        f"{sum(WEIGHTS):g}": "total feature weight",
+        f"{sum(WEIGHTS[:-len(TONE_FEATURES)]):g}": "total weight of the segment features",
         f"{GAP_COST:g}": "gap cost",
         f"{PhoneticFuzzySearch().cluster_sensitivity:g}": "default sensitivity",
         str(cognates["resamples"]): "bootstrap resamples",
@@ -245,7 +246,8 @@ def prose_values():
     values[str(control["segments_with_vector_difference"])] = "segments with a changed PanPhon value"
     values[str(control["segments_read_by_both"])] = "segments both read"
     parts = {"CSV features": ("front", "tap", "trill"), "height steps": tuple(f"h{i}" for i in range(1, 7)),
-             "tongue root": ("atr",), "secondary features": ("palatalized", "labialized", "velarized", "pharyngealized")}
+             "tongue root": ("atr",), "secondary features": ("palatalized", "labialized", "velarized", "pharyngealized"),
+             "tone features": TONE_FEATURES}
     assert all(name in FEATURES for names in parts.values() for name in names)
     assert FEATURES.index("velaric") + 1 + sum(len(names) for names in parts.values()) == len(FEATURES)
     values.update({str(len(names)): what for what, names in parts.items()})

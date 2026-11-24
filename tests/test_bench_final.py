@@ -67,7 +67,7 @@ def test_c1_weighs_every_feature_one():
 
 
 def test_c2_gives_the_height_steps_a_sixth_and_the_pairs_a_half():
-    weights = dict(zip(variants.features.FEATURES, variants.c2_weights()))
+    weights = dict(zip(variants.SEGMENT_FEATURES, variants.c2_weights()))
     assert [weights[f] for f in ("h1", "h6", "front", "back", "round", "lab", "voi", "syl")] == [1 / 6, 1 / 6, 0.5, 0.5, 0.5, 0.5, 1, 1]
     assert sum(weights.values()) == pytest.approx(29)
     assert variants.build_variant("pm-C2").segment_distance("p", "b") == pytest.approx(1 / 29)
@@ -75,7 +75,7 @@ def test_c2_gives_the_height_steps_a_sixth_and_the_pairs_a_half():
 
 def test_c3_is_c2_with_the_major_class_at_the_bisection_weight():
     c3 = variants.build_variant("pm-C3")
-    weights = dict(zip(variants.features.FEATURES, c3.weights))
+    weights = dict(zip(variants.SEGMENT_FEATURES, c3.weights))
     assert [weights[f] for f in ("syl", "son", "cons")] == [variants.c3_weight()] * 3
     assert weights["voi"] == 1 and weights["h1"] == 1 / 6
 

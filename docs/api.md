@@ -34,15 +34,25 @@ These names are the stable API. Each one is exported from the package root, so `
 
 `phonematcher.__version__` is the version string of the installed package, such as `2.2.0a2`.
 
-A stable name changes only in a major release, after one deprecation cycle with a warning. `phonetic_distance` is in that cycle: it is still exported from the package root, it warns, and it goes away in the next major version. Use `feature_distance` instead.
+A stable name changes only in a major release. A name that goes away first passes one deprecation cycle with a warning. A major release can also change what a stable name returns, with no deprecation cycle: the release then has a migration note, such as [Migrate from 2.x to 3.0](#migrate-from-2x-to-30). `phonetic_distance` is in that cycle: it is still exported from the package root, it warns, and it goes away in the next major version. Use `feature_distance` instead.
+
+## Migrate from 2.x to 3.0
+
+Version 3.0 reads a tone as four features of the vowel that carries it, and not as a segment of its own. Three outputs change.
+
+1. `segments` puts a tone on its vowel. `segments("ma˥")` gives `['m', 'a˥']`, where 2.x gave `['m', 'a', '˥']`. A tone after a coda goes to the vowel before the coda: `segments("tam˧˧")` gives `['t', 'a˧˧', 'm']`. A tone with no vowel or syllabic consonant before it in its word stays a segment of its own, as in 2.x. Code that looked for tone segments with `is_tone` finds only those. To get the phone and the tone of a segment apart, use `phonematcher.features.phone_and_tone("a˥")`, which gives `('a', '˥')`.
+2. `vectorize_phones` returns 40 values, not 36. The last four are `tone_is`, `tone_start`, `tone_mid` and `tone_end`. A segment with no tone has `None` in all four, and a toned vowel has `True` and three pitches from −1 to 1. `FEATURES` and `WEIGHTS` have the four names and weights at their end. Code that zips a vector with `FEATURES` keeps working. Code that takes the first 36 values gets the 2.x vector.
+3. A word distance with tones changes. Two toned vowels are compared by their features, so `ipa_distance("ma˥", "ma˩")` is a feature distance and not a tone distance. A missing tone is no longer a deletion. A word distance with no tone mark in either word does not change.
+
+`tone_levels` and `tone_distance` do not change. `tone_distance` compares two tones that have no vowel, such as two token ids of a TTS voice.
 
 ## Internal
 
 Every other name is internal. It can change or go away in any release, with no warning. Do not import it in code that must keep working.
 
 - `phonematcher.clustering`: `upgma`, `phone_clusters`, `merge_threshold`.
-- `phonematcher.distance`: `check_readable`, `SUPRASEGMENTALS`, `NON_SYLLABIC`.
-- `phonematcher.features`: `compose_tie`, `phone_features`, `NUM_FEATURES`, `SOURCE`, `SPELLINGS`, `PRE_DIACRITICS`, `POST_DIACRITICS`.
+- `phonematcher.distance`: `check_readable`, `carry_tones`, `SUPRASEGMENTALS`, `NON_SYLLABIC`.
+- `phonematcher.features`: `compose_tie`, `phone_and_tone`, `phone_features`, `NUM_FEATURES`, `TONE_FEATURES`, `SOURCE`, `SPELLINGS`, `PRE_DIACRITICS`, `POST_DIACRITICS`.
 - `phonematcher.tone`: `LEVELS`, `DIACRITIC_TONES`, `NUMERALS`, `PHRASE_MARKS`.
 - `phonematcher.scales`: the whole module.
 
@@ -53,15 +63,15 @@ The sections below describe the stable names first, then the internal names that
 
 - `feature_distance(a, b) -> float`: the weighted feature distance between two segments, from 0 to 1. See [features.md](features.md).
 - `phonetic_distance(a, b) -> float`: the old name of `feature_distance`. It returns the same value and raises a `DeprecationWarning` that names the version where it goes away, the next major version.
-- `vectorize_phones(segment) -> tuple`: the feature vector of one segment, in the order of `FEATURES`. Raises `ValueError` for a segment it cannot read.
+- `vectorize_phones(segment) -> tuple`: the feature vector of one segment, in the order of `FEATURES`. A vowel or a syllabic consonant may carry a tone, in tone letters (`a˥˩`), tone numerals or a tone diacritic (`â`), and the tone sets the last four values. Raises `ValueError` for a segment it cannot read, and for a tone on any other segment.
 - `is_vowel_phone(segment) -> bool`: true when the segment reads and its `syl` feature is `+`: a vowel, a syllabic consonant such as `m̩`, or a rhotic vowel such as `ɚ`. It is false for a glide, a consonant, and a segment that cannot be read (it does not raise).
-- `FEATURES`, `WEIGHTS`: the feature names and their weights, as tuples. Treat them as read-only.
+- `FEATURES`, `WEIGHTS`: the feature names and their weights, as tuples: 36 segment features, then the four tone features. Treat them as read-only.
 
 ## `phonematcher.distance`
 
-- `segments(ipa) -> list[str]`: the segments of an IPA string. A diacritic stays with its base, a tie bar joins two symbols, a space between words becomes one `" "` segment, and stress, syllable and phrase-tone marks are dropped. A tone is one segment of tone letters after its syllable; a tone diacritic or a tone numeral is written as tone letters. A tie bar with nothing before it in its word is dropped, and format characters such as U+200B and U+FEFF are dropped.
-- `segment_spans(text) -> list[tuple[int, int]]`: the `(start, end)` offsets of the segments in `text`, in order, so `[text[s:e] for s, e in segment_spans(text)]` gives each segment as it is written in `text`. A spelling keeps its form and nothing is normalized: `segment_spans("ˈʧa")` gives `[(1, 2), (2, 3)]`, the substrings `ʧ` and `a`, where `segments` gives `t͡ʃ` and `a`. The characters that `segments` drops (stress, syllable and phrase-tone marks, format characters, a tie bar between two vowels) and the spaces between words fall in the gaps between spans. A tone diacritic stays in the span of the letter it is written on, because a precomposed letter such as `á` is one character. Two segments that share a character share one span. So, for well-formed IPA, the `segments` of each span, in turn, are the `segments` of `text` without its `" "` entries.
-- `substitution_cost(a, b) -> float`: the one cost of replacing segment `a` by `b`: the square root of the tone distance of two tones, 1 for a tone and a phone, and the square root of the feature distance of two phones. `edit_distance`, `align`, `ipa_distance` and the clusters of `PhoneticFuzzySearch` use it.
+- `segments(ipa) -> list[str]`: the segments of an IPA string. A diacritic stays with its base, a tie bar joins two symbols, a space between words becomes one `" "` segment, and stress, syllable and phrase-tone marks are dropped. A tone diacritic or a tone numeral is written as tone letters, and a tone goes onto the last vowel or syllabic consonant before it in its word, so `segments("ma˥")` gives `['m', 'a˥']`. A tone with no such segment stays a segment of tone letters. A tie bar with nothing before it in its word is dropped, and format characters such as U+200B and U+FEFF are dropped.
+- `segment_spans(text) -> list[tuple[int, int]]`: the `(start, end)` offsets of the segments in `text`, in order, so `[text[s:e] for s, e in segment_spans(text)]` gives each segment as it is written in `text`. A spelling keeps its form and nothing is normalized: `segment_spans("ˈʧa")` gives `[(1, 2), (2, 3)]`, the substrings `ʧ` and `a`, where `segments` gives `t͡ʃ` and `a`. The characters that `segments` drops (stress, syllable and phrase-tone marks, format characters) and the spaces between words fall in the gaps between spans. A mark that `segments` drops between the parts of one segment stays inside its span, so `ɲaⁿˈdu` puts the stress mark inside the span of `ⁿd`, and the `segments` of that span are still `ⁿd`. A tone diacritic stays in the span of the letter it is written on, because a precomposed letter such as `á` is one character. Two segments that share a character share one span, so the tie bar of `a͡i` puts `a` and `i̯` in one span. A tone written right after the segment that carries it is in that segment's span: `segment_spans("ma˥")` gives `[(0, 1), (1, 3)]`. A tone written after a coda falls in a gap, so each segment keeps a span of its own: `segment_spans("tam˧˧")` gives `[(0, 1), (1, 2), (2, 3)]` for `t`, `a˧˧` and `m`. So, for well-formed IPA with no tone after a coda, the `segments` of each span, in turn, are the `segments` of `text` without its `" "` entries. With a tone after a coda, the same holds for the segments with their tones removed.
+- `substitution_cost(a, b) -> float`: the one cost of replacing segment `a` by `b`: the square root of the tone distance of two tone segments, 1 for a tone segment and a phone, and the square root of the feature distance of two phones, with the tone a phone carries. `edit_distance`, `align`, `ipa_distance` and the clusters of `PhoneticFuzzySearch` use it.
 - `edit_distance(a, b, *, strict=False, substitution=substitution_cost, gap=GAP_COST) -> float`: the Levenshtein distance between two segment lists, where a substitution costs `substitution_cost` and an insertion or deletion costs 0.5. `substitution` and `gap` replace these two costs. The costs are those of the pre-registered test in [`benchmarks/prereg-2.md`](https://github.com/TigreGotico/phonematcher/blob/dev/benchmarks/prereg-2.md) and [`docs/benchmarks.md`](https://github.com/TigreGotico/phonematcher/blob/dev/docs/benchmarks.md).
 - `align(a, b, *, strict=False, substitution=substitution_cost, gap=GAP_COST) -> list[tuple[str | None, str | None]]`: one least-cost alignment of two segment lists, as pairs of a left and a right segment. `None` marks a gap. The costs are those of `edit_distance`. The traceback starts at the end and prefers a substitution, then a deletion (a gap in `b`), then an insertion.
 - `edit_distance` takes lists of segments. A string is also accepted, and each character is then one segment, so `edit_distance("ka", "kb")` compares the two characters of each string. A diacritic or a tie bar is a character of its own in that case. Call `segments` first to split a string as IPA.
@@ -75,7 +85,7 @@ The sections below describe the stable names first, then the internal names that
 
 - `is_tone(segment) -> bool`: true for a segment made only of tone letters.
 - `tone_levels(tone) -> tuple[int, ...]`: the Chao levels of a tone, in order, from 1 (extra low) to 5 (extra high), so `tone_levels("˧˦˧")` gives `(3, 4, 3)`. It takes tone letters, superscript tone numerals (`²¹⁴`) and left-stem tone letters (U+A712 to U+A716). A string that is not a tone raises `ValueError`, and a value that is not a string raises `TypeError`.
-- `tone_distance(a, b) -> float`: the distance between two tones, from 0 to 1. It is experimental: see [Tones](tones.md) and issue [#68](https://github.com/TigreGotico/phonematcher/issues/68). See [features.md](features.md#tone).
+- `tone_distance(a, b) -> float`: the distance between two tones that have no vowel, from 0 to 1. A word distance uses it for two tone segments of their own; a tone on a vowel is compared by its features. It is experimental: see [Tones](tones.md) and issue [#68](https://github.com/TigreGotico/phonematcher/issues/68). See [features.md](features.md#tone).
 
 ## `phonematcher.clustering`
 
@@ -100,7 +110,10 @@ A search result: the term's id, its readings as a tuple, and its score.
 
 These names can change in any release.
 
-- `phonematcher.features.NUM_FEATURES`: the feature count.
+- `phonematcher.features.NUM_FEATURES`: the feature count, 40.
+- `phonematcher.features.TONE_FEATURES`: the names of the four tone features.
+- `phonematcher.features.phone_and_tone(segment) -> tuple[str, str]`: the phone of a segment, in NFD, and its tone as tone letters: `phone_and_tone("â")` gives `('a', '˥˩')`. A segment with no tone gives an empty tone.
+- `phonematcher.distance.carry_tones(segs) -> list[str]`: a segment list with each tone on its vowel, as `segments` does: `carry_tones(["m", "a", "˥"])` gives `['m', 'a˥']`. It is for a tokenizer that holds tones apart.
 - `phonematcher.features.SOURCE`: where the table comes from.
 - `phonematcher.features.phone_features`: the table, segment (NFD) to vector.
 - `phonematcher.features.POST_DIACRITICS`: the diacritics that follow their base.

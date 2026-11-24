@@ -34,7 +34,7 @@ Two rules control the library:
 
 ## 2. The feature table and its sources
 
-A segment is a vector of 36 features. Each value is plus, minus or zero. Zero means that the feature does not apply.
+A segment is a vector of 40 features. Each value of the first 36 is plus, minus or zero. Zero means that the feature does not apply. The last four give the tone of a vowel, as numbers.
 
 The features come from these sources:
 
@@ -43,8 +43,9 @@ The features come from these sources:
 - Six height steps, `h1` to `h6`, place a vowel on seven height rows. The IPA chart (International Phonetic Association 2015) prints four height labels: close, close-mid, open-mid and open. It draws `ɪ ʏ ʊ`, `ə` and `æ ɐ` between them, so the table counts seven rows. A vowel is + on one step for each row it lies below close.
 - One feature, `atr`, gives the position of the tongue root. The marks `◌̘` and `◌̙` set it.
 - Four features give a secondary articulation: palatalized, labialized, velarized and pharyngealized.
+- Four tone features come from the tone block of phoonnx: `tone_is` and the pitch at the start, the middle and the end of the syllable.
 
-The total is 22 + 3 + 6 + 1 + 4 = 36.
+The total is 22 + 3 + 6 + 1 + 4 + 4 = 40.
 
 The vowels follow the IPA chart, not a feature table. The chart defines each vowel symbol. The chart puts 28 vowel letters on seven height rows. PanPhon's `hi` and `lo` give only three heights. Thus we add six height steps. Two vowels differ on one step for each row between them.
 
@@ -66,9 +67,9 @@ Coverage shows how much real transcription the table can read. We counted covera
 <!-- whitepaper:coverage:start -->
 | Corpus | Segment types | Types read | Share of types | Share of tokens |
 |---|---|---|---|---|
-| PHOIBLE 2.0 | 4158 | 3768 | 0.9062 | 0.9944 |
-| WikiPron | 3604 | 2616 | 0.7259 | 0.9939 |
-| orthography2ipa | 2569 | 2171 | 0.8451 | 0.9895 |
+| PHOIBLE 2.0 | 4158 | 3765 | 0.9055 | 0.9944 |
+| WikiPron | 3604 | 2605 | 0.7228 | 0.9939 |
+| orthography2ipa | 2569 | 2184 | 0.8501 | 0.9898 |
 <!-- whitepaper:coverage:end -->
 
 Most segments that the table cannot read are rare. Thus the token share is much higher than the type share. The table cannot read these types of segment:
@@ -80,7 +81,7 @@ Most segments that the table cannot read are rare. Thus the token share is much 
 
 ## 3. Diacritics, ties, tone and the reading rules
 
-A diacritic applies only to the bases that its rule accepts. The rule is PanPhon's, unless `overrides.json` changes it with a source. PanPhon's rule for nasalization accepts a voiced base that is not already nasal, so `b̃`, `z̃` and `w̃` read, and `k̃` and `m̃` do not. The IPA chart prints the mark on a vowel, as in `ẽ`, so the rule also accepts a voiceless vowel. PanPhon's rule for aspiration accepts stops and voiceless fricatives. Thus `aʰ` does not read. Some rules accept any base: `iˤ`, `å` and `ḁ` read, and `aˠ` reads because `a` is not high. A refusal decreases coverage. A rule becomes wider only when a chart prints the mark on a base that the rule refuses.
+A diacritic applies only to the bases that its rule accepts. The rule is PanPhon's, unless `overrides.json` changes it with a source. PanPhon's rule for nasalization accepts a voiced base that is not already nasal, so `b̃`, `z̃` and `w̃` read, and `k̃` and `m̃` do not. The IPA chart prints the mark on a vowel, as in `ẽ`, so the rule also accepts a voiceless vowel. Ladefoged and Maddieson (1996) print `h̃` among the nasalized continuants, so the rule also accepts a voiceless continuant, as in `h̃` and `f̃`. PanPhon's rule for aspiration accepts stops and voiceless fricatives. Thus `aʰ` does not read. Some rules accept any base: `iˤ`, `å` and `ḁ` read, and `aˠ` reads because `a` is not high. A refusal decreases coverage. A rule becomes wider only when a chart prints the mark on a base that the rule refuses.
 
 Eight marks move a vowel on a scale of the chart:
 
@@ -96,31 +97,31 @@ Two letters without a tie bar read as one tied segment if the tie is possible. F
 - A stop before a fricative gives an affricate.
 - Two stops or two nasals give a double articulation, as in `k͡p`.
 
-Two vowels do not combine. Thus a diphthong is two segments. The sources do not agree on this point. Nerbonne and Heeringa (1997, p. 11) found better dialect distances with two segments. Heeringa (2004, p. 188) found no difference. Rubehn et al. (2024, p. 209) use one segment with the vector of its first part.
+Two vowels do not combine. Thus a diphthong is two segments, and the second vowel of a tied pair is non-syllabic: `a͡i` reads as `a` and `i̯`. The sources do not agree on this point. Nerbonne and Heeringa (1997, p. 11) found better dialect distances with two segments. Heeringa (2004, p. 188) found no difference. Rubehn et al. (2024, p. 209) use one segment with the vector of its first part.
 
 The tie rule increases coverage. This table gives the PHOIBLE types that read with three methods.
 
 <!-- whitepaper:readings:start -->
 | Reading of a PHOIBLE segment | Types read | Share of types |
 |---|---|---|
-| the segment as written | 2614 of 4158 | 0.6287 |
-| as written, or with a tie bar between its pieces | 2691 of 4158 | 0.6472 |
-| as the library reads a word: whole, split into segments, tones included | 3768 of 4158 | 0.9062 |
+| the segment as written | 2663 of 4158 | 0.6405 |
+| as written, or with a tie bar between its pieces | 2692 of 4158 | 0.6474 |
+| as the library reads a word: whole, split into segments, tones included | 3765 of 4158 | 0.9055 |
 <!-- whitepaper:readings:end -->
 
-A tone is its own segment. It comes after the syllable that has the tone. Tone letters, tone diacritics and superscript digits give the same segment. Thus `má`, `ma˦` and `ma⁴` all read as `m`, `a`, `˦`. We do not use the two tone features of PanPhon. We compare two tones by their pitch at the start, the middle and the end of the syllable. The distance is the mean difference, divided by the range of the five levels. Section 6 shows that this distance is not better than a simple baseline. Thus the tone distance is experimental.
+A tone is four features of the vowel that has it. The tone comes after its syllable, and the library puts it on the last vowel or syllabic consonant before it in the word. Tone letters, tone diacritics and superscript digits give the same features. Thus `má`, `ma˦` and `ma⁴` all read as `m`, `a˦`, and `tam˧˧` reads as `t`, `a˧˧`, `m`. The four features are those of the tone block of phoonnx: `tone_is`, and the pitch at the start, the middle and the end of the syllable, each Chao level as `(level − 3) / 2`. We do not use the two tone features of PanPhon. The distance divides by the weight of the segment features only, so a pair with no tone keeps its distance. A tone with no vowel before it in its word stays a segment of its own. We compare two such tones by the mean difference of their three pitches, divided by the range of the five levels. Section 6 shows that this ranking of tones is not better than a simple baseline. Thus the tone model is experimental.
 
 A stress mark is not a segment. The library removes it. Thus `ˈio` and `io` are at distance 0.
 
 ## 4. Distances and search
 
-The feature distance of two segments is a weighted city-block distance between their vectors. Plus against minus costs the full weight of the feature. Zero against plus or minus costs half the weight. We divide by the total weight, 9.5. Thus the distance is between 0 and 1. A segment that the table cannot read is at distance 1 from all other segments.
+The feature distance of two segments is a weighted city-block distance between their vectors. Plus against minus costs the full weight of the feature. Zero against plus or minus costs half the weight. We divide by the total weight, 9.5, of the 36 segment features, and cut the result to 1. Thus the distance is between 0 and 1. A segment that the table cannot read is at distance 1 from all other segments.
 
 The word distance is an edit distance:
 
 - A substitution costs the square root of the feature distance.
 - A deletion or an insertion costs 0.5.
-- A tone against a phone costs 1.
+- A tone segment against a phone costs 1.
 
 Thus a substitution never costs more than a deletion and an insertion. The square root of a metric is a metric. Thus the word distance is a metric. The normalized distance divides by the number of segments in the longer word. The test chose these costs (section 5.5). We call them the released costs.
 
@@ -285,7 +286,7 @@ The Romance defect does not change this choice. All candidates used the same ben
 
 ### 6.1 Tone
 
-We compared our tone distance with the confusions of the six Cantonese tones (Wong, Cheng and Chen 2018). The tone distance is not better than a baseline that knows only if a contour goes up, goes down or stays level. There are 15 pairs. The intervals are wide and they overlap. Thus the data does not show that the baseline is better. But it shows that the tone distance is not better. The data is seen.
+We compared our tone distance with the confusions of the six Cantonese tones (Wong, Cheng and Chen 2018). The tone features weigh the three pitches equally, so they rank the pairs as the tone distance does. The tone distance is not better than a baseline that knows only if a contour goes up, goes down or stays level. There are 15 pairs. The intervals are wide and they overlap. Thus the data does not show that the baseline is better. But it shows that the tone distance is not better. The data is seen.
 
 <!-- whitepaper:tone:start -->
 Seen data, 15 Cantonese tone pairs.
@@ -305,11 +306,11 @@ The height steps and the scale marks follow the chart. Neither improves a score.
 <!-- whitepaper:ablations:start -->
 | Variant | Test cognates, AP minus table (original costs) | Test alignment, PAS minus table (original costs) | Dev cognates, AP (released costs) |
 |---|---|---|---|
-| PanPhon's 22 features | +0.0058 [+0.0044, +0.0071] | +0.0000 [+0.0000, +0.0000] | 0.7752 |
-| no height steps | -0.0002 [-0.0013, +0.0008] | +0.0000 [+0.0000, +0.0000] | 0.7734 |
-| no scale marks | -0.0000 [-0.0000, -0.0000] | +0.0000 [+0.0000, +0.0000] | 0.7735 |
-| every weight 1 | -0.0066 [-0.0082, -0.0050] | -0.0205 [-0.0462, +0.0000] | 0.7698 |
-| the table (control) | - | - | 0.7736 |
+| PanPhon's 22 features | +0.0058 [+0.0044, +0.0071] | +0.0000 [+0.0000, +0.0000] | 0.7882 |
+| no height steps | -0.0002 [-0.0013, +0.0008] | +0.0000 [+0.0000, +0.0000] | 0.7871 |
+| no scale marks | -0.0000 [-0.0000, -0.0000] | +0.0000 [+0.0000, +0.0000] | 0.7874 |
+| every weight 1 | -0.0066 [-0.0082, -0.0050] | -0.0205 [-0.0462, +0.0000] | 0.7834 |
+| the table (control) | - | - | 0.7875 |
 <!-- whitepaper:ablations:end -->
 
 Removing the scale marks changes each paired test score by less than 0.0001. It changes the development cognate score by one unit in the fourth decimal. We keep the marks because the chart gives them a meaning, not because they help. We did not measure their effect on coverage.
@@ -354,13 +355,13 @@ Lakretz et al. (2018) learn a perceptual metric from confusions. They compare it
 
 The PanPhon weight file gives `tense` 0.25, `long` 0.125 and `velaric` 0.25. The PanPhon feature table reads these numbers without their names. It gives them in its own feature order, which ends with `velaric`, `tense`, `long`. Thus a PanPhon distance gives 0.25 to `velaric`, 0.125 to `tense` and 0.25 to `long`. phonematcher reads the weights by name.
 
-A control shows this. One variant of phonematcher has PanPhon's 22 features and the weights that PanPhon applies. This variant agrees with the weighted PanPhon distance on each pair of segments that has PanPhon's values. It differs on other pairs, because our table changes some values. 725 of the 1207 segments that both read have one or more changed values.
+A control shows this. One variant of phonematcher has PanPhon's 22 features and the weights that PanPhon applies. This variant agrees with the weighted PanPhon distance on each pair of segments that has PanPhon's values. It differs on other pairs, because our table changes some values. 710 of the 1207 segments that both read have one or more changed values.
 
 <!-- whitepaper:control:start -->
 | Pairs | Count | Distance differs |
 |---|---|---|
-| segment pairs that both read | 727821 | 561318 |
-| pairs whose 22 values equal PanPhon's | 115921 | 0 |
+| segment pairs that both read | 727821 | 556665 |
+| pairs whose 22 values equal PanPhon's | 123256 | 0 |
 <!-- whitepaper:control:end -->
 
 Two of our results agree with earlier work. Heeringa (2004, p. 185) found that methods with phones were better than methods with features, against perception. Sofroniev and Çöltekin (2018, p. 114) found PHOIBLE feature vectors below SCA on the same alignment benchmark.
@@ -375,7 +376,7 @@ The numbers of the released library come from the candidate that won the same te
 
 We defined the common words of the cognate table after we saw the results. They do not include the two tonal sets, Chinese and Tujia. They keep only the words that the weakest reader can read.
 
-Only the three test result files have the hash of the written rules. The development and seen results come from one later run on the clean tree of commit `100ff08`, which has the sourced feature values.
+Only the three test result files have a clean commit and the hash of the written rules. The development and seen results come from working trees. Most of these trees had changes that were not committed.
 
 The alignment comparison uses few pairs. The retrieval comparison with SCA and ALINE uses samples.
 
@@ -391,7 +392,7 @@ The two audit runs of section 6 are not in the result files. The triangle check 
 
 The relative sensitivity and strict mode came after the test. They do not change a word distance. A test keeps a hash of many word distances, and this hash did not change. On the development queries, each query gives the same result at the share 0.08 as with the absolute threshold 0.1 of the tested version. The paired difference in mean recall at 1 is 0.0000, with an interval from 0.0000 to 0.0000 (1000 resamples, seed 0, 500 queries in each of four pairs). A query returns from 1% to 23% fewer candidates, depending on the pair. This comparison is an audit run. No result file has its scores for each query.
 
-Some feature values of the released table differ from the values that the test scored. Each of them follows a cited source, and they change some word distances. The test numbers describe the tested library. `docs/design.md` lists these values and their sources. It also compares the development scores with and without them, and no paired interval lies wholly below 0, so the released table keeps them.
+Some feature values of the released table differ from the values that the test scored. Each of them follows a cited source, and they change some word distances. The test numbers describe the tested library. `docs/design.md` lists these values and their sources.
 
 `benchmarks/render.py` makes the tables of this paper from `benchmarks/results/`. `tests/test_whitepaper.py` checks each number in the text against those files. It connects each number to the system and the claim in its sentence. The five audit-run numbers of section 6 and the three of the sensitivity comparison above are typed, because no file has them.
 
@@ -434,6 +435,7 @@ On Python before version 3.12, the clusters of the search changed with the hash 
 - Hermes, Z., Barlaz, M., Shosted, R., Liang, Z.-P. and Sutton, B. 2017. Phonetic correlates of pharyngeal and pharyngealized consonants in Saudi, Lebanese, and Jordanian Arabic: an rt-MRI study. *Proceedings of Interspeech 2017*, pp. 201–205. <https://www.isca-archive.org/interspeech_2017/hermes17_interspeech.pdf>
 - International Phonetic Association. 2015. The International Phonetic Alphabet (chart, revised to 2015). <https://www.internationalphoneticassociation.org/IPAcharts/common_files/pdfs/pdfs_IPA_charts_E/IPA_Kiel.pdf>
 - Kondrak, G. 2000. A new algorithm for the alignment of phonetic sequences. *Proceedings of NAACL 2000*, pp. 288–295. <https://aclanthology.org/A00-2038.pdf>
+- Ladefoged, P. and Maddieson, I. 1996. *The Sounds of the World's Languages*. Oxford: Blackwell. ISBN 0-631-19815-6. <https://openlibrary.org/books/OL1122315M>
 - Lakretz, Y., Chechik, G., Cohen, E.-G., Treves, A. and Friedmann, N. 2018. Metric learning for phoneme perception. arXiv:1809.07824. <https://arxiv.org/pdf/1809.07824>
 - Lee, J. L., Ashby, L. F. E., Garza, M. E., Lee-Sikka, Y., Miller, S., Wong, A., McCarthy, A. D. and Gorman, K. 2020. Massively multilingual pronunciation mining with WikiPron. *Proceedings of LREC 2020*, pp. 4223–4228. <https://aclanthology.org/2020.lrec-1.521.pdf>
 - List, J.-M. 2012. LexStat: automatic detection of cognates in multilingual wordlists. *Proceedings of the EACL 2012 Joint Workshop of LINGVIS and UNCLH*, pp. 117–125. <https://aclanthology.org/W12-0216.pdf>

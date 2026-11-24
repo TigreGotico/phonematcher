@@ -21,14 +21,20 @@ def segments(ipa: str) -> List[str]:
 
     A segment is a base symbol with the diacritics and modifier letters that follow it. A tie bar
     joins the symbols on both sides into one segment, so ``t͡ʃ`` is one affricate, unless both are
-    vowels: a diphthong is two segments, so ``a͡i`` gives ``a`` and ``i``. Spaces become a
+    vowels: a diphthong is two segments, a vowel and a non-syllabic vowel, so ``a͡i`` gives ``a``
+    and ``i̯``, as ``ai̯`` does. Spaces become a
     ``" "`` segment between words; stress, syllable and phrase-tone marks are dropped. A tone is
-    one segment of tone letters after its syllable: a tone diacritic or a tone numeral is written
-    as tone letters after the segment that carries it. A tone diacritic on a tone letter adds its
+    read as tone letters after its syllable: a tone diacritic or a tone numeral is written as tone
+    letters after the segment that carries it. A tone diacritic on a tone letter adds its
     levels to that tone. A tone diacritic before a tie bar's second symbol, or at the start of a
     word, belongs to the next base symbol. A tie bar with no symbol before it in its word is dropped,
     so it never joins across a space. Format characters (Unicode category Cf, such as U+200B and
     U+FEFF) are dropped.
+
+    A tone then moves onto the segment that carries it: the last vowel or syllabic consonant before
+    it in the same word that carries no tone yet. ``ma˥`` gives ``m``, ``a˥``, and ``tam˧˧`` gives
+    ``t``, ``a˧˧``, ``m``. A tone with no such segment stays a segment of tone letters, as in ``˥˩``
+    and ``ɡ˩a``.
     """
     return [unicodedata.normalize("NFC", s) for s in _segments(unicodedata.normalize("NFD", ipa).translate(SPELLINGS))[0]]
 
@@ -79,6 +85,7 @@ def _segments(nfd: str, track: bool = False) -> Tuple[List[str], List[List[int]]
     at: List[List[int]] = []  # with track: the positions of each segment, and of the held marks below
     pending_at, tone_at, carried_at = [], [], []
     join_next = False
+    offglide = -1  # the index in out of the offglide of a tied diphthong, which holds its ◌̯
     pending = ""  # marks written before the base they belong to
 
     def release_pending() -> None:
@@ -106,8 +113,10 @@ def _segments(nfd: str, track: bool = False) -> Tuple[List[str], List[List[int]]
                 at.append(tone_at)
             tone, tone_at = "", []
 
-    for i, ch in enumerate(nfd):
-        ch = NUMERALS.get(ch, ch)
+    level_kind = None  # the notation of the tone letter last written: Chao, left-stem or numeral
+
+    for i, raw in enumerate(nfd):
+        ch = NUMERALS.get(raw, raw)
         if ch in SUPRASEGMENTALS or unicodedata.category(ch) == "Cf":
             continue
         if ch in DIACRITIC_TONES:
@@ -124,15 +133,20 @@ def _segments(nfd: str, track: bool = False) -> Tuple[List[str], List[List[int]]
                 tone += letters
                 if track:
                     tone_at += (min(at[-1]), i)  # the span of a tone mark holds the letter it is on
+            level_kind = None
             continue
         if ch in LEVELS:
+            # A tone run ends where its notation changes: ˨˩˦꜔꜒ is the tone 214, then the tone 35.
+            kind = 0 if raw in LEVELS else 1 if "\ua712" <= raw <= "\ua716" else 2
+            same_notation = level_kind in (None, kind)
+            level_kind = kind
             if tone:
                 tone += ch
                 if track:
                     tone_at.append(i)
                 continue
             release_pending()
-            if out and is_tone(out[-1]):
+            if out and is_tone(out[-1]) and same_notation:
                 out[-1] += ch
                 if track:
                     at[-1].append(i)
@@ -142,6 +156,7 @@ def _segments(nfd: str, track: bool = False) -> Tuple[List[str], List[List[int]]
                 if track:
                     at.append([i])
             continue
+        level_kind = None
         attaches = unicodedata.combining(ch) or ch in POST_DIACRITICS
         if not attaches:
             release_tone()
@@ -158,6 +173,11 @@ def _segments(nfd: str, track: bool = False) -> Tuple[List[str], List[List[int]]
                 if track:
                     at.append([i])
             continue
+        if ch in TIES and pending:  # a tie between two marks before a base, as in ᵑ͡ᵐk͡p
+            pending += ch
+            if track:
+                pending_at.append(i)
+            continue
         if ch in TIES:
             join_next = bool(out) and out[-1] != " "
             if join_next:
@@ -170,11 +190,21 @@ def _segments(nfd: str, track: bool = False) -> Tuple[List[str], List[List[int]]
             continue
         if join_next and out[-1][-1] in TIES and is_vowel_phone(out[-1][:-1].replace(NON_SYLLABIC, "")) and is_vowel_phone(ch):
             out[-1] = out[-1][:-1]
+            if NON_SYLLABIC in out[-1] and offglide != len(out) - 1:  # a rising diphthong with its glide marked: i̯͡a
+                out.append(ch)
+            else:  # the second vowel of a tied diphthong is its offglide
+                out.append(ch + NON_SYLLABIC)
+                offglide = len(out) - 1
             if track:
-                at[-1].pop()
+                at.append([tie_at, i])  # the tie bar is in both spans, so the diphthong is one span
             join_next = False
-        starts_word = not out or out[-1] == " "
-        if ch in PRE_DIACRITICS and (starts_word or is_vowel_phone(out[-1])) and not join_next:
+            continue
+        if ch == NON_SYLLABIC and out and offglide == len(out) - 1:
+            if track:
+                at[-1].append(i)
+            continue
+        base = next((seg for seg in reversed(out) if not is_tone(seg)), " ")  # a tone letter does not end the vowel
+        if ch in PRE_DIACRITICS and (base == " " or is_vowel_phone(base)) and not join_next:
             pending += ch
             if track:
                 pending_at.append(i)
@@ -203,14 +233,49 @@ def _segments(nfd: str, track: bool = False) -> Tuple[List[str], List[List[int]]
         out.pop()
         if track:
             at.pop()
-    return out, at
+    return _carry_tones(out, at, track)
+
+
+def carry_tones(segs: Sequence[str]) -> List[str]:
+    """*segs* with each tone moved onto the segment that carries it, as :func:`segments` does: the
+    last vowel or syllabic consonant before the tone in its word that has no tone yet. A tone with
+    no such segment stays a segment of its own. For a tokenizer whose own segments hold tones apart:
+    ``carry_tones(["m", "a", "˥"])`` gives ``["m", "a˥"]``."""
+    return _carry_tones(list(segs), [], False)[0]
+
+
+def _carry_tones(segs: List[str], at: List[List[int]], track: bool) -> Tuple[List[str], List[List[int]]]:
+    """Move each tone of *segs* onto the last vowel or syllabic consonant before it in its word that
+    has no tone yet. A tone with no such segment stays a segment of its own. A tone written right
+    after its segment joins that segment's positions; a tone written after a coda is left out of
+    them, so each segment keeps a span of its own."""
+    out: List[str] = []
+    out_at: List[List[int]] = []
+    for k, seg in enumerate(segs):
+        carried = False
+        if is_tone(seg):
+            for j in reversed(range(len(out))):
+                if out[j] == " " or out[j][-1] in LEVELS:  # a word boundary, a tone or a toned segment
+                    break
+                if is_vowel_phone(out[j]):
+                    out[j] += seg
+                    if track and j == len(out) - 1:
+                        out_at[j] = out_at[j] + at[k]
+                    carried = True
+                    break
+        if not carried:
+            out.append(seg)
+            if track:
+                out_at.append(at[k])
+    return out, out_at
 
 
 @lru_cache(maxsize=65536)
 def substitution_cost(a: str, b: str) -> float:
     """Cost of replacing segment *a* by *b*, from 0 to 1, so a substitution never costs more than a
-    deletion plus an insertion: the square root of the tone distance of two tones, 1 for a tone and
-    a phone, and the square root of the feature distance of two phones. The square root keeps the
+    deletion plus an insertion: the square root of the tone distance of two tone segments, 1 for a
+    tone segment and a phone, and the square root of the feature distance of two phones, which
+    holds the tone a phone carries. The square root keeps the
     cost a metric.
     """
     a_tone, b_tone = is_tone(a), is_tone(b)

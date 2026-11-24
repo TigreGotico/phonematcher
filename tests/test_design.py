@@ -146,7 +146,7 @@ def test_a_tone_against_a_phone_costs_a_deletion_plus_an_insertion():
 
 
 def test_a_diphthong_is_two_segments_and_costs_one_deletion_against_its_nucleus():
-    assert segments("a͡i") == ["a", "i"]
+    assert segments("a͡i") == ["a", "i̯"]
     assert ipa_distance("a͡i", "a") == GAP_COST
 
 

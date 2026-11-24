@@ -3,8 +3,8 @@
  "system": "phonematcher,levenshtein,panphon-weighted,panphon-hamming,aline,soundvectors,sca",
  "split": "dev",
  "commit": null,
- "head": "100ff08cf33c0687edcd7efa8eea10c8ef978166",
- "tree_dirty": false,
+ "head": "b08a707fcf0a906d0d7f298da6859adecc421925",
+ "tree_dirty": true,
  "source": "https://doi.org/10.5281/zenodo.192607 (v1.0, glottobank/potential-of-cognate-detection-v1.0.zip, md5 d270e3803e5be2f018c9a2975b750ce8)",
  "datasets": [
   "Austronesian-210-20",
@@ -115,60 +115,60 @@
     ],
     "average_precision": {
      "Austronesian-210-20": 0.6004027458697022,
-     "Bai-110-09": 0.9320712059163411,
-     "Chinese-140-15": 0.5485240442428911,
+     "Bai-110-09": 0.9355984291965171,
+     "Chinese-140-15": 0.6286274868388814,
      "IndoEuropean-207-20": 0.6314874940112523,
      "Japanese-200-10": 0.9604431794565814,
      "ObUgrian-110-21": 0.9684550577302249,
-     "mean": 0.7735639545378321
+     "mean": 0.7875023988505266
     },
     "bcubed_f": {
-     "Austronesian-210-20": 0.7398845429088488,
-     "Bai-110-09": 0.8524932980885694,
-     "Chinese-140-15": 0.7447989300216162,
-     "IndoEuropean-207-20": 0.7940159034846548,
-     "Japanese-200-10": 0.9155181716049695,
-     "ObUgrian-110-21": 0.9138667415203364,
-     "mean": 0.8267629312714994
+     "Austronesian-210-20": 0.7605025528123855,
+     "Bai-110-09": 0.875670341130003,
+     "Chinese-140-15": 0.78139300647375,
+     "IndoEuropean-207-20": 0.7911494352197895,
+     "Japanese-200-10": 0.9133424039730031,
+     "ObUgrian-110-21": 0.908618601516024,
+     "mean": 0.8384460568541593
     },
-    "bcubed_precision_mean": 0.8607225592713044,
-    "bcubed_recall_mean": 0.8091880007087537,
-    "threshold": 0.31,
+    "bcubed_precision_mean": 0.8625565137215844,
+    "bcubed_recall_mean": 0.8232923393406125,
+    "threshold": 0.3,
     "paper_grid": {
      "threshold": 0.3,
      "bcubed_f": {
       "Austronesian-210-20": 0.7605025528123855,
-      "Bai-110-09": 0.8446186115493716,
-      "Chinese-140-15": 0.7422388372664482,
+      "Bai-110-09": 0.875670341130003,
+      "Chinese-140-15": 0.78139300647375,
       "IndoEuropean-207-20": 0.7911494352197895,
       "Japanese-200-10": 0.9133424039730031,
       "ObUgrian-110-21": 0.908618601516024,
-      "mean": 0.826745073722837
+      "mean": 0.8384460568541593
      }
     },
     "per_word": {
      "bcubed_f": {
       "Austronesian-210-20": 0.7434770924716617,
-      "Bai-110-09": 0.8431230944894887,
-      "Chinese-140-15": 0.7181440268761142,
+      "Bai-110-09": 0.873377240810439,
+      "Chinese-140-15": 0.7521870515293497,
       "IndoEuropean-207-20": 0.785888650569192,
       "Japanese-200-10": 0.9129489174985496,
       "ObUgrian-110-21": 0.908618601516024,
-      "mean": 0.818700063903505
+      "mean": 0.8294162590658694
      },
-     "bcubed_precision_mean": 0.8626744753748886,
-     "bcubed_recall_mean": 0.7901577294379306,
+     "bcubed_precision_mean": 0.8465899716564514,
+     "bcubed_recall_mean": 0.8211470564308652,
      "threshold": 0.3,
      "paper_grid": {
       "threshold": 0.3,
       "bcubed_f": {
        "Austronesian-210-20": 0.7434770924716617,
-       "Bai-110-09": 0.8431230944894887,
-       "Chinese-140-15": 0.7181440268761142,
+       "Bai-110-09": 0.873377240810439,
+       "Chinese-140-15": 0.7521870515293497,
        "IndoEuropean-207-20": 0.785888650569192,
        "Japanese-200-10": 0.9129489174985496,
        "ObUgrian-110-21": 0.908618601516024,
-       "mean": 0.818700063903505
+       "mean": 0.8294162590658694
       }
      }
     },
