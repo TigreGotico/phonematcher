@@ -198,8 +198,8 @@ def _segments(nfd: str, track: bool = False) -> Tuple[List[str], List[List[int]]
             if track:
                 at[-1].append(i)
             continue
-        starts_word = not out or out[-1] == " "
-        if ch in PRE_DIACRITICS and (starts_word or is_vowel_phone(out[-1])) and not join_next:
+        base = next((seg for seg in reversed(out) if not is_tone(seg)), " ")  # a tone letter does not end the vowel
+        if ch in PRE_DIACRITICS and (base == " " or is_vowel_phone(base)) and not join_next:
             pending += ch
             if track:
                 pending_at.append(i)
