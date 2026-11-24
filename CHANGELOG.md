@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.7.4a1](https://github.com/TigreGotico/phonematcher/tree/2.7.4a1) (2026-11-24)
+
+[Full Changelog](https://github.com/TigreGotico/phonematcher/compare/2.7.3a1...2.7.4a1)
+
+**Merged pull requests:**
+
+- fix: take \[son\] and \[cons\] of h, ɦ and ʔ from the Hayes CSV [\#142](https://github.com/TigreGotico/phonematcher/pull/142) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
+
 ## [2.7.3a1](https://github.com/TigreGotico/phonematcher/tree/2.7.3a1) (2026-11-24)
 
 [Full Changelog](https://github.com/TigreGotico/phonematcher/compare/2.7.2a1...2.7.3a1)
