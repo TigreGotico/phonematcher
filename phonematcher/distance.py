@@ -52,7 +52,7 @@ def segment_spans(text: str) -> List[Tuple[int, int]]:
     """
     spans: List[Tuple[int, int]] = []
     chars = _characters(text)
-    for seg, at in zip(*_segments("".join(ch for ch, _ in chars), track=True)):
+    for seg, at in zip(*_segments("".join(ch for ch, _ in chars))):
         if seg == " ":
             continue
         where = [chars[k][1] for k in at]
@@ -79,15 +79,17 @@ def _characters(ipa: str) -> List[Tuple[str, int]]:
     return [(t, i) for d, i in chars for t in d.translate(SPELLINGS)]
 
 
-def _segments(nfd: str, track: bool = False) -> Tuple[List[str], List[List[int]]]:
-    """The segments of the NFD string *nfd*. With *track*, also the positions in *nfd* of the
-    characters of each segment; without it, the second list is empty."""
+def _segments(nfd: str) -> Tuple[List[str], List[List[int]]]:
+    """The segments of the NFD string *nfd*, and the positions in *nfd* of the characters of each."""
     out: List[str] = []
-    at: List[List[int]] = []  # with track: the positions of each segment, and of the held marks below
-    pending_at, tone_at, carried_at = [], [], []
+    at: List[List[int]] = []
+    pending, pending_at = "", []  # marks written before the base they belong to
+    tone, tone_at = "", []  # a tone diacritic, written out after the segment that carries it
+    carried, carried_at = "", []  # a tone diacritic that belongs to the next base symbol
     join_next = False
+    tie_at = -1  # the tie bar that sets join_next
     offglide = -1  # the index in out of the offglide of a tied diphthong, which holds its ◌̯
-    pending = ""  # marks written before the base they belong to
+    level_kind = None  # the notation of the tone letter last written: Chao, left-stem or numeral
 
     def release_pending() -> None:
         """A held mark with no following base belongs to the segment before it, if any."""
@@ -95,26 +97,18 @@ def _segments(nfd: str, track: bool = False) -> Tuple[List[str], List[List[int]]
         if pending:
             if out and out[-1] != " ":
                 out[-1] += pending
-                if track:
-                    at[-1] += pending_at
+                at[-1] += pending_at
             else:
                 out.append(pending)
-                if track:
-                    at.append(pending_at)
+                at.append(pending_at)
             pending, pending_at = "", []
-
-    tone = ""  # a tone diacritic, written out after the segment that carries it
-    carried = ""  # a tone diacritic that belongs to the next base symbol
 
     def release_tone() -> None:
         nonlocal tone, tone_at
         if tone:
             out.append(tone)
-            if track:
-                at.append(tone_at)
+            at.append(tone_at)
             tone, tone_at = "", []
-
-    level_kind = None  # the notation of the tone letter last written: Chao, left-stem or numeral
 
     for i, raw in enumerate(nfd):
         ch = NUMERALS.get(raw, raw)
@@ -124,16 +118,13 @@ def _segments(nfd: str, track: bool = False) -> Tuple[List[str], List[List[int]]
             letters = DIACRITIC_TONES[ch]
             if not out or out[-1] == " ":
                 carried += letters
-                if track:
-                    carried_at.append(i)
+                carried_at.append(i)
             elif is_tone(out[-1]) and not tone:
                 out[-1] += letters
-                if track:
-                    at[-1].append(i)
+                at[-1].append(i)
             else:
                 tone += letters
-                if track:
-                    tone_at += (min(at[-1]), i)  # the span of a tone mark holds the letter it is on
+                tone_at += (min(at[-1]), i)  # the span of a tone mark holds the letter it is on
             level_kind = None
             continue
         if ch in LEVELS:
@@ -143,19 +134,16 @@ def _segments(nfd: str, track: bool = False) -> Tuple[List[str], List[List[int]]
             level_kind = kind
             if tone:
                 tone += ch
-                if track:
-                    tone_at.append(i)
+                tone_at.append(i)
                 continue
             release_pending()
             if out and is_tone(out[-1]) and same_notation:
                 out[-1] += ch
-                if track:
-                    at[-1].append(i)
+                at[-1].append(i)
             else:
                 release_tone()
                 out.append(ch)
-                if track:
-                    at.append([i])
+                at.append([i])
             continue
         level_kind = None
         attaches = unicodedata.combining(ch) or ch in POST_DIACRITICS
@@ -163,31 +151,26 @@ def _segments(nfd: str, track: bool = False) -> Tuple[List[str], List[List[int]]
             release_tone()
         if ch.isspace():
             tone += carried
-            carried = ""
-            if track:
-                tone_at += carried_at
-                carried_at = []
+            tone_at += carried_at
+            carried, carried_at = "", []
             release_tone()
             release_pending()
             if out and out[-1] != " ":
                 out.append(" ")
-                if track:
-                    at.append([i])
+                at.append([i])
             continue
         if ch in TIES and pending:  # a tie between two marks before a base, as in ᵑ͡ᵐk͡p
             pending += ch
-            if track:
-                pending_at.append(i)
+            pending_at.append(i)
             continue
         if ch in TIES:
             join_next = bool(out) and out[-1] != " "
             if join_next:
                 carried, tone = carried + tone, ""
+                carried_at, tone_at = carried_at + tone_at, []
                 out[-1] += ch
-                if track:
-                    carried_at, tone_at = carried_at + tone_at, []
-                    at[-1].append(i)
-                    tie_at = i  # the tie bar that sets join_next
+                at[-1].append(i)
+                tie_at = i
             continue
         if join_next and out[-1][-1] in TIES and is_vowel_phone(out[-1][:-1].replace(NON_SYLLABIC, "")) and is_vowel_phone(ch):
             out[-1] = out[-1][:-1]
@@ -196,45 +179,38 @@ def _segments(nfd: str, track: bool = False) -> Tuple[List[str], List[List[int]]
             else:  # the second vowel of a tied diphthong is its offglide
                 out.append(ch + NON_SYLLABIC)
                 offglide = len(out) - 1
-            if track:
-                at.append([tie_at, i])  # the tie bar is in both spans, so the diphthong is one span
+            at.append([tie_at, i])  # the tie bar is in both spans, so the diphthong is one span
             join_next = False
             continue
         if ch == NON_SYLLABIC and out and offglide == len(out) - 1:
-            if track:
-                at[-1].append(i)
+            at[-1].append(i)
             continue
-        base = next((seg for seg in reversed(out) if not _split_tone_marks(seg)[0]), " ")  # a tone letter does not end the vowel
-        if ch in PRE_DIACRITICS and (base == " " or is_vowel_phone(base)) and not join_next:
-            pending += ch
-            if track:
+        if ch in PRE_DIACRITICS and not join_next:
+            base = next((seg for seg in reversed(out) if not _split_tone_marks(seg)[0]), " ")  # a tone letter does not end the vowel
+            if base == " " or is_vowel_phone(base):
+                pending += ch
                 pending_at.append(i)
-            continue
+                continue
         if not pending and out and out[-1] != " " and (attaches or join_next):
             out[-1] += ch
-            if track:
-                at[-1].append(i)
-                if join_next:
-                    at[-1].append(tie_at)
+            at[-1].append(i)
+            if join_next:
+                at[-1].append(tie_at)
         else:
             out.append(pending + ch)
-            pending = ""
+            at.append(pending_at + [i])
+            pending, pending_at = "", []
             tone, carried = tone + carried, ""
-            if track:
-                at.append(pending_at + [i])
-                pending_at = []
-                tone_at, carried_at = tone_at + carried_at, []
+            tone_at, carried_at = tone_at + carried_at, []
         join_next = False
     release_pending()
     tone += carried
-    if track:
-        tone_at += carried_at
+    tone_at += carried_at
     release_tone()
     if out and out[-1] == " ":
         out.pop()
-        if track:
-            at.pop()
-    return _carry_tones(out, at, track)
+        at.pop()
+    return _carry_tones(out, at)
 
 
 def carry_tones(segs: Sequence[str]) -> List[str]:
@@ -242,7 +218,7 @@ def carry_tones(segs: Sequence[str]) -> List[str]:
     last vowel or syllabic consonant before the tone in its word that has no tone yet. A tone with
     no such segment stays a segment of its own. For a tokenizer whose own segments hold tones apart:
     ``carry_tones(["m", "a", "˥"])`` gives ``["m", "a˥"]``."""
-    return _carry_tones(list(segs), [], False)[0]
+    return _carry_tones(list(segs), [[] for _ in segs])[0]
 
 
 def _split_tone_marks(seg: str) -> Tuple[str, str]:
@@ -258,34 +234,38 @@ def _split_tone_marks(seg: str) -> Tuple[str, str]:
     return "", ""
 
 
-def _carry_tones(segs: List[str], at: List[List[int]], track: bool) -> Tuple[List[str], List[List[int]]]:
-    """Move each tone of *segs* onto the last vowel or syllabic consonant before it in its word that
-    has no tone yet. A tone with no such segment stays a segment of its own. A tone written right
-    after its segment joins that segment's positions; a tone written after a coda is left out of
-    them, so each segment keeps a span of its own. A length or combining mark written after the
-    tone goes onto the vowel right before the tone, as if written before it; after a coda, the tone
-    and its mark stay one segment."""
+def _tone_carrier(out: List[str], marks: str) -> Optional[int]:
+    """The index in *out* of the last vowel or syllabic consonant of the word that has no tone yet,
+    if a tone followed by *marks* can move onto it. A coda between them stops *marks*, which cannot
+    join the vowel's span."""
+    for j in reversed(range(len(out))):
+        if out[j] == " " or out[j][-1] in LEVELS:  # a word boundary, a tone or a toned segment
+            return None
+        if marks and j != len(out) - 1:
+            return None
+        if is_vowel_phone(out[j]):
+            return j
+    return None
+
+
+def _carry_tones(segs: List[str], at: List[List[int]]) -> Tuple[List[str], List[List[int]]]:
+    """Move each tone of *segs* onto the segment that carries it, or leave it a segment of its own.
+    A tone written right after its segment joins that segment's positions; a tone written after a
+    coda is left out of them, so each segment keeps a span of its own. A length or combining mark
+    written after the tone goes onto the vowel right before the tone; after a coda, the tone and
+    its mark stay one segment."""
     out: List[str] = []
     out_at: List[List[int]] = []
-    for k, seg in enumerate(segs):
-        carried = False
+    for seg, seg_at in zip(segs, at):
         tone, marks = _split_tone_marks(seg)
-        if tone:
-            for j in reversed(range(len(out))):
-                if out[j] == " " or out[j][-1] in LEVELS:  # a word boundary, a tone or a toned segment
-                    break
-                if marks and j != len(out) - 1:  # a coda between: the marks cannot join the vowel's span
-                    break
-                if is_vowel_phone(out[j]):
-                    out[j] += marks + tone
-                    if track and j == len(out) - 1:
-                        out_at[j] = out_at[j] + at[k]
-                    carried = True
-                    break
-        if not carried:
+        j = _tone_carrier(out, marks) if tone else None
+        if j is None:
             out.append(seg)
-            if track:
-                out_at.append(at[k])
+            out_at.append(seg_at)
+            continue
+        out[j] += marks + tone
+        if j == len(out) - 1:
+            out_at[j] = out_at[j] + seg_at
     return out, out_at
 
 
@@ -316,10 +296,13 @@ def check_readable(segs: Sequence[str], source: str) -> None:
                 raise ValueError(f"cannot read the segment {seg!r} in {source!r}") from None
 
 
-def _check_sequences(function: str, a: Sequence[str], b: Sequence[str]) -> None:
+def _check_sequences(function: str, a: Sequence[str], b: Sequence[str], strict: bool) -> None:
     for name, value in (("a", a), ("b", b)):
         if not isinstance(value, (str, list, tuple)):
             raise TypeError(f"{function}() argument {name} must be a list of segments, not {type(value).__name__}")
+    if strict:
+        check_readable(a, " ".join(a))
+        check_readable(b, " ".join(b))
 
 
 def edit_distance(
@@ -339,10 +322,7 @@ def edit_distance(
     A segment that phonematcher cannot read is at distance 1 from every other segment. With *strict*, an unread segment raises ``ValueError`` instead. *substitution* and *gap*
     replace the cost of a substitution and of one deletion or insertion.
     """
-    _check_sequences("edit_distance", a, b)
-    if strict:
-        check_readable(a, " ".join(a))
-        check_readable(b, " ".join(b))
+    _check_sequences("edit_distance", a, b, strict)
     row = [j * gap for j in range(len(b) + 1)]
     for i, seg in enumerate(a, start=1):
         prev, row[0] = row[0], i * gap
@@ -369,10 +349,7 @@ def align(
     ``rel_tol=0`` and ``abs_tol=1e-9``). With *strict*, an unread segment raises ``ValueError``, as
     in :func:`edit_distance`.
     """
-    _check_sequences("align", a, b)
-    if strict:
-        check_readable(a, " ".join(a))
-        check_readable(b, " ".join(b))
+    _check_sequences("align", a, b, strict)
     n, m = len(a), len(b)
     cost = [[0.0] * (m + 1) for _ in range(n + 1)]
     for i in range(1, n + 1):
