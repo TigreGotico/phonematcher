@@ -1,5 +1,13 @@
 # Changelog
 
+## [3.1.6a1](https://github.com/TigreGotico/phonematcher/tree/3.1.6a1) (2026-11-25)
+
+[Full Changelog](https://github.com/TigreGotico/phonematcher/compare/3.1.5a1...3.1.6a1)
+
+**Merged pull requests:**
+
+- fix: read an ejective uvular stop tied before a click as the click tied before it [\#216](https://github.com/TigreGotico/phonematcher/pull/216) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
+
 ## [3.1.5a1](https://github.com/TigreGotico/phonematcher/tree/3.1.5a1) (2026-11-25)
 
 [Full Changelog](https://github.com/TigreGotico/phonematcher/compare/3.1.4a6...3.1.5a1)
@@ -379,10 +387,6 @@
 ## [2.3.4a2](https://github.com/TigreGotico/phonematcher/tree/2.3.4a2) (2026-11-23)
 
 [Full Changelog](https://github.com/TigreGotico/phonematcher/compare/2.3.4a1...2.3.4a2)
-
-**Merged pull requests:**
-
-- docs: add the whitepaper, with every table rendered from the results [\#102](https://github.com/TigreGotico/phonematcher/pull/102) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
 
 ## [2.3.4a1](https://github.com/TigreGotico/phonematcher/tree/2.3.4a1) (2026-11-23)
 
