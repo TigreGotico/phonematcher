@@ -211,6 +211,9 @@ def _click_tie(parts: List[str], segment: str) -> Vector:
         # it, a modifier letter after it goes with the click.
         letter = parts[1][:1] + "".join(takewhile(unicodedata.combining, parts[1][1:]))
         return vectorize_phones(letter + TIES[0] + parts[0] + parts[1][len(letter):])
+    if (len(parts) == 2 and parts[0] == "qʼ" and parts[1][:1] in _CLICKS
+            and all(map(unicodedata.combining, parts[1][1:]))):
+        return vectorize_phones(parts[1] + TIES[0] + parts[0])  # the order of ǃ͡qʼ
     rear_letter = parts[0][:1] in _REAR_CLOSURES and all(map(unicodedata.combining, parts[0][1:]))
     if len(parts) != 2 or not rear_letter or parts[1][0] not in _CLICKS:
         raise _unrecognized(segment)
