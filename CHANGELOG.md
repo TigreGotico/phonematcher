@@ -1,8 +1,20 @@
 # Changelog
 
+## [3.1.5a1](https://github.com/TigreGotico/phonematcher/tree/3.1.5a1) (2026-11-25)
+
+[Full Changelog](https://github.com/TigreGotico/phonematcher/compare/3.1.4a6...3.1.5a1)
+
+**Merged pull requests:**
+
+- fix: keep a leading tie bar on the next segment so it reads as unread [\#215](https://github.com/TigreGotico/phonematcher/pull/215) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
+
 ## [3.1.4a6](https://github.com/TigreGotico/phonematcher/tree/3.1.4a6) (2026-11-25)
 
-[Full Changelog](https://github.com/TigreGotico/phonematcher/compare/3.1.4a4...3.1.4a6)
+[Full Changelog](https://github.com/TigreGotico/phonematcher/compare/3.1.4a5...3.1.4a6)
+
+## [3.1.4a5](https://github.com/TigreGotico/phonematcher/tree/3.1.4a5) (2026-11-25)
+
+[Full Changelog](https://github.com/TigreGotico/phonematcher/compare/3.1.4a4...3.1.4a5)
 
 **Merged pull requests:**
 
@@ -375,10 +387,6 @@
 ## [2.3.4a1](https://github.com/TigreGotico/phonematcher/tree/2.3.4a1) (2026-11-23)
 
 [Full Changelog](https://github.com/TigreGotico/phonematcher/compare/2.3.3a1...2.3.4a1)
-
-**Merged pull requests:**
-
-- fix: rerun the dev cognate and ablation results with the corrected benchmark reader [\#99](https://github.com/TigreGotico/phonematcher/pull/99) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
 
 ## [2.3.3a1](https://github.com/TigreGotico/phonematcher/tree/2.3.3a1) (2026-11-23)
 
