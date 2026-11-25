@@ -1,5 +1,14 @@
 # Changelog
 
+## [3.1.4a5](https://github.com/TigreGotico/phonematcher/tree/3.1.4a5) (2026-11-25)
+
+[Full Changelog](https://github.com/TigreGotico/phonematcher/compare/3.1.4a4...3.1.4a5)
+
+**Merged pull requests:**
+
+- test: strict-xfail an ejective uvular stop tied before a click [\#211](https://github.com/TigreGotico/phonematcher/pull/211) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
+- test: strict-xfail a leading tie bar in a word distance [\#210](https://github.com/TigreGotico/phonematcher/pull/210) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
+
 ## [3.1.4a4](https://github.com/TigreGotico/phonematcher/tree/3.1.4a4) (2026-11-25)
 
 [Full Changelog](https://github.com/TigreGotico/phonematcher/compare/3.1.4a3...3.1.4a4)
@@ -382,10 +391,6 @@
 ## [2.3.2a1](https://github.com/TigreGotico/phonematcher/tree/2.3.2a1) (2026-11-22)
 
 [Full Changelog](https://github.com/TigreGotico/phonematcher/compare/2.3.1a1...2.3.2a1)
-
-**Merged pull requests:**
-
-- fix: ablate phonematcher at the shipped costs, and say which cost rule each table uses [\#96](https://github.com/TigreGotico/phonematcher/pull/96) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
 
 ## [2.3.1a1](https://github.com/TigreGotico/phonematcher/tree/2.3.1a1) (2026-11-22)
 
