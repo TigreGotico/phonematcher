@@ -129,7 +129,7 @@ def _segments(nfd: str) -> Tuple[List[str], List[List[int]]]:
             continue
         if ch in LEVELS:
             # A tone run ends where its notation changes: ˨˩˦꜔꜒ is the tone 214, then the tone 35.
-            kind = 0 if raw in LEVELS else 1 if "꜒" <= raw <= "꜖" else 2
+            kind = 0 if raw in LEVELS else 1 if "\ua712" <= raw <= "\ua716" else 2
             same_notation = level_kind in (None, kind)
             level_kind = kind
             if tone:
@@ -229,7 +229,7 @@ def _split_tone_marks(seg: str) -> Tuple[str, str]:
     while n < len(seg) and seg[n] in LEVELS:
         n += 1
     marks = seg[n:]
-    if n and all(ch in "ːˑ" or "̀" <= ch <= "ͯ" for ch in marks):
+    if n and all(ch in "ːˑ" or "\u0300" <= ch <= "\u036f" for ch in marks):
         return seg[:n], marks
     return "", ""
 
