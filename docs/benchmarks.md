@@ -15,21 +15,21 @@ These data were inspected while the weights were fitted. The scores are descript
 
 ### coverage
 
-Commit `4f254da10846`.
+Commit `0327eefdb8ce`.
 
 ```text
-phonematcher: phoible types 0.9098 tokens 0.9947; wikipron types 0.7300 tokens 0.9939; orthography2ipa types 0.8832 tokens 0.9936
+phonematcher: phoible types 0.9098 tokens 0.9947; wikipron types 0.7322 tokens 0.9940; orthography2ipa types 0.9127 tokens 0.9953
 levenshtein: phoible types 1.0000 tokens 1.0000; wikipron types 1.0000 tokens 1.0000; orthography2ipa types 1.0000 tokens 1.0000
-panphon-weighted: phoible types 0.3254 tokens 0.8706; wikipron types 0.3088 tokens 0.9300; orthography2ipa types 0.3702 tokens 0.8960
-panphon-hamming: phoible types 0.3254 tokens 0.8706; wikipron types 0.3088 tokens 0.9300; orthography2ipa types 0.3702 tokens 0.8960
-aline: phoible types 0.0216 tokens 0.5745; wikipron types 0.0247 tokens 0.7848; orthography2ipa types 0.0335 tokens 0.6500
-soundvectors: phoible types 0.8179 tokens 0.9827; wikipron types 0.7675 tokens 0.9938; orthography2ipa types 0.7497 tokens 0.9863
+panphon-weighted: phoible types 0.3254 tokens 0.8706; wikipron types 0.3088 tokens 0.9300; orthography2ipa types 0.3871 tokens 0.8977
+panphon-hamming: phoible types 0.3254 tokens 0.8706; wikipron types 0.3088 tokens 0.9300; orthography2ipa types 0.3871 tokens 0.8977
+aline: phoible types 0.0216 tokens 0.5745; wikipron types 0.0247 tokens 0.7848; orthography2ipa types 0.0341 tokens 0.6491
+soundvectors: phoible types 0.8179 tokens 0.9827; wikipron types 0.7675 tokens 0.9938; orthography2ipa types 0.7543 tokens 0.9869
 sca: phoible types 0.9875 tokens 0.9975; wikipron types 0.9528 tokens 0.9976; orthography2ipa types 0.9809 tokens 0.9981
 ```
 
 ### allophones
 
-Commit `4f254da10846`.
+Commit `0327eefdb8ce`.
 
 ```text
 phonematcher: direct unread-at-1 0.8988 read-only 0.9110; tie_retry unread-at-1 0.8988 read-only 0.9110
@@ -43,7 +43,7 @@ sca: direct unread-at-1 0.9155 read-only 0.9168; tie_retry unread-at-1 0.9155 re
 
 ### confusions
 
-Commit `4f254da10846`.
+Commit `0327eefdb8ce`.
 
 ```text
 phonematcher: mandarin 0.293 (skipped 0); miller_nicely 0.349 (skipped 0); hillenbrand 0.561 (skipped 0); spanish 0.127 (skipped 0)
@@ -57,7 +57,7 @@ sca: mandarin 0.115 (skipped 0); miller_nicely 0.157 (skipped 0); hillenbrand 0.
 
 ### tone
 
-Commit `4f254da10846`.
+Commit `0327eefdb8ce`.
 
 ```text
 main Chao values: direction_baseline 0.782 [0.455, 0.886] (pairs 15 in, 15 out)
@@ -71,20 +71,20 @@ not scored, no tone model: levenshtein, panphon-weighted, panphon-hamming, aline
 
 ### ablations
 
-Commit `4f254da10846`.
+Commit `0327eefdb8ce`.
 
 Cost rule: none matters here. Each score ranks pairs of segments by their segment distance, and the square root keeps that order, so the C0 costs and the P5 costs give the same rows.
 
 #### coverage
 
 ```text
-phonematcher: phoible types 0.9098 tokens 0.9947; wikipron types 0.7300 tokens 0.9939; orthography2ipa types 0.8832 tokens 0.9936
-pm-p5-panphon22: phoible types 0.9098 tokens 0.9947; wikipron types 0.7300 tokens 0.9939; orthography2ipa types 0.8832 tokens 0.9936
-pm-p5-no-height: phoible types 0.9098 tokens 0.9947; wikipron types 0.7300 tokens 0.9939; orthography2ipa types 0.8832 tokens 0.9936
-pm-p5-flat-diacritics: phoible types 0.9098 tokens 0.9947; wikipron types 0.7300 tokens 0.9939; orthography2ipa types 0.8832 tokens 0.9936
-pm-p5-uniform: phoible types 0.9098 tokens 0.9947; wikipron types 0.7300 tokens 0.9939; orthography2ipa types 0.8832 tokens 0.9936
-pm-p5-indel-0.5: phoible types 0.9098 tokens 0.9947; wikipron types 0.7300 tokens 0.9939; orthography2ipa types 0.8832 tokens 0.9936
-pm-p5-indel-1.5: phoible types 0.9098 tokens 0.9947; wikipron types 0.7300 tokens 0.9939; orthography2ipa types 0.8832 tokens 0.9936
+phonematcher: phoible types 0.9098 tokens 0.9947; wikipron types 0.7322 tokens 0.9940; orthography2ipa types 0.9127 tokens 0.9953
+pm-p5-panphon22: phoible types 0.9098 tokens 0.9947; wikipron types 0.7322 tokens 0.9940; orthography2ipa types 0.9127 tokens 0.9953
+pm-p5-no-height: phoible types 0.9098 tokens 0.9947; wikipron types 0.7322 tokens 0.9940; orthography2ipa types 0.9127 tokens 0.9953
+pm-p5-flat-diacritics: phoible types 0.9098 tokens 0.9947; wikipron types 0.7322 tokens 0.9940; orthography2ipa types 0.9127 tokens 0.9953
+pm-p5-uniform: phoible types 0.9098 tokens 0.9947; wikipron types 0.7322 tokens 0.9940; orthography2ipa types 0.9127 tokens 0.9953
+pm-p5-indel-0.5: phoible types 0.9098 tokens 0.9947; wikipron types 0.7322 tokens 0.9940; orthography2ipa types 0.9127 tokens 0.9953
+pm-p5-indel-1.5: phoible types 0.9098 tokens 0.9947; wikipron types 0.7322 tokens 0.9940; orthography2ipa types 0.9127 tokens 0.9953
 ```
 
 #### allophones
@@ -123,11 +123,11 @@ The development split holds the items that `benchmarks/split.py` assigns to dev.
 
 ### cognates
 
-Commit `4f254da10846`.
+Commit `0327eefdb8ce`.
 
 | System | AP, unread at 1 | F, unread at 1 | AP, common words | F, common words | Words skipped |
 |---|---|---|---|---|---|
-| phonematcher | 0.7875 | 0.8383 | 0.8545 | 0.8838 | 436 |
+| phonematcher | 0.7876 | 0.8383 | 0.8545 | 0.8838 | 416 |
 | levenshtein | 0.7514 | 0.8165 | 0.8362 | 0.8757 | 0 |
 | panphon-weighted | 0.5833 | 0.7714 | 0.8057 | 0.8505 | 5129 |
 | panphon-hamming | 0.5847 | 0.6624 | 0.7715 | 0.8358 | 5129 |
@@ -137,11 +137,11 @@ Commit `4f254da10846`.
 
 ### cognates-toneless
 
-Commit `4f254da10846`.
+Commit `0327eefdb8ce`.
 
 | System | AP, unread at 1 | F, unread at 1 | AP, common words | F, common words | Words skipped |
 |---|---|---|---|---|---|
-| phonematcher | 0.7863 | 0.8377 | 0.8366 | 0.8779 | 396 |
+| phonematcher | 0.7864 | 0.8377 | 0.8366 | 0.8779 | 376 |
 | levenshtein | 0.7515 | 0.8117 | 0.8007 | 0.8641 | 0 |
 | panphon-weighted | 0.6403 | 0.7842 | 0.7874 | 0.8409 | 2773 |
 | panphon-hamming | 0.6505 | 0.7328 | 0.7486 | 0.8260 | 2773 |
@@ -151,7 +151,7 @@ Commit `4f254da10846`.
 
 ### alignment
 
-Commit `4f254da10846`.
+Commit `0327eefdb8ce`.
 
 Common pairs: 831 of 5748.
 
@@ -207,7 +207,7 @@ Fuzzy search of phonematcher:
 
 ### ablations
 
-Commit `4f254da10846`.
+Commit `0327eefdb8ce`.
 
 Cost rule: the shipped P5 costs, gap 0.5 and substitutions at the square root of the feature distance. `phonematcher` is the shipped library, and each `pm-p5-` row changes one thing in it. `pm-p5-indel-0.5` is the shipped costs again and serves as a control.
 
@@ -215,25 +215,25 @@ Cost rule: the shipped P5 costs, gap 0.5 and substitutions at the square root of
 
 | System | AP, unread at 1 | F, unread at 1 | AP, common words | F, common words | Words skipped |
 |---|---|---|---|---|---|
-| phonematcher | 0.7875 | 0.8383 | 0.8094 | 0.8450 | 436 |
-| pm-p5-panphon22 | 0.7882 | 0.8379 | 0.8102 | 0.8449 | 436 |
-| pm-p5-no-height | 0.7871 | 0.8368 | 0.8091 | 0.8436 | 436 |
-| pm-p5-flat-diacritics | 0.7874 | 0.8381 | 0.8093 | 0.8448 | 436 |
-| pm-p5-uniform | 0.7834 | 0.8323 | 0.8052 | 0.8386 | 436 |
-| pm-p5-indel-0.5 | 0.7875 | 0.8383 | 0.8094 | 0.8450 | 436 |
-| pm-p5-indel-1.5 | 0.7132 | 0.7707 | 0.7318 | 0.7785 | 436 |
+| phonematcher | 0.7876 | 0.8383 | 0.8085 | 0.8449 | 416 |
+| pm-p5-panphon22 | 0.7882 | 0.8378 | 0.8092 | 0.8447 | 416 |
+| pm-p5-no-height | 0.7872 | 0.8368 | 0.8082 | 0.8434 | 416 |
+| pm-p5-flat-diacritics | 0.7875 | 0.8381 | 0.8084 | 0.8447 | 416 |
+| pm-p5-uniform | 0.7836 | 0.8322 | 0.8043 | 0.8383 | 416 |
+| pm-p5-indel-0.5 | 0.7876 | 0.8383 | 0.8085 | 0.8449 | 416 |
+| pm-p5-indel-1.5 | 0.7133 | 0.7707 | 0.7312 | 0.7783 | 416 |
 
 #### cognates-toneless
 
 | System | AP, unread at 1 | F, unread at 1 | AP, common words | F, common words | Words skipped |
 |---|---|---|---|---|---|
-| phonematcher | 0.7863 | 0.8377 | 0.8077 | 0.8441 | 396 |
-| pm-p5-panphon22 | 0.7873 | 0.8380 | 0.8090 | 0.8441 | 396 |
-| pm-p5-no-height | 0.7862 | 0.8366 | 0.8077 | 0.8430 | 396 |
-| pm-p5-flat-diacritics | 0.7862 | 0.8376 | 0.8076 | 0.8440 | 396 |
-| pm-p5-uniform | 0.7820 | 0.8314 | 0.8031 | 0.8375 | 396 |
-| pm-p5-indel-0.5 | 0.7863 | 0.8377 | 0.8077 | 0.8441 | 396 |
-| pm-p5-indel-1.5 | 0.7128 | 0.7711 | 0.7310 | 0.7790 | 396 |
+| phonematcher | 0.7864 | 0.8377 | 0.8068 | 0.8440 | 376 |
+| pm-p5-panphon22 | 0.7874 | 0.8380 | 0.8080 | 0.8441 | 376 |
+| pm-p5-no-height | 0.7862 | 0.8365 | 0.8067 | 0.8429 | 376 |
+| pm-p5-flat-diacritics | 0.7863 | 0.8376 | 0.8067 | 0.8439 | 376 |
+| pm-p5-uniform | 0.7822 | 0.8313 | 0.8022 | 0.8372 | 376 |
+| pm-p5-indel-0.5 | 0.7864 | 0.8377 | 0.8068 | 0.8440 | 376 |
+| pm-p5-indel-1.5 | 0.7129 | 0.7711 | 0.7304 | 0.7788 | 376 |
 
 #### alignment
 

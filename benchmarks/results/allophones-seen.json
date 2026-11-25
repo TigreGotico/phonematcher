@@ -3,7 +3,7 @@
  "system": "phonematcher,levenshtein,panphon-weighted,panphon-hamming,aline,soundvectors,sca",
  "split": "seen",
  "commit": null,
- "head": "4f254da108460c3a56c25c482751aa0cae11fe1c",
+ "head": "0327eefdb8ce0a96dfe277599c864cbc9dd07532",
  "tree_dirty": false,
  "data": {
   "phoible": {

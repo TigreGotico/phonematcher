@@ -68,8 +68,8 @@ Coverage shows how much real transcription the table can read. We counted covera
 | Corpus | Segment types | Types read | Share of types | Share of tokens |
 |---|---|---|---|---|
 | PHOIBLE 2.0 | 4158 | 3783 | 0.9098 | 0.9947 |
-| WikiPron | 3604 | 2631 | 0.7300 | 0.9939 |
-| orthography2ipa | 2569 | 2269 | 0.8832 | 0.9936 |
+| WikiPron | 3604 | 2639 | 0.7322 | 0.9940 |
+| orthography2ipa | 2519 | 2299 | 0.9127 | 0.9953 |
 <!-- whitepaper:coverage:end -->
 
 Most segments that the table cannot read are rare. Thus the token share is much higher than the type share. The table cannot read these types of segment:
@@ -99,6 +99,8 @@ Two letters without a tie bar read as one tied segment if the tie is possible. F
 
 Two vowels do not combine. Thus a diphthong is two segments, and the second vowel of a tied pair is non-syllabic: `a͡i` reads as `a` and `i̯`. The sources do not agree on this point. Nerbonne and Heeringa (1997, p. 11) found better dialect distances with two segments. Heeringa (2004, p. 188) found no difference. Rubehn et al. (2024, p. 209) use one segment with the vector of its first part.
 
+A click ties to the velar or uvular letter of its back closure, in either order: `k͡ǃ` and `ǃ͡k` read the same. The letter gives `voi` and `nas` and no place, so `k͡ǃ` and `q͡ǃ` are at distance 0. Miller et al. (2009) show with ultrasound that the back constriction of a click is not at the velar place and that the contrast of velar and uvular clicks is one of airstream. A click tied to `χ` reads as `q͡ǃ` with `delrel` and `strid` set to plus, the values of the affricate `q͡χ`. Miller et al. (2009, pp. 149–152) describe the fricated release of a click as a manner contour with a scraping sound. A click tied to an ejective uvular reads as the click with `cg` plus. A tie bar with nothing before it, as in `͡ǃ`, does not read and raises `ValueError`.
+
 The tie rule increases coverage. This table gives the PHOIBLE types that read with three methods.
 
 <!-- whitepaper:readings:start -->
@@ -109,7 +111,7 @@ The tie rule increases coverage. This table gives the PHOIBLE types that read wi
 | as the library reads a word: whole, split into segments, tones included | 3783 of 4158 | 0.9098 |
 <!-- whitepaper:readings:end -->
 
-A tone is four features of the vowel that has it. The tone comes after its syllable, and the library puts it on the last vowel or syllabic consonant before it in the word. Tone letters, tone diacritics and superscript digits give the same features. Thus `má`, `ma˦` and `ma⁴` all read as `m`, `a˦`, and `tam˧˧` reads as `t`, `a˧˧`, `m`. The four features are those of the tone block of phoonnx: `tone_is`, and the pitch at the start, the middle and the end of the syllable, each Chao level as `(level − 3) / 2`. We do not use the two tone features of PanPhon. The distance divides by the weight of the segment features only, so a pair with no tone keeps its distance. A tone with no vowel before it in its word stays a segment of its own. We compare two such tones by the mean difference of their three pitches, divided by the range of the five levels. Section 6 shows that this ranking of tones is not better than a simple baseline. Thus the tone model is experimental.
+A tone is four features of the vowel that has it. The tone comes after its syllable, and the library puts it on the last vowel or syllabic consonant before it in the word. Tone letters, tone diacritics and superscript digits give the same features. Thus `má`, `ma˦` and `ma⁴` all read as `m`, `a˦`, and `tam˧˧` reads as `t`, `a˧˧`, `m`. The four features are those of the tone block of phoonnx: `tone_is`, and the pitch at the start, the middle and the end of the syllable, each Chao level as `(level − 3) / 2`. We do not use the two tone features of PanPhon. The distance divides by the weight of the segment features only, so a pair with no tone keeps its distance. A length mark or a combining mark written after a tone belongs to the vowel before the tone: `a˥ː` reads as `aː˥`, and `ma˥ː` reads as `m`, `aː˥`. A modifier letter after a tone has no base. Before a stop it belongs to the stop. Otherwise it stays with the tone letters, as in `ma˥ʰ`, and the segment `˥ʰ` is not a phone. A tone with no vowel before it in its word stays a segment of its own. We compare two such tones by the mean difference of their three pitches, divided by the range of the five levels. Section 6 shows that this ranking of tones is not better than a simple baseline. Thus the tone model is experimental.
 
 A stress mark is not a segment. The library removes it. Thus `ˈio` and `io` are at distance 0.
 
@@ -132,6 +134,8 @@ The search does not compare the query with each term. The index puts the letters
 The sensitivity controls the size of the clusters. It is a share between 0 and 1. The merge threshold is that quantile of the costs of all pairs of letters. Thus one share has the same meaning with different costs.
 
 We chose the default share, 0.12, on the development data. We took the share with the best mean recall@1 that also kept the lists of candidates short. The share 0.12 has a mean recall@1 of 0.8521 over the four dialect pairs, and the share 0.08 has 0.8348.
+
+The function `pairwise_distances` returns the matrix of distances between segments or between words, as lists. It is the input of the scikit-learn clusterers that take a precomputed distance. The class `PhoneFeatures` turns segments into rows of the 40 feature values, with plus as 1, minus as -1 and zero as 0, and a tone pitch as its number. It works in a scikit-learn pipeline. The package does not import scikit-learn and does not need it.
 
 A segment that phonematcher cannot read is at distance 1 from every other segment. The library gives no warning. With `strict=True`, the distance, alignment and search functions stop with an error. The error gives the segment. Strict mode cannot find the ASCII letters `c`, `y`, `j` and `r`, because they are also IPA letters.
 
@@ -307,10 +311,10 @@ The height steps and the scale marks follow the chart. Neither improves a score.
 | Variant | Test cognates, AP minus table (original costs) | Test alignment, PAS minus table (original costs) | Dev cognates, AP (released costs) |
 |---|---|---|---|
 | PanPhon's 22 features | +0.0058 [+0.0044, +0.0071] | +0.0000 [+0.0000, +0.0000] | 0.7882 |
-| no height steps | -0.0002 [-0.0013, +0.0008] | +0.0000 [+0.0000, +0.0000] | 0.7871 |
-| no scale marks | -0.0000 [-0.0000, -0.0000] | +0.0000 [+0.0000, +0.0000] | 0.7874 |
-| every weight 1 | -0.0066 [-0.0082, -0.0050] | -0.0205 [-0.0462, +0.0000] | 0.7834 |
-| the table (control) | - | - | 0.7875 |
+| no height steps | -0.0002 [-0.0013, +0.0008] | +0.0000 [+0.0000, +0.0000] | 0.7872 |
+| no scale marks | -0.0000 [-0.0000, -0.0000] | +0.0000 [+0.0000, +0.0000] | 0.7875 |
+| every weight 1 | -0.0066 [-0.0082, -0.0050] | -0.0205 [-0.0462, +0.0000] | 0.7836 |
+| the table (control) | - | - | 0.7876 |
 <!-- whitepaper:ablations:end -->
 
 Removing the scale marks changes each paired test score by less than 0.0001. It changes the development cognate score by one unit in the fourth decimal. We keep the marks because the chart gives them a meaning, not because they help. We did not measure their effect on coverage.
@@ -376,7 +380,9 @@ The numbers of the released library come from the candidate that won the same te
 
 We defined the common words of the cognate table after we saw the results. They do not include the two tonal sets, Chinese and Tujia. They keep only the words that the weakest reader can read.
 
-Only the three test result files have the hash of the written rules. The development and seen results come from one later run on the clean tree of commit `4f254da`, which has the sourced feature values and the tone features.
+Only the three test result files have the hash of the written rules. The development and seen results come from one later run on the clean tree of commit `0327eef`, version `3.1.4a1`. The retrieval file is the exception. It comes from the clean tree of commit `4f254da`, because a run of ALINE and SCA on the full query sets takes many hours. A run of phonematcher alone on the later tree gave the same rows for all queries, for skipped queries and for the fuzzy search, and no other system depends on the table. The tables of this paper describe version `3.1.4a1`.
+
+A click with a breathy or glottalic mark before or on its rear letter, as in `ǃ͡ɢʱ` and `ᵏʼǃ`, does not read, because no source that we know writes it. A modifier letter after a tone, as in `ma˥ʰ`, makes a segment that is not a phone and costs 1 against every other segment. No source gives it a pitch. `PhoneFeatures` has no scikit-learn tags. The checker `check_estimator`, `ColumnTransformer` and an array input do not work with it.
 
 The alignment comparison uses few pairs. The retrieval comparison with SCA and ALINE uses samples.
 
@@ -387,6 +393,8 @@ The tone model uses one small data set that we used before.
 ## 9. Reproducibility
 
 The test ran at commit `f092f20c8bbe0aa49a6480946858c0354a2580a9` of `TigreGotico/phonematcher`. The written rules are in `benchmarks/prereg-2.md`. Their sha256 is `29927d4e0e8162276cf12c68450a3b28372dc039d3a24377bbf390a64bd2df7c`. The test code stops if the hash of the file is different.
+
+The development and seen results ran at commit `0327eefdb8ce0a96dfe277599c864cbc9dd07532`, which is version `3.1.4a1` of the library. The retrieval file ran at commit `4f254da108460c3a56c25c482751aa0cae11fe1c` (section 8). The data of the coverage counts comes from the pinned WikiPron files, from PHOIBLE 2.0, and from the phone lists of the installed orthography2ipa package, which is not pinned, so the orthography2ipa row also follows the package version.
 
 The two audit runs of section 6 are not in the result files. The triangle check ran on the tree of commit `ecde385`. The weight fit ran `scripts/fit_weights.py` on the library at commit `9c0f5bf`. The script is not on `dev`. It is on the branch `feat/fit-weights`, at commit `3a134ef`.
 
@@ -442,6 +450,7 @@ On Python before version 3.12, the clusters of the search changed with the hash 
 - List, J.-M. and Prokić, J. 2014. A benchmark database of phonetic alignments in historical linguistics and dialectology. *Proceedings of LREC 2014*, pp. 288–294. <http://www.lrec-conf.org/proceedings/lrec2014/pdf/299_Paper.pdf>
 - List, J.-M., Greenhill, S. J. and Gray, R. D. 2017. The potential of automatic word comparison for historical linguistics. *PLOS ONE* 12(1): e0170046. <https://journals.plos.org/plosone/article/file?id=10.1371/journal.pone.0170046&type=printable>
 - McCarthy, J. J. 1994. The phonetics and phonology of Semitic pharyngeals. In P. A. Keating (ed.), *Phonological Structure and Phonetic Form: Papers in Laboratory Phonology III*, pp. 191–233. Cambridge University Press. <https://hdl.handle.net/20.500.14394/32543>
+- Miller, A. L., Brugman, J., Sands, B., Namaseb, L., Exter, M. and Collins, C. 2009. Differences in airstream and posterior place of articulation among Nǀuu clicks. *Journal of the International Phonetic Association* 39(2):129–161. <https://cpb-us-w2.wpmucdn.com/u.osu.edu/dist/4/25187/files/2016/01/JIPA_AMiller_published-1u7kmdn.pdf>
 - Moran, S. and McCloy, D. (eds.) 2019. PHOIBLE 2.0. Max Planck Institute for the Science of Human History, Jena. <https://phoible.org/>
 - Mortensen, D. R., Littell, P., Bharadwaj, A., Goyal, K., Dyer, C. and Levin, L. 2016. PanPhon: a resource for mapping IPA segments to articulatory feature vectors. *Proceedings of COLING 2016*, pp. 3475–3484. <https://aclanthology.org/C16-1328.pdf>
 - Nerbonne, J. and Heeringa, W. 1997. Measuring dialect distance phonetically. *Computational Phonology: Third Meeting of the ACL SIGPHON*, pp. 11–18. <https://aclanthology.org/W97-1102.pdf>
