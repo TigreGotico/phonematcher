@@ -19,7 +19,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from systems import NAMES, System, build  # noqa: E402
 from variants import NAMES as VARIANTS, P5_NAMES as P5_VARIANTS  # noqa: E402
 import final  # noqa: E402
-from tasks import ablations, alignment, allophones, cognates, cognates_toneless, confusions, coverage, retrieval, tone  # noqa: E402
+from tasks import ablations, alignment, allophones, cognates, cognates_toneless, confusions, coverage, equal_cost, retrieval, tone  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent
 DEFAULT_CACHE = Path.home() / ".cache" / "phonematcher-bench"
@@ -72,10 +72,11 @@ SUITE_TASKS = {
     "retrieval": retrieval,
     "tone": tone,
     "ablations": ablations,
+    "equal-cost": equal_cost,
 }
 RESULTS = ROOT / "benchmarks" / "results"
 #: ``--system`` values that stand for several systems
-GROUPS = {"all": NAMES, "variants": ["phonematcher", *VARIANTS], "variants-p5": ["phonematcher", *P5_VARIANTS]}
+GROUPS = {"all": NAMES, "variants": ["phonematcher", *VARIANTS], "variants-p5": ["phonematcher", *P5_VARIANTS], "equal-cost": equal_cost.SYSTEMS}
 
 
 def write_result(path: Path, payload: dict, task: str, system: str, split: str, commit: Optional[str]) -> None:

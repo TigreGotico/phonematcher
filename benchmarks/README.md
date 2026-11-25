@@ -119,6 +119,16 @@ The `seen` run covers coverage, allophones and confusions, and the control. The 
 
 The control compares `pm-panphon22` with `panphon-weighted`: `python benchmarks/variants.py control`. It prints the pair counts for every PHOIBLE segment that both systems read. A variant is a diagnostic and not a candidate.
 
+## Equal costs
+
+The test run gave the feature baselines a gap of 1 and linear substitutions, and only phonematcher the candidate costs of the pre-registration. The `equal-cost` task gives `panphon-weighted` and `soundvectors` the shipped costs of phonematcher: a gap of 0.5, and a substitution at the square root of the distance. The systems are `panphon-weighted-p5` and `soundvectors-p5`. The PanPhon distance is divided by its largest value, twice the sum of its weights, before the square root. The CLTS distance is the share of positions that differ and needs no scaling. `--system all` does not run them.
+
+```bash
+python benchmarks/run.py --task equal-cost --system equal-cost --split dev
+```
+
+The run covers cognates, alignment and retrieval on the dev split, for plain edit distance, `pm-C0`, `phonematcher`, the two PanPhon systems and the two CLTS systems. Retrieval scores each system by brute force on the fixed sample of 500 queries per pair. The run writes `equal-cost-dev.json`. It takes about ten minutes. The result has no interval, and the test split has no such run.
+
 ## The splits
 
 `split.is_test(key)` is true for one key in five, by the SHA-1 of the key. Each task names its key.

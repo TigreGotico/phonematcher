@@ -39,7 +39,7 @@ IDENTIFIERS = {
     "192607",            # the Zenodo record, checked below against the cognate test file
     "3.12",              # the Python version of the hash-seed note
     "7",                 # rule 7 of the pre-registration
-    "21",                # the feature count the PanPhon paper states on p. 3477
+    "21",                # the feature count the PanPhon paper states on p. 3475
 }
 
 #: Numbers from an audit run that no result file holds. The paper names the audit beside each.
@@ -80,6 +80,25 @@ def numbers(text):
     return re.findall(r"(?<![\w@.-])\d+(?:[.,]\d+)*", text)
 
 
+def tone_scores():
+    return results("tone-seen.json")["scored"]["main"]
+
+
+def equal_cost():
+    """The dev numbers of section 5.6 by system: AP on all and on common words, PAS on common pairs, mean recall@1."""
+    tasks = results("equal-cost-dev.json")["tasks"]
+    pairs = tasks["retrieval"]["pairs"].values()
+    return {
+        name: {
+            "cog_all": tasks["cognates"]["systems"][name]["unread_at_1"]["average_precision"]["mean"],
+            "cog_common": tasks["cognates"]["systems"][name]["common"]["average_precision"]["mean"],
+            "pas": tasks["alignment"]["all"]["systems"][name]["common_pas"],
+            "recall": math.fsum(p["systems"][name]["all_items_unread_at_1"]["recall@1"] for p in pairs) / len(pairs),
+        }
+        for name in tasks["cognates"]["systems"]
+    }
+
+
 def scale_mark_bound():
     """The least power of ten above every paired test difference of the variant with no scale marks."""
     diffs = [abs(results(f"{task}-test.json")["paired"]["pm-flat-diacritics"]["diff"]) for task in ("cognates", "alignment")]
@@ -105,9 +124,20 @@ def anchors():
     control = results("ablations-seen.json")["control"]
     letters = len(_letter_costs()[0])
     triples = math.comb(letters, 3)
+    equal = equal_cost()
     return [
-        anchored(f"{retrieval_leader()} has the highest recall@1", f4(retrieval["intervals"]["pm-P5"]["estimate"])),
-        anchored("precision is", iv["pm-P5"], "below SCA at", iv["sca"], "below plain edit distance at", iv["levenshtein"]),
+        anchored("It has the highest recall@1", f4(retrieval["intervals"]["phonematcher"]["estimate"])),
+        anchored("precision is", iv["phonematcher"]),
+        anchored("This is below SCA at", iv["sca"], "plain edit distance at", iv["levenshtein"], "CLTS sound vectors at", iv["soundvectors"]),
+        anchored("the scores are", f4(retrieval["intervals"]["pm-P5"]["estimate"]), "for retrieval", iv["pm-P5"], "for cognates"),
+        anchored("baseline has the higher point estimate", f4(tone_scores()["direction_baseline"]["score"]), "against", f4(tone_scores()["phonematcher"]["score"])),
+        anchored("In", str(tone_scores()["direction_baseline"]["interval"]["undefined"]), "of the", str(cognates["resamples"]), "resamples"),
+        anchored("On cognates, CLTS sound vectors score", f4(equal["soundvectors-p5"]["cog_all"]), "on all words and phonematcher", f4(equal["phonematcher"]["cog_all"])),
+        anchored("On the common words, CLTS sound vectors score", f4(equal["soundvectors-p5"]["cog_common"]), "and phonematcher", f4(equal["phonematcher"]["cog_common"])),
+        anchored("On alignment, PanPhon scores", f4(equal["panphon-weighted-p5"]["pas"]), "and phonematcher", f4(equal["phonematcher"]["pas"])),
+        anchored("CLTS sound vectors score", f4(equal["soundvectors-p5"]["pas"])),
+        anchored("On retrieval, phonematcher keeps the lead with", f4(equal["phonematcher"]["recall"]), "against", f4(equal["soundvectors-p5"]["recall"]),
+                 "for CLTS sound vectors and", f4(equal["panphon-weighted-p5"]["recall"]), "for PanPhon"),
         anchored("Plain edit distance also has the higher point estimate", iv["levenshtein"], "against", iv["pm-P5"]),
         anchored("released library reached a B-cubed F", f4(p5["bcubed_f_at_training_threshold"]["bcubed_f"][ROMANCE]),
                  "against", f4(sca["bcubed_f_at_training_threshold"]["bcubed_f"][ROMANCE]), "for SCA"),
@@ -129,13 +159,13 @@ def anchors():
 
 
 #: The names the paper gives the systems whose order it states.
-PAPER_NAMES = {"pm-P5": "phonematcher", "sca": "SCA", "levenshtein": "plain edit distance", "aline": "ALINE"}
+PAPER_NAMES = {"pm-P5": "phonematcher", "phonematcher": "It", "sca": "SCA", "levenshtein": "plain edit distance", "aline": "ALINE"}
 
 
-def retrieval_leader():
+def retrieval_leader(systems=None):
     """The paper's name for the system with the highest mean recall@1 over the test pairs, on all queries."""
     pairs = results("retrieval-test.json")["pairs"].values()
-    systems = [name for name, _ in render.README_SYSTEMS]
+    systems = systems or [name for name, _ in render.README_SYSTEMS]
     mean = {s: math.fsum(p["systems"][s]["all_items_unread_at_1"]["recall@1"] for p in pairs) for s in systems}
     best = max(mean, key=mean.get)
     return PAPER_NAMES.get(best, best)
@@ -158,18 +188,27 @@ def order_sentences():
     common = {s: cognates["systems"][s]["common"]["average_precision"]["mean"] for s, _ in render.README_SYSTEMS}
     others = [s for s in common if s not in ("pm-P5", "sca")]
     panphon = cognates["paired"]["pm-panphon22"]
-    tone = results("tone-seen.json")["scored"]["main"]
+    tone = tone_scores()
+    c0 = {"retrieval": results("retrieval-test.json")["intervals"], "alignment": av}
+    first = [s for s, _ in render.README_SYSTEMS if s != "pm-P5"]
     skipped = {s: cognates["systems"][s]["skipped"]["words"][ROMANCE] for s in ("pm-P5", "panphon-weighted", "panphon-hamming", "aline")}
     overlap = "do not overlap" if p5["high"] < sca["low"] or p5["low"] > sca["high"] else "overlap"
     higher = lambda a, b: "higher" if a > b else "lower"  # noqa: E731
+    clts = c0["retrieval"]["soundvectors"]
+    c0_retrieval = c0["retrieval"]["phonematcher"]
+    below = lambda other: "below" if iv["phonematcher"]["estimate"] < iv[other]["estimate"] else "not below"  # noqa: E731
     return [
-        f"{retrieval_leader()} has the highest recall@1",
+        f"{retrieval_leader(first)} has the highest recall@1 on word retrieval across dialects",
+        "its interval " + ("overlaps" if c0_retrieval["low"] <= clts["high"] and clts["low"] <= c0_retrieval["high"] else "does not overlap") + " that of CLTS sound vectors",
+        f"This is {below('sca')} SCA at",
+        f"On alignment, it is {'below' if all(av['phonematcher']['estimate'] < av[s]['estimate'] for s in ('sca', 'aline')) else 'not below'} SCA and ALINE, "
+        f"and its interval lies {'below' if av['phonematcher']['high'] < av['sca']['low'] else 'not below'} that of SCA",
         f"PanPhon's own features scored {higher(panphon['diff'], 0)} than our full table on test cognates",
         "PanPhon's 22 features alone are " + comparison({"low": 0, "high": 0}, panphon, ("better", "worse", "not different from"))
         + " than our table on test cognates, and the interval is " + ("above" if panphon["low"] > 0 else "not above") + " zero",
-        "Our tone distance is " + ("not better" if tone["phonematcher"]["score"] < tone["direction_baseline"]["score"] else "better")
+        "The data does not show that our tone distance is " + ("better" if tone["phonematcher"]["score"] < tone["direction_baseline"]["score"] else "worse")
         + " than a baseline",
-        "The tone distance is " + ("not better" if tone["phonematcher"]["score"] < tone["direction_baseline"]["score"] else "better")
+        "The data does not show that the tone distance is " + ("better" if tone["phonematcher"]["score"] < tone["direction_baseline"]["score"] else "worse")
         + " than a baseline",
         f"On the common words, phonematcher has a {higher(common['pm-P5'], common['sca'])} average precision than SCA. "
         f"It has a {higher(common['pm-P5'], max(common[s] for s in others))} average precision than all other systems.",
@@ -197,6 +236,13 @@ def prose_values():
     """Each prose number, computed from a result file or the library, with what it is."""
     cognates, alignment, retrieval = (results(f"{task}-test.json") for task in ("cognates", "alignment", "retrieval"))
     values = {
+        f4(retrieval["intervals"]["phonematcher"]["estimate"]): "retrieval, original costs, test",
+        f4(cognates["intervals"]["phonematcher"]["estimate"]): "cognates, original costs, test",
+        f4(cognates["intervals"]["soundvectors"]["estimate"]): "cognates, CLTS sound vectors, test",
+        f"{retrieval['index_cap']:,}": "words in the retrieval index",
+        f4(tone_scores()["direction_baseline"]["score"]): "tone, direction baseline, seen",
+        f4(tone_scores()["phonematcher"]["score"]): "tone, tone distance, seen",
+        str(tone_scores()["direction_baseline"]["interval"]["undefined"]): "resamples with an undefined baseline correlation",
         f4(retrieval["intervals"]["pm-P5"]["estimate"]): "retrieval, P5, test",
         f4(cognates["intervals"]["pm-P5"]["estimate"]): "cognates, P5, test",
         f4(cognates["intervals"]["sca"]["estimate"]): "cognates, SCA, test",
@@ -240,6 +286,11 @@ def prose_values():
     values[f4(cognates["systems"]["sca"]["common"]["average_precision"][ROMANCE])] = "Romance common AP of SCA"
 
     values[str(results("tone-seen.json")["pairs"])] = "tone pairs"
+    equal = equal_cost()
+    for system, keys in (("phonematcher", ("cog_all", "cog_common", "pas", "recall")), ("soundvectors-p5", ("cog_all", "cog_common", "pas", "recall")),
+                         ("panphon-weighted-p5", ("pas", "recall"))):
+        for key in keys:
+            values[f4(equal[system][key])] = f"{system}, {key}, equal costs, dev"
     values[scale_mark_bound()] = "bound on the paired test differences of the scale-mark variant"
     confusions = results("confusions-seen.json")["systems"]["phonematcher"]
     for name in ("hillenbrand", "mandarin", "miller_nicely"):
@@ -318,7 +369,9 @@ def test_each_key_number_sits_beside_its_system_and_claim():
 
 def test_a_swapped_system_or_value_fails_the_anchors():
     swaps = [
-        ("precision is 0.8035, below SCA at 0.8835", "precision is 0.8835, above SCA at 0.8035"),
+        ("precision is 0.7326. This is below SCA at 0.8835, plain edit distance at 0.8234", "precision is 0.8835. This is below SCA at 0.7326, plain edit distance at 0.8234"),
+        ("On cognates, CLTS sound vectors score 0.7776 on all words and phonematcher 0.7876", "On cognates, CLTS sound vectors score 0.7876 on all words and phonematcher 0.7776"),
+        ("On retrieval, phonematcher keeps the lead with 0.8736, against 0.8585", "On retrieval, phonematcher keeps the lead with 0.8585, against 0.8736"),
         ("library scores an average precision of 0.9812 and SCA 0.9877", "library scores an average precision of 0.9877 and SCA 0.9812"),
         ("0.8234 against 0.8035", "0.8035 against 0.8234"),
         ("0.3631 at its training threshold, against 0.8660 for SCA", "0.8660 at its training threshold, against 0.3631 for SCA"),
@@ -334,11 +387,14 @@ def test_each_order_sentence_states_the_order_of_the_files():
 
 def test_a_reversed_order_sentence_fails():
     reversals = [
-        ("phonematcher has the highest recall@1, 0.8777", "SCA has the highest recall@1, 0.8777"),
+        ("It has the highest recall@1 on word retrieval across dialects", "SCA has the highest recall@1 on word retrieval across dialects"),
         ("PanPhon's own features scored higher than our full table", "PanPhon's own features scored lower than our full table"),
         ("PanPhon's 22 features alone are better than our table", "PanPhon's 22 features alone are worse than our table"),
-        ("Our tone distance is not better than a baseline", "Our tone distance is better than a baseline"),
-        ("The tone distance is not better than a baseline", "The tone distance is better than a baseline"),
+        ("This is below SCA at", "This is above SCA at"),
+        ("its interval overlaps that of CLTS sound vectors", "its interval does not overlap that of CLTS sound vectors"),
+        ("On alignment, it is below SCA and ALINE", "On alignment, it is above SCA and ALINE"),
+        ("The data does not show that our tone distance is better", "The data does not show that our tone distance is worse"),
+        ("The data does not show that the tone distance is better", "The data does not show that the tone distance is worse"),
         ("phonematcher has a lower average precision than SCA", "phonematcher has a higher average precision than SCA"),
         ("It has a higher average precision than all other systems", "It has a lower average precision than all other systems"),
         ("On all words, phonematcher is worse than SCA", "On all words, phonematcher is better than SCA"),
@@ -435,7 +491,7 @@ def test_only_the_test_files_carry_a_clean_commit():
         else:
             assert "prereg_sha256" not in payload, path.name
     development = [json.loads(p.read_text(encoding="utf8")) for p in sorted(RESULTS.glob("*-*.json"))]
-    development = [p for p in development if p.get("split") in ("seen", "dev")]
+    development = [p for p in development if p.get("split") in ("seen", "dev") and p["task"] != "equal-cost"]
     older = {"retrieval-dev.json": "4f254da108460c3a56c25c482751aa0cae11fe1c"}  # ALINE and SCA take many hours; section 8 says so
     heads = {p.get("head") or p.get("commit") for p in development if p["task"] + "-" + p["split"] + ".json" not in older}
     assert len(heads) == 1 and all(p.get("tree_dirty") is not True for p in development)
@@ -443,6 +499,9 @@ def test_only_the_test_files_carry_a_clean_commit():
         assert json.loads((RESULTS / name).read_text(encoding="utf8"))["head"] == head
         assert f"`{head[:7]}`" in PAPER
     assert f"`{heads.pop()[:7]}`" in PAPER
+    equal = json.loads((RESULTS / "equal-cost-dev.json").read_text(encoding="utf8"))
+    assert equal["head"] == "22f3615241dfb85b5404e5df041af520128ec352" and equal["tree_dirty"] is True  # section 8 says so
+    assert f"`{equal['head'][:7]}`" in PAPER
     assert "`f092f20c8bbe0aa49a6480946858c0354a2580a9`" in PAPER
     assert "`29927d4e0e8162276cf12c68450a3b28372dc039d3a24377bbf390a64bd2df7c`" in PAPER
 
@@ -465,3 +524,20 @@ def test_each_reference_is_cited_and_each_citation_has_a_reference():
 def test_the_readme_and_the_index_link_the_paper():
     assert "(whitepaper.md)" in (ROOT / "README.md").read_text(encoding="utf8")
     assert "(../whitepaper.md)" in (ROOT / "docs" / "index.md").read_text(encoding="utf8")
+
+
+def test_equal_costs_give_every_feature_system_a_gain_and_the_table_no_clear_lead():
+    equal = equal_cost()
+    for released, plain in (("phonematcher", "pm-C0"), ("panphon-weighted-p5", "panphon-weighted"), ("soundvectors-p5", "soundvectors")):
+        for key in ("cog_all", "pas", "recall"):
+            assert equal[released][key] > equal[plain][key], (released, key)
+    gain = {s: {k: equal[s][k] - equal[p][k] for k in ("cog_all", "recall")}
+            for s, p in (("phonematcher", "pm-C0"), ("soundvectors-p5", "soundvectors"))}
+    for key in ("cog_all", "recall"):
+        assert abs(gain["phonematcher"][key] - gain["soundvectors-p5"][key]) < 0.005, key
+    assert equal["soundvectors-p5"]["cog_common"] > equal["phonematcher"]["cog_common"]
+    assert equal["phonematcher"]["recall"] == max(row["recall"] for row in equal.values())
+    assert abs(equal["panphon-weighted-p5"]["pas"] - equal["phonematcher"]["pas"]) < 0.001
+    assert equal["soundvectors-p5"]["pas"] < equal["phonematcher"]["pas"]
+    assert "Every feature system gains from the released costs on all three tasks" in PAPER
+    assert "nearly the same amount" in PAPER

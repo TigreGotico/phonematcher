@@ -55,7 +55,7 @@ A term may have several readings: `search.add_term(["ˈpojʃ", "ˈpojs"], "pois"
 ## How it compares
 
 <!-- benchmark-table:start -->
-Test split, run once under [`benchmarks/prereg-2.md`](https://github.com/TigreGotico/phonematcher/blob/dev/benchmarks/prereg-2.md). Each cell is the estimate with its 95% interval. The best value in each column is in bold. A dash means that the system does not run the task. SCA ran retrieval on a sample of 500 queries per pair and ALINE on the first 100 of those, so these two retrieval cells are not on the same queries as the other rows. The shipped library is the P5 candidate, with its test numbers. [docs/benchmarks.md](docs/benchmarks.md) holds every result.
+Test split, run once under [`benchmarks/prereg-2.md`](https://github.com/TigreGotico/phonematcher/blob/dev/benchmarks/prereg-2.md). Each cell is the estimate with its 95% interval. The best value in each column is in bold. A dash means that the system does not run the task. SCA ran retrieval on a sample of 500 queries per pair and ALINE on the first 100 of those, so these two retrieval cells are not on the same queries as the other rows. The shipped library is the P5 candidate. Its test numbers describe the tested library at commit `f092f20`, with 36 features and a tone as a segment of its own, and no test has scored the released tone model. [docs/benchmarks.md](docs/benchmarks.md) holds every result.
 
 | System | Cognates, mean AP | Alignment, PAS on common pairs | Retrieval, mean recall@1 |
 |---|---|---|---|
