@@ -195,8 +195,9 @@ def test_the_sourced_value_table_equals_the_corrections_file():
     labels = {"cognates": "Cognates, AP", "alignment": "Alignment, PAS", "retrieval": "Retrieval, recall@1"}
     after = {"cognates": results("cognates-dev.json")["systems"]["phonematcher"]["unread_at_1"]["average_precision"]["mean"],
              "alignment": results("alignment-dev.json")["all"]["systems"]["phonematcher"]["common_pas"]}
+    tolerance = {"cognates": 1.1e-4}  # measured gap of the cognate AP is 1.05e-4; the alignment score is exact
     for task, key in keys.items():
-        assert abs(after.get(task, data["after"][key]) - data["after"][key]) < 2e-4  # the audit ran at 4f254da, before the later reading fixes
+        assert abs(after.get(task, data["after"][key]) - data["after"][key]) <= tolerance.get(task, 0)
         paired = data["paired"][task]["paired"]["after"]
         assert paired["high"] >= 0 or not data["adopted"]
         cells = [f"{data['before'][key]:.4f}", f"{data['after'][key]:.4f}",

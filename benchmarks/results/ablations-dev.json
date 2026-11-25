@@ -3,7 +3,7 @@
  "system": "phonematcher,pm-p5-panphon22,pm-p5-no-height,pm-p5-flat-diacritics,pm-p5-uniform,pm-p5-indel-0.5,pm-p5-indel-1.5",
  "split": "dev",
  "commit": null,
- "head": "0327eefdb8ce0a96dfe277599c864cbc9dd07532",
+ "head": "bc69674664ae12e7528361bbb4593095b7cf2a9c",
  "tree_dirty": false,
  "systems": [
   "phonematcher",
@@ -3118,7 +3118,7 @@
         "recall@10": 0.992,
         "mrr": 0.8782921366474149
        },
-       "seconds": 9.8,
+       "seconds": 8.4,
        "batched_equals_system_on_pairs": 1500
       },
       "pm-p5-panphon22": {
@@ -3149,7 +3149,7 @@
         "recall@10": 0.9864333333333333,
         "mrr": 0.8651079762161644
        },
-       "seconds": 10.9,
+       "seconds": 9.0,
        "batched_equals_system_on_pairs": 1500
       },
       "pm-p5-no-height": {
@@ -3180,7 +3180,7 @@
         "recall@10": 0.992,
         "mrr": 0.8735714154661235
        },
-       "seconds": 10.7,
+       "seconds": 8.9,
        "batched_equals_system_on_pairs": 1500
       },
       "pm-p5-flat-diacritics": {
@@ -3211,7 +3211,7 @@
         "recall@10": 0.992,
         "mrr": 0.8782921366474149
        },
-       "seconds": 10.5,
+       "seconds": 8.7,
        "batched_equals_system_on_pairs": 1500
       },
       "pm-p5-uniform": {
@@ -3242,7 +3242,7 @@
         "recall@10": 0.9882857142857143,
         "mrr": 0.866463305013865
        },
-       "seconds": 10.7,
+       "seconds": 8.8,
        "batched_equals_system_on_pairs": 1500
       },
       "pm-p5-indel-0.5": {
@@ -3273,7 +3273,7 @@
         "recall@10": 0.992,
         "mrr": 0.8782921366474149
        },
-       "seconds": 10.6,
+       "seconds": 8.6,
        "batched_equals_system_on_pairs": 1500
       },
       "pm-p5-indel-1.5": {
@@ -3304,7 +3304,7 @@
         "recall@10": 0.832,
         "mrr": 0.7293418339437313
        },
-       "seconds": 10.7,
+       "seconds": 8.2,
        "batched_equals_system_on_pairs": 1500
       }
      },
@@ -3362,7 +3362,7 @@
         "recall@10": 0.988,
         "mrr": 0.9113863997113997
        },
-       "seconds": 12.9,
+       "seconds": 11.6,
        "batched_equals_system_on_pairs": 1500
       },
       "pm-p5-panphon22": {
@@ -3393,7 +3393,7 @@
         "recall@10": 0.982,
         "mrr": 0.9019046096387273
        },
-       "seconds": 14.2,
+       "seconds": 11.9,
        "batched_equals_system_on_pairs": 1500
       },
       "pm-p5-no-height": {
@@ -3424,7 +3424,7 @@
         "recall@10": 0.988,
         "mrr": 0.9039675257273084
        },
-       "seconds": 14.4,
+       "seconds": 12.2,
        "batched_equals_system_on_pairs": 1500
       },
       "pm-p5-flat-diacritics": {
@@ -3455,7 +3455,7 @@
         "recall@10": 0.988,
         "mrr": 0.9113863997113997
        },
-       "seconds": 13.5,
+       "seconds": 12.1,
        "batched_equals_system_on_pairs": 1500
       },
       "pm-p5-uniform": {
@@ -3486,7 +3486,7 @@
         "recall@10": 0.992,
         "mrr": 0.9202985805860806
        },
-       "seconds": 14.7,
+       "seconds": 12.1,
        "batched_equals_system_on_pairs": 1500
       },
       "pm-p5-indel-0.5": {
@@ -3517,7 +3517,7 @@
         "recall@10": 0.988,
         "mrr": 0.9113863997113997
        },
-       "seconds": 15.0,
+       "seconds": 11.5,
        "batched_equals_system_on_pairs": 1500
       },
       "pm-p5-indel-1.5": {
@@ -3548,7 +3548,7 @@
         "recall@10": 0.95,
         "mrr": 0.9027777116425237
        },
-       "seconds": 20.7,
+       "seconds": 11.5,
        "batched_equals_system_on_pairs": 1500
       }
      },
@@ -3606,7 +3606,7 @@
         "recall@10": 1.0,
         "mrr": 0.9563611111111111
        },
-       "seconds": 10.2,
+       "seconds": 8.1,
        "batched_equals_system_on_pairs": 1500
       },
       "pm-p5-panphon22": {
@@ -3637,7 +3637,7 @@
         "recall@10": 1.0,
         "mrr": 0.9546333333333333
        },
-       "seconds": 10.5,
+       "seconds": 9.3,
        "batched_equals_system_on_pairs": 1500
       },
       "pm-p5-no-height": {
@@ -3668,7 +3668,7 @@
         "recall@10": 1.0,
         "mrr": 0.9561333333333333
        },
-       "seconds": 10.3,
+       "seconds": 9.2,
        "batched_equals_system_on_pairs": 1500
       },
       "pm-p5-flat-diacritics": {
@@ -3699,7 +3699,7 @@
         "recall@10": 1.0,
         "mrr": 0.9563611111111111
        },
-       "seconds": 10.5,
+       "seconds": 9.3,
        "batched_equals_system_on_pairs": 1500
       },
       "pm-p5-uniform": {
@@ -3730,7 +3730,7 @@
         "recall@10": 1.0,
         "mrr": 0.9535833333333333
        },
-       "seconds": 10.9,
+       "seconds": 9.2,
        "batched_equals_system_on_pairs": 1500
       },
       "pm-p5-indel-0.5": {
@@ -3761,7 +3761,7 @@
         "recall@10": 1.0,
         "mrr": 0.9563611111111111
        },
-       "seconds": 10.5,
+       "seconds": 8.7,
        "batched_equals_system_on_pairs": 1500
       },
       "pm-p5-indel-1.5": {
@@ -3792,7 +3792,7 @@
         "recall@10": 1.0,
         "mrr": 0.9550277777777778
        },
-       "seconds": 12.3,
+       "seconds": 8.7,
        "batched_equals_system_on_pairs": 1500
       }
      },
@@ -3850,7 +3850,7 @@
         "recall@10": 1.0,
         "mrr": 0.9518079365079365
        },
-       "seconds": 7.7,
+       "seconds": 6.4,
        "batched_equals_system_on_pairs": 1500
       },
       "pm-p5-panphon22": {
@@ -3881,7 +3881,7 @@
         "recall@10": 1.0,
         "mrr": 0.9515833333333333
        },
-       "seconds": 7.9,
+       "seconds": 7.0,
        "batched_equals_system_on_pairs": 1500
       },
       "pm-p5-no-height": {
@@ -3912,7 +3912,7 @@
         "recall@10": 1.0,
         "mrr": 0.9476873015873016
        },
-       "seconds": 7.6,
+       "seconds": 6.8,
        "batched_equals_system_on_pairs": 1500
       },
       "pm-p5-flat-diacritics": {
@@ -3943,7 +3943,7 @@
         "recall@10": 1.0,
         "mrr": 0.9518079365079365
        },
-       "seconds": 9.3,
+       "seconds": 7.0,
        "batched_equals_system_on_pairs": 1500
       },
       "pm-p5-uniform": {
@@ -3974,7 +3974,7 @@
         "recall@10": 0.998,
         "mrr": 0.9385222222222223
        },
-       "seconds": 7.9,
+       "seconds": 6.7,
        "batched_equals_system_on_pairs": 1500
       },
       "pm-p5-indel-0.5": {
@@ -4005,7 +4005,7 @@
         "recall@10": 1.0,
         "mrr": 0.9518079365079365
        },
-       "seconds": 7.9,
+       "seconds": 6.5,
        "batched_equals_system_on_pairs": 1500
       },
       "pm-p5-indel-1.5": {
@@ -4036,7 +4036,7 @@
         "recall@10": 0.978,
         "mrr": 0.9258993608320578
        },
-       "seconds": 10.4,
+       "seconds": 6.5,
        "batched_equals_system_on_pairs": 1500
       }
      },

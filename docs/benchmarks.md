@@ -15,7 +15,7 @@ These data were inspected while the weights were fitted. The scores are descript
 
 ### coverage
 
-Commit `0327eefdb8ce`.
+Commit `bc69674664ae`.
 
 ```text
 phonematcher: phoible types 0.9098 tokens 0.9947; wikipron types 0.7322 tokens 0.9940; orthography2ipa types 0.9127 tokens 0.9953
@@ -29,7 +29,7 @@ sca: phoible types 0.9875 tokens 0.9975; wikipron types 0.9528 tokens 0.9976; or
 
 ### allophones
 
-Commit `0327eefdb8ce`.
+Commit `bc69674664ae`.
 
 ```text
 phonematcher: direct unread-at-1 0.8988 read-only 0.9110; tie_retry unread-at-1 0.8988 read-only 0.9110
@@ -43,7 +43,7 @@ sca: direct unread-at-1 0.9155 read-only 0.9168; tie_retry unread-at-1 0.9155 re
 
 ### confusions
 
-Commit `0327eefdb8ce`.
+Commit `bc69674664ae`.
 
 ```text
 phonematcher: mandarin 0.293 (skipped 0); miller_nicely 0.349 (skipped 0); hillenbrand 0.561 (skipped 0); spanish 0.127 (skipped 0)
@@ -57,7 +57,7 @@ sca: mandarin 0.115 (skipped 0); miller_nicely 0.157 (skipped 0); hillenbrand 0.
 
 ### tone
 
-Commit `0327eefdb8ce`.
+Commit `bc69674664ae`.
 
 ```text
 main Chao values: direction_baseline 0.782 [0.455, 0.886] (pairs 15 in, 15 out)
@@ -71,7 +71,7 @@ not scored, no tone model: levenshtein, panphon-weighted, panphon-hamming, aline
 
 ### ablations
 
-Commit `0327eefdb8ce`.
+Commit `bc69674664ae`.
 
 Cost rule: none matters here. Each score ranks pairs of segments by their segment distance, and the square root keeps that order, so the C0 costs and the P5 costs give the same rows.
 
@@ -123,7 +123,7 @@ The development split holds the items that `benchmarks/split.py` assigns to dev.
 
 ### cognates
 
-Commit `0327eefdb8ce`.
+Commit `bc69674664ae`.
 
 | System | AP, unread at 1 | F, unread at 1 | AP, common words | F, common words | Words skipped |
 |---|---|---|---|---|---|
@@ -137,7 +137,7 @@ Commit `0327eefdb8ce`.
 
 ### cognates-toneless
 
-Commit `0327eefdb8ce`.
+Commit `bc69674664ae`.
 
 | System | AP, unread at 1 | F, unread at 1 | AP, common words | F, common words | Words skipped |
 |---|---|---|---|---|---|
@@ -151,7 +151,7 @@ Commit `0327eefdb8ce`.
 
 ### alignment
 
-Commit `0327eefdb8ce`.
+Commit `bc69674664ae`.
 
 Common pairs: 831 of 5748.
 
@@ -207,7 +207,7 @@ Fuzzy search of phonematcher:
 
 ### ablations
 
-Commit `0327eefdb8ce`.
+Commit `bc69674664ae`.
 
 Cost rule: the shipped P5 costs, gap 0.5 and substitutions at the square root of the feature distance. `phonematcher` is the shipped library, and each `pm-p5-` row changes one thing in it. `pm-p5-indel-0.5` is the shipped costs again and serves as a control.
 

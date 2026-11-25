@@ -3,7 +3,7 @@
  "system": "phonematcher,pm-p5-panphon22,pm-p5-no-height,pm-p5-flat-diacritics,pm-p5-uniform,pm-p5-indel-0.5,pm-p5-indel-1.5",
  "split": "seen",
  "commit": null,
- "head": "0327eefdb8ce0a96dfe277599c864cbc9dd07532",
+ "head": "bc69674664ae12e7528361bbb4593095b7cf2a9c",
  "tree_dirty": false,
  "systems": [
   "phonematcher",

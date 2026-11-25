@@ -163,7 +163,7 @@ The table compares the library of the test run with the shipped library on the d
 | Alignment, PAS | 0.8315 | 0.8315 | +0.0002 [-0.0007, +0.0011] |
 | Retrieval, recall@1 | 0.8801 | 0.8802 | +0.0002 [+0.0000, +0.0008] |
 
-The audit ran at `4f254da`. The click ties and the marks after a tone that came later move the cognate AP of the shipped library from 0.7875 to 0.7876 and leave the alignment score at 0.8315 on the development split. The paired intervals were not computed again.
+The audit ran at `4f254da`. The click ties and the marks after a tone move the cognate AP of the shipped library from 0.7875 to 0.7876 and leave the alignment score at 0.8315 on the development split. The paired intervals were not computed again.
 
 The rule for a change that corrects a value is to adopt it unless a paired interval on the development split lies wholly below 0. No interval lies below 0, so the library keeps its values.
 
