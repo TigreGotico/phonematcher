@@ -202,4 +202,4 @@ A test asserts that each example raises `ValueError`.
 - The step features, the scale marks and the pharyngealized feature rest on the chart and on descriptions of the articulation. The benchmarks do not show that they help.
 - The coverage counts are of three corpora. A segment outside them may not read.
 
-[Index](index.md) · Previous: [The feature table](features.md) · Next: [API reference](api.md)
+[Index](index.md) · Previous: [Segments](segments.md) · Next: [API reference](api.md)
