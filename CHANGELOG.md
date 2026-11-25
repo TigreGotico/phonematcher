@@ -1,5 +1,13 @@
 # Changelog
 
+## [3.1.6a5](https://github.com/TigreGotico/phonematcher/tree/3.1.6a5) (2026-11-25)
+
+[Full Changelog](https://github.com/TigreGotico/phonematcher/compare/3.1.6a4...3.1.6a5)
+
+**Merged pull requests:**
+
+- docs: revise the whitepaper for the referee report, with an equal-cost baseline run [\#224](https://github.com/TigreGotico/phonematcher/pull/224) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
+
 ## [3.1.6a4](https://github.com/TigreGotico/phonematcher/tree/3.1.6a4) (2026-11-25)
 
 [Full Changelog](https://github.com/TigreGotico/phonematcher/compare/3.1.6a3...3.1.6a4)
@@ -349,7 +357,6 @@
 
 - test: assert values instead of structure, share helpers in conftest [\#122](https://github.com/TigreGotico/phonematcher/pull/122) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
 - perf: cache substitution\_cost, store term segments, merge UPGMA incrementally [\#121](https://github.com/TigreGotico/phonematcher/pull/121) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
-- fix: name the C0 baseline pm-C0 and make sample\_queries honour its size [\#112](https://github.com/TigreGotico/phonematcher/pull/112) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
 
 ## [2.3.9a1](https://github.com/TigreGotico/phonematcher/tree/2.3.9a1) (2026-11-23)
 
@@ -362,7 +369,6 @@
 **Merged pull requests:**
 
 - fix: order tied search results by id type and check n\_results [\#114](https://github.com/TigreGotico/phonematcher/pull/114) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
-- fix: refuse malformed entries in overrides.json at build time [\#111](https://github.com/TigreGotico/phonematcher/pull/111) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
 
 ## [2.3.7a1](https://github.com/TigreGotico/phonematcher/tree/2.3.7a1) (2026-11-23)
 
