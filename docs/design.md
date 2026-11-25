@@ -80,7 +80,7 @@ Nearly all of the gain over the segment model comes from carrying the tone onto 
 
 ### The tone distance
 
-The tone distance is experimental. On the one tone data set that exists for it, it does not beat a baseline that compares only direction ([tracked in an open issue](https://github.com/TigreGotico/phonematcher/issues/68)). With equal weights on the three pitches, the feature distance of two toned vowels ranks tone pairs as the tone distance does, so the same limit holds for both.
+The tone distance is experimental. On the one tone data set that exists for it, it does not beat a baseline that compares only direction ([the tracking issue](https://github.com/TigreGotico/phonematcher/issues/68)). With equal weights on the three pitches, the feature distance of two toned vowels ranks tone pairs as the tone distance does, so the same limit holds for both.
 
 This is a limit, not a result. The benchmark has 15 tone pairs of Cantonese. It correlates the negative distance with the rate at which listeners confuse the two tones. The tone distance scores a Spearman 0.2475, with an interval from -0.3167 to 0.7396. A baseline that compares only the direction of the contour (rising, falling or level) scores 0.7817, with an interval from 0.4554 to 0.8860. With the alternative Chao values, the tone distance scores 0.3579. The intervals overlap, so 15 pairs do not show that the baseline is better. They show that the tone distance does not beat it. The two most confused pairs, T3 with T6 and T1 with T3, are level tones one or two steps apart. The data was seen while the library was built, and no other tone data was tested.
 

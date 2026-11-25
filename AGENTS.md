@@ -22,7 +22,7 @@ The `bench-copyleft` extra adds the SCA system. Its tests, `benchmarks/test_sca.
 - `phonematcher/data/features.json`: built, never hand-edited. `scripts/build_features.py` rebuilds it from `scripts/sources/` and `data/overrides.json`.
 - `phonematcher/data/overrides.json`: changes to the built table, each with its source and reason. `data/spellings.json` maps spellings that are not IPA to IPA.
 - `scripts/sources/`: the Hayes (2009) feature table as a CSV conversion by Kyle Gorman (Apache-2.0), and the height, backness and rounding of the 28 vowel letters of the IPA chart.
-- `benchmarks/`: the harness, outside the wheel. `benchmarks/render.py` writes `docs/benchmarks.md` and the README table.
+- `benchmarks/`: the harness, outside the wheel. `benchmarks/render.py` writes `docs/benchmarks.md` and the whitepaper tables, and prints the README table with `--readme`.
 - `docs/index.md`: every documentation page in reading order. `whitepaper.md` is the method and the evidence as one paper.
 
 ## Rules
