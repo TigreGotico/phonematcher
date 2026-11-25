@@ -275,7 +275,7 @@ def render(directory: Path = RESULTS) -> str:
         if split not in results:
             continue
         out += [f"## {title}", "", SPLIT_TEXT[split], ""]
-        if split == "test":
+        if split == "test" and all(task in results[split] for task, _ in README_COLUMNS):
             out += test_figure(results[split])
         for task in TASK_ORDER:
             if task in results[split]:
