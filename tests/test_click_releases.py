@@ -53,3 +53,8 @@ def test_the_fricated_release_and_the_ejected_release_differ_from_the_plain_clic
 def test_the_other_click_accompaniments_stay_unread(segment):
     with pytest.raises(ValueError):
         vectorize_phones(segment)
+
+
+@pytest.mark.xfail(strict=True, reason="#209")
+def test_an_ejective_uvular_stop_then_click_reads_as_the_click_then_stop():
+    assert vectorize_phones("qʼ͡ǃ") == vectorize_phones("ǃ͡qʼ")
