@@ -1,5 +1,13 @@
 # Changelog
 
+## [3.1.4a4](https://github.com/TigreGotico/phonematcher/tree/3.1.4a4) (2026-11-25)
+
+[Full Changelog](https://github.com/TigreGotico/phonematcher/compare/3.1.4a3...3.1.4a4)
+
+**Merged pull requests:**
+
+- docs: bring the whitepaper and the dev and seen results up to 3.1.4a1 [\#207](https://github.com/TigreGotico/phonematcher/pull/207) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
+
 ## [3.1.4a3](https://github.com/TigreGotico/phonematcher/tree/3.1.4a3) (2026-11-25)
 
 [Full Changelog](https://github.com/TigreGotico/phonematcher/compare/3.1.4a2...3.1.4a3)
@@ -366,10 +374,6 @@
 ## [2.3.3a1](https://github.com/TigreGotico/phonematcher/tree/2.3.3a1) (2026-11-23)
 
 [Full Changelog](https://github.com/TigreGotico/phonematcher/compare/2.3.2a2...2.3.3a1)
-
-**Merged pull requests:**
-
-- fix: read stress-marked segments and word-list boundaries in the benchmark system [\#95](https://github.com/TigreGotico/phonematcher/pull/95) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
 
 ## [2.3.2a2](https://github.com/TigreGotico/phonematcher/tree/2.3.2a2) (2026-11-22)
 
