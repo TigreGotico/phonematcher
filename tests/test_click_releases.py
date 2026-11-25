@@ -55,5 +55,6 @@ def test_the_other_click_accompaniments_stay_unread(segment):
         vectorize_phones(segment)
 
 
-def test_an_ejective_uvular_stop_then_click_reads_as_the_click_then_stop():
-    assert vectorize_phones("qʼ͡ǃ") == vectorize_phones("ǃ͡qʼ")
+@pytest.mark.parametrize("rear", ["qʼ", "kʼ"])
+def test_an_ejective_rear_stop_then_click_reads_as_the_click_then_stop(rear):
+    assert vectorize_phones(f"{rear}͡ǃ") == vectorize_phones(f"ǃ͡{rear}")
