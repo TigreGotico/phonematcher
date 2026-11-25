@@ -65,8 +65,6 @@ PRE_DIACRITICS = {
 }
 #: The tie bars, above and below; the table writes the first.
 TIES = ("͡", "͜")
-#: Unicode categories of a base letter, as against a modifier letter or a combining mark.
-_LETTER_CATEGORIES = {"Ll", "Lu", "Lo"}
 #: Click letters, and the velar and uvular letters that write a click's accompaniment (voicing,
 #: nasality) beside it. A click after any other letter with no tie bar is not read.
 _CLICKS = set("ʘǀǃǂǁ‼ʞ")
@@ -102,11 +100,14 @@ def _is_listed_vowel(seg: str) -> bool:
     return seg in phone_features and phone_features[seg][0] is True
 
 
+def _code_points(text: str) -> str:
+    return " ".join(f"U+{ord(c):04X}" for c in text)
+
+
 def _unrecognized(segment: str, note: str = "") -> ValueError:
     """The error for a segment with no vector. It lists the code points, so a combining mark that
     prints as nothing is visible."""
-    points = " ".join(f"U+{ord(c):04X}" for c in segment)
-    return ValueError(f"Unrecognized phone {segment!r} ({points}){note}. A word distance or a search"
+    return ValueError(f"Unrecognized phone {segment!r} ({_code_points(segment)}){note}. A word distance or a search"
                       " takes strict=True to raise on such a segment instead of costing it 1")
 
 
@@ -172,29 +173,7 @@ def vectorize_phones(segment: str) -> Vector:
     if TIES[0] in untied:
         parts = untied.split(TIES[0])
         if any(c in _CLICKS for part in parts for c in part):
-            click, uvular = (parts[1], parts[0]) if parts[0][:1] == "χ" else (parts[0], parts[-1])
-            if (len(parts) == 2 and uvular[:1] == "χ" and uvular[1:] in ("", "ʼ")
-                    and click[:1] in _CLICKS and all(map(unicodedata.combining, click[1:]))):
-                # Miller et al. (2009, pp. 149 and 152): a fricated release makes the click an
-                # affricate contour; an ejected release reads as an ejective, as for q.
-                out = list(vectorize_phones("q" + TIES[0] + click + uvular[1:]))
-                if uvular == "χ":
-                    out[_DELREL] = out[_INDEX["strid"]] = True
-                return tuple(out)
-            # A click tie is one velar or uvular letter, then the click (IPA Handbook, 2.5). The
-            # click takes only voi and nas from that letter, so it may carry combining marks only.
-            if len(parts) == 2 and parts[0][:1] in _CLICKS and parts[1][:1] in _REAR_CLOSURES:
-                # The letter after the click reads as the letter before it: its combining marks
-                # stay with it, a modifier letter after it goes with the click.
-                letter = parts[1][:1] + "".join(takewhile(unicodedata.combining, parts[1][1:]))
-                return vectorize_phones(letter + TIES[0] + parts[0] + parts[1][len(letter):])
-            rear_letter = parts[0][:1] in _REAR_CLOSURES and all(map(unicodedata.combining, parts[0][1:]))
-            if len(parts) != 2 or not rear_letter or parts[1][0] not in _CLICKS:
-                raise _unrecognized(segment)
-            rear, click = (vectorize_phones(part) for part in parts)
-            out = list(click)
-            out[_VOI], out[_NAS] = rear[_VOI], rear[_NAS]
-            return tuple(out)
+            return _click_tie(parts, segment)
         try:
             return compose_tie([vectorize_phones(part) for part in parts])
         except ValueError:
@@ -208,22 +187,55 @@ def vectorize_phones(segment: str) -> Vector:
             vec = _apply_pre(marker, vec, segment)
         return vec
     if seg and TIES[0] not in untied:
-        clusters: List[str] = []  # a character and the combining marks after it
-        for c in seg:
-            if clusters and unicodedata.combining(c):
-                clusters[-1] += c
-            else:
-                clusters.append(c)
-        tied = clusters[0]
-        for before, cluster in zip(clusters, clusters[1:]):
-            joins = (unicodedata.category(cluster[0]) in _LETTER_CATEGORIES and cluster != before
-                     and not _GLOTTALS & {cluster[0], before[0]}
-                     and not (cluster[0] in _REAR_CLOSURES | {"χ"} and _CLICKS.intersection(tied))
-                     and (cluster[0] not in _CLICKS or before[0] in _REAR_CLOSURES))
-            tied += (TIES[0] if joins else "") + cluster
+        tied = _tie_adjacent_letters(seg)
         if tied != seg:
             return vectorize_phones(tied)
     raise _unrecognized(segment, ": a diphthong is two segments, a vowel and a non-syllabic vowel" if _is_diphthong(seg) else "")
+
+
+def _click_tie(parts: List[str], segment: str) -> Vector:
+    """The vector of a tie that holds a click, from the parts of the tie."""
+    click, uvular = (parts[1], parts[0]) if parts[0][:1] == "χ" else (parts[0], parts[-1])
+    if (len(parts) == 2 and uvular[:1] == "χ" and uvular[1:] in ("", "ʼ")
+            and click[:1] in _CLICKS and all(map(unicodedata.combining, click[1:]))):
+        # Miller et al. (2009, pp. 149 and 152): a fricated release makes the click an
+        # affricate contour; an ejected release reads as an ejective, as for q.
+        out = list(vectorize_phones("q" + TIES[0] + click + uvular[1:]))
+        if uvular == "χ":
+            out[_DELREL] = out[_INDEX["strid"]] = True
+        return tuple(out)
+    # A click tie is one velar or uvular letter, then the click (IPA Handbook, 2.5). The click
+    # takes only voi and nas from that letter, so it may carry combining marks only.
+    if len(parts) == 2 and parts[0][:1] in _CLICKS and parts[1][:1] in _REAR_CLOSURES:
+        # The letter after the click reads as the letter before it: its combining marks stay with
+        # it, a modifier letter after it goes with the click.
+        letter = parts[1][:1] + "".join(takewhile(unicodedata.combining, parts[1][1:]))
+        return vectorize_phones(letter + TIES[0] + parts[0] + parts[1][len(letter):])
+    rear_letter = parts[0][:1] in _REAR_CLOSURES and all(map(unicodedata.combining, parts[0][1:]))
+    if len(parts) != 2 or not rear_letter or parts[1][0] not in _CLICKS:
+        raise _unrecognized(segment)
+    rear, click_vec = (vectorize_phones(part) for part in parts)
+    out = list(click_vec)
+    out[_VOI], out[_NAS] = rear[_VOI], rear[_NAS]
+    return tuple(out)
+
+
+def _tie_adjacent_letters(seg: str) -> str:
+    """*seg* with a tie bar between each two base letters that the IPA chart would tie."""
+    clusters: List[str] = []  # a character and the combining marks after it
+    for c in seg:
+        if clusters and unicodedata.combining(c):
+            clusters[-1] += c
+        else:
+            clusters.append(c)
+    tied = clusters[0]
+    for before, cluster in zip(clusters, clusters[1:]):
+        joins = (unicodedata.category(cluster[0]) in ("Ll", "Lu", "Lo") and cluster != before
+                 and not _GLOTTALS & {cluster[0], before[0]}
+                 and not (cluster[0] in _REAR_CLOSURES | {"χ"} and _CLICKS.intersection(tied))
+                 and (cluster[0] not in _CLICKS or before[0] in _REAR_CLOSURES))
+        tied += (TIES[0] if joins else "") + cluster
+    return tied
 
 
 _NAS, _SON, _CONT, _DELREL, _SG, _CG, _VOI = (
@@ -358,8 +370,7 @@ def feature_distance(a: str, b: str) -> float:
                     if seg in _WARNED:
                         continue
                     _WARNED.add(seg)
-                points = " ".join(f"U+{ord(c):04X}" for c in seg)
-                warnings.warn(f"Unrecognized phone {seg!r} ({points}) costs 1 against every other"
+                warnings.warn(f"Unrecognized phone {seg!r} ({_code_points(seg)}) costs 1 against every other"
                               " segment; pass strict=True to raise instead", UserWarning, stacklevel=2)
         return 1.0
     diff = sum(w * abs(x - y) / 2 for w, x, y in zip(WEIGHTS, va, vb))
