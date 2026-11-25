@@ -1,5 +1,13 @@
 # Changelog
 
+## [3.1.6a6](https://github.com/TigreGotico/phonematcher/tree/3.1.6a6) (2026-11-25)
+
+[Full Changelog](https://github.com/TigreGotico/phonematcher/compare/3.1.6a5...3.1.6a6)
+
+**Merged pull requests:**
+
+- docs: test-split figure and index presentation [\#228](https://github.com/TigreGotico/phonematcher/pull/228) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
+
 ## [3.1.6a5](https://github.com/TigreGotico/phonematcher/tree/3.1.6a5) (2026-11-25)
 
 [Full Changelog](https://github.com/TigreGotico/phonematcher/compare/3.1.6a4...3.1.6a5)
@@ -366,10 +374,6 @@
 
 [Full Changelog](https://github.com/TigreGotico/phonematcher/compare/2.3.7a1...2.3.8a1)
 
-**Merged pull requests:**
-
-- fix: order tied search results by id type and check n\_results [\#114](https://github.com/TigreGotico/phonematcher/pull/114) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
-
 ## [2.3.7a1](https://github.com/TigreGotico/phonematcher/tree/2.3.7a1) (2026-11-23)
 
 [Full Changelog](https://github.com/TigreGotico/phonematcher/compare/2.3.6a2...2.3.7a1)
@@ -377,10 +381,6 @@
 ## [2.3.6a2](https://github.com/TigreGotico/phonematcher/tree/2.3.6a2) (2026-11-23)
 
 [Full Changelog](https://github.com/TigreGotico/phonematcher/compare/2.3.6a1...2.3.6a2)
-
-**Merged pull requests:**
-
-- test: bind the whitepaper order sentences to the result files [\#113](https://github.com/TigreGotico/phonematcher/pull/113) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
 
 ## [2.3.6a1](https://github.com/TigreGotico/phonematcher/tree/2.3.6a1) (2026-11-23)
 
