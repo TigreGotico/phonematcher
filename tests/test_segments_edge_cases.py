@@ -24,12 +24,13 @@ def test_tone_mark_after_a_tie_with_no_following_base():
 
 
 def test_tie_after_a_space_does_not_join_across_the_space():
-    assert segments("a " + TIE + "ba") == ["a", " ", "b", "a"]
-    assert ipa_distance("a " + TIE + "ba", "a ba") == 0.0
+    assert segments("a " + TIE + "ba") == ["a", " ", TIE + "b", "a"]
+    with pytest.raises(ValueError):
+        ipa_distance("a " + TIE + "ba", "a ba", strict=True)
 
 
-def test_tie_at_the_start_is_dropped():
-    assert segments(TIE + "ab") == ["a", "b"]
+def test_tie_at_the_start_stays_on_the_next_segment():
+    assert segments(TIE + "ab") == [TIE + "a", "b"]
 
 
 def test_tone_mark_after_a_tone_letter_folds_into_that_tone():

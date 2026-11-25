@@ -27,8 +27,8 @@ def segments(ipa: str) -> List[str]:
     read as tone letters after its syllable: a tone diacritic or a tone numeral is written as tone
     letters after the segment that carries it. A tone diacritic on a tone letter adds its
     levels to that tone. A tone diacritic before a tie bar's second symbol, or at the start of a
-    word, belongs to the next base symbol. A tie bar with no symbol before it in its word is dropped,
-    so it never joins across a space. Format characters (Unicode category Cf, such as U+200B and
+    word, belongs to the next base symbol. A tie bar with no symbol before it in its word stays on
+    the next segment, as in ``͡ǃ``, so it never joins across a space and the segment does not read. Format characters (Unicode category Cf, such as U+200B and
     U+FEFF) are dropped.
 
     A tone then moves onto the segment that carries it: the last vowel or syllabic consonant before
@@ -171,6 +171,9 @@ def _segments(nfd: str) -> Tuple[List[str], List[List[int]]]:
                 out[-1] += ch
                 at[-1].append(i)
                 tie_at = i
+            else:  # a tie bar with no segment before it stays with the next one, which then does not read
+                pending += ch
+                pending_at.append(i)
             continue
         if join_next and out[-1][-1] in TIES and is_vowel_phone(out[-1][:-1].replace(NON_SYLLABIC, "")) and is_vowel_phone(ch):
             out[-1] = out[-1][:-1]
