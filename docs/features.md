@@ -99,7 +99,7 @@ PanPhon gives 6 of the 28 vowels `delrel` 0 and the rest `delrel` −. A vowel h
 
 ## Changes to PanPhon's diacritic rules
 
-| Mark | PanPhon | Here | Source |
+| Mark | PanPhon | This table | Source |
 |---|---|---|---|
 | `◌̈` centralized | no change | `front` −, `back` − | the IPA chart names it; the reading is this table's |
 | `◌̝` raised, `◌̞` lowered | no change | on a vowel, one chart row up or down; `◌̝` on an approximant gives the fricative, `◌̞` on a fricative gives the approximant | the IPA chart names them and prints `ɹ̝` and `β̞`; the vowel step is this table's |
@@ -158,7 +158,7 @@ A mark reads only if a chart states its meaning. These marks occur in PHOIBLE, W
 
 ### Marks that a base refuses
 
-A rule applies a mark only to the bases that its conditions accept. The conditions are PanPhon's, unless `overrides.json` changes them with a source, so a rule can accept more bases than a chart prints: `b̃`, `iˤ`, `aˠ` and `å` read. A base outside the class makes `vectorize_phones` raise `ValueError`, and the segment is at distance 1 from every other. A rule widens when a chart prints the mark on a base that the rule refuses, as the IPA chart does for `◌̃` on a vowel. The Unicode chart gives a mark a name and no base, so a name alone does not widen a rule.
+A rule applies a mark only to the bases that its conditions accept ([why](design.md#a-mark-reads-only-on-the-bases-its-rule-accepts)). A base outside the class makes `vectorize_phones` raise `ValueError`, and the segment is at distance 1 from every other. The table lists what the charts print and the bases that stay refused.
 
 | Mark | What the charts print | Bases that stay refused |
 |---|---|---|
@@ -180,9 +180,9 @@ The marks `◌̟ ◌̠ ◌̝ ◌̞ ◌̭ ˖ ˗ ˔ ˕` move a chart vowel along a
 
 PanPhon writes a secondary articulation with the features of primary place. The mark then overwrites the place of its base: in PanPhon, `kʲ` and `qʲ` share a vector. Here each mark sets a feature of its own, and the base keeps its place. Thus `kʲ` has the place of `k` and differs from `k` only in `palatalized`. The four feature names belong to this table.
 
-Pharyngealized consonants, such as the Arabic emphatics, have a second constriction high in the pharynx. McCarthy (1994, "The phonetics and phonology of Semitic pharyngeals", in Keating (ed.), *Phonological Structure and Phonetic Form: Papers in Laboratory Phonology III*, Cambridge University Press, pp. 218–219) reports that emphatics "have a constriction in the upper pharynx". He writes: "The so-called pharyngealized consonants of Arabic should really be called uvularized." Real-time MRI shows that this constriction is at a different place from that of the pharyngeals `ħ ʕ` (Hermes, Barlaz, Shosted, Liang and Sutton 2017, Interspeech, pp. 201–205). Ultrasound shows "tongue root and tongue dorsum retraction with inconsistent tongue root retraction" (Al-Solami 2017, *Canadian Acoustics* 45(1), pp. 25–35). Thus `◌ˤ` sets `pharyngealized` + for the upper-pharynx constriction, and `atr` − for the part of it that retracts the tongue root. A pharyngealized vowel and a vowel with retracted tongue root share `atr` −, but differ in `pharyngealized`: `iˤ` is not `i̙`.
+Pharyngealized consonants, such as the Arabic emphatics, have a second constriction high in the pharynx. `◌ˤ` sets `pharyngealized` + for that constriction, and `atr` − for the part of it that retracts the tongue root. A pharyngealized vowel and a vowel with retracted tongue root share `atr` −, but differ in `pharyngealized`: `iˤ` is not `i̙`. [Design choices](design.md#pharyngealization-is-its-own-feature) gives the alternative and the sources.
 
-`◌̘` and `◌̙` set `atr`. Casali (2007, "Some observations on the phonetics of [ATR] contrasts", lecture, University of Education, Winneba, section 2, p. 2) writes that expansion or contraction of the pharyngeal cavity is a better measure of the [ATR] contrast than tongue root position alone, at least in languages such as Akan. He also writes that it is "probably not possible to give a single invariant articulatory definition of [ATR] that applies to all ATR harmony languages". This table gives [ATR] a feature of its own and does not read it as vowel height, so the mark keeps `tense` as the base has it.
+`◌̘` and `◌̙` set `atr`. This table gives [ATR] a feature of its own and does not read it as vowel height, so the mark keeps `tense` as the base has it. The source is Casali (2007), in [Design choices](design.md#pharyngealization-is-its-own-feature).
 
 Rhoticity `◌˞` colours a vowel. The IPA chart gives the mark a name and no features. PanPhon's rule made `ɚ` high and rounded. This table reads the mark as a colouring that keeps the vowel's height and rounding, and keeps PanPhon's `ant` −. The precomposed letters `ɚ` and `ɝ` read as `ə˞` and `ɜ˞`, and `ɫ`, the chart's example for `◌̴`, reads as `l̴`.
 
@@ -275,7 +275,7 @@ PanPhon lists 6,367 segments, many with diacritics, such as `ɐ̃` and `kʷʰ`. 
 
 Some marks come before their base. A superscript nasal letter (`ᵐ ⁿ ᵑ ᶬ ᶮ ᶯ ᶰ`) before an obstruent makes it prenasalized, as in `ⁿd`, `ᶮɟ` and `ⁿs`: it adds `nas` +, as a nasal tied before the obstruent does, so `ⁿs` equals `n͡s`. Ladefoged and Maddieson (1996, *The Sounds of the World's Languages*, pp. 118 to 119) name the classes: "prenasalized stops (including affricates), prenasalized fricatives, prestopped nasals, and, perhaps, prenasalized trills", "often notated by a superscript nasal symbol preceding the stop symbol". They add: "We do not know of any cases of prenasalized lateral or central approximants", so `ⁿl`, `ⁿj` and `ⁿw` stay unread. The book calls h "the voiceless approximant h" (p. 132), so `ⁿh`, `ⁿhʷ` and `ⁿɦ` also stay unread. The book also says: "Pre- and postnasalization do not seem to occur with glottalic consonants. We know of no cases of prenasalized implosives. Prenasalized ejectives are at best marginal" (p. 119), and it judges the Zulu strings of nasal and ejective not to be one prenasalized segment. So an implosive or an ejective after a nasal mark stays unread, as `ⁿɓ`, `ⁿɗ`, `ⁿtʼ` and `ⁿkʼ`. A creaky or glottalized pulmonic stop, as `ⁿb̰` or `ⁿdˀ`, is not glottalic and still reads. Two marks joined by a tie bar act as the two marks: `ᵑ͡ᵐk͡p` equals `ᵑᵐk͡p`. `ʰ` before a stop makes a preaspirated stop, as in `ʰt`. Each takes the rule of the same mark after a base.
 
-A tie bar joins two symbols into one segment. `t͡ʃ` and `t͜ʃ` are the same affricate. Without a tie bar, `tʃ` is two segments.
+A tie bar joins two symbols into one segment. `t͡ʃ` and `t͜ʃ` are the same affricate. Without a tie bar, `tʃ` is two segments. A tie bar with no symbol on one side does not read: `vectorize_phones` raises `ValueError` for `͡ǃ`, `͡k` and `ǃ͡`.
 
 PanPhon lists 23 tied pairs, such as `t͡ʃ`, `k͡p` and `ɡ͡b`, each with its diacritic stacks. A tied segment that is not listed is built from its parts, right to left:
 
@@ -293,11 +293,7 @@ Other ties raise `ValueError`. Two sonorants, such as `l͡j`, and a fricative be
 
 `segments` splits a tie between two vowels into a vowel and a non-syllabic vowel: `a͡i` gives `a` and `i̯`, as `ai̯` does. The IPA chart names ◌̯ "Non-syllabic", and `i̯` takes the rule of that mark, [−syl]. A tie reads as a falling diphthong. Write a rising diphthong with its glide marked, as `i̯a` or `i̯͡a`, and the second vowel stays syllabic. A tie between two consonants still joins them, so `t͡ʃa͡i` gives `t͡ʃ`, `a` and `i̯`. A diphthong thus costs as two segments in a word distance. Against `a` the distance is 0.5, one deletion of `i̯`. A plain `ai` gives two vowels, `a` and `i`, because the string does not say whether it is a diphthong or a hiatus. So `a͡i` against `ai` or `a.i` costs 0.3244, the syllabic feature alone, and `a͡i` against `aj` costs 0.2294.
 
-Nerbonne and Heeringa (1997, pp. 11-13) compared one-symbol and two-symbol diphthongs on 40 Dutch dialects with feature vectors. The two-symbol form gave the better dialect distances. Anderson et al. (2018, p. 33) define a diphthong in CLTS as two vowels: "Diphthongs are thus defined by two vowels". A diphthong has no vector of its own, so `vectorize_phones` raises `ValueError` for `ai`, `a͡i` and `ei̯`:
-
-| Input | Result | Reason |
-|---|---|---|
-| `a͡i`, `ai`, `ei̯` as one segment | `ValueError` | a diphthong is two segments; read `a` and `i̯` alone |
+A diphthong has no vector of its own, so `vectorize_phones` raises `ValueError` for `ai`, `a͡i` and `ei̯` as one segment: read `a` and `i̯` alone. [Design choices](design.md#a-diphthong-is-two-segments) gives the alternatives and the sources.
 
 ## Distance
 
@@ -359,19 +355,14 @@ Superscript digits are tone numerals: the digit is the level, so `²¹⁴` is `�
 
 Some marks are not read and are dropped like stress marks. The chart lists downstep `ꜜ` and upstep `ꜛ` with the level tones, but they change the pitch of the tones after them, and a tone here is the contour of one syllable only. Global rise `↗` and global fall `↘` belong to the intonation of a phrase. The neutral-tone numeral `⁰` has no level.
 
-A tone gives its pitch at the start, the middle and the end of the syllable, by linear steps between its levels. Each pitch is the Chao level as (level − 3) / 2, from −1 to 1. These are the features `tone_start`, `tone_mid` and `tone_end`, and `tone_is` marks a toned segment. Two toned vowels are compared by their features. A toned vowel against the same vowel with no tone costs `tone_is` at half its weight and each pitch at half its weight times its distance from 0.
+A tone gives its pitch at the start, the middle and the end of the syllable, by linear steps between its levels. Each pitch is the Chao level as (level − 3) / 2, from −1 to 1. These are the features `tone_start`, `tone_mid` and `tone_end`, and `tone_is` marks a toned segment. Two toned vowels are compared by their features. A toned vowel against the same vowel with no tone costs `tone_is` at half its weight and each pitch at half its weight times its distance from 0, so a missing tone costs less than a missing sound, and a missing mid tone costs least. A segment with no tone has `None` in all four tone features.
 
-Two tone segments with no vowel are compared by `tone_distance`: the mean difference of the three pitches, divided by four, the range from `˩` to `˥`. Thus `˥` and `˩` are at 1, `˥` and `˦` at 0.25, and `˧˥` and `˩˥` at 0.25. A tone segment against a phone costs 1, so it costs no less than deleting one segment and inserting the other (see [Tones](tones.md)).
+Two tone segments with no vowel are compared by `tone_distance`: the mean difference of the three pitches, divided by four, the range from `˩` to `˥`. Thus `˥` and `˩` are at 1, `˥` and `˦` at 0.25, and `˧˥` and `˩˥` at 0.25. A tone segment has no phone features, so no feature distance exists for it against a phone. The substitution cost of two tone segments is the square root of `tone_distance`. The substitution cost of a tone segment against a phone is 1, the same as deleting one segment and inserting the other (2 × 0.5). A TTS voice that holds a tone as a token of its own reads it with `tone_levels` (see [Tones](tones.md)).
 
 The pitch scale is linear and not fitted to perception data. The search index ignores tones, so a query finds a word with any tone, and the score ranks the same tone first.
 
 ## Rebuilding
 
-```
-uv pip install panphon==0.22.2 pyyaml
-python scripts/build_features.py
-```
-
-The build prints the number of segments in, added and out, the number of value changes and the number of diacritic rules. It stops if a change's recorded old value does not match the table, or if a segment is [+high, +low].
+Install the `build` extra, which holds `panphon==0.22.2` and `pyyaml`, then run `python scripts/build_features.py`. [Add a segment](add-a-segment.md#3-rebuild-the-table) shows the run. The build prints the number of segments in, added and out, the number of value changes and the number of diacritic rules. It stops if a change's recorded old value does not match the table, or if a segment is [+high, +low].
 
 [Index](index.md) · Previous: [Add a segment](add-a-segment.md) · Next: [Design choices and limits](design.md)

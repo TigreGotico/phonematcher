@@ -99,7 +99,7 @@ for sensitivity in (0.0, 0.08, 0.2, 0.5):
 0.5 3 clusters; pb ʁχ sʃ eɛ aɐ pt ʁk eo
 ```
 
-At 0.0 only the nearest pairs share a cluster, `p b` and `ʁ χ`. At 0.08, voicing pairs and near vowels share a cluster, and `p t` and `e o` do not. At 0.2 `p t` and `e o` share one. At 0.5 only 3 clusters remain.
+At 0.0 only the nearest pairs share a cluster, `p b` and `ʁ χ`. At 0.08, voicing pairs and near vowels share a cluster, and `p t` and `e o` do not. At 0.2 `p t` and `e o` share one. At 0.5 only 3 clusters remain. At the default 0.12, the pairs `p b`, `ʁ χ`, `s ʃ`, `e ɛ` and `a ɐ` share a cluster, and `p t`, `ʁ k` and `e o` do not.
 
 The dropping lets a query find a term that has no near sounds in common with it. The query `lumaki` finds the term `lumano`, because the query drops `k` and `i`, the term drops `n` and `o`, and both words become `luma`. The score is high:
 
