@@ -19,7 +19,7 @@ PanPhon gives a vowel two height features, `hi` and `lo`, so it knows three heig
 
 The alternatives are `hi` and `lo` alone, or one numeric height. Steps keep every feature a plus, a minus or a zero, as PanPhon does. The source is the IPA chart, which fixes the rows (`docs/features.md`, "Vowels").
 
-The evidence is thin. On the Hillenbrand vowel confusions, the weighted table scores 0.5610. The same table with zero weight on the steps scores 0.5340. The 22 features of PanPhon 0.22.2 score 0.4153. The intervals of the three overlap, and the data was seen while the library was built. On the six cognate test sets, under the C0 word costs (gap 1, linear substitutions), the variant with zero weight on the steps differs from the shipped table by -0.0002, with an interval from -0.0013 to +0.0008. On the development split, under the shipped word costs (gap 0.5, square-root substitutions), the cognate AP of the variant with zero weight on the steps is 0.7871 and the shipped table's is 0.7875. The steps are kept because the chart has seven rows, not because a test showed that they help cognate detection.
+The evidence is thin. On the Hillenbrand vowel confusions, the weighted table scores 0.5610. The same table with zero weight on the steps scores 0.5340. The 22 features of PanPhon 0.22.2 score 0.4153. The intervals of the three overlap, and the data was seen while the library was built. On the six cognate test sets, under the C0 word costs (gap 1, linear substitutions), the variant with zero weight on the steps differs from the shipped table by -0.0002, with an interval from -0.0013 to +0.0008. On the development split, under the shipped word costs (gap 0.5, square-root substitutions), the cognate AP of the variant with zero weight on the steps is 0.7872 and the shipped table's is 0.7876. The steps are kept because the chart has seven rows, not because a test showed that they help cognate detection.
 
 The table keeps both codings, a trade-off that was measured. A form with one encoding sets `hi` and `lo` to 0 on every vowel, so the steps alone carry height and the distance stays a weighted L1 over fixed vectors. It is a metric. On the development split it changed the paired cognate AP by -0.0006, with an interval from -0.0012 to -0.0001, and the alignment PAS by +0.0039, with an interval from +0.0011 to +0.0066. On the Hillenbrand confusions it lowered the Spearman correlation from 0.5610 to 0.5474. The acceptance rule refuses a change when the interval of any development task lies wholly below 0, and the cognate interval does.
 
@@ -39,7 +39,7 @@ The shared `atr` − encodes the overlap. The separate feature encodes the diffe
 
 The marks `◌̝ ◌̞ ◌̟ ◌̠ ◌̈ ◌̽ ◌̹ ◌̜` move a vowel along the height, backness or rounding scale. PanPhon has no rule for most of them. The alternative is to read them as the bare letter. The table takes a rule for each mark, because the IPA chart names each mark and says what it moves. The size of the step, one chart row or column, is this table's own. On a consonant, `◌̝` and `◌̞` follow the chart's own examples instead: `ɹ̝` is a fricative and `β̞` is an approximant (`docs/features.md`).
 
-The rules change no score that the benchmarks measure. Under the C0 word costs (gap 1, linear substitutions), the variant with no scale shifts differs from the shipped table by less than 0.0001 in the paired cognate difference on the test sets. On the development split, under the shipped word costs, the cognate AP of that variant is 0.7874 and the shipped table's is 0.7875. The rules stay for the sake of the chart's meaning, and the benchmarks do not support them or oppose them.
+The rules change no score that the benchmarks measure. Under the C0 word costs (gap 1, linear substitutions), the variant with no scale shifts differs from the shipped table by less than 0.0001 in the paired cognate difference on the test sets. On the development split, under the shipped word costs, the cognate AP of that variant is 0.7875 and the shipped table's is 0.7876. The rules stay for the sake of the chart's meaning, and the benchmarks do not support them or oppose them.
 
 ### A mark reads only on the bases its rule accepts
 
@@ -163,6 +163,8 @@ The table compares the library of the test run with the shipped library on the d
 | Alignment, PAS | 0.8315 | 0.8315 | +0.0002 [-0.0007, +0.0011] |
 | Retrieval, recall@1 | 0.8801 | 0.8802 | +0.0002 [+0.0000, +0.0008] |
 
+The audit ran at `4f254da`. The click ties and the marks after a tone move the cognate AP of the shipped library from 0.7875 to 0.7876 and leave the alignment score at 0.8315 on the development split. The paired intervals were not computed again.
+
 The rule for a change that corrects a value is to adopt it unless a paired interval on the development split lies wholly below 0. No interval lies below 0, so the library keeps its values.
 
 ### The feature weights stay
@@ -176,8 +178,8 @@ The weights of the 22 features in the data of PanPhon 0.22.2 are PanPhon's. The 
 | Corpus | Distinct segments | Read | Unread | Share of tokens read |
 |---|---|---|---|---|
 | PHOIBLE 2.0 | 4158 | 3783 | 375 | 0.9947 |
-| WikiPron | 3604 | 2631 | 973 | 0.9939 |
-| orthography2ipa | 2569 | 2269 | 300 | 0.9936 |
+| WikiPron | 3604 | 2639 | 965 | 0.9940 |
+| orthography2ipa | 2519 | 2299 | 220 | 0.9953 |
 
 Most unread segments are rare. The kinds of segment that do not read are these.
 
