@@ -31,9 +31,9 @@ segments("ˈt͡ʃɐ̃w̃")              # ['t͡ʃ', 'ɐ̃', 'w̃']
 ipa_distance("ˈpojʃ", "ˈpojs")   # 0.199: one near substitution
 ```
 
-`feature_distance` compares two segments, from 0 to 1. `substitution_cost` is the one cost of replacing a segment by another. It is the square root of the feature distance. `ipa_distance` compares two IPA strings: an edit distance where a substitution costs `substitution_cost` and an insertion or deletion costs 0.5. A substitution costs at most 1, so it never costs more than a deletion plus an insertion. The search groups sounds with the same cost. The costs are the ones that the pre-registered test in [`benchmarks/prereg-2.md`](https://github.com/TigreGotico/phonematcher/blob/dev/benchmarks/prereg-2.md) selected.
+`feature_distance` compares two segments, from 0 to 1. `substitution_cost` is the one cost of replacing a segment by another. It is the square root of the feature distance. `ipa_distance` compares two IPA strings: an edit distance where a substitution costs `substitution_cost` and an insertion or deletion costs 0.5. [Compare two words](docs/compare-words.md) shows each cost, and [Design choices and limits](docs/design.md) gives the pre-registered test that selected them.
 
-A segment that phonematcher cannot read is at distance 1 from every other segment. The first time such a segment is priced, phonematcher issues one `UserWarning` that names the segment. `warnings.filterwarnings("ignore", message="Unrecognized phone", category=UserWarning)` silences it. With `strict=True`, a distance, an alignment or a search raises `ValueError` for such a segment. The table does not read every valid IPA segment. Strict mode cannot catch a spelling that uses the ASCII letters `c`, `y`, `j` and `r`. These are also IPA letters, so the spelling is read as IPA and gives a wrong score with no error.
+A segment that phonematcher cannot read is at distance 1 from every other segment, and the first such segment priced issues one `UserWarning`. With `strict=True`, a distance, an alignment or a search raises `ValueError` for it instead. [Design choices and limits](docs/design.md#an-unread-segment-is-at-distance-1) gives the rules, how to silence the warning, and what the table does not read.
 
 ## Search by sound
 
@@ -72,9 +72,10 @@ Test split, run once under [`benchmarks/prereg-2.md`](https://github.com/TigreGo
 ## Documentation
 
 - [docs/index.md](docs/index.md): every page, in reading order.
-- [docs/quickstart.md](docs/quickstart.md): first steps.
-- [docs/features.md](docs/features.md): the feature table, its sources and the distance.
+- [docs/quickstart.md](docs/quickstart.md): first steps, from words to a distance and a search.
+- [docs/features.md](docs/features.md): the feature table, its sources and the distance formula.
 - [docs/api.md](docs/api.md): every public name.
+- [docs/design.md](docs/design.md): the contested choices and what does not read.
 - [whitepaper.md](whitepaper.md): the method and the evidence as one paper, with the pre-registered test and its limits.
 
 ## Licence

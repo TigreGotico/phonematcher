@@ -18,8 +18,8 @@ These pages teach phonematcher in the order below. The first seven are walk-thro
 | [Search by sound](search.md) | An index of terms, a query, and what the sensitivity changes, with benchmark numbers. |
 | [Use with scikit-learn](scikit-learn.md) | A distance matrix for a clusterer, and feature rows for a pipeline. |
 | [Add a segment](add-a-segment.md) | An entry with its source, the rebuild of the table and the test. |
-| [The feature table](features.md) | The 36 features, their weights and sources, and every change to PanPhon. |
-| [Design choices and limits](design.md) | The contested choices, their sources, and what does not read. |
+| [The feature table](features.md) | The 40 features, their weights and sources, every change to PanPhon, how marks, ties and tones read, and the distance formula. |
+| [Design choices and limits](design.md) | The contested choices, their alternatives, sources and evidence, and what does not read. |
 | [API reference](api.md) | Every public name. |
 | [Benchmarks](benchmarks.md) | Every result file, rendered, for phonematcher and the systems it is compared with. |
 

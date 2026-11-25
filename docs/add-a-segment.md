@@ -64,10 +64,10 @@ python scripts/build_features.py
 ```
 
 ```text
-phones in 6307 + 10 added, out 6317; overrides 2; diacritics 50
+phones in 6307 + 10 added, out 6317; overrides 8; diacritics 50
 ```
 
-The line says how many segments PanPhon lists, how many `segments` entries were added, and how many segments the table holds. The build stops with a message that names the entry if its `from` or `place_of` is a segment that PanPhon does not list, and if an `overrides` entry names such a segment. Commit `overrides.json` and `features.json` together. A test rebuilds the table and compares it with `features.json` byte for byte, so a change to one file without the other fails.
+The line says how many segments PanPhon lists, how many `segments` entries were added, how many segments the table holds, how many value changes `overrides` holds, and how many diacritic rules the build read. The build stops with a message that names the entry if its `from` or `place_of` is a segment that PanPhon does not list, and if an `overrides` entry names such a segment. Commit `overrides.json` and `features.json` together. A test rebuilds the table and compares it with `features.json` byte for byte, so a change to one file without the other fails.
 
 ## 4. Check the vector
 
