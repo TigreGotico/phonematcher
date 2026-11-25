@@ -29,7 +29,7 @@ import numpy as np
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 from split import is_test  # noqa: E402
-from systems import NAMES, PhoneMatcher, downey  # noqa: E402
+from systems import EQUAL_COST_NAMES, NAMES, PhoneMatcher, downey  # noqa: E402
 from tasks.common import fetch  # noqa: E402
 
 ROOT = Path(__file__).resolve().parent.parent.parent
@@ -54,7 +54,7 @@ SENSITIVITIES = (0.01, 0.02, 0.03, 0.05, 0.08, 0.12)
 TIE_EPSILON = 1e-9
 #: systems whose word distance is an edit distance with one cost per segment pair and a constant
 #: indel cost, so the distance to the whole index is computed as one vectorised table
-BATCHED = ("phonematcher", "levenshtein", "panphon-weighted", "panphon-hamming", "soundvectors")
+BATCHED = ("phonematcher", "levenshtein", "panphon-weighted", "panphon-hamming", "soundvectors", *EQUAL_COST_NAMES)
 
 SPLITS = ("dev",)
 

@@ -90,6 +90,38 @@ def test_soundvectors_differs_in_one_of_39_positions(built):
     assert built["soundvectors"].segment_distance("p", "b") == 1 / 39
 
 
+@pytest.fixture(scope="module")
+def equal_cost():
+    return {name: systems.build(name, run.DEFAULT_CACHE) for name in systems.EQUAL_COST_NAMES}
+
+
+def test_soundvectors_p5_takes_the_square_root_and_the_half_gap(equal_cost):
+    system = equal_cost["soundvectors-p5"]
+    assert system.segment_distance("p", "b") == pytest.approx((1 / 39) ** 0.5)
+    # pa -> baa: p becomes b, one a is inserted
+    assert system.word_distance(["p", "a"], ["b", "a", "a"]) == pytest.approx((1 / 39) ** 0.5 + 0.5)
+    assert system.align(["p", "a"], ["b", "a", "a"]) == [("p", "b"), (None, "a"), ("a", "a")]
+
+
+def test_panphon_weighted_p5_scales_to_the_unit_range_before_the_square_root(equal_cost, built):
+    from panphon import FeatureTable
+
+    table = FeatureTable()
+    system = equal_cost["panphon-weighted-p5"]
+    voi = table.weights[table.names.index("voi")]
+    assert system.segment_distance("p", "b") == pytest.approx((2 * voi / (2 * sum(table.weights))) ** 0.5)
+    assert system.word_distance(["p", "a"], ["b", "a", "a"]) == pytest.approx(system.segment_distance("p", "b") + 0.5)
+    # the plain system keeps PanPhon's own gap, the sum of its weights
+    assert built["panphon-weighted"].word_distance(["p", "a"], ["b", "a", "a"]) == pytest.approx(2 * voi + sum(table.weights))
+    assert built["panphon-weighted"].align(["p", "a"], ["b", "a", "a"]) == [("p", "b"), (None, "a"), ("a", "a")]
+
+
+def test_every_segment_distance_of_the_p5_systems_lies_between_zero_and_one(equal_cost):
+    for system in equal_cost.values():
+        letters = [x for x in "pbtdkgaeiouszmnl" if system.reads(x)]
+        assert all(0 <= system.segment_distance(a, b) <= 1 for a in letters for b in letters)
+
+
 def test_aline_distance_follows_the_hand_scores(built):
     assert built["aline"].similarity(["p", "a"], ["p", "a"]) == 60
     assert built["aline"].word_distance(["p", "a"], ["b", "a"]) == 5

@@ -39,6 +39,7 @@ SPLIT_TEXT = {
     "seen": "These data were inspected while the weights were fitted. The scores are descriptions, not tests.",
     "dev": "The development split holds the items that `benchmarks/split.py` assigns to dev. Weights, indel costs and sensitivities were chosen on it.",
     "test": "The test split ran once, from a clean tree, under the pre-registration in `benchmarks/prereg-2.md`. "
+    "The tested library had 36 features and read a tone as a segment of its own, not as four features of its vowel. "
     "The rows `phonematcher` and `pm-` followed by a variant name (`pm-panphon22`, `pm-no-height`, `pm-flat-diacritics`, `pm-uniform`, `pm-indel-0.5`, `pm-indel-1.5`) use the C0 costs: gap 1 and linear substitutions. "
     "The candidate rows `pm-C1` to `pm-P5` carry their own costs, and `pm-P5` is the shipped library.",
 }
@@ -47,9 +48,13 @@ C0_NOTE = ("Cost rule: the C0 costs, gap 1 and linear substitutions. The rows ar
 P5_NOTE = ("Cost rule: the shipped P5 costs, gap 0.5 and substitutions at the square root of the feature distance. "
            "`phonematcher` is the shipped library, and each `pm-p5-` row changes one thing in it. "
            "`pm-p5-indel-0.5` is the shipped costs again and serves as a control.")
+EQUAL_COST_NOTE = ("Cost rule: each feature baseline appears twice. The plain row keeps the cost rule of the test run: linear substitutions, and a gap of 1 "
+                   "(weighted PanPhon has its own gap, half its largest substitution). The `-p5` row takes the shipped costs of phonematcher: gap 0.5 and substitutions at the "
+                   "square root of the distance, scaled to 0 to 1. `pm-C0` and `phonematcher` are the table at the two cost rules. Retrieval is the brute-force "
+                   "score on the fixed sample of 500 queries per pair.")
 SEEN_NOTE = ("Cost rule: none matters here. Each score ranks pairs of segments by their segment distance, and the square root keeps that order, "
              "so the C0 costs and the P5 costs give the same rows.")
-TASK_ORDER = ["coverage", "allophones", "confusions", "tone", "cognates", "cognates-toneless", "alignment", "retrieval", "ablations"]
+TASK_ORDER = ["coverage", "allophones", "confusions", "tone", "cognates", "cognates-toneless", "alignment", "retrieval", "ablations", "equal-cost"]
 
 
 def num(value: Optional[float], digits: int = 4) -> str:
@@ -155,6 +160,13 @@ def ablations_section(payload: dict) -> List[str]:
     return out + (["#### control", "", *text_block(controls)] if controls else [])
 
 
+def equal_cost_section(payload: dict) -> List[str]:
+    out = [EQUAL_COST_NOTE, ""]
+    for task in ("cognates", "alignment", "retrieval"):
+        out += [f"#### {task}", "", *TASKS[task](payload["tasks"][task])]
+    return out
+
+
 def lines_block(module) -> Callable[[dict], List[str]]:
     return lambda payload: text_block(module.lines(payload))
 
@@ -169,6 +181,7 @@ TASKS: Dict[str, Callable[[dict], List[str]]] = {
     "alignment": alignment_table,
     "retrieval": retrieval_table,
     "ablations": ablations_section,
+    "equal-cost": equal_cost_section,
 }
 
 
@@ -311,7 +324,7 @@ def readme_table(directory: Path = RESULTS) -> str:
                "The best value in each column is in bold. A dash means that the system does not run the task. "
                f"SCA ran retrieval on a sample of {sca_sample} queries per pair and ALINE on the first {aline_sample} of those, "
                "so these two retrieval cells are not on the same queries as the other rows. "
-               "The shipped library is the P5 candidate, with its test numbers. "
+               "The shipped library is the P5 candidate. Its test numbers describe the tested library at commit `f092f20`, with 36 features and a tone as a segment of its own, and no test has scored the released tone model. "
                "[docs/benchmarks.md](docs/benchmarks.md) holds every result.")
     return "\n".join([caption, "", *table(["System", *(title for _, title in README_COLUMNS)], rows)]).rstrip("\n") + "\n"
 
@@ -362,7 +375,7 @@ def wp_cognates(results: dict) -> str:
                      num(every["average_precision"][romance])])
     head = ["System", "AP, common words", "B-cubed F, common words", "Romance AP, common words",
             "AP, all words [95% interval]", "Romance AP, all words"]
-    caption = (f"Test split. The common words are the {words} words that every system reads, in {sets}; "
+    caption = (f"Test split, library at `f092f20` (36 features, a tone as a segment of its own). The common words are the {words} words that every system reads, in {sets}; "
                f"{empty} have no word that every system reads. The common columns have no interval. "
                "The all-words column is the pre-registered main metric, with unread pairs at distance 1.")
     return "\n".join([caption, "", *table(head, rows)])
@@ -375,7 +388,7 @@ def wp_romance(results: dict) -> str:
         systems = ("pm-P5", "panphon-weighted", "aline", "soundvectors", "levenshtein", "sca")
         rows.append([name.split("-")[0], str(total), *(str(test["systems"][system]["skipped"]["words"][name]) for system in systems)])
     head = ["Test set", "Words", "phonematcher", "PanPhon", "ALINE", "CLTS sound vectors", "plain edit distance", "SCA"]
-    return "\n".join(["Test split. Words that each system cannot read; both PanPhon systems read the same words.", "", *table(head, rows)])
+    return "\n".join(["Test split, library at `f092f20`. Words that each system cannot read; both PanPhon systems read the same words.", "", *table(head, rows)])
 
 
 def wp_alignment(results: dict) -> str:
@@ -386,7 +399,7 @@ def wp_alignment(results: dict) -> str:
         if entry is None:
             continue
         rows.append([label, f"{entry['n_scored']} of {entry['n_in']}", span(test["intervals"][system]), num(entry["common_cs"])])
-    caption = f"Test split. Every system is scored on the {test['all']['n_common']} pairs that all four aligning systems read."
+    caption = f"Test split, library at `f092f20` (36 features, a tone as a segment of its own). Every system is scored on the {test['all']['n_common']} pairs that all four aligning systems read."
     return "\n".join([caption, "", *table(["System", "Pairs read", "PAS, common pairs [95% interval]", "Column score, common pairs"], rows)])
 
 
@@ -401,7 +414,7 @@ def wp_retrieval(results: dict) -> str:
     shared = sum(p["shared_sampled_queries"] for p in pairs)
     rows = [[label, mean(system, "common_subset"), mean(system, "on_shared_queries"), span(test["intervals"][system]),
              "/".join(str(p["systems"][system]["queries_scored"]) for p in pairs)] for system, label in WHITEPAPER_SYSTEMS]
-    caption = (f"Test split, mean recall@1 over the four dialect pairs ({', '.join(test['pairs'])}). "
+    caption = (f"Test split, library at `f092f20` (36 features, a tone as a segment of its own). Mean recall@1 over the four dialect pairs ({', '.join(test['pairs'])}). "
                f"The common queries are the {common} queries that every system reads and scores. "
                f"The shared queries are the {shared} queries of the ALINE sample, which every system scores. "
                "These two columns have no interval.")
@@ -415,7 +428,7 @@ def wp_candidates(results: dict) -> str:
     for name, row in tests["cognates"]["candidates"].items():
         rows.append([CANDIDATE_NAMES[name], "yes" if row["k1"] else "no", *(bare(tests[task]["paired"][row["system"]]) for task in final.TASKS)])
     head = ["Candidate", "Passes the vowel rule", "Cognates, AP minus original", "Alignment, PAS minus original", "Retrieval, recall@1 minus original"]
-    return "\n".join(table(head, rows))
+    return "\n".join(["Test split, library at `f092f20` (36 features, a tone as a segment of its own).", "", *table(head, rows)])
 
 
 def wp_ablations(results: dict) -> str:
@@ -428,6 +441,33 @@ def wp_ablations(results: dict) -> str:
     rows.append(["the table (control)", "-", "-", num(dev["phonematcher"]["unread_at_1"]["average_precision"]["mean"])])
     head = ["Variant", "Test cognates, AP minus table (original costs)", "Test alignment, PAS minus table (original costs)", "Dev cognates, AP (released costs)"]
     return "\n".join(table(head, rows))
+
+
+EQUAL_COST_ROWS = [
+    ("levenshtein", "plain edit distance", "unit costs"),
+    ("pm-C0", "phonematcher, original costs", "gap 1, linear"),
+    ("phonematcher", "phonematcher, released costs", "gap 0.5, square root"),
+    ("panphon-weighted", "PanPhon, weighted", "own gap, linear"),
+    ("panphon-weighted-p5", "PanPhon, weighted", "gap 0.5, square root"),
+    ("soundvectors", "CLTS sound vectors", "gap 1, linear"),
+    ("soundvectors-p5", "CLTS sound vectors", "gap 0.5, square root"),
+]
+
+
+def wp_equal_cost(results: dict) -> str:
+    tasks = results["dev"]["equal-cost"]["tasks"]
+    cognates, alignment, retrieval = tasks["cognates"]["systems"], tasks["alignment"]["all"], tasks["retrieval"]["pairs"]
+    rows = []
+    for system, label, costs in EQUAL_COST_ROWS:
+        recall = math.fsum(p["systems"][system]["all_items_unread_at_1"]["recall@1"] for p in retrieval.values()) / len(retrieval)
+        rows.append([label, costs, num(cognates[system]["unread_at_1"]["average_precision"]["mean"]),
+                     num(cognates[system]["common"]["average_precision"]["mean"]),
+                     num(alignment["systems"][system]["common_pas"]), num(recall)])
+    caption = (f"Dev split. Cognates: AP on all words, and on the {sum(cognates['levenshtein']['common']['words_out'].values())} common words. "
+               f"Alignment: PAS on the {alignment['n_common']} pairs that every row reads. "
+               f"Retrieval: mean recall@1 on the sample of {tasks['retrieval']['pairs']['en-US-UK']['systems']['phonematcher']['sample']} queries per pair. No row has an interval.")
+    head = ["System", "Costs", "Cognates, AP all words", "Cognates, AP common words", "Alignment, PAS common pairs", "Retrieval, recall@1"]
+    return "\n".join([caption, "", *table(head, rows)])
 
 
 def wp_confusions(results: dict) -> str:
@@ -472,7 +512,7 @@ def whitepaper_blocks(directory: Path = RESULTS) -> Dict[str, str]:
     blocks = {name: build(results) for name, build in (
         ("coverage", wp_coverage), ("readings", wp_readings), ("cognates", wp_cognates), ("romance", wp_romance),
         ("alignment", wp_alignment), ("retrieval", wp_retrieval), ("candidates", wp_candidates),
-        ("ablations", wp_ablations), ("confusions", wp_confusions), ("tone", wp_tone), ("control", wp_control))}
+        ("ablations", wp_ablations), ("equal-cost", wp_equal_cost), ("confusions", wp_confusions), ("tone", wp_tone), ("control", wp_control))}
     blocks["vowel-height"] = wp_vowel_height(directory)
     return {name: text.rstrip("\n") + "\n" for name, text in blocks.items()}
 

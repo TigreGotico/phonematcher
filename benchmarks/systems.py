@@ -12,6 +12,7 @@ for a gap.
 Third-party packages are imported when a system is built, so a missing package is an
 ``ImportError`` at that point and never a silent skip.
 """
+import math
 import subprocess
 from pathlib import Path
 from typing import Callable, Dict, List, Optional, Sequence, Tuple
@@ -199,13 +200,18 @@ class PanPhon(System):
     ``Distance.min_edit_distance`` call runs on the vectors, so every system sees the same
     segments. The normalized distance divides by the longer word, as PanPhon's ``_div_maxlen``
     methods do.
+
+    With ``p5`` the weighted distance takes the shipped costs of phonematcher: a substitution is
+    the square root of the weighted difference over its largest value, twice the sum of the weights,
+    and a gap costs 0.5. Only the weighted distance has this form.
     """
 
-    def __init__(self, weighted: bool):
+    def __init__(self, weighted: bool, p5: bool = False):
         from panphon.distance import Distance
         from panphon.segment import Segment
 
-        self.name = "panphon-weighted" if weighted else "panphon-hamming"
+        self.name = ("panphon-weighted" if weighted else "panphon-hamming") + ("-p5" if p5 else "")
+        self._p5 = p5
         self._segment_type = Segment
         self._distance = Distance()
         self._weighted = weighted
@@ -223,10 +229,13 @@ class PanPhon(System):
     def segment_distance(self, a: str, b: str) -> float:
         d = self._distance
         cost = d.weighted_substitution_cost if self._weighted else d.hamming_substitution_cost
-        return cost(self._vector(a), self._vector(b))
+        raw = cost(self._vector(a), self._vector(b))
+        return math.sqrt(raw / (2 * sum(d.fm.weights))) if self._p5 else raw
 
     def _word_distance(self, a: Word, b: Word, normalized: bool) -> float:
         d = self._distance
+        if self._p5:
+            return per_length(edit_distance(a, b, substitution=self.segment_distance, gap=0.5), a, b, normalized)
         if self._weighted:
             indel, sub = d.weighted_deletion_cost, d.weighted_substitution_cost
         else:
@@ -235,6 +244,10 @@ class PanPhon(System):
             indel, indel, sub, [[]], [self._vector(s) for s in a], [self._vector(s) for s in b]
         )
         return per_length(raw, a, b, normalized)
+
+    def _align(self, a: Word, b: Word) -> Pairs:
+        gap = 0.5 if self._p5 else sum(self._distance.fm.weights) if self._weighted else 1.0
+        return align(a, b, substitution=self.segment_distance, gap=gap)
 
 
 def downey(similarity: float, self_a: float, self_b: float, normalized: bool) -> float:
@@ -345,11 +358,14 @@ class SoundVectors(System):
     The CLTS data is cloned at a fixed tag into ``cache/clts-<tag>`` when it is missing. A segment
     is read when ``SoundVectors.get_vec`` returns without ``ValueError``. The segment distance is
     the share of the 39 vector positions that differ; deletion and insertion cost 1.
+
+    With ``p5`` a substitution is the square root of that share and a gap costs 0.5, the shipped
+    costs of phonematcher.
     """
 
-    name = "soundvectors"
-
-    def __init__(self, cache: Path):
+    def __init__(self, cache: Path, p5: bool = False):
+        self.name = "soundvectors-p5" if p5 else "soundvectors"
+        self._p5 = p5
         from pyclts import CLTS
         from soundvectors import SoundVectors as Vectors
 
@@ -376,10 +392,18 @@ class SoundVectors(System):
 
     def segment_distance(self, a: str, b: str) -> float:
         va, vb = self._vector(a), self._vector(b)
-        return sum(x != y for x, y in zip(va, vb)) / len(va)
+        share = sum(x != y for x, y in zip(va, vb)) / len(va)
+        return math.sqrt(share) if self._p5 else share
+
+    @property
+    def _gap(self) -> float:
+        return 0.5 if self._p5 else 1.0
 
     def _word_distance(self, a: Word, b: Word, normalized: bool) -> float:
-        return per_length(edit_distance(a, b, substitution=self.segment_distance, gap=1.0), a, b, normalized)
+        return per_length(edit_distance(a, b, substitution=self.segment_distance, gap=self._gap), a, b, normalized)
+
+    def _align(self, a: Word, b: Word) -> Pairs:
+        return align(a, b, substitution=self.segment_distance, gap=self._gap)
 
 
 class Sca(System):
@@ -437,6 +461,8 @@ def build(name: str, cache: Path) -> System:
         "panphon-hamming": lambda: PanPhon(weighted=False),
         "aline": Aline,
         "soundvectors": lambda: SoundVectors(cache),
+        "panphon-weighted-p5": lambda: PanPhon(weighted=True, p5=True),
+        "soundvectors-p5": lambda: SoundVectors(cache, p5=True),
         "sca": Sca,
     }
     if name.startswith("pm-"):
@@ -444,8 +470,11 @@ def build(name: str, cache: Path) -> System:
 
         return build_variant(name)
     if name not in factories:
-        raise KeyError(f"unknown system {name!r}; known: {', '.join(NAMES)}")
+        raise KeyError(f"unknown system {name!r}; known: {', '.join([*NAMES, *EQUAL_COST_NAMES])}")
     return factories[name]()
 
 
 NAMES = ["phonematcher", "levenshtein", "panphon-weighted", "panphon-hamming", "aline", "soundvectors", "sca"]
+
+#: the feature baselines at the shipped costs of phonematcher, for the equal-cost comparison
+EQUAL_COST_NAMES = ["panphon-weighted-p5", "soundvectors-p5"]

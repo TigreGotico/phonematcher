@@ -261,9 +261,82 @@ Common pairs: 4575 of 5748.
 | pm-p5-indel-0.5 | 0.8080 | 0.8590 | 0.9157 | 0.9117 | 0.8736 | 0.9950 | 0.9245 | 500/500/500/500 |
 | pm-p5-indel-1.5 | 0.6683 | 0.8690 | 0.9137 | 0.8837 | 0.8337 | 0.9400 | 0.8783 | 500/500/500/500 |
 
+### equal-cost
+
+Commit `be83f79178ea`.
+
+Cost rule: each feature baseline appears twice. The plain row keeps the cost rule of the test run: linear substitutions, and a gap of 1 (weighted PanPhon has its own gap, half its largest substitution). The `-p5` row takes the shipped costs of phonematcher: gap 0.5 and substitutions at the square root of the distance, scaled to 0 to 1. `pm-C0` and `phonematcher` are the table at the two cost rules. Retrieval is the brute-force score on the fixed sample of 500 queries per pair.
+
+#### cognates
+
+| System | AP, unread at 1 | F, unread at 1 | AP, common words | F, common words | Words skipped |
+|---|---|---|---|---|---|
+| levenshtein | 0.7514 | 0.8165 | 0.7101 | 0.8569 | 0 |
+| pm-C0 | 0.6955 | 0.7661 | 0.6467 | 0.8134 | 416 |
+| phonematcher | 0.7876 | 0.8383 | 0.7384 | 0.8715 | 416 |
+| panphon-weighted | 0.5833 | 0.7714 | 0.6864 | 0.8314 | 5129 |
+| panphon-weighted-p5 | 0.6486 | 0.7033 | 0.7394 | 0.8704 | 5129 |
+| soundvectors | 0.6874 | 0.7676 | 0.7374 | 0.8157 | 587 |
+| soundvectors-p5 | 0.7776 | 0.8343 | 0.8329 | 0.8660 | 587 |
+
+#### alignment
+
+Common pairs: 3146 of 5748.
+
+| System | Pairs read | PAS, common pairs | CS, common pairs | PAS, unread at 0 |
+|---|---|---|---|---|
+| levenshtein | 5748 of 5748 | 0.5283 | 0.6913 | 0.4734 |
+| pm-C0 | 4575 of 5748 | 0.7807 | 0.8843 | 0.6247 |
+| phonematcher | 4575 of 5748 | 0.8252 | 0.9154 | 0.6534 |
+| panphon-weighted | 3146 of 5748 | 0.7997 | 0.9010 | 0.4377 |
+| panphon-weighted-p5 | 3146 of 5748 | 0.8255 | 0.9155 | 0.4518 |
+| soundvectors | 5457 of 5748 | 0.7759 | 0.8821 | 0.7206 |
+| soundvectors-p5 | 5457 of 5748 | 0.8102 | 0.9051 | 0.7470 |
+
+#### retrieval
+
+| System | en-US-UK | pt-PT-BR | es-ES-LA | hy-E-W | Mean recall@1 | Mean recall@10 | Mean MRR | Queries per pair |
+|---|---|---|---|---|---|---|---|---|
+| levenshtein | 0.6395 | 0.6546 | 0.8537 | 0.5422 | 0.6725 | 0.9325 | 0.7686 | 500/500/500/500 |
+| pm-C0 | 0.6187 | 0.8300 | 0.9137 | 0.8607 | 0.8057 | 0.9068 | 0.8496 | 500/500/500/500 |
+| phonematcher | 0.8080 | 0.8590 | 0.9157 | 0.9117 | 0.8736 | 0.9950 | 0.9245 | 500/500/500/500 |
+| panphon-weighted | 0.5200 | 0.7268 | 0.9107 | 0.8997 | 0.7643 | 0.8812 | 0.8105 | 500/500/500/500 |
+| panphon-weighted-p5 | 0.6293 | 0.7852 | 0.9127 | 0.9127 | 0.8100 | 0.9410 | 0.8643 | 500/500/500/500 |
+| soundvectors | 0.6087 | 0.8132 | 0.9044 | 0.8300 | 0.7891 | 0.8883 | 0.8320 | 500/500/500/500 |
+| soundvectors-p5 | 0.7950 | 0.8510 | 0.9092 | 0.8788 | 0.8585 | 0.9891 | 0.9122 | 500/500/500/500 |
+
+Fuzzy search of phonematcher:
+
+| Pair | Sensitivity | Candidate recall | Mean candidates | Recall@1 |
+|---|---|---|---|---|
+| en-US-UK | 0.01 | 0.9580 | 86.5 | 0.7630 |
+| en-US-UK | 0.02 | 0.9600 | 119.4 | 0.7630 |
+| en-US-UK | 0.03 | 0.9640 | 152.3 | 0.7670 |
+| en-US-UK | 0.05 | 0.9640 | 152.3 | 0.7670 |
+| en-US-UK | 0.08 | 0.9680 | 356.9 | 0.7650 |
+| en-US-UK | 0.12 | 0.9820 | 432.2 | 0.7770 |
+| pt-PT-BR | 0.01 | 0.5120 | 14.7 | 0.4520 |
+| pt-PT-BR | 0.02 | 0.7680 | 45.4 | 0.6780 |
+| pt-PT-BR | 0.03 | 0.8400 | 58.8 | 0.7370 |
+| pt-PT-BR | 0.05 | 0.8400 | 60.4 | 0.7370 |
+| pt-PT-BR | 0.08 | 0.8580 | 139.4 | 0.7490 |
+| pt-PT-BR | 0.12 | 0.9240 | 170.1 | 0.8060 |
+| es-ES-LA | 0.01 | 1.0000 | 21.1 | 0.9157 |
+| es-ES-LA | 0.02 | 1.0000 | 36.2 | 0.9157 |
+| es-ES-LA | 0.03 | 1.0000 | 36.4 | 0.9157 |
+| es-ES-LA | 0.05 | 1.0000 | 36.9 | 0.9157 |
+| es-ES-LA | 0.08 | 1.0000 | 93.9 | 0.9157 |
+| es-ES-LA | 0.12 | 1.0000 | 108.4 | 0.9157 |
+| hy-E-W | 0.01 | 0.9980 | 69.6 | 0.9097 |
+| hy-E-W | 0.02 | 0.9980 | 76.1 | 0.9097 |
+| hy-E-W | 0.03 | 1.0000 | 84.4 | 0.9097 |
+| hy-E-W | 0.05 | 1.0000 | 84.4 | 0.9097 |
+| hy-E-W | 0.08 | 1.0000 | 168.9 | 0.9097 |
+| hy-E-W | 0.12 | 1.0000 | 243.2 | 0.9097 |
+
 ## Test split
 
-The test split ran once, from a clean tree, under the pre-registration in `benchmarks/prereg-2.md`. The rows `phonematcher` and `pm-` followed by a variant name (`pm-panphon22`, `pm-no-height`, `pm-flat-diacritics`, `pm-uniform`, `pm-indel-0.5`, `pm-indel-1.5`) use the C0 costs: gap 1 and linear substitutions. The candidate rows `pm-C1` to `pm-P5` carry their own costs, and `pm-P5` is the shipped library.
+The test split ran once, from a clean tree, under the pre-registration in `benchmarks/prereg-2.md`. The tested library had 36 features and read a tone as a segment of its own, not as four features of its vowel. The rows `phonematcher` and `pm-` followed by a variant name (`pm-panphon22`, `pm-no-height`, `pm-flat-diacritics`, `pm-uniform`, `pm-indel-0.5`, `pm-indel-1.5`) use the C0 costs: gap 1 and linear substitutions. The candidate rows `pm-C1` to `pm-P5` carry their own costs, and `pm-P5` is the shipped library.
 
 ### cognates
 
