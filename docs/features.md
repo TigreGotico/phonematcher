@@ -365,4 +365,4 @@ The pitch scale is linear and not fitted to perception data. The search index ig
 
 Install the `build` extra, which holds `panphon==0.22.2` and `pyyaml`, then run `python scripts/build_features.py`. [Add a segment](add-a-segment.md#3-rebuild-the-table) shows the run. The build prints the number of segments in, added and out, the number of value changes and the number of diacritic rules. It stops if a change's recorded old value does not match the table, or if a segment is [+high, +low].
 
-[Index](index.md) · Previous: [Add a segment](add-a-segment.md) · Next: [Design choices and limits](design.md)
+[Index](index.md) · Previous: [Add a segment](add-a-segment.md) · Next: [Segments](segments.md)

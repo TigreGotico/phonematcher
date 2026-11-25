@@ -233,3 +233,22 @@ def test_reread_leaves_no_stale_distance_in_the_module_caches():
     assert stale != feature_distance("pʰ", "p")
     variants.reread(module, shifts=True)
     assert module.feature_distance("pʰ", "p") == feature_distance("pʰ", "p")
+
+
+def test_the_shipped_tone_weights_variant_is_the_shipped_system():
+    shipped, chosen = systems.PhoneMatcher(), variants.build_variant("pm-p5-tone-0.25-0.125")
+    for a, b in ((["m", "a", "˥"], ["m", "a", "˩"]), (["p", "a˥", "n"], ["b", "a˧", "n"]), (["t", "i˥˩"], ["t", "i˧"])):
+        assert chosen.word_distance(a, b) == pytest.approx(shipped.word_distance(a, b))
+
+
+def test_a_tone_weight_variant_prices_a_pitch_step_by_its_weights():
+    # ˥ is 1 and ˧ is 0 on the three pitches; each pitch adds weight * 1 / 2 of the 9.5 total, and the cost is the square root
+    for pitch in (0.125, 0.5):
+        variant = variants.build_variant(f"pm-p5-tone-0.25-{pitch:g}")
+        assert variant.segment_distance("a˥", "a˧") == pytest.approx((3 * pitch / 2 / 9.5) ** 0.5)
+
+
+def test_standalone_tone_keeps_a_tone_as_a_segment_of_its_own():
+    standalone, carried = variants.build_variant("pm-p5-tone-standalone"), variants.build_variant("pm-p5-tone-0.25-0.125")
+    assert standalone.word_distance(["m", "a", "˥"], ["m", "a"]) == 0.5
+    assert carried.word_distance(["m", "a", "˥"], ["m", "a"]) != 0.5

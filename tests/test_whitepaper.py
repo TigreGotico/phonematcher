@@ -495,7 +495,8 @@ def test_only_the_test_files_carry_a_clean_commit():
         else:
             assert "prereg_sha256" not in payload, path.name
     development = [json.loads(p.read_text(encoding="utf8")) for p in sorted(RESULTS.glob("*-*.json"))]
-    development = [p for p in development if p.get("split") in ("seen", "dev") and p["task"] != "equal-cost"]
+    # the equal-cost and tone-weight runs come from heads other than the dev results
+    development = [p for p in development if p.get("split") in ("seen", "dev") and p["task"] not in ("equal-cost", "tone-weights")]
     older = {"retrieval-dev.json": "4f254da108460c3a56c25c482751aa0cae11fe1c"}  # ALINE and SCA take many hours; section 8 says so
     heads = {p.get("head") or p.get("commit") for p in development if p["task"] + "-" + p["split"] + ".json" not in older}
     assert len(heads) == 1 and all(p.get("tree_dirty") is not True for p in development)

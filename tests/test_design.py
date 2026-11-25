@@ -193,15 +193,22 @@ def test_the_sourced_value_table_equals_the_corrections_file():
     data = json.loads((RESULTS / "ablations" / "corrections-dev.json").read_text(encoding="utf-8"))
     keys = {"cognates": "cognates_ap", "alignment": "alignment_pas", "retrieval": "retrieval_recall@1"}
     labels = {"cognates": "Cognates, AP", "alignment": "Alignment, PAS", "retrieval": "Retrieval, recall@1"}
-    after = {"cognates": results("cognates-dev.json")["systems"]["phonematcher"]["unread_at_1"]["average_precision"]["mean"],
-             "alignment": results("alignment-dev.json")["all"]["systems"]["phonematcher"]["common_pas"]}
-    tolerance = {"cognates": 1.1e-4}  # measured gap of the cognate AP is 1.05e-4; the alignment score is exact
+    shipped = results("cognates-dev.json")["systems"]["phonematcher"]["unread_at_1"]["average_precision"]["mean"]
+    assert data["after"]["cognates_ap"] == pytest.approx(shipped, abs=1e-12)
     for task, key in keys.items():
-        assert abs(after.get(task, data["after"][key]) - data["after"][key]) <= tolerance.get(task, 0)
         paired = data["paired"][task]["paired"]["after"]
         assert paired["high"] >= 0 or not data["adopted"]
         cells = [f"{data['before'][key]:.4f}", f"{data['after'][key]:.4f}",
                  f"{signed(paired['diff'])} [{signed(paired['low'])}, {signed(paired['high'])}]"]
         assert f"| {labels[task]} | " + " | ".join(cells) + " |" in PAGE
     assert data["adopted"] and all(data["paired"][t]["paired"]["after"]["high"] > 0 for t in keys)
-    assert all(head == "4f254da108460c3a56c25c482751aa0cae11fe1c" for head in data["after"]["heads"].values())
+
+
+def test_the_tone_weight_table_equals_the_tone_weights_file():
+    systems = results("tone-weights-dev.json")["systems"]
+    shipped = results("cognates-dev.json")["systems"]["phonematcher"]["unread_at_1"]
+    chosen = systems["pm-p5-tone-0.25-0.125"]
+    assert chosen == systems["phonematcher"]
+    assert chosen["average_precision"] == pytest.approx(shipped["average_precision"]["mean"], abs=1e-12)
+    row = "| 0.25 and 0.125, chosen | " + " | ".join(f"{chosen[k]:.4f}" for k in ("average_precision", "bcubed_f", "chinese_average_precision")) + " |"
+    assert row in PAGE

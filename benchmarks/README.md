@@ -129,6 +129,23 @@ python benchmarks/run.py --task equal-cost --system equal-cost --split dev
 
 The run covers cognates, alignment and retrieval on the dev split, for plain edit distance, `pm-C0`, `phonematcher`, the two PanPhon systems and the two CLTS systems. Retrieval scores each system by brute force on the fixed sample of 500 queries per pair. The run writes `equal-cost-dev.json`. It takes about ten minutes. The result has no interval, and the test split has no such run.
 
+## Tone weights and corrections
+
+The tone-weight table of `docs/design.md` comes from the cognate task on the dev split. The variants `pm-p5-tone-W-P` weigh `tone_is` at W and each of the three pitches at P, and `pm-p5-tone-standalone` reads a tone as a segment of its own. All keep the shipped costs.
+
+```bash
+python benchmarks/run.py --task tone-weights --system tone-weights --split dev --out benchmarks/results
+```
+
+The corrections table compares the package at `cd2996a` with this tree, unit by unit on the dev split. The script unpacks the old package and the old benchmark code from git, so it needs the full history.
+
+```bash
+python benchmarks/corrections.py --out benchmarks/results/ablations/corrections-dev.json
+python benchmarks/render.py --design
+```
+
+`render.py --check` fails when either table of `docs/design.md` differs from its result file.
+
 ## The splits
 
 `split.is_test(key)` is true for one key in five, by the SHA-1 of the key. Each task names its key.

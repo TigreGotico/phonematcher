@@ -63,20 +63,22 @@ The feature distance divides by 9.5, the weight of the 36 segment features, and 
 
 The four weights were chosen on the dev split. `tone_is` weighs 0.25, and each of the three pitches weighs 0.125, the weight of one height step. So one Chao level costs 0.09375 of the 9.5, a little less than one height step, and `˥` against `˩` costs 0.375 of the 9.5. The three pitches weigh the same, as in the tone distance, because 15 seen tone pairs cannot support another shape. With equal pitch weights, the tone task ranks the 15 pairs as the tone distance does, so its score does not depend on the weights.
 
-The weights come from the cognate task on its dev split, the six training word lists, where Bai and Chinese write tones. The mean average precision and the mean B-cubed F-score over the six lists were these, with the tone weights as `tone_is` and pitch:
+The weights come from the cognate task on its dev split, the six training word lists, where Bai and Chinese write tones. The mean average precision and the mean B-cubed F-score over the six lists were these, with the tone weights as `tone_is` and pitch. `benchmarks/results/tone-weights-dev.json` holds the rows, `python benchmarks/run.py --task tone-weights --system tone-weights --split dev` makes them, and `python benchmarks/render.py --design` writes the table. Each row runs the shipped word costs, and the row of the chosen weights equals the shipped library.
 
+<!-- design:tone-weights:start -->
 | Tone weights | Average precision | B-cubed F | Chinese average precision |
 |---|---|---|---|
-| tone as a segment of its own | 0.7736 | 0.8268 | 0.5485 |
-| 0 and 0: the tone is read and not priced | 0.7867 | 0.8383 | 0.6297 |
-| 0.25 and 0.0625 | 0.7876 | 0.8385 | 0.6308 |
-| 0.25 and 0.125, chosen | 0.7875 | 0.8384 | 0.6286 |
-| 0.5 and 0.125 | 0.7875 | 0.8384 | 0.6288 |
-| 0.25 and 0.25 | 0.7869 | 0.8378 | 0.6236 |
-| 0.5 and 0.5 | 0.7854 | 0.8358 | 0.6135 |
-| 1 and 1 | 0.7817 | 0.8321 | 0.5928 |
+| tone as a segment of its own | 0.7736 | 0.8268 | 0.5490 |
+| 0 and 0: the tone is read and not priced | 0.7868 | 0.8382 | 0.6303 |
+| 0.25 and 0.0625 | 0.7877 | 0.8383 | 0.6314 |
+| 0.25 and 0.125, chosen | 0.7876 | 0.8383 | 0.6292 |
+| 0.5 and 0.125 | 0.7876 | 0.8383 | 0.6294 |
+| 0.25 and 0.25 | 0.7870 | 0.8377 | 0.6242 |
+| 0.5 and 0.5 | 0.7855 | 0.8357 | 0.6140 |
+| 1 and 1 | 0.7818 | 0.8321 | 0.5932 |
+<!-- design:tone-weights:end -->
 
-Nearly all of the gain over the segment model comes from carrying the tone onto its vowel, and not from the weights: with both weights at 0, the scores are already 0.7867 and 0.8383. The chosen weights add about 0.001 to that, on two tonal lists only. The row 0.25 and 0.0625 scores 0.0001 higher than the chosen row, which is less than the dev split can separate. The scores are flat up to a pitch weight of 0.125 and fall above it. The table takes the largest pitch weight in that flat range, so that a tone still separates two words, and the dev split does not show that this weight is better than a smaller one. No claim about tone weights holds beyond Bai, Chinese and the 15 Cantonese tone pairs. The test split was not run.
+Nearly all of the gain over the segment model comes from carrying the tone onto its vowel, and not from the weights: with both weights at 0, the scores are already 0.7868 and 0.8382. The chosen weights add about 0.001 to that, on two tonal lists only. The row 0.25 and 0.0625 scores 0.0001 higher than the chosen row, which is less than the dev split can separate. The scores are flat up to a pitch weight of 0.125 and fall above it. The table takes the largest pitch weight in that flat range, so that a tone still separates two words, and the dev split does not show that this weight is better than a smaller one. No claim about tone weights holds beyond Bai, Chinese and the 15 Cantonese tone pairs. The test split was not run.
 
 ### The tone distance
 
@@ -155,15 +157,15 @@ The default share is 0.12. Rule 7 of [`benchmarks/prereg-2.md`](https://github.c
 
 Three groups of feature values follow a cited source and differ from the values that the test run scored. The marks `◌̝ ◌̞ ˔ ˕` on a consonant follow the chart examples `ɹ̝` and `β̞` (`docs/features.md`). In a tie of a click and its velar or uvular letter, the tie is the click with the voicing and nasality of that letter (`docs/features.md`). `h` and `ɦ` take [−son, −cons] and `ʔ` takes [−son, +cons] from the Hayes CSV, as `ɹ` does (`docs/features.md`). These values change some word distances. The test numbers describe the library that the test run scored. The development and seen result files are scored with these values.
 
-The table compares the library of the test run with the shipped library on the development split. The "without" column is the result files of the test-run library. The paired difference comes from an audit run that scores each unit with the library at `cd2996a` (without) and at `4f254da` (with). The "with" column holds every change since `cd2996a`: these values, the tone features, and the later fixes to the reading of marks. The audit uses the benchmark code of `100ff08` for "without" and of `4f254da` for "with". Its units are the 977 cognate concepts, the 4575 alignment pairs that phonematcher reads, and the 500-query sample of each of the four retrieval pairs; its interval uses 1,000 resamples with seed 0. `benchmarks/results/ablations/corrections-dev.json` holds every number of the table.
+The table compares the library of the test run with the shipped library on the development split. `python benchmarks/corrections.py` scores each unit with the package at `cd2996a` (without) and with this tree (with), and it runs the benchmark code of `100ff08` for "without". The "with" column holds every change since `cd2996a`: these values, the tone features, and the later fixes to the reading of marks. Each cell is the mean over the units of its task: the 977 cognate concepts, the 4575 alignment pairs that both libraries read, and the 500-query sample of each of the four retrieval pairs, scored by brute force. The alignment and retrieval cells therefore differ from the rows of `alignment-dev.json` and `retrieval-dev.json`, which count the pairs that every system reads and run the fuzzy search. The interval uses 1,000 resamples with seed 0. `benchmarks/results/ablations/corrections-dev.json` holds every number of the table, and `python benchmarks/render.py --design` writes the table.
 
+<!-- design:corrections:start -->
 | Task | Without | With | Paired difference [95% interval] |
 |---|---|---|---|
-| Cognates, AP | 0.7727 | 0.7875 | +0.0148 [+0.0122, +0.0176] |
-| Alignment, PAS | 0.8315 | 0.8315 | +0.0002 [-0.0007, +0.0011] |
-| Retrieval, recall@1 | 0.8801 | 0.8802 | +0.0002 [+0.0000, +0.0008] |
-
-The audit ran at `4f254da`. The click ties and the marks after a tone move the cognate AP of the shipped library from 0.7875 to 0.7876 and leave the alignment score at 0.8315 on the development split. The paired intervals were not computed again.
+| Cognates, AP | 0.7727 | 0.7876 | +0.0149 [+0.0123, +0.0177] |
+| Alignment, PAS | 0.8208 | 0.8210 | +0.0002 [-0.0007, +0.0011] |
+| Retrieval, recall@1 | 0.8733 | 0.8736 | +0.0002 [+0.0000, +0.0008] |
+<!-- design:corrections:end -->
 
 The rule for a change that corrects a value is to adopt it unless a paired interval on the development split lies wholly below 0. No interval lies below 0, so the library keeps its values.
 
@@ -202,4 +204,4 @@ A test asserts that each example raises `ValueError`.
 - The step features, the scale marks and the pharyngealized feature rest on the chart and on descriptions of the articulation. The benchmarks do not show that they help.
 - The coverage counts are of three corpora. A segment outside them may not read.
 
-[Index](index.md) · Previous: [The feature table](features.md) · Next: [API reference](api.md)
+[Index](index.md) · Previous: [Segments](segments.md) · Next: [API reference](api.md)

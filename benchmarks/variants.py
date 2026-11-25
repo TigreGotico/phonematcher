@@ -53,6 +53,9 @@ SEGMENT_FEATURES = features.FEATURES[: -len(features.TONE_FEATURES)]
 SEGMENT_WEIGHTS = features.WEIGHTS[: -len(features.TONE_FEATURES)]
 TONE_WEIGHTS = features.WEIGHTS[-len(features.TONE_FEATURES):]
 C0 = "pm-C0"
+#: the (``tone_is``, pitch) weights of the tone-weight grid; the shipped pair is ``(0.25, 0.125)``
+TONE_GRID = [(0, 0), (0.25, 0.0625), (0.25, 0.125), (0.5, 0.125), (0.25, 0.25), (0.5, 0.5), (1, 1)]
+TONE_NAMES = ["pm-p5-tone-standalone", *(f"pm-p5-tone-{w:g}-{p:g}" for w, p in TONE_GRID)]
 #: the weight candidates of ``prereg-2.md``, each compared with C0
 CANDIDATES = ["pm-C1", "pm-C2", "pm-C3", "pm-P4", "pm-P5"]
 HEIGHT_STEPS = tuple(f"h{k}" for k in range(1, 7))
@@ -136,13 +139,23 @@ class Variant(PhoneMatcher):
     """phonematcher with other feature weights, other feature vectors or another indel cost."""
 
     def __init__(
-        self, name: str, weights: Sequence[float] = SEGMENT_WEIGHTS, indel: float = 1.0, vectorize=None, power: float = 1.0
+        self,
+        name: str,
+        weights: Sequence[float] = SEGMENT_WEIGHTS,
+        indel: float = 1.0,
+        vectorize=None,
+        power: float = 1.0,
+        tone_weights: Sequence[float] = TONE_WEIGHTS,
+        carry: bool = True,
     ):
         super().__init__()
         self.name = name
         self.weights = tuple(weights)
         self.indel = indel
         self.power = power
+        self.tone_weights = tuple(tone_weights)
+        if not carry:
+            self._carry = list
         if vectorize is not None:
             self._vectorize = vectorize
         self._substitution = self.substitution
@@ -160,7 +173,7 @@ class Variant(PhoneMatcher):
             return 1.0
         number = {True: 1, False: -1, None: 0}
         va, vb = ([v if type(v) is float else number[v] for v in vec] for vec in (va, vb))
-        diff = sum(w * abs(x - y) / 2 for w, x, y in zip(self.weights + TONE_WEIGHTS, va, vb))
+        diff = sum(w * abs(x - y) / 2 for w, x, y in zip(self.weights + self.tone_weights, va, vb))
         return min(diff / sum(self.weights), 1.0)
 
     def substitution(self, a: str, b: str) -> float:
@@ -177,9 +190,23 @@ class Variant(PhoneMatcher):
         return per_length(edit_distance(left, right, substitution=self.substitution, gap=self.indel), left, right, normalized)
 
 
+def tone_variant(name: str) -> Variant:
+    """``pm-p5-tone-standalone`` reads a tone as a segment of its own, as a library that does not
+    carry the tone onto its vowel does. ``pm-p5-tone-W-P`` carries the tone and weighs ``tone_is``
+    *W* and each of the three pitches *P*. Both keep the shipped P5 costs."""
+    costs = {"indel": 0.5, "power": 0.5}
+    spec = name.removeprefix("pm-p5-tone-")
+    if spec == "standalone":
+        return Variant(name, carry=False, **costs)
+    tone_is, pitch = (float(w) for w in spec.split("-"))
+    return Variant(name, tone_weights=(tone_is, pitch, pitch, pitch), **costs)
+
+
 def build_variant(name: str) -> Variant:
     if name == C0:
         return Variant(name)
+    if name.startswith("pm-p5-tone-"):
+        return tone_variant(name)
     if name in CANDIDATES:
         return build_candidate(name)
     p5 = name in P5_NAMES

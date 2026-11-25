@@ -434,7 +434,7 @@ The tone model uses one small data set that we used before.
 
 The test ran at commit `f092f20c8bbe0aa49a6480946858c0354a2580a9` of `TigreGotico/phonematcher`. The written rules are in `benchmarks/prereg-2.md`. Their sha256 is `29927d4e0e8162276cf12c68450a3b28372dc039d3a24377bbf390a64bd2df7c`. The test code stops if the hash of the file is different.
 
-The development and seen results ran at commit `bc69674664ae12e7528361bbb4593095b7cf2a9c`, which is version `3.1.4a3` of the library. The retrieval file ran at commit `4f254da108460c3a56c25c482751aa0cae11fe1c` (section 8). The equal-cost file ran at commit `22f3615241dfb85b5404e5df041af520128ec352` (section 8). The data of the coverage counts comes from the pinned WikiPron files, from PHOIBLE 2.0, and from the phone lists of the installed orthography2ipa package, which is not pinned, so the orthography2ipa row also follows the package version.
+The development and seen results ran at commit `bc69674664ae12e7528361bbb4593095b7cf2a9c`, which is version `3.1.4a3` of the library. The retrieval file ran at commit `4f254da108460c3a56c25c482751aa0cae11fe1c` (section 8). The equal-cost file ran at commit `be83f79178ea5ca3052e7a1b6c5a8c8855f0939d` (section 8). The data of the coverage counts comes from the pinned WikiPron files, from PHOIBLE 2.0, and from the phone lists of the installed orthography2ipa package, which is not pinned, so the orthography2ipa row also follows the package version.
 
 The two audit runs of section 6 are not in the result files. The triangle check ran on the tree of commit `ecde385`. The weight fit ran `scripts/fit_weights.py` on the library at commit `9c0f5bf`. The script is not on `dev`. It is on the branch `feat/fit-weights`, at commit `3a134ef`.
 
