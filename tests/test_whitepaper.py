@@ -11,6 +11,7 @@ import csv
 import json
 import math
 import re
+import subprocess
 import sys
 from importlib import metadata
 from pathlib import Path
@@ -503,8 +504,13 @@ def test_only_the_test_files_carry_a_clean_commit():
         assert f"`{head[:7]}`" in PAPER
     assert f"`{heads.pop()[:7]}`" in PAPER
     equal = json.loads((RESULTS / "equal-cost-dev.json").read_text(encoding="utf8"))
-    assert equal["head"] == "22f3615241dfb85b5404e5df041af520128ec352" and equal["tree_dirty"] is True  # section 8 says so
+    assert equal["tree_dirty"] is False and equal["head"] == "be83f79178ea5ca3052e7a1b6c5a8c8855f0939d"
     assert f"`{equal['head'][:7]}`" in PAPER
+    # A squash merge drops the run's commit; where it is still present, its benchmark code must equal this tree's.
+    if subprocess.run(["git", "cat-file", "-e", equal["head"] + "^{commit}"], cwd=ROOT, capture_output=True).returncode == 0:
+        diff = subprocess.run(["git", "diff", equal["head"], "HEAD", "--", "benchmarks/systems.py", "benchmarks/tasks/equal_cost.py"],
+                              cwd=ROOT, capture_output=True, text=True, check=True)
+        assert diff.stdout == ""
     assert "`f092f20c8bbe0aa49a6480946858c0354a2580a9`" in PAPER
     assert "`29927d4e0e8162276cf12c68450a3b28372dc039d3a24377bbf390a64bd2df7c`" in PAPER
 

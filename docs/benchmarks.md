@@ -263,7 +263,7 @@ Common pairs: 4575 of 5748.
 
 ### equal-cost
 
-Commit `22f3615241df`.
+Commit `be83f79178ea`.
 
 Cost rule: each feature baseline appears twice. The plain row keeps the cost rule of the test run: linear substitutions, and a gap of 1 (weighted PanPhon has its own gap, half its largest substitution). The `-p5` row takes the shipped costs of phonematcher: gap 0.5 and substitutions at the square root of the distance, scaled to 0 to 1. `pm-C0` and `phonematcher` are the table at the two cost rules. Retrieval is the brute-force score on the fixed sample of 500 queries per pair.
 
@@ -304,6 +304,35 @@ Common pairs: 3146 of 5748.
 | panphon-weighted-p5 | 0.6293 | 0.7852 | 0.9127 | 0.9127 | 0.8100 | 0.9410 | 0.8643 | 500/500/500/500 |
 | soundvectors | 0.6087 | 0.8132 | 0.9044 | 0.8300 | 0.7891 | 0.8883 | 0.8320 | 500/500/500/500 |
 | soundvectors-p5 | 0.7950 | 0.8510 | 0.9092 | 0.8788 | 0.8585 | 0.9891 | 0.9122 | 500/500/500/500 |
+
+Fuzzy search of phonematcher:
+
+| Pair | Sensitivity | Candidate recall | Mean candidates | Recall@1 |
+|---|---|---|---|---|
+| en-US-UK | 0.01 | 0.9580 | 86.5 | 0.7630 |
+| en-US-UK | 0.02 | 0.9600 | 119.4 | 0.7630 |
+| en-US-UK | 0.03 | 0.9640 | 152.3 | 0.7670 |
+| en-US-UK | 0.05 | 0.9640 | 152.3 | 0.7670 |
+| en-US-UK | 0.08 | 0.9680 | 356.9 | 0.7650 |
+| en-US-UK | 0.12 | 0.9820 | 432.2 | 0.7770 |
+| pt-PT-BR | 0.01 | 0.5120 | 14.7 | 0.4520 |
+| pt-PT-BR | 0.02 | 0.7680 | 45.4 | 0.6780 |
+| pt-PT-BR | 0.03 | 0.8400 | 58.8 | 0.7370 |
+| pt-PT-BR | 0.05 | 0.8400 | 60.4 | 0.7370 |
+| pt-PT-BR | 0.08 | 0.8580 | 139.4 | 0.7490 |
+| pt-PT-BR | 0.12 | 0.9240 | 170.1 | 0.8060 |
+| es-ES-LA | 0.01 | 1.0000 | 21.1 | 0.9157 |
+| es-ES-LA | 0.02 | 1.0000 | 36.2 | 0.9157 |
+| es-ES-LA | 0.03 | 1.0000 | 36.4 | 0.9157 |
+| es-ES-LA | 0.05 | 1.0000 | 36.9 | 0.9157 |
+| es-ES-LA | 0.08 | 1.0000 | 93.9 | 0.9157 |
+| es-ES-LA | 0.12 | 1.0000 | 108.4 | 0.9157 |
+| hy-E-W | 0.01 | 0.9980 | 69.6 | 0.9097 |
+| hy-E-W | 0.02 | 0.9980 | 76.1 | 0.9097 |
+| hy-E-W | 0.03 | 1.0000 | 84.4 | 0.9097 |
+| hy-E-W | 0.05 | 1.0000 | 84.4 | 0.9097 |
+| hy-E-W | 0.08 | 1.0000 | 168.9 | 0.9097 |
+| hy-E-W | 0.12 | 1.0000 | 243.2 | 0.9097 |
 
 ## Test split
 
