@@ -1,0 +1,64 @@
+{
+ "task": "tone-weights",
+ "system": "phonematcher,pm-p5-tone-standalone,pm-p5-tone-0-0,pm-p5-tone-0.25-0.0625,pm-p5-tone-0.25-0.125,pm-p5-tone-0.5-0.125,pm-p5-tone-0.25-0.25,pm-p5-tone-0.5-0.5,pm-p5-tone-1-1",
+ "split": "dev",
+ "commit": null,
+ "head": "22f3615241dfb85b5404e5df041af520128ec352",
+ "tree_dirty": true,
+ "source": "https://doi.org/10.5281/zenodo.192607 (v1.0, glottobank/potential-of-cognate-detection-v1.0.zip, md5 d270e3803e5be2f018c9a2975b750ce8)",
+ "datasets": [
+  "Austronesian-210-20",
+  "Bai-110-09",
+  "Chinese-140-15",
+  "IndoEuropean-207-20",
+  "Japanese-200-10",
+  "ObUgrian-110-21"
+ ],
+ "systems": {
+  "phonematcher": {
+   "average_precision": 0.7875946355610898,
+   "bcubed_f": 0.838336938112236,
+   "chinese_average_precision": 0.6292478807926634
+  },
+  "pm-p5-tone-standalone": {
+   "average_precision": 0.7736352035713213,
+   "bcubed_f": 0.8268284326777119,
+   "chinese_average_precision": 0.5490185121342293
+  },
+  "pm-p5-tone-0-0": {
+   "average_precision": 0.7868152062505899,
+   "bcubed_f": 0.8381661863650459,
+   "chinese_average_precision": 0.630345371195133
+  },
+  "pm-p5-tone-0.25-0.0625": {
+   "average_precision": 0.787709351133766,
+   "bcubed_f": 0.8383472018669091,
+   "chinese_average_precision": 0.6314181581808954
+  },
+  "pm-p5-tone-0.25-0.125": {
+   "average_precision": 0.7875946355610898,
+   "bcubed_f": 0.838336938112236,
+   "chinese_average_precision": 0.6292478807926634
+  },
+  "pm-p5-tone-0.5-0.125": {
+   "average_precision": 0.7876259602072216,
+   "bcubed_f": 0.8383359592311552,
+   "chinese_average_precision": 0.6294266640777066
+  },
+  "pm-p5-tone-0.25-0.25": {
+   "average_precision": 0.7870287962562855,
+   "bcubed_f": 0.8376552322443612,
+   "chinese_average_precision": 0.6242042832603805
+  },
+  "pm-p5-tone-0.5-0.5": {
+   "average_precision": 0.7855089648869337,
+   "bcubed_f": 0.8356883483283376,
+   "chinese_average_precision": 0.6139907312965258
+  },
+  "pm-p5-tone-1-1": {
+   "average_precision": 0.7817892672685027,
+   "bcubed_f": 0.8320537102337672,
+   "chinese_average_precision": 0.5932092843654693
+  }
+ }
+}

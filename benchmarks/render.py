@@ -1,9 +1,10 @@
 """Render ``docs/benchmarks.md`` from the result files in ``benchmarks/results``.
 
     python benchmarks/render.py            # write docs/benchmarks.md
-    python benchmarks/render.py --check    # exit 1 when docs/benchmarks.md, the README table or a whitepaper table differs from a fresh render
+    python benchmarks/render.py --check    # exit 1 when docs/benchmarks.md, the README table, a whitepaper table or a design table differs from a fresh render
     python benchmarks/render.py --readme   # print the summary table of the README
     python benchmarks/render.py --whitepaper   # rewrite the marked tables of whitepaper.md
+    python benchmarks/render.py --design   # rewrite the marked tables of docs/design.md
 
 Every number in the page comes from a result file. The files of the ``seen`` and ``dev`` splits
 are always rendered; the files of the ``test`` split are rendered when they exist.
@@ -25,6 +26,7 @@ RESULTS = ROOT / "benchmarks" / "results"
 PAGE = ROOT / "docs" / "benchmarks.md"
 README = ROOT / "README.md"
 WHITEPAPER = ROOT / "whitepaper.md"
+DESIGN = ROOT / "docs" / "design.md"
 README_START = "<!-- benchmark-table:start -->"
 README_END = "<!-- benchmark-table:end -->"
 
@@ -475,16 +477,52 @@ def whitepaper_blocks(directory: Path = RESULTS) -> Dict[str, str]:
     return {name: text.rstrip("\n") + "\n" for name, text in blocks.items()}
 
 
-def fill_whitepaper(text: str, blocks: Dict[str, str]) -> str:
+TONE_LABELS = {
+    "pm-p5-tone-standalone": "tone as a segment of its own",
+    "pm-p5-tone-0-0": "0 and 0: the tone is read and not priced",
+    "pm-p5-tone-0.25-0.125": "0.25 and 0.125, chosen",
+}
+
+
+def design_tone_weights(results: dict) -> str:
+    rows = []
+    for name, row in results["dev"]["tone-weights"]["systems"].items():
+        if name == "phonematcher":
+            continue
+        label = TONE_LABELS.get(name) or " and ".join(name.removeprefix("pm-p5-tone-").split("-"))
+        rows.append([label, num(row["average_precision"]), num(row["bcubed_f"]), num(row["chinese_average_precision"])])
+    return "\n".join(table(["Tone weights", "Average precision", "B-cubed F", "Chinese average precision"], rows))
+
+
+def design_corrections(directory: Path) -> str:
+    data = json.loads((directory / "ablations" / "corrections-dev.json").read_text(encoding="utf8"))
+    rows = []
+    for task, label in (("cognates", "Cognates, AP"), ("alignment", "Alignment, PAS"), ("retrieval", "Retrieval, recall@1")):
+        key = {"cognates": "cognates_ap", "alignment": "alignment_pas", "retrieval": "retrieval_recall@1"}[task]
+        rows.append([label, num(data["before"][key]), num(data["after"][key]), difference(data["paired"][task]["paired"]["after"])])
+    return "\n".join(table(["Task", "Without", "With", "Paired difference [95% interval]"], rows))
+
+
+def design_blocks(directory: Path = RESULTS) -> Dict[str, str]:
+    """The text of each marked table of docs/design.md, by name."""
+    blocks = {"tone-weights": design_tone_weights(load_results(directory)), "corrections": design_corrections(directory)}
+    return {name: text.rstrip("\n") + "\n" for name, text in blocks.items()}
+
+
+def fill_marked(text: str, blocks: Dict[str, str], page: str) -> str:
     """*text* with the content between each pair of markers replaced by its block; a missing marker raises."""
     for name, block in blocks.items():
-        start, end = f"<!-- whitepaper:{name}:start -->", f"<!-- whitepaper:{name}:end -->"
+        start, end = f"<!-- {page}:{name}:start -->", f"<!-- {page}:{name}:end -->"
         if text.count(start) != 1 or text.count(end) != 1:
-            raise SystemExit(f"whitepaper.md needs one {start} and one {end}")
+            raise SystemExit(f"{page}.md needs one {start} and one {end}")
         head, rest = text.split(start, 1)
         tail = rest.split(end, 1)[1]
         text = f"{head}{start}\n{block}{end}{tail}"
     return text
+
+
+def fill_whitepaper(text: str, blocks: Dict[str, str]) -> str:
+    return fill_marked(text, blocks, "whitepaper")
 
 
 def readme_block(text: str) -> Optional[str]:
@@ -503,6 +541,8 @@ def main(argv: Optional[List[str]] = None) -> int:
     parser.add_argument("--readme-file", type=Path, default=README)
     parser.add_argument("--whitepaper", action="store_true", help="rewrite the marked tables of whitepaper.md")
     parser.add_argument("--whitepaper-file", type=Path, default=WHITEPAPER)
+    parser.add_argument("--design", action="store_true", help="rewrite the marked tables of docs/design.md")
+    parser.add_argument("--design-file", type=Path, default=DESIGN)
     args = parser.parse_args(argv)
     if args.readme:
         print(readme_table(args.results), end="")
@@ -511,6 +551,11 @@ def main(argv: Optional[List[str]] = None) -> int:
         paper = args.whitepaper_file.read_text(encoding="utf8")
         args.whitepaper_file.write_text(fill_whitepaper(paper, whitepaper_blocks(args.results)), encoding="utf8")
         print(f"wrote the tables of {args.whitepaper_file}")
+        return 0
+    if args.design:
+        page = args.design_file.read_text(encoding="utf8")
+        args.design_file.write_text(fill_marked(page, design_blocks(args.results), "design"), encoding="utf8")
+        print(f"wrote the tables of {args.design_file}")
         return 0
     fresh = render(args.results)
     if args.check:
@@ -524,7 +569,11 @@ def main(argv: Optional[List[str]] = None) -> int:
         if fill_whitepaper(paper, whitepaper_blocks(args.results)) != paper:
             print(f"a table in {args.whitepaper_file} differs from a fresh render; run benchmarks/render.py --whitepaper", file=sys.stderr)
             return 1
-        print(f"{args.page}, the table in {args.readme_file} and the tables in {args.whitepaper_file} match a fresh render")
+        design = args.design_file.read_text(encoding="utf8")
+        if fill_marked(design, design_blocks(args.results), "design") != design:
+            print(f"a table in {args.design_file} differs from a fresh render; run benchmarks/render.py --design", file=sys.stderr)
+            return 1
+        print(f"{args.page}, the table in {args.readme_file} and the tables in {args.whitepaper_file} and {args.design_file} match a fresh render")
         return 0
     args.page.write_text(fresh, encoding="utf8")
     print(f"wrote {args.page}")
