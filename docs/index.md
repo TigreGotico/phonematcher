@@ -7,6 +7,31 @@ verify: pytest --import-mode=importlib tests/test_docs.py -k test_the_index_list
 see: ../README.md, quickstart.md
 -->
 
+phonematcher measures how far apart two sounds or two IPA words are, and finds words that sound alike.
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="img/test-split-dark.svg">
+  <img alt="Test split by task: the shipped library leads retrieval, and SCA leads cognates and alignment. The Benchmarks page lists every value." src="img/test-split.svg">
+</picture>
+
+The [Benchmarks](benchmarks.md) page gives every value of this figure.
+
+## Quickstart
+
+```bash
+uv pip install --prerelease=allow phonematcher
+```
+
+```python
+from phonematcher import feature_distance, ipa_distance, segments
+
+feature_distance("ʁ", "χ")       # 0.013
+segments("ˈt͡ʃɐ̃w̃")              # ['t͡ʃ', 'ɐ̃', 'w̃']
+ipa_distance("ˈpojʃ", "ˈpojs")   # 0.199
+```
+
+## Pages
+
 These pages teach phonematcher in the order below. The first seven are walk-throughs: each step shows real output. The last five are reference.
 
 | Page | What you get |

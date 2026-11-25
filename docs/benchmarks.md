@@ -338,6 +338,13 @@ Fuzzy search of phonematcher:
 
 The test split ran once, from a clean tree, under the pre-registration in `benchmarks/prereg-2.md`. The tested library had 36 features and read a tone as a segment of its own, not as four features of its vowel. The rows `phonematcher` and `pm-` followed by a variant name (`pm-panphon22`, `pm-no-height`, `pm-flat-diacritics`, `pm-uniform`, `pm-indel-0.5`, `pm-indel-1.5`) use the C0 costs: gap 1 and linear substitutions. The candidate rows `pm-C1` to `pm-P5` carry their own costs, and `pm-P5` is the shipped library.
 
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="img/test-split-dark.svg">
+  <img alt="Test split by task. Cognates, mean AP: P5 0.80, best sca 0.88. Alignment, PAS on common pairs: P5 0.85, best sca 0.90. Retrieval, mean recall@1: P5 0.88, the best." src="img/test-split.svg">
+</picture>
+
+`img/plot_test_split.py` makes this figure from `benchmarks/results/*-test.json`.
+
 ### cognates
 
 Commit `f092f20c8bbe`.
