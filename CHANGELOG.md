@@ -1,5 +1,13 @@
 # Changelog
 
+## [3.1.6a4](https://github.com/TigreGotico/phonematcher/tree/3.1.6a4) (2026-11-25)
+
+[Full Changelog](https://github.com/TigreGotico/phonematcher/compare/3.1.6a3...3.1.6a4)
+
+**Merged pull requests:**
+
+- docs: regenerate the tone-weight and corrections tables of the design page from scripts [\#225](https://github.com/TigreGotico/phonematcher/pull/225) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
+
 ## [3.1.6a3](https://github.com/TigreGotico/phonematcher/tree/3.1.6a3) (2026-11-25)
 
 [Full Changelog](https://github.com/TigreGotico/phonematcher/compare/3.1.6a2...3.1.6a3)
@@ -360,10 +368,6 @@
 
 [Full Changelog](https://github.com/TigreGotico/phonematcher/compare/2.3.6a2...2.3.7a1)
 
-**Merged pull requests:**
-
-- fix: read tone marks, tie bars and format characters at segment edges [\#109](https://github.com/TigreGotico/phonematcher/pull/109) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
-
 ## [2.3.6a2](https://github.com/TigreGotico/phonematcher/tree/2.3.6a2) (2026-11-23)
 
 [Full Changelog](https://github.com/TigreGotico/phonematcher/compare/2.3.6a1...2.3.6a2)
@@ -375,10 +379,6 @@
 ## [2.3.6a1](https://github.com/TigreGotico/phonematcher/tree/2.3.6a1) (2026-11-23)
 
 [Full Changelog](https://github.com/TigreGotico/phonematcher/compare/2.3.5a1...2.3.6a1)
-
-**Merged pull requests:**
-
-- fix: write benchmark results outside the tree [\#110](https://github.com/TigreGotico/phonematcher/pull/110) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
 
 ## [2.3.5a1](https://github.com/TigreGotico/phonematcher/tree/2.3.5a1) (2026-11-23)
 
