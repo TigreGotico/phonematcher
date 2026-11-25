@@ -134,6 +134,7 @@ def anchors():
         anchored("In", str(tone_scores()["direction_baseline"]["interval"]["undefined"]), "of the", str(cognates["resamples"]), "resamples"),
         anchored("On cognates, CLTS sound vectors score", f4(equal["soundvectors-p5"]["cog_all"]), "on all words and phonematcher", f4(equal["phonematcher"]["cog_all"])),
         anchored("On the common words, CLTS sound vectors score", f4(equal["soundvectors-p5"]["cog_common"]), "and phonematcher", f4(equal["phonematcher"]["cog_common"])),
+        anchored("phonematcher is last of the three feature systems at equal costs: PanPhon scores", f4(equal["panphon-weighted-p5"]["cog_common"])),
         anchored("On alignment, PanPhon scores", f4(equal["panphon-weighted-p5"]["pas"]), "and phonematcher", f4(equal["phonematcher"]["pas"])),
         anchored("CLTS sound vectors score", f4(equal["soundvectors-p5"]["pas"])),
         anchored("On retrieval, phonematcher keeps the lead with", f4(equal["phonematcher"]["recall"]), "against", f4(equal["soundvectors-p5"]["recall"]),
@@ -288,9 +289,11 @@ def prose_values():
     values[str(results("tone-seen.json")["pairs"])] = "tone pairs"
     equal = equal_cost()
     for system, keys in (("phonematcher", ("cog_all", "cog_common", "pas", "recall")), ("soundvectors-p5", ("cog_all", "cog_common", "pas", "recall")),
-                         ("panphon-weighted-p5", ("pas", "recall"))):
+                         ("panphon-weighted-p5", ("cog_common", "pas", "recall"))):
         for key in keys:
             values[f4(equal[system][key])] = f"{system}, {key}, equal costs, dev"
+    for system in ("pm-C0", "panphon-weighted", "soundvectors"):
+        values[f4(equal[system]["cog_common"])] = f"{system}, cog_common, original costs, dev"
     values[scale_mark_bound()] = "bound on the paired test differences of the scale-mark variant"
     confusions = results("confusions-seen.json")["systems"]["phonematcher"]
     for name in ("hillenbrand", "mandarin", "miller_nicely"):
@@ -535,7 +538,8 @@ def test_equal_costs_give_every_feature_system_a_gain_and_the_table_no_clear_lea
             for s, p in (("phonematcher", "pm-C0"), ("soundvectors-p5", "soundvectors"))}
     for key in ("cog_all", "recall"):
         assert abs(gain["phonematcher"][key] - gain["soundvectors-p5"][key]) < 0.005, key
-    assert equal["soundvectors-p5"]["cog_common"] > equal["phonematcher"]["cog_common"]
+    assert equal["soundvectors-p5"]["cog_common"] > equal["panphon-weighted-p5"]["cog_common"] > equal["phonematcher"]["cog_common"]
+    assert equal["soundvectors"]["cog_common"] > equal["panphon-weighted"]["cog_common"] > equal["pm-C0"]["cog_common"]
     assert equal["phonematcher"]["recall"] == max(row["recall"] for row in equal.values())
     assert abs(equal["panphon-weighted-p5"]["pas"] - equal["phonematcher"]["pas"]) < 0.001
     assert equal["soundvectors-p5"]["pas"] < equal["phonematcher"]["pas"]
