@@ -9,7 +9,7 @@ see: compare-words.md, features.md
 
 This page shows how a tone enters a word distance. A tone is four features of the vowel that carries it.
 
-The tone distance between two tones is experimental. On the 15 Cantonese tone pairs of the benchmark it ranks tone confusions worse than a baseline that compares only the direction of the contour (issue [#68](https://github.com/TigreGotico/phonematcher/issues/68)). The tone features rank the 15 pairs in the same order, so the same limit holds for them. The numbers come from `benchmarks/results/tone-seen.json`. Run this block from the root of a clone of the repository, because the file is not in the installed package:
+The tone distance between two tones is experimental. On the 15 Cantonese tone pairs of the benchmark it ranks tone confusions worse than a baseline that compares only the direction of the contour ([the tracking issue](https://github.com/TigreGotico/phonematcher/issues/68)). The tone features rank the 15 pairs in the same order, so the same limit holds for them. [Design choices and limits](design.md#the-tone-distance) gives the reading of the numbers. They come from `benchmarks/results/tone-seen.json`. Run this block from the root of a clone of the repository, because the file is not in the installed package:
 
 ```python
 import json
@@ -21,8 +21,6 @@ round(scored["phonematcher_features"]["score"], 4)                         # 0.2
 round(scored["direction_baseline"]["score"], 4)                            # 0.7817
 [round(scored["direction_baseline"]["interval"][k], 4) for k in ("low", "high")]  # [0.4554, 0.886]
 ```
-
-The data was seen during the work, and the 15 pairs do not show that the baseline is better. They show that the tone distance does not beat it.
 
 ## 1. Write a tone
 

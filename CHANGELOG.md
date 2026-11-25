@@ -1,5 +1,21 @@
 # Changelog
 
+## [3.1.4a3](https://github.com/TigreGotico/phonematcher/tree/3.1.4a3) (2026-11-25)
+
+[Full Changelog](https://github.com/TigreGotico/phonematcher/compare/3.1.4a2...3.1.4a3)
+
+**Merged pull requests:**
+
+- refactor: make the segment and vector readers read in order [\#205](https://github.com/TigreGotico/phonematcher/pull/205) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
+
+## [3.1.4a2](https://github.com/TigreGotico/phonematcher/tree/3.1.4a2) (2026-11-25)
+
+[Full Changelog](https://github.com/TigreGotico/phonematcher/compare/3.1.4a1...3.1.4a2)
+
+**Merged pull requests:**
+
+- docs: README, docs index, navigation and agent hints [\#203](https://github.com/TigreGotico/phonematcher/pull/203) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
+
 ## [3.1.4a1](https://github.com/TigreGotico/phonematcher/tree/3.1.4a1) (2026-11-24)
 
 [Full Changelog](https://github.com/TigreGotico/phonematcher/compare/3.1.3a1...3.1.4a1)
@@ -359,10 +375,6 @@
 
 [Full Changelog](https://github.com/TigreGotico/phonematcher/compare/2.3.2a1...2.3.2a2)
 
-**Merged pull requests:**
-
-- perf: cache feature\_distance on the ordered pair and read vectors as ints [\#90](https://github.com/TigreGotico/phonematcher/pull/90) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
-
 ## [2.3.2a1](https://github.com/TigreGotico/phonematcher/tree/2.3.2a1) (2026-11-22)
 
 [Full Changelog](https://github.com/TigreGotico/phonematcher/compare/2.3.1a1...2.3.2a1)
@@ -375,17 +387,9 @@
 
 [Full Changelog](https://github.com/TigreGotico/phonematcher/compare/2.3.0a1...2.3.1a1)
 
-**Merged pull requests:**
-
-- fix: read a prenasal mark before an affricate, and a click after its velar or uvular letter [\#92](https://github.com/TigreGotico/phonematcher/pull/92) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
-
 ## [2.3.0a1](https://github.com/TigreGotico/phonematcher/tree/2.3.0a1) (2026-11-22)
 
 [Full Changelog](https://github.com/TigreGotico/phonematcher/compare/2.2.1a2...2.3.0a1)
-
-**Merged pull requests:**
-
-- feat: export is\_vowel\_phone as stable API [\#91](https://github.com/TigreGotico/phonematcher/pull/91) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
 
 ## [2.2.1a2](https://github.com/TigreGotico/phonematcher/tree/2.2.1a2) (2026-11-22)
 
