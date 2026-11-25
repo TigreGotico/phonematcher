@@ -1,26 +1,18 @@
 {
- "about": "phonematcher on dev before and after the post-test changes to the feature values and the tone model. 'before' and 'after' are the main metrics of the committed result files; 'paired' is an audit run of per-unit scores, library at cd2996a with the dev benchmark code of 100ff08 (before) and library and dev benchmark code of the 'after' head (after).",
+ "about": "phonematcher on dev, the library of 'before' against the shipped library of 'after', scored unit by unit on the same units. Each 'before' and 'after' value is the mean of the units of its task, as 'paired' lists them.",
  "before": {
-  "files": "benchmarks/results/{cognates,alignment,retrieval}-dev.json at 100ff08",
-  "heads": {
-   "cognates": "99383979599a2ac4f5e54a65d765f1635a4cd8ff",
-   "alignment": "fe3944f052dd84bbf8d44333a3242ea7dbe091fa",
-   "retrieval": "28ef420a7654efa60546be58d9bfe439c273f2f6"
-  },
+  "library": "cd2996a",
+  "benchmarks": "100ff08",
   "cognates_ap": 0.7726677178958216,
-  "alignment_pas": 0.8315282791817088,
-  "retrieval_recall@1": 0.8800962955015018
+  "alignment_pas": 0.8207650273224044,
+  "retrieval_recall@1": 0.8733333333333333
  },
  "after": {
-  "files": "benchmarks/results/{cognates,alignment,retrieval}-dev.json",
-  "heads": {
-   "cognates": "4f254da108460c3a56c25c482751aa0cae11fe1c",
-   "alignment": "4f254da108460c3a56c25c482751aa0cae11fe1c",
-   "retrieval": "4f254da108460c3a56c25c482751aa0cae11fe1c"
-  },
-  "cognates_ap": 0.7874895594820304,
-  "alignment_pas": 0.8315282791817088,
-  "retrieval_recall@1": 0.8801911663010207
+  "head": "22f3615241dfb85b5404e5df041af520128ec352",
+  "tree_dirty": true,
+  "cognates_ap": 0.7875946355610898,
+  "alignment_pas": 0.820983606557377,
+  "retrieval_recall@1": 0.8735833333333333
  },
  "paired": {
   "cognates": {
@@ -33,16 +25,16 @@
      "high": 0.7854183728727019
     },
     "after": {
-     "estimate": 0.7874895594820304,
-     "low": 0.7735031186970114,
-     "high": 0.8007729858939285
+     "estimate": 0.7875946355610898,
+     "low": 0.7736181989464598,
+     "high": 0.8008294433094086
     }
    },
    "paired": {
     "after": {
-     "diff": 0.014821841586208806,
-     "low": 0.012164479681512635,
-     "high": 0.01761257897165435
+     "diff": 0.014926917665268213,
+     "low": 0.012305536276208834,
+     "high": 0.017685760992135136
     }
    }
   },

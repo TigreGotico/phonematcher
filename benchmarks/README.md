@@ -119,6 +119,23 @@ The `seen` run covers coverage, allophones and confusions, and the control. The 
 
 The control compares `pm-panphon22` with `panphon-weighted`: `python benchmarks/variants.py control`. It prints the pair counts for every PHOIBLE segment that both systems read. A variant is a diagnostic and not a candidate.
 
+### Tone weights and corrections
+
+The tone-weight table of `docs/design.md` comes from the cognate task on the dev split. The variants `pm-p5-tone-W-P` weigh `tone_is` at W and each of the three pitches at P, and `pm-p5-tone-standalone` reads a tone as a segment of its own. All keep the shipped costs.
+
+```bash
+python benchmarks/run.py --task tone-weights --system tone-weights --split dev --out benchmarks/results
+```
+
+The corrections table compares the package at `cd2996a` with this tree, unit by unit on the dev split. The script unpacks the old package and the old benchmark code from git, so it needs the full history.
+
+```bash
+python benchmarks/corrections.py --out benchmarks/results/ablations/corrections-dev.json
+python benchmarks/render.py --design
+```
+
+`render.py --check` fails when either table of `docs/design.md` differs from its result file.
+
 ## The splits
 
 `split.is_test(key)` is true for one key in five, by the SHA-1 of the key. Each task names its key.
