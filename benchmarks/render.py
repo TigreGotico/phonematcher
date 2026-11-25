@@ -237,6 +237,25 @@ def flatten(tree: dict, prefix: str = "") -> Dict[str, float]:
 FOOTER = "[Index](index.md) · Previous: [API reference](api.md)"
 
 
+def test_figure(tests: Dict[str, dict]) -> List[str]:
+    """The figure of the test split, with alt text read from the same result files."""
+    parts = []
+    for task, title in README_COLUMNS:
+        cells = tests[task]["intervals"]
+        best = max(cells, key=lambda s: cells[s]["estimate"])
+        lead = "the best" if best == "pm-P5" else f"best {best} {cells[best]['estimate']:.2f}"
+        parts.append(f"{title}: P5 {cells['pm-P5']['estimate']:.2f}, {lead}")
+    return [
+        "<picture>",
+        '  <source media="(prefers-color-scheme: dark)" srcset="img/test-split-dark.svg">',
+        f'  <img alt="Test split by task. {". ".join(parts)}." src="img/test-split.svg">',
+        "</picture>",
+        "",
+        "`img/plot_test_split.py` makes this figure from `benchmarks/results/*-test.json`.",
+        "",
+    ]
+
+
 def render(directory: Path = RESULTS) -> str:
     results = load_results(directory)
     out = [
@@ -256,6 +275,8 @@ def render(directory: Path = RESULTS) -> str:
         if split not in results:
             continue
         out += [f"## {title}", "", SPLIT_TEXT[split], ""]
+        if split == "test":
+            out += test_figure(results[split])
         for task in TASK_ORDER:
             if task in results[split]:
                 payload = results[split][task]
