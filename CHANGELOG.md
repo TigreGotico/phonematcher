@@ -1,5 +1,13 @@
 # Changelog
 
+## [3.1.6a7](https://github.com/TigreGotico/phonematcher/tree/3.1.6a7) (2026-11-26)
+
+[Full Changelog](https://github.com/TigreGotico/phonematcher/compare/3.1.6a6...3.1.6a7)
+
+**Merged pull requests:**
+
+- test: each strict xfail names the exception it expects [\#232](https://github.com/TigreGotico/phonematcher/pull/232) ([openvoiceos-bot](https://github.com/openvoiceos-bot))
+
 ## [3.1.6a6](https://github.com/TigreGotico/phonematcher/tree/3.1.6a6) (2026-11-25)
 
 [Full Changelog](https://github.com/TigreGotico/phonematcher/compare/3.1.6a5...3.1.6a6)
