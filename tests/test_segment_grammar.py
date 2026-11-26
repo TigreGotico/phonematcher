@@ -51,7 +51,7 @@ def test_vectorize_phones_reads_or_raises_as_documented(text, output, verdicts):
 # and a span is one range of the text.
 TONE_AFTER_CODA = "tam˧˧"
 SPAN_CASES = [
-    pytest.param(*case, marks=pytest.mark.xfail(strict=True, reason="tone after a coda is in no span: audits/phonematcher/issue-drafts-grammar.md"))
+    pytest.param(*case, marks=pytest.mark.xfail(strict=True, raises=AssertionError, reason="tone after a coda is in no span: audits/phonematcher/issue-drafts-grammar.md"))
     if case[0] == TONE_AFTER_CODA else case
     for case in examples()
 ]
