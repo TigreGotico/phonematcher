@@ -1,0 +1,37 @@
+[
+  {
+    "spelling": "g",
+    "reads_as": "ɡ",
+    "source": "Unicode Standard 18.0 code chart U+0000..U+007F (C0 Controls and Basic Latin), https://www.unicode.org/charts/PDF/U0000.pdf: U+0067 g carries the cross reference \"→ 0261 ɡ latin small letter script g\"; the chart U+0250..U+02AF, https://www.unicode.org/charts/PDF/U0250.pdf, lists U+0261 ɡ as \"voiced velar stop\" with the cross reference \"→ 0067 g latin small letter g\""
+  },
+  {
+    "spelling": "ʦ",
+    "reads_as": "t͡s",
+    "source": "Unicode Standard 18.0 code chart U+0250..U+02AF (IPA Extensions), https://www.unicode.org/charts/PDF/U0250.pdf, p. 29: U+02A6 ʦ LATIN SMALL LETTER TS DIGRAPH \"voiceless dental affricate\"; Unicode Standard 18.0 chapter 7.1.5: U+02A6 ʦ \"is a transcription for the sound that could also be transcribed in IPA as [ t͜s ] ... or [ t͡s ]\""
+  },
+  {
+    "spelling": "ʣ",
+    "reads_as": "d͡z",
+    "source": "Unicode Standard 18.0 code chart U+0250..U+02AF (IPA Extensions), https://www.unicode.org/charts/PDF/U0250.pdf, p. 29: U+02A3 ʣ LATIN SMALL LETTER DZ DIGRAPH \"voiced dental affricate\""
+  },
+  {
+    "spelling": "ʧ",
+    "reads_as": "t͡ʃ",
+    "source": "Unicode Standard 18.0 code chart U+0250..U+02AF (IPA Extensions), https://www.unicode.org/charts/PDF/U0250.pdf, p. 29: U+02A7 ʧ LATIN SMALL LETTER TESH DIGRAPH \"voiceless postalveolar affricate\""
+  },
+  {
+    "spelling": "ʤ",
+    "reads_as": "d͡ʒ",
+    "source": "Unicode Standard 18.0 code chart U+0250..U+02AF (IPA Extensions), https://www.unicode.org/charts/PDF/U0250.pdf, p. 29: U+02A4 ʤ LATIN SMALL LETTER DEZH DIGRAPH \"voiced postalveolar affricate\""
+  },
+  {
+    "spelling": "ʨ",
+    "reads_as": "t͡ɕ",
+    "source": "Unicode Standard 18.0 code chart U+0250..U+02AF (IPA Extensions), https://www.unicode.org/charts/PDF/U0250.pdf, p. 29: U+02A8 ʨ LATIN SMALL LETTER TC DIGRAPH WITH CURL \"voiceless alveolo-palatal affricate\""
+  },
+  {
+    "spelling": "ʥ",
+    "reads_as": "d͡ʑ",
+    "source": "Unicode Standard 18.0 code chart U+0250..U+02AF (IPA Extensions), https://www.unicode.org/charts/PDF/U0250.pdf, p. 29: U+02A5 ʥ LATIN SMALL LETTER DZ DIGRAPH WITH CURL \"voiced alveolo-palatal affricate\""
+  }
+]

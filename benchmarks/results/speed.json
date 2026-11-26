@@ -1,0 +1,256 @@
+{
+ "task": "speed",
+ "head": "e3129fbb845e1b8c8c1b99eda7309f40714f24a5",
+ "machine": {
+  "cpu": "11th Gen Intel(R) Core(TM) i9-11900H @ 2.50GHz",
+  "cores": 16,
+  "python": "3.14.6"
+ },
+ "segments": 135,
+ "pair_count": 18225,
+ "matrix_sha256": "44c7d449fc5d31f74b289e50ed0994c9741936e25a60944e08a31c400dfe14a9",
+ "method": {
+  "ipa_pairs": "10000 pairs of two distinct rows drawn with random.Random(0).sample from all broad WikiPron files in the cache, sorted by file name, spaces removed",
+  "index_terms": "the first 100000 rows of eng_latn_us_broad, one term per row, spaces removed",
+  "queries": "1000 rows of eng_latn_uk_broad drawn with random.Random(0).sample, search(n_results=10)",
+  "segments": "letters and tied affricates of phone_clusters; every ordered pair, diagonal included; vectors warmed before timing; one cold pass, then one warm pass over the same pairs"
+ },
+ "runs": [
+  {
+   "load_at_start": "16.64",
+   "segment": {
+    "pairs": 18225,
+    "seconds": 0.20754777791444212,
+    "per_second": 87811.10635408938
+   },
+   "segment_warm": {
+    "pairs": 18225,
+    "seconds": 0.0032031360315158963,
+    "per_second": 5689736.502191245
+   },
+   "ipa_distance": {
+    "pairs": 10000,
+    "seconds": 1.7635036429855973,
+    "per_second": 5670.529822705715
+   },
+   "ipa_distance_warm": {
+    "pairs": 10000,
+    "seconds": 1.4429293220164254,
+    "per_second": 6930.346377621236
+   },
+   "search": {
+    "terms": 100000,
+    "queries": 1000,
+    "0.05": {
+     "build_seconds": 14.001131501048803,
+     "queries_per_second": 24.67402965899418
+    },
+    "0.1": {
+     "build_seconds": 11.866183051024564,
+     "queries_per_second": 13.679030765679169
+    }
+   }
+  },
+  {
+   "load_at_start": "16.90",
+   "segment": {
+    "pairs": 18225,
+    "seconds": 0.1084974049590528,
+    "per_second": 167976.3677931114
+   },
+   "segment_warm": {
+    "pairs": 18225,
+    "seconds": 0.001708163064904511,
+    "per_second": 10669356.090437891
+   },
+   "ipa_distance": {
+    "pairs": 10000,
+    "seconds": 1.2694696770049632,
+    "per_second": 7877.30513074784
+   },
+   "ipa_distance_warm": {
+    "pairs": 10000,
+    "seconds": 1.0862219789996743,
+    "per_second": 9206.221374022665
+   },
+   "search": {
+    "terms": 100000,
+    "queries": 1000,
+    "0.05": {
+     "build_seconds": 9.558749875053763,
+     "queries_per_second": 40.64082321946946
+    },
+    "0.1": {
+     "build_seconds": 8.558963627088815,
+     "queries_per_second": 15.55186630188735
+    }
+   }
+  },
+  {
+   "load_at_start": "10.16",
+   "segment": {
+    "pairs": 18225,
+    "seconds": 0.14401557203382254,
+    "per_second": 126548.81512201887
+   },
+   "segment_warm": {
+    "pairs": 18225,
+    "seconds": 0.002669112989678979,
+    "per_second": 6828111.088018034
+   },
+   "ipa_distance": {
+    "pairs": 10000,
+    "seconds": 1.0866129859350622,
+    "per_second": 9202.908606319212
+   },
+   "ipa_distance_warm": {
+    "pairs": 10000,
+    "seconds": 1.0449493270134553,
+    "per_second": 9569.842040647809
+   },
+   "search": {
+    "terms": 100000,
+    "queries": 1000,
+    "0.05": {
+     "build_seconds": 10.11385511199478,
+     "queries_per_second": 40.40050665592055
+    },
+    "0.1": {
+     "build_seconds": 8.834907104959711,
+     "queries_per_second": 15.493719827984597
+    }
+   }
+  }
+ ],
+ "median": {
+  "segment_per_second": 126548.81512201887,
+  "segment_warm_per_second": 6828111.088018034,
+  "ipa_distance_per_second": 7877.30513074784,
+  "ipa_distance_warm_per_second": 9206.221374022665,
+  "build_seconds_0.05": 10.11385511199478,
+  "queries_per_second_0.05": 40.40050665592055,
+  "build_seconds_0.1": 8.834907104959711,
+  "queries_per_second_0.1": 15.493719827984597
+ },
+ "before": {
+  "head": "1e96d646e55c7e117fb2c465fb6c8c659066b37d",
+  "matrix_sha256": "44c7d449fc5d31f74b289e50ed0994c9741936e25a60944e08a31c400dfe14a9",
+  "runs": [
+   {
+    "load_at_start": "7.37",
+    "segment": {
+     "pairs": 18225,
+     "seconds": 0.10735850397031754,
+     "per_second": 169758.3267836784
+    },
+    "segment_warm": {
+     "pairs": 18225,
+     "seconds": 0.11905462492723018,
+     "per_second": 153080.9912772366
+    },
+    "ipa_distance": {
+     "pairs": 10000,
+     "seconds": 4.641371608013287,
+     "per_second": 2154.5355219424982
+    },
+    "ipa_distance_warm": {
+     "pairs": 10000,
+     "seconds": 4.588916075997986,
+     "per_second": 2179.163844879256
+    },
+    "search": {
+     "terms": 100000,
+     "queries": 1000,
+     "0.05": {
+      "build_seconds": 8.7792235390516,
+      "queries_per_second": 7.587841639696624
+     },
+     "0.1": {
+      "build_seconds": 9.484110728022642,
+      "queries_per_second": 2.9604920345926895
+     }
+    }
+   },
+   {
+    "load_at_start": "11.23",
+    "segment": {
+     "pairs": 18225,
+     "seconds": 0.12090397998690605,
+     "per_second": 150739.4545818407
+    },
+    "segment_warm": {
+     "pairs": 18225,
+     "seconds": 0.11145105701871216,
+     "per_second": 163524.69404520857
+    },
+    "ipa_distance": {
+     "pairs": 10000,
+     "seconds": 5.782730632927269,
+     "per_second": 1729.286842976795
+    },
+    "ipa_distance_warm": {
+     "pairs": 10000,
+     "seconds": 6.0917433550348505,
+     "per_second": 1641.5662015266878
+    },
+    "search": {
+     "terms": 100000,
+     "queries": 1000,
+     "0.05": {
+      "build_seconds": 9.515171125996858,
+      "queries_per_second": 6.813173582600074
+     },
+     "0.1": {
+      "build_seconds": 9.831628630985506,
+      "queries_per_second": 2.712807246215468
+     }
+    }
+   },
+   {
+    "load_at_start": "13.96",
+    "segment": {
+     "pairs": 18225,
+     "seconds": 0.3186831719940528,
+     "per_second": 57188.46052009332
+    },
+    "segment_warm": {
+     "pairs": 18225,
+     "seconds": 0.2436721280682832,
+     "per_second": 74793.12527238604
+    },
+    "ipa_distance": {
+     "pairs": 10000,
+     "seconds": 5.948920493014157,
+     "per_second": 1680.9772481819255
+    },
+    "ipa_distance_warm": {
+     "pairs": 10000,
+     "seconds": 5.698431176948361,
+     "per_second": 1754.8689612068329
+    },
+    "search": {
+     "terms": 100000,
+     "queries": 1000,
+     "0.05": {
+      "build_seconds": 10.964677413925529,
+      "queries_per_second": 7.945651977635636
+     },
+     "0.1": {
+      "build_seconds": 8.134841672028415,
+      "queries_per_second": 2.984054773253651
+     }
+    }
+   }
+  ],
+  "median": {
+   "segment_per_second": 150739.4545818407,
+   "segment_warm_per_second": 153080.9912772366,
+   "ipa_distance_per_second": 1729.286842976795,
+   "ipa_distance_warm_per_second": 1754.8689612068329,
+   "build_seconds_0.05": 9.515171125996858,
+   "queries_per_second_0.05": 7.587841639696624,
+   "build_seconds_0.1": 9.484110728022642,
+   "queries_per_second_0.1": 2.9604920345926895
+  }
+ }
+}

@@ -1,0 +1,90 @@
+{
+ "about": "phonematcher on dev, the library of 'before' against the shipped library of 'after', scored unit by unit on the same units. Each 'before' and 'after' value is the mean of the units of its task, as 'paired' lists them.",
+ "before": {
+  "library": "cd2996a",
+  "benchmarks": "100ff08",
+  "cognates_ap": 0.7726677178958216,
+  "alignment_pas": 0.8207650273224044,
+  "retrieval_recall@1": 0.8733333333333333
+ },
+ "after": {
+  "head": "22f3615241dfb85b5404e5df041af520128ec352",
+  "tree_dirty": true,
+  "cognates_ap": 0.7875946355610898,
+  "alignment_pas": 0.820983606557377,
+  "retrieval_recall@1": 0.8735833333333333
+ },
+ "paired": {
+  "cognates": {
+   "unit": "concept",
+   "units": 977,
+   "estimates": {
+    "before": {
+     "estimate": 0.7726677178958216,
+     "low": 0.7587251964007015,
+     "high": 0.7854183728727019
+    },
+    "after": {
+     "estimate": 0.7875946355610898,
+     "low": 0.7736181989464598,
+     "high": 0.8008294433094086
+    }
+   },
+   "paired": {
+    "after": {
+     "diff": 0.014926917665268213,
+     "low": 0.012305536276208834,
+     "high": 0.017685760992135136
+    }
+   }
+  },
+  "alignment": {
+   "unit": "pair both read",
+   "units": 4575,
+   "estimates": {
+    "before": {
+     "estimate": 0.8207650273224044,
+     "low": 0.8096174863387978,
+     "high": 0.8314754098360656
+    },
+    "after": {
+     "estimate": 0.820983606557377,
+     "low": 0.8100546448087431,
+     "high": 0.8316939890710382
+    }
+   },
+   "paired": {
+    "after": {
+     "diff": 0.00021857923497259346,
+     "low": -0.0006557377049180024,
+     "high": 0.0010928961748634114
+    }
+   }
+  },
+  "retrieval": {
+   "unit": "query",
+   "units": 2000,
+   "estimates": {
+    "before": {
+     "estimate": 0.8733333333333333,
+     "low": 0.8597479166666667,
+     "high": 0.8872520833333333
+    },
+    "after": {
+     "estimate": 0.8735833333333333,
+     "low": 0.8599145833333334,
+     "high": 0.8875
+    }
+   },
+   "paired": {
+    "after": {
+     "diff": 0.00024999999999997247,
+     "low": 0.0,
+     "high": 0.0007500000000000284
+    }
+   }
+  }
+ },
+ "rule": "adopt unless a dev paired 95% interval (1,000 resamples, seed 0) lies wholly below 0",
+ "adopted": true
+}

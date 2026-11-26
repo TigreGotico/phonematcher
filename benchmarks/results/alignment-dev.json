@@ -1,0 +1,144 @@
+{
+ "task": "alignment",
+ "system": "phonematcher,levenshtein,aline,sca",
+ "split": "dev",
+ "commit": "bc69674664ae12e7528361bbb4593095b7cf2a9c",
+ "data": {
+  "source": "https://github.com/SequenceComparison/SupplementaryMaterial",
+  "sha": "cc4bf855f9549867e86157f49ac03608717b95c2",
+  "files": [
+   "full.psa",
+   "covington.psa"
+  ]
+ },
+ "n_in": 7207,
+ "n_items": 5748,
+ "n_left_out": 1459,
+ "all": {
+  "n_common": 831,
+  "systems": {
+   "phonematcher": {
+    "n_in": 5748,
+    "n_scored": 4575,
+    "n_skipped": 1173,
+    "common_pas": 0.8315282791817088,
+    "common_cs": 0.9072604624951195,
+    "unread_at_zero_pas": 0.6534446764091858,
+    "unread_at_zero_cs": 0.7274384104739529
+   },
+   "levenshtein": {
+    "n_in": 5748,
+    "n_scored": 5748,
+    "n_skipped": 0,
+    "common_pas": 0.6004813477737665,
+    "common_cs": 0.7598799081651068,
+    "unread_at_zero_pas": 0.4733820459290188,
+    "unread_at_zero_cs": 0.6604573620855216
+   },
+   "aline": {
+    "n_in": 5748,
+    "n_scored": 831,
+    "n_skipped": 4917,
+    "common_pas": 0.8507821901323707,
+    "common_cs": 0.9239421530890276,
+    "unread_at_zero_pas": 0.12299930410577592,
+    "unread_at_zero_cs": 0.13357618810316316
+   },
+   "sca": {
+    "n_in": 5748,
+    "n_scored": 5748,
+    "n_skipped": 0,
+    "common_pas": 0.8892900120336944,
+    "common_cs": 0.9420387073816676,
+    "unread_at_zero_pas": 0.871955462769659,
+    "unread_at_zero_cs": 0.9439868330864948
+   }
+  }
+ },
+ "by_file": {
+  "full.psa": {
+   "n_in": 5684,
+   "n_common": 802,
+   "systems": {
+    "phonematcher": {
+     "n_in": 5684,
+     "n_scored": 4521,
+     "n_skipped": 1163,
+     "common_pas": 0.8316708229426434,
+     "common_cs": 0.9074883622888611,
+     "unread_at_zero_pas": 0.6528852920478536,
+     "unread_at_zero_cs": 0.7270510032716748
+    },
+    "levenshtein": {
+     "n_in": 5684,
+     "n_scored": 5684,
+     "n_skipped": 0,
+     "common_pas": 0.6047381546134664,
+     "common_cs": 0.761948161979334,
+     "unread_at_zero_pas": 0.4732582688247713,
+     "unread_at_zero_cs": 0.6600576740810135
+    },
+    "aline": {
+     "n_in": 5684,
+     "n_scored": 802,
+     "n_skipped": 4882,
+     "common_pas": 0.8478802992518704,
+     "common_cs": 0.9228544420826872,
+     "unread_at_zero_pas": 0.11963406052076003,
+     "unread_at_zero_cs": 0.13021274851342632
+    },
+    "sca": {
+     "n_in": 5684,
+     "n_scored": 5684,
+     "n_skipped": 0,
+     "common_pas": 0.8877805486284289,
+     "common_cs": 0.9407741053626341,
+     "unread_at_zero_pas": 0.8715693173821253,
+     "unread_at_zero_cs": 0.9437666519905885
+    }
+   }
+  },
+  "covington.psa": {
+   "n_in": 64,
+   "n_common": 29,
+   "systems": {
+    "phonematcher": {
+     "n_in": 64,
+     "n_scored": 54,
+     "n_skipped": 10,
+     "common_pas": 0.8275862068965517,
+     "common_cs": 0.9009578544061302,
+     "unread_at_zero_pas": 0.703125,
+     "unread_at_zero_cs": 0.7618450126262626
+    },
+    "levenshtein": {
+     "n_in": 64,
+     "n_scored": 64,
+     "n_skipped": 0,
+     "common_pas": 0.4827586206896552,
+     "common_cs": 0.7026819923371647,
+     "unread_at_zero_pas": 0.484375,
+     "unread_at_zero_cs": 0.695954652985903
+    },
+    "aline": {
+     "n_in": 64,
+     "n_scored": 29,
+     "n_skipped": 35,
+     "common_pas": 0.9310344827586207,
+     "common_cs": 0.9540229885057472,
+     "unread_at_zero_pas": 0.421875,
+     "unread_at_zero_cs": 0.4322916666666667
+    },
+    "sca": {
+     "n_in": 64,
+     "n_scored": 64,
+     "n_skipped": 0,
+     "common_pas": 0.9310344827586207,
+     "common_cs": 0.9770114942528735,
+     "unread_at_zero_pas": 0.90625,
+     "unread_at_zero_cs": 0.9635416666666666
+    }
+   }
+  }
+ }
+}

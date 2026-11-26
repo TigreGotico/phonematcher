@@ -1,0 +1,4838 @@
+{
+ "task": "ablations",
+ "system": "phonematcher,pm-p5-panphon22,pm-p5-no-height,pm-p5-flat-diacritics,pm-p5-uniform,pm-p5-indel-0.5,pm-p5-indel-1.5",
+ "split": "seen",
+ "commit": null,
+ "head": "bc69674664ae12e7528361bbb4593095b7cf2a9c",
+ "tree_dirty": false,
+ "systems": [
+  "phonematcher",
+  "pm-p5-panphon22",
+  "pm-p5-no-height",
+  "pm-p5-flat-diacritics",
+  "pm-p5-uniform",
+  "pm-p5-indel-0.5",
+  "pm-p5-indel-1.5"
+ ],
+ "tasks": {
+  "coverage": {
+   "data": {
+    "phoible": {
+     "url": "https://raw.githubusercontent.com/phoible/dev/master/data/phoible.csv",
+     "sha256": "0816e698563b68ec6a309bab404a06dfb221d4334aa5ffcbc0c18f2bd01844b8",
+     "rows": 105484,
+     "inventories": 3020
+    },
+    "wikipron": {
+     "url": "https://github.com/CUNY-CL/wikipron",
+     "commit": "d282e848a211ea31cfd730f0ced8bc8cdab9e83d",
+     "files": 543
+    },
+    "orthography2ipa": {
+     "version": "7.124.51a2",
+     "specs": 7404,
+     "dropped": [
+      "ˈ",
+      "ˌ"
+     ]
+    }
+   },
+   "systems": {
+    "phonematcher": {
+     "phoible": {
+      "direct": {
+       "types": 4158,
+       "types_read": 3783,
+       "types_unread": 375,
+       "type_share": 0.9098124098124099,
+       "tokens": 116373,
+       "tokens_read": 115760,
+       "token_share": 0.9947324551227519
+      },
+      "tie_retry": {
+       "types": 4158,
+       "types_read": 3783,
+       "types_unread": 375,
+       "type_share": 0.9098124098124099,
+       "tokens": 116373,
+       "tokens_read": 115760,
+       "token_share": 0.9947324551227519
+      }
+     },
+     "wikipron": {
+      "direct": {
+       "types": 3604,
+       "types_read": 2639,
+       "types_unread": 965,
+       "type_share": 0.7322419533851277,
+       "tokens": 55266303,
+       "tokens_read": 54932639,
+       "token_share": 0.9939626140724485
+      }
+     },
+     "orthography2ipa": {
+      "direct": {
+       "types": 2519,
+       "types_read": 2299,
+       "types_unread": 220,
+       "type_share": 0.9126637554585153,
+       "tokens": 58589,
+       "tokens_read": 58311,
+       "token_share": 0.9952550820119818
+      }
+     }
+    },
+    "pm-p5-panphon22": {
+     "phoible": {
+      "direct": {
+       "types": 4158,
+       "types_read": 3783,
+       "types_unread": 375,
+       "type_share": 0.9098124098124099,
+       "tokens": 116373,
+       "tokens_read": 115760,
+       "token_share": 0.9947324551227519
+      },
+      "tie_retry": {
+       "types": 4158,
+       "types_read": 3783,
+       "types_unread": 375,
+       "type_share": 0.9098124098124099,
+       "tokens": 116373,
+       "tokens_read": 115760,
+       "token_share": 0.9947324551227519
+      }
+     },
+     "wikipron": {
+      "direct": {
+       "types": 3604,
+       "types_read": 2639,
+       "types_unread": 965,
+       "type_share": 0.7322419533851277,
+       "tokens": 55266303,
+       "tokens_read": 54932639,
+       "token_share": 0.9939626140724485
+      }
+     },
+     "orthography2ipa": {
+      "direct": {
+       "types": 2519,
+       "types_read": 2299,
+       "types_unread": 220,
+       "type_share": 0.9126637554585153,
+       "tokens": 58589,
+       "tokens_read": 58311,
+       "token_share": 0.9952550820119818
+      }
+     }
+    },
+    "pm-p5-no-height": {
+     "phoible": {
+      "direct": {
+       "types": 4158,
+       "types_read": 3783,
+       "types_unread": 375,
+       "type_share": 0.9098124098124099,
+       "tokens": 116373,
+       "tokens_read": 115760,
+       "token_share": 0.9947324551227519
+      },
+      "tie_retry": {
+       "types": 4158,
+       "types_read": 3783,
+       "types_unread": 375,
+       "type_share": 0.9098124098124099,
+       "tokens": 116373,
+       "tokens_read": 115760,
+       "token_share": 0.9947324551227519
+      }
+     },
+     "wikipron": {
+      "direct": {
+       "types": 3604,
+       "types_read": 2639,
+       "types_unread": 965,
+       "type_share": 0.7322419533851277,
+       "tokens": 55266303,
+       "tokens_read": 54932639,
+       "token_share": 0.9939626140724485
+      }
+     },
+     "orthography2ipa": {
+      "direct": {
+       "types": 2519,
+       "types_read": 2299,
+       "types_unread": 220,
+       "type_share": 0.9126637554585153,
+       "tokens": 58589,
+       "tokens_read": 58311,
+       "token_share": 0.9952550820119818
+      }
+     }
+    },
+    "pm-p5-flat-diacritics": {
+     "phoible": {
+      "direct": {
+       "types": 4158,
+       "types_read": 3783,
+       "types_unread": 375,
+       "type_share": 0.9098124098124099,
+       "tokens": 116373,
+       "tokens_read": 115760,
+       "token_share": 0.9947324551227519
+      },
+      "tie_retry": {
+       "types": 4158,
+       "types_read": 3783,
+       "types_unread": 375,
+       "type_share": 0.9098124098124099,
+       "tokens": 116373,
+       "tokens_read": 115760,
+       "token_share": 0.9947324551227519
+      }
+     },
+     "wikipron": {
+      "direct": {
+       "types": 3604,
+       "types_read": 2639,
+       "types_unread": 965,
+       "type_share": 0.7322419533851277,
+       "tokens": 55266303,
+       "tokens_read": 54932639,
+       "token_share": 0.9939626140724485
+      }
+     },
+     "orthography2ipa": {
+      "direct": {
+       "types": 2519,
+       "types_read": 2299,
+       "types_unread": 220,
+       "type_share": 0.9126637554585153,
+       "tokens": 58589,
+       "tokens_read": 58311,
+       "token_share": 0.9952550820119818
+      }
+     }
+    },
+    "pm-p5-uniform": {
+     "phoible": {
+      "direct": {
+       "types": 4158,
+       "types_read": 3783,
+       "types_unread": 375,
+       "type_share": 0.9098124098124099,
+       "tokens": 116373,
+       "tokens_read": 115760,
+       "token_share": 0.9947324551227519
+      },
+      "tie_retry": {
+       "types": 4158,
+       "types_read": 3783,
+       "types_unread": 375,
+       "type_share": 0.9098124098124099,
+       "tokens": 116373,
+       "tokens_read": 115760,
+       "token_share": 0.9947324551227519
+      }
+     },
+     "wikipron": {
+      "direct": {
+       "types": 3604,
+       "types_read": 2639,
+       "types_unread": 965,
+       "type_share": 0.7322419533851277,
+       "tokens": 55266303,
+       "tokens_read": 54932639,
+       "token_share": 0.9939626140724485
+      }
+     },
+     "orthography2ipa": {
+      "direct": {
+       "types": 2519,
+       "types_read": 2299,
+       "types_unread": 220,
+       "type_share": 0.9126637554585153,
+       "tokens": 58589,
+       "tokens_read": 58311,
+       "token_share": 0.9952550820119818
+      }
+     }
+    },
+    "pm-p5-indel-0.5": {
+     "phoible": {
+      "direct": {
+       "types": 4158,
+       "types_read": 3783,
+       "types_unread": 375,
+       "type_share": 0.9098124098124099,
+       "tokens": 116373,
+       "tokens_read": 115760,
+       "token_share": 0.9947324551227519
+      },
+      "tie_retry": {
+       "types": 4158,
+       "types_read": 3783,
+       "types_unread": 375,
+       "type_share": 0.9098124098124099,
+       "tokens": 116373,
+       "tokens_read": 115760,
+       "token_share": 0.9947324551227519
+      }
+     },
+     "wikipron": {
+      "direct": {
+       "types": 3604,
+       "types_read": 2639,
+       "types_unread": 965,
+       "type_share": 0.7322419533851277,
+       "tokens": 55266303,
+       "tokens_read": 54932639,
+       "token_share": 0.9939626140724485
+      }
+     },
+     "orthography2ipa": {
+      "direct": {
+       "types": 2519,
+       "types_read": 2299,
+       "types_unread": 220,
+       "type_share": 0.9126637554585153,
+       "tokens": 58589,
+       "tokens_read": 58311,
+       "token_share": 0.9952550820119818
+      }
+     }
+    },
+    "pm-p5-indel-1.5": {
+     "phoible": {
+      "direct": {
+       "types": 4158,
+       "types_read": 3783,
+       "types_unread": 375,
+       "type_share": 0.9098124098124099,
+       "tokens": 116373,
+       "tokens_read": 115760,
+       "token_share": 0.9947324551227519
+      },
+      "tie_retry": {
+       "types": 4158,
+       "types_read": 3783,
+       "types_unread": 375,
+       "type_share": 0.9098124098124099,
+       "tokens": 116373,
+       "tokens_read": 115760,
+       "token_share": 0.9947324551227519
+      }
+     },
+     "wikipron": {
+      "direct": {
+       "types": 3604,
+       "types_read": 2639,
+       "types_unread": 965,
+       "type_share": 0.7322419533851277,
+       "tokens": 55266303,
+       "tokens_read": 54932639,
+       "token_share": 0.9939626140724485
+      }
+     },
+     "orthography2ipa": {
+      "direct": {
+       "types": 2519,
+       "types_read": 2299,
+       "types_unread": 220,
+       "type_share": 0.9126637554585153,
+       "tokens": 58589,
+       "tokens_read": 58311,
+       "token_share": 0.9952550820119818
+      }
+     }
+    }
+   },
+   "common_subset": {
+    "phoible": {
+     "direct": {
+      "types_read_by_all": 3783,
+      "tokens_read_by_all": 115760
+     },
+     "tie_retry": {
+      "types_read_by_all": 3783,
+      "tokens_read_by_all": 115760
+     }
+    },
+    "wikipron": {
+     "direct": {
+      "types_read_by_all": 2639,
+      "tokens_read_by_all": 54932639
+     }
+    },
+    "orthography2ipa": {
+     "direct": {
+      "types_read_by_all": 2299,
+      "tokens_read_by_all": 58311
+     }
+    }
+   },
+   "phonematcher_readings": {
+    "segments_only": {
+     "phoible": {
+      "direct": {
+       "types": 4158,
+       "types_read": 2627,
+       "types_unread": 1531,
+       "type_share": 0.6317941317941318,
+       "tokens": 116373,
+       "tokens_read": 109744,
+       "token_share": 0.9430366150223849
+      },
+      "tie_retry": {
+       "types": 4158,
+       "types_read": 2704,
+       "types_unread": 1454,
+       "type_share": 0.6503126503126503,
+       "tokens": 116373,
+       "tokens_read": 110384,
+       "token_share": 0.9485361724798708
+      }
+     },
+     "wikipron": {
+      "direct": {
+       "types": 3604,
+       "types_read": 2429,
+       "types_unread": 1175,
+       "type_share": 0.6739733629300777,
+       "tokens": 55266303,
+       "tokens_read": 52266926,
+       "token_share": 0.9457286477078085
+      }
+     },
+     "orthography2ipa": {
+      "direct": {
+       "types": 2519,
+       "types_read": 2181,
+       "types_unread": 338,
+       "type_share": 0.8658197697499007,
+       "tokens": 58589,
+       "tokens_read": 58170,
+       "token_share": 0.9928484869173394
+      }
+     }
+    },
+    "with_tones": {
+     "phoible": {
+      "direct": {
+       "types": 4158,
+       "types_read": 3783,
+       "types_unread": 375,
+       "type_share": 0.9098124098124099,
+       "tokens": 116373,
+       "tokens_read": 115760,
+       "token_share": 0.9947324551227519
+      },
+      "tie_retry": {
+       "types": 4158,
+       "types_read": 3783,
+       "types_unread": 375,
+       "type_share": 0.9098124098124099,
+       "tokens": 116373,
+       "tokens_read": 115760,
+       "token_share": 0.9947324551227519
+      }
+     },
+     "wikipron": {
+      "direct": {
+       "types": 3604,
+       "types_read": 2639,
+       "types_unread": 965,
+       "type_share": 0.7322419533851277,
+       "tokens": 55266303,
+       "tokens_read": 54932639,
+       "token_share": 0.9939626140724485
+      }
+     },
+     "orthography2ipa": {
+      "direct": {
+       "types": 2519,
+       "types_read": 2299,
+       "types_unread": 220,
+       "type_share": 0.9126637554585153,
+       "tokens": 58589,
+       "tokens_read": 58311,
+       "token_share": 0.9952550820119818
+      }
+     }
+    }
+   }
+  },
+  "allophones": {
+   "data": {
+    "phoible": {
+     "url": "https://raw.githubusercontent.com/phoible/dev/master/data/phoible.csv",
+     "sha256": "0816e698563b68ec6a309bab404a06dfb221d4334aa5ffcbc0c18f2bd01844b8",
+     "items": 12716
+    }
+   },
+   "systems": {
+    "phonematcher": {
+     "direct": {
+      "all": {
+       "items_in": 12716,
+       "read_only": {
+        "score": 0.9109743569640809,
+        "items_out": 12517,
+        "skipped": 199
+       },
+       "common_subset": {
+        "score": 0.9109743569640809,
+        "items_out": 12517,
+        "skipped": 199
+       },
+       "unread_at_1": {
+        "score": 0.8988232973162151,
+        "items_out": 12716,
+        "skipped": 0
+       }
+      },
+      "odd": {
+       "items_in": 6011,
+       "read_only": {
+        "score": 0.9058890051403482,
+        "items_out": 5942,
+        "skipped": 69
+       },
+       "common_subset": {
+        "score": 0.9058890051403482,
+        "items_out": 5942,
+        "skipped": 69
+       },
+       "unread_at_1": {
+        "score": 0.8971582666114842,
+        "items_out": 6011,
+        "skipped": 0
+       }
+      },
+      "even": {
+       "items_in": 6705,
+       "read_only": {
+        "score": 0.9155701228251636,
+        "items_out": 6575,
+        "skipped": 130
+       },
+       "common_subset": {
+        "score": 0.9155701228251636,
+        "items_out": 6575,
+        "skipped": 130
+       },
+       "unread_at_1": {
+        "score": 0.9003159892723878,
+        "items_out": 6705,
+        "skipped": 0
+       }
+      }
+     },
+     "tie_retry": {
+      "all": {
+       "items_in": 12716,
+       "read_only": {
+        "score": 0.9109743569640809,
+        "items_out": 12517,
+        "skipped": 199
+       },
+       "common_subset": {
+        "score": 0.9109743569640809,
+        "items_out": 12517,
+        "skipped": 199
+       },
+       "unread_at_1": {
+        "score": 0.8988232973162151,
+        "items_out": 12716,
+        "skipped": 0
+       }
+      },
+      "odd": {
+       "items_in": 6011,
+       "read_only": {
+        "score": 0.9058890051403482,
+        "items_out": 5942,
+        "skipped": 69
+       },
+       "common_subset": {
+        "score": 0.9058890051403482,
+        "items_out": 5942,
+        "skipped": 69
+       },
+       "unread_at_1": {
+        "score": 0.8971582666114842,
+        "items_out": 6011,
+        "skipped": 0
+       }
+      },
+      "even": {
+       "items_in": 6705,
+       "read_only": {
+        "score": 0.9155701228251636,
+        "items_out": 6575,
+        "skipped": 130
+       },
+       "common_subset": {
+        "score": 0.9155701228251636,
+        "items_out": 6575,
+        "skipped": 130
+       },
+       "unread_at_1": {
+        "score": 0.9003159892723878,
+        "items_out": 6705,
+        "skipped": 0
+       }
+      }
+     }
+    },
+    "pm-p5-panphon22": {
+     "direct": {
+      "all": {
+       "items_in": 12716,
+       "read_only": {
+        "score": 0.907864580049411,
+        "items_out": 12517,
+        "skipped": 199
+       },
+       "common_subset": {
+        "score": 0.907864580049411,
+        "items_out": 12517,
+        "skipped": 199
+       },
+       "unread_at_1": {
+        "score": 0.8957762371458392,
+        "items_out": 12716,
+        "skipped": 0
+       }
+      },
+      "odd": {
+       "items_in": 6011,
+       "read_only": {
+        "score": 0.9027466371140876,
+        "items_out": 5942,
+        "skipped": 69
+       },
+       "common_subset": {
+        "score": 0.9027466371140876,
+        "items_out": 5942,
+        "skipped": 69
+       },
+       "unread_at_1": {
+        "score": 0.8940613007967513,
+        "items_out": 6011,
+        "skipped": 0
+       }
+      },
+      "even": {
+       "items_in": 6705,
+       "read_only": {
+        "score": 0.91248979935309,
+        "items_out": 6575,
+        "skipped": 130
+       },
+       "common_subset": {
+        "score": 0.91248979935309,
+        "items_out": 6575,
+        "skipped": 130
+       },
+       "unread_at_1": {
+        "score": 0.8973136692702788,
+        "items_out": 6705,
+        "skipped": 0
+       }
+      }
+     },
+     "tie_retry": {
+      "all": {
+       "items_in": 12716,
+       "read_only": {
+        "score": 0.907864580049411,
+        "items_out": 12517,
+        "skipped": 199
+       },
+       "common_subset": {
+        "score": 0.907864580049411,
+        "items_out": 12517,
+        "skipped": 199
+       },
+       "unread_at_1": {
+        "score": 0.8957762371458392,
+        "items_out": 12716,
+        "skipped": 0
+       }
+      },
+      "odd": {
+       "items_in": 6011,
+       "read_only": {
+        "score": 0.9027466371140876,
+        "items_out": 5942,
+        "skipped": 69
+       },
+       "common_subset": {
+        "score": 0.9027466371140876,
+        "items_out": 5942,
+        "skipped": 69
+       },
+       "unread_at_1": {
+        "score": 0.8940613007967513,
+        "items_out": 6011,
+        "skipped": 0
+       }
+      },
+      "even": {
+       "items_in": 6705,
+       "read_only": {
+        "score": 0.91248979935309,
+        "items_out": 6575,
+        "skipped": 130
+       },
+       "common_subset": {
+        "score": 0.91248979935309,
+        "items_out": 6575,
+        "skipped": 130
+       },
+       "unread_at_1": {
+        "score": 0.8973136692702788,
+        "items_out": 6705,
+        "skipped": 0
+       }
+      }
+     }
+    },
+    "pm-p5-no-height": {
+     "direct": {
+      "all": {
+       "items_in": 12716,
+       "read_only": {
+        "score": 0.9075201564236908,
+        "items_out": 12517,
+        "skipped": 199
+       },
+       "common_subset": {
+        "score": 0.9075201564236908,
+        "items_out": 12517,
+        "skipped": 199
+       },
+       "unread_at_1": {
+        "score": 0.8954365759745966,
+        "items_out": 12716,
+        "skipped": 0
+       }
+      },
+      "odd": {
+       "items_in": 6011,
+       "read_only": {
+        "score": 0.9024421412817084,
+        "items_out": 5942,
+        "skipped": 69
+       },
+       "common_subset": {
+        "score": 0.9024421412817084,
+        "items_out": 5942,
+        "skipped": 69
+       },
+       "unread_at_1": {
+        "score": 0.8937665811405235,
+        "items_out": 6011,
+        "skipped": 0
+       }
+      },
+      "even": {
+       "items_in": 6705,
+       "read_only": {
+        "score": 0.9121092919329927,
+        "items_out": 6575,
+        "skipped": 130
+       },
+       "common_subset": {
+        "score": 0.9121092919329927,
+        "items_out": 6575,
+        "skipped": 130
+       },
+       "unread_at_1": {
+        "score": 0.8969337182486627,
+        "items_out": 6705,
+        "skipped": 0
+       }
+      }
+     },
+     "tie_retry": {
+      "all": {
+       "items_in": 12716,
+       "read_only": {
+        "score": 0.9075201564236908,
+        "items_out": 12517,
+        "skipped": 199
+       },
+       "common_subset": {
+        "score": 0.9075201564236908,
+        "items_out": 12517,
+        "skipped": 199
+       },
+       "unread_at_1": {
+        "score": 0.8954365759745966,
+        "items_out": 12716,
+        "skipped": 0
+       }
+      },
+      "odd": {
+       "items_in": 6011,
+       "read_only": {
+        "score": 0.9024421412817084,
+        "items_out": 5942,
+        "skipped": 69
+       },
+       "common_subset": {
+        "score": 0.9024421412817084,
+        "items_out": 5942,
+        "skipped": 69
+       },
+       "unread_at_1": {
+        "score": 0.8937665811405235,
+        "items_out": 6011,
+        "skipped": 0
+       }
+      },
+      "even": {
+       "items_in": 6705,
+       "read_only": {
+        "score": 0.9121092919329927,
+        "items_out": 6575,
+        "skipped": 130
+       },
+       "common_subset": {
+        "score": 0.9121092919329927,
+        "items_out": 6575,
+        "skipped": 130
+       },
+       "unread_at_1": {
+        "score": 0.8969337182486627,
+        "items_out": 6705,
+        "skipped": 0
+       }
+      }
+     }
+    },
+    "pm-p5-flat-diacritics": {
+     "direct": {
+      "all": {
+       "items_in": 12716,
+       "read_only": {
+        "score": 0.9110409186318841,
+        "items_out": 12517,
+        "skipped": 199
+       },
+       "common_subset": {
+        "score": 0.9110409186318841,
+        "items_out": 12517,
+        "skipped": 199
+       },
+       "unread_at_1": {
+        "score": 0.8988877784358152,
+        "items_out": 12716,
+        "skipped": 0
+       }
+      },
+      "odd": {
+       "items_in": 6011,
+       "read_only": {
+        "score": 0.9059508946565721,
+        "items_out": 5942,
+        "skipped": 69
+       },
+       "common_subset": {
+        "score": 0.9059508946565721,
+        "items_out": 5942,
+        "skipped": 69
+       },
+       "unread_at_1": {
+        "score": 0.8972179747507664,
+        "items_out": 6011,
+        "skipped": 0
+       }
+      },
+      "even": {
+       "items_in": 6705,
+       "read_only": {
+        "score": 0.9156409068389265,
+        "items_out": 6575,
+        "skipped": 130
+       },
+       "common_subset": {
+        "score": 0.9156409068389265,
+        "items_out": 6575,
+        "skipped": 130
+       },
+       "unread_at_1": {
+        "score": 0.9003847493457078,
+        "items_out": 6705,
+        "skipped": 0
+       }
+      }
+     },
+     "tie_retry": {
+      "all": {
+       "items_in": 12716,
+       "read_only": {
+        "score": 0.9110409186318841,
+        "items_out": 12517,
+        "skipped": 199
+       },
+       "common_subset": {
+        "score": 0.9110409186318841,
+        "items_out": 12517,
+        "skipped": 199
+       },
+       "unread_at_1": {
+        "score": 0.8988877784358152,
+        "items_out": 12716,
+        "skipped": 0
+       }
+      },
+      "odd": {
+       "items_in": 6011,
+       "read_only": {
+        "score": 0.9059508946565721,
+        "items_out": 5942,
+        "skipped": 69
+       },
+       "common_subset": {
+        "score": 0.9059508946565721,
+        "items_out": 5942,
+        "skipped": 69
+       },
+       "unread_at_1": {
+        "score": 0.8972179747507664,
+        "items_out": 6011,
+        "skipped": 0
+       }
+      },
+      "even": {
+       "items_in": 6705,
+       "read_only": {
+        "score": 0.9156409068389265,
+        "items_out": 6575,
+        "skipped": 130
+       },
+       "common_subset": {
+        "score": 0.9156409068389265,
+        "items_out": 6575,
+        "skipped": 130
+       },
+       "unread_at_1": {
+        "score": 0.9003847493457078,
+        "items_out": 6705,
+        "skipped": 0
+       }
+      }
+     }
+    },
+    "pm-p5-uniform": {
+     "direct": {
+      "all": {
+       "items_in": 12716,
+       "read_only": {
+        "score": 0.919293871116715,
+        "items_out": 12517,
+        "skipped": 199
+       },
+       "common_subset": {
+        "score": 0.919293871116715,
+        "items_out": 12517,
+        "skipped": 199
+       },
+       "unread_at_1": {
+        "score": 0.9069745137692158,
+        "items_out": 12716,
+        "skipped": 0
+       }
+      },
+      "odd": {
+       "items_in": 6011,
+       "read_only": {
+        "score": 0.9146487759053593,
+        "items_out": 5942,
+        "skipped": 69
+       },
+       "common_subset": {
+        "score": 0.9146487759053593,
+        "items_out": 5942,
+        "skipped": 69
+       },
+       "unread_at_1": {
+        "score": 0.9057973753574055,
+        "items_out": 6011,
+        "skipped": 0
+       }
+      },
+      "even": {
+       "items_in": 6705,
+       "read_only": {
+        "score": 0.923491765526734,
+        "items_out": 6575,
+        "skipped": 130
+       },
+       "common_subset": {
+        "score": 0.923491765526734,
+        "items_out": 6575,
+        "skipped": 130
+       },
+       "unread_at_1": {
+        "score": 0.9080298126496619,
+        "items_out": 6705,
+        "skipped": 0
+       }
+      }
+     },
+     "tie_retry": {
+      "all": {
+       "items_in": 12716,
+       "read_only": {
+        "score": 0.919293871116715,
+        "items_out": 12517,
+        "skipped": 199
+       },
+       "common_subset": {
+        "score": 0.919293871116715,
+        "items_out": 12517,
+        "skipped": 199
+       },
+       "unread_at_1": {
+        "score": 0.9069745137692158,
+        "items_out": 12716,
+        "skipped": 0
+       }
+      },
+      "odd": {
+       "items_in": 6011,
+       "read_only": {
+        "score": 0.9146487759053593,
+        "items_out": 5942,
+        "skipped": 69
+       },
+       "common_subset": {
+        "score": 0.9146487759053593,
+        "items_out": 5942,
+        "skipped": 69
+       },
+       "unread_at_1": {
+        "score": 0.9057973753574055,
+        "items_out": 6011,
+        "skipped": 0
+       }
+      },
+      "even": {
+       "items_in": 6705,
+       "read_only": {
+        "score": 0.923491765526734,
+        "items_out": 6575,
+        "skipped": 130
+       },
+       "common_subset": {
+        "score": 0.923491765526734,
+        "items_out": 6575,
+        "skipped": 130
+       },
+       "unread_at_1": {
+        "score": 0.9080298126496619,
+        "items_out": 6705,
+        "skipped": 0
+       }
+      }
+     }
+    },
+    "pm-p5-indel-0.5": {
+     "direct": {
+      "all": {
+       "items_in": 12716,
+       "read_only": {
+        "score": 0.9109743569640809,
+        "items_out": 12517,
+        "skipped": 199
+       },
+       "common_subset": {
+        "score": 0.9109743569640809,
+        "items_out": 12517,
+        "skipped": 199
+       },
+       "unread_at_1": {
+        "score": 0.8988232973162151,
+        "items_out": 12716,
+        "skipped": 0
+       }
+      },
+      "odd": {
+       "items_in": 6011,
+       "read_only": {
+        "score": 0.9058890051403482,
+        "items_out": 5942,
+        "skipped": 69
+       },
+       "common_subset": {
+        "score": 0.9058890051403482,
+        "items_out": 5942,
+        "skipped": 69
+       },
+       "unread_at_1": {
+        "score": 0.8971582666114842,
+        "items_out": 6011,
+        "skipped": 0
+       }
+      },
+      "even": {
+       "items_in": 6705,
+       "read_only": {
+        "score": 0.9155701228251636,
+        "items_out": 6575,
+        "skipped": 130
+       },
+       "common_subset": {
+        "score": 0.9155701228251636,
+        "items_out": 6575,
+        "skipped": 130
+       },
+       "unread_at_1": {
+        "score": 0.9003159892723878,
+        "items_out": 6705,
+        "skipped": 0
+       }
+      }
+     },
+     "tie_retry": {
+      "all": {
+       "items_in": 12716,
+       "read_only": {
+        "score": 0.9109743569640809,
+        "items_out": 12517,
+        "skipped": 199
+       },
+       "common_subset": {
+        "score": 0.9109743569640809,
+        "items_out": 12517,
+        "skipped": 199
+       },
+       "unread_at_1": {
+        "score": 0.8988232973162151,
+        "items_out": 12716,
+        "skipped": 0
+       }
+      },
+      "odd": {
+       "items_in": 6011,
+       "read_only": {
+        "score": 0.9058890051403482,
+        "items_out": 5942,
+        "skipped": 69
+       },
+       "common_subset": {
+        "score": 0.9058890051403482,
+        "items_out": 5942,
+        "skipped": 69
+       },
+       "unread_at_1": {
+        "score": 0.8971582666114842,
+        "items_out": 6011,
+        "skipped": 0
+       }
+      },
+      "even": {
+       "items_in": 6705,
+       "read_only": {
+        "score": 0.9155701228251636,
+        "items_out": 6575,
+        "skipped": 130
+       },
+       "common_subset": {
+        "score": 0.9155701228251636,
+        "items_out": 6575,
+        "skipped": 130
+       },
+       "unread_at_1": {
+        "score": 0.9003159892723878,
+        "items_out": 6705,
+        "skipped": 0
+       }
+      }
+     }
+    },
+    "pm-p5-indel-1.5": {
+     "direct": {
+      "all": {
+       "items_in": 12716,
+       "read_only": {
+        "score": 0.9109743569640809,
+        "items_out": 12517,
+        "skipped": 199
+       },
+       "common_subset": {
+        "score": 0.9109743569640809,
+        "items_out": 12517,
+        "skipped": 199
+       },
+       "unread_at_1": {
+        "score": 0.8988232973162151,
+        "items_out": 12716,
+        "skipped": 0
+       }
+      },
+      "odd": {
+       "items_in": 6011,
+       "read_only": {
+        "score": 0.9058890051403482,
+        "items_out": 5942,
+        "skipped": 69
+       },
+       "common_subset": {
+        "score": 0.9058890051403482,
+        "items_out": 5942,
+        "skipped": 69
+       },
+       "unread_at_1": {
+        "score": 0.8971582666114842,
+        "items_out": 6011,
+        "skipped": 0
+       }
+      },
+      "even": {
+       "items_in": 6705,
+       "read_only": {
+        "score": 0.9155701228251636,
+        "items_out": 6575,
+        "skipped": 130
+       },
+       "common_subset": {
+        "score": 0.9155701228251636,
+        "items_out": 6575,
+        "skipped": 130
+       },
+       "unread_at_1": {
+        "score": 0.9003159892723878,
+        "items_out": 6705,
+        "skipped": 0
+       }
+      }
+     },
+     "tie_retry": {
+      "all": {
+       "items_in": 12716,
+       "read_only": {
+        "score": 0.9109743569640809,
+        "items_out": 12517,
+        "skipped": 199
+       },
+       "common_subset": {
+        "score": 0.9109743569640809,
+        "items_out": 12517,
+        "skipped": 199
+       },
+       "unread_at_1": {
+        "score": 0.8988232973162151,
+        "items_out": 12716,
+        "skipped": 0
+       }
+      },
+      "odd": {
+       "items_in": 6011,
+       "read_only": {
+        "score": 0.9058890051403482,
+        "items_out": 5942,
+        "skipped": 69
+       },
+       "common_subset": {
+        "score": 0.9058890051403482,
+        "items_out": 5942,
+        "skipped": 69
+       },
+       "unread_at_1": {
+        "score": 0.8971582666114842,
+        "items_out": 6011,
+        "skipped": 0
+       }
+      },
+      "even": {
+       "items_in": 6705,
+       "read_only": {
+        "score": 0.9155701228251636,
+        "items_out": 6575,
+        "skipped": 130
+       },
+       "common_subset": {
+        "score": 0.9155701228251636,
+        "items_out": 6575,
+        "skipped": 130
+       },
+       "unread_at_1": {
+        "score": 0.9003159892723878,
+        "items_out": 6705,
+        "skipped": 0
+       }
+      }
+     }
+    }
+   }
+  },
+  "confusions": {
+   "data": {
+    "mandarin": {
+     "url": "https://osf.io/download/k9qzg/",
+     "sha256": "f7627d366c0239a3d16eaa2647b48071e4c01dced66094ce6b41e68f61efc1a4"
+    },
+    "miller_nicely": {
+     "url": "https://cran.r-project.org/src/contrib/Archive/clue/clue_0.3-55.tar.gz",
+     "sha256": "cc92aa08e1b430a23ef60b5f767ff0c611401e53afb5c75ccd2e9698da87f942",
+     "version": "clue 0.3-55"
+    },
+    "hillenbrand": {
+     "url": "https://github.com/santiagobarreda/hillenbrand_et_al_1995/raw/main/h95-alldata.zip",
+     "sha256": "2560548591e3a726c88549b6dc9d226995616c26874d601c69fee8b9eee9d730"
+    },
+    "spanish": {
+     "url": "https://zenodo.org/api/records/3521449/files/SpanishConfusionsCorpus.zip/content",
+     "md5": "c9367123ebc2d6e290b7bc97f526a274",
+     "sha256": "6499915e1c9ee4420b36dcd176588ab01d0da75ddc2a0b4acf8aa144d5ff4dd3",
+     "version": "Zenodo 3521449 v1"
+    }
+   },
+   "pairs": {
+    "mandarin": 253,
+    "miller_nicely": 120,
+    "hillenbrand": 66,
+    "spanish": 465
+   },
+   "systems": {
+    "phonematcher": {
+     "mandarin": {
+      "pairs_in": 253,
+      "skipped": 0,
+      "unread_at_1": {
+       "score": 0.29271665868876645,
+       "interval": {
+        "low": 0.1768259162847497,
+        "high": 0.40208913453044837,
+        "undefined": 0
+       },
+       "pairs_out": 253,
+       "distance_range": [
+        0.11470786693528089,
+        0.7117435966472906
+       ]
+      },
+      "common_subset": {
+       "score": 0.29271665868876645,
+       "interval": {
+        "low": 0.1768259162847497,
+        "high": 0.40208913453044837,
+        "undefined": 0
+       },
+       "pairs_out": 253,
+       "distance_range": [
+        0.11470786693528089,
+        0.7117435966472906
+       ]
+      }
+     },
+     "miller_nicely": {
+      "pairs_in": 120,
+      "skipped": 0,
+      "unread_at_1": {
+       "score": 0.34949636526380945,
+       "interval": {
+        "low": 0.17681315668957834,
+        "high": 0.486340388584563,
+        "undefined": 0
+       },
+       "pairs_out": 120,
+       "distance_range": [
+        0.11470786693528089,
+        0.5441071875825088
+       ]
+      },
+      "common_subset": {
+       "score": 0.34949636526380945,
+       "interval": {
+        "low": 0.17681315668957834,
+        "high": 0.486340388584563,
+        "undefined": 0
+       },
+       "pairs_out": 120,
+       "distance_range": [
+        0.11470786693528089,
+        0.5441071875825088
+       ]
+      }
+     },
+     "hillenbrand": {
+      "pairs_in": 66,
+      "skipped": 0,
+      "unread_at_1": {
+       "score": 0.5609720454572342,
+       "interval": {
+        "low": 0.38003248043261173,
+        "high": 0.7125698729440751,
+        "undefined": 0
+       },
+       "pairs_out": 66,
+       "distance_range": [
+        0.11470786693528089,
+        0.47295265146345866
+       ]
+      },
+      "common_subset": {
+       "score": 0.5609720454572342,
+       "interval": {
+        "low": 0.38003248043261173,
+        "high": 0.7125698729440751,
+        "undefined": 0
+       },
+       "pairs_out": 66,
+       "distance_range": [
+        0.11470786693528089,
+        0.47295265146345866
+       ]
+      }
+     },
+     "spanish": {
+      "pairs_in": 465,
+      "skipped": 0,
+      "unread_at_1": {
+       "score": 0.12698160945530187,
+       "interval": {
+        "low": 0.035940824509980714,
+        "high": 0.2170748930076026,
+        "undefined": 0
+       },
+       "pairs_out": 465,
+       "distance_range": [
+        0.11470786693528089,
+        0.7905694150420949
+       ]
+      },
+      "common_subset": {
+       "score": 0.12698160945530187,
+       "interval": {
+        "low": 0.035940824509980714,
+        "high": 0.2170748930076026,
+        "undefined": 0
+       },
+       "pairs_out": 465,
+       "distance_range": [
+        0.11470786693528089,
+        0.7905694150420949
+       ]
+      }
+     }
+    },
+    "pm-p5-panphon22": {
+     "mandarin": {
+      "pairs_in": 253,
+      "skipped": 0,
+      "unread_at_1": {
+       "score": 0.27711583540034307,
+       "interval": {
+        "low": 0.1637997574405811,
+        "high": 0.3840649880459874,
+        "undefined": 0
+       },
+       "pairs_out": 253,
+       "distance_range": [
+        0.13130643285972254,
+        0.8040844011283461
+       ]
+      },
+      "common_subset": {
+       "score": 0.27711583540034307,
+       "interval": {
+        "low": 0.1637997574405811,
+        "high": 0.3840649880459874,
+        "undefined": 0
+       },
+       "pairs_out": 253,
+       "distance_range": [
+        0.13130643285972254,
+        0.8040844011283461
+       ]
+      }
+     },
+     "miller_nicely": {
+      "pairs_in": 120,
+      "skipped": 0,
+      "unread_at_1": {
+       "score": 0.34949636526380945,
+       "interval": {
+        "low": 0.17681315668957834,
+        "high": 0.486340388584563,
+        "undefined": 0
+       },
+       "pairs_out": 120,
+       "distance_range": [
+        0.13130643285972254,
+        0.6228410989030497
+       ]
+      },
+      "common_subset": {
+       "score": 0.34949636526380945,
+       "interval": {
+        "low": 0.17681315668957834,
+        "high": 0.486340388584563,
+        "undefined": 0
+       },
+       "pairs_out": 120,
+       "distance_range": [
+        0.13130643285972254,
+        0.6228410989030497
+       ]
+      }
+     },
+     "hillenbrand": {
+      "pairs_in": 66,
+      "skipped": 0,
+      "unread_at_1": {
+       "score": 0.41534327121049075,
+       "interval": {
+        "low": 0.19839170600406886,
+        "high": 0.6170866854675362,
+        "undefined": 0
+       },
+       "pairs_out": 66,
+       "distance_range": [
+        0.0,
+        0.41522739926869984
+       ]
+      },
+      "common_subset": {
+       "score": 0.41534327121049075,
+       "interval": {
+        "low": 0.19839170600406886,
+        "high": 0.6170866854675362,
+        "undefined": 0
+       },
+       "pairs_out": 66,
+       "distance_range": [
+        0.0,
+        0.41522739926869984
+       ]
+      }
+     },
+     "spanish": {
+      "pairs_in": 465,
+      "skipped": 0,
+      "unread_at_1": {
+       "score": 0.15847160078482575,
+       "interval": {
+        "low": 0.06653451820589742,
+        "high": 0.2509354121748658,
+        "undefined": 0
+       },
+       "pairs_out": 465,
+       "distance_range": [
+        0.0,
+        0.8660254037844386
+       ]
+      },
+      "common_subset": {
+       "score": 0.15847160078482575,
+       "interval": {
+        "low": 0.06653451820589742,
+        "high": 0.2509354121748658,
+        "undefined": 0
+       },
+       "pairs_out": 465,
+       "distance_range": [
+        0.0,
+        0.8660254037844386
+       ]
+      }
+     }
+    },
+    "pm-p5-no-height": {
+     "mandarin": {
+      "pairs_in": 253,
+      "skipped": 0,
+      "unread_at_1": {
+       "score": 0.29271665868876645,
+       "interval": {
+        "low": 0.1768259162847497,
+        "high": 0.40208913453044837,
+        "undefined": 0
+       },
+       "pairs_out": 253,
+       "distance_range": [
+        0.11952286093343936,
+        0.7416198487095663
+       ]
+      },
+      "common_subset": {
+       "score": 0.29271665868876645,
+       "interval": {
+        "low": 0.1768259162847497,
+        "high": 0.40208913453044837,
+        "undefined": 0
+       },
+       "pairs_out": 253,
+       "distance_range": [
+        0.11952286093343936,
+        0.7416198487095663
+       ]
+      }
+     },
+     "miller_nicely": {
+      "pairs_in": 120,
+      "skipped": 0,
+      "unread_at_1": {
+       "score": 0.34949636526380945,
+       "interval": {
+        "low": 0.17681315668957834,
+        "high": 0.486340388584563,
+        "undefined": 0
+       },
+       "pairs_out": 120,
+       "distance_range": [
+        0.11952286093343936,
+        0.5669467095138409
+       ]
+      },
+      "common_subset": {
+       "score": 0.34949636526380945,
+       "interval": {
+        "low": 0.17681315668957834,
+        "high": 0.486340388584563,
+        "undefined": 0
+       },
+       "pairs_out": 120,
+       "distance_range": [
+        0.11952286093343936,
+        0.5669467095138409
+       ]
+      }
+     },
+     "hillenbrand": {
+      "pairs_in": 66,
+      "skipped": 0,
+      "unread_at_1": {
+       "score": 0.5339721415655677,
+       "interval": {
+        "low": 0.3463076889456869,
+        "high": 0.6964394617238542,
+        "undefined": 0
+       },
+       "pairs_out": 66,
+       "distance_range": [
+        0.0,
+        0.4140393356054125
+       ]
+      },
+      "common_subset": {
+       "score": 0.5339721415655677,
+       "interval": {
+        "low": 0.3463076889456869,
+        "high": 0.6964394617238542,
+        "undefined": 0
+       },
+       "pairs_out": 66,
+       "distance_range": [
+        0.0,
+        0.4140393356054125
+       ]
+      }
+     },
+     "spanish": {
+      "pairs_in": 465,
+      "skipped": 0,
+      "unread_at_1": {
+       "score": 0.14509034952441824,
+       "interval": {
+        "low": 0.052203287879625256,
+        "high": 0.23603946131444242,
+        "undefined": 0
+       },
+       "pairs_out": 465,
+       "distance_range": [
+        0.11952286093343936,
+        0.7973169292786186
+       ]
+      },
+      "common_subset": {
+       "score": 0.14509034952441824,
+       "interval": {
+        "low": 0.052203287879625256,
+        "high": 0.23603946131444242,
+        "undefined": 0
+       },
+       "pairs_out": 465,
+       "distance_range": [
+        0.11952286093343936,
+        0.7973169292786186
+       ]
+      }
+     }
+    },
+    "pm-p5-flat-diacritics": {
+     "mandarin": {
+      "pairs_in": 253,
+      "skipped": 0,
+      "unread_at_1": {
+       "score": 0.29271665868876645,
+       "interval": {
+        "low": 0.1768259162847497,
+        "high": 0.40208913453044837,
+        "undefined": 0
+       },
+       "pairs_out": 253,
+       "distance_range": [
+        0.11470786693528089,
+        0.7117435966472906
+       ]
+      },
+      "common_subset": {
+       "score": 0.29271665868876645,
+       "interval": {
+        "low": 0.1768259162847497,
+        "high": 0.40208913453044837,
+        "undefined": 0
+       },
+       "pairs_out": 253,
+       "distance_range": [
+        0.11470786693528089,
+        0.7117435966472906
+       ]
+      }
+     },
+     "miller_nicely": {
+      "pairs_in": 120,
+      "skipped": 0,
+      "unread_at_1": {
+       "score": 0.34949636526380945,
+       "interval": {
+        "low": 0.17681315668957834,
+        "high": 0.486340388584563,
+        "undefined": 0
+       },
+       "pairs_out": 120,
+       "distance_range": [
+        0.11470786693528089,
+        0.5441071875825088
+       ]
+      },
+      "common_subset": {
+       "score": 0.34949636526380945,
+       "interval": {
+        "low": 0.17681315668957834,
+        "high": 0.486340388584563,
+        "undefined": 0
+       },
+       "pairs_out": 120,
+       "distance_range": [
+        0.11470786693528089,
+        0.5441071875825088
+       ]
+      }
+     },
+     "hillenbrand": {
+      "pairs_in": 66,
+      "skipped": 0,
+      "unread_at_1": {
+       "score": 0.5609720454572342,
+       "interval": {
+        "low": 0.38003248043261173,
+        "high": 0.7125698729440751,
+        "undefined": 0
+       },
+       "pairs_out": 66,
+       "distance_range": [
+        0.11470786693528089,
+        0.47295265146345866
+       ]
+      },
+      "common_subset": {
+       "score": 0.5609720454572342,
+       "interval": {
+        "low": 0.38003248043261173,
+        "high": 0.7125698729440751,
+        "undefined": 0
+       },
+       "pairs_out": 66,
+       "distance_range": [
+        0.11470786693528089,
+        0.47295265146345866
+       ]
+      }
+     },
+     "spanish": {
+      "pairs_in": 465,
+      "skipped": 0,
+      "unread_at_1": {
+       "score": 0.12698160945530187,
+       "interval": {
+        "low": 0.035940824509980714,
+        "high": 0.2170748930076026,
+        "undefined": 0
+       },
+       "pairs_out": 465,
+       "distance_range": [
+        0.11470786693528089,
+        0.7905694150420949
+       ]
+      },
+      "common_subset": {
+       "score": 0.12698160945530187,
+       "interval": {
+        "low": 0.035940824509980714,
+        "high": 0.2170748930076026,
+        "undefined": 0
+       },
+       "pairs_out": 465,
+       "distance_range": [
+        0.11470786693528089,
+        0.7905694150420949
+       ]
+      }
+     }
+    },
+    "pm-p5-uniform": {
+     "mandarin": {
+      "pairs_in": 253,
+      "skipped": 0,
+      "unread_at_1": {
+       "score": 0.3841483868052771,
+       "interval": {
+        "low": 0.276860060162581,
+        "high": 0.4870398758333357,
+        "undefined": 0
+       },
+       "pairs_out": 253,
+       "distance_range": [
+        0.16666666666666666,
+        0.6236095644623235
+       ]
+      },
+      "common_subset": {
+       "score": 0.3841483868052771,
+       "interval": {
+        "low": 0.276860060162581,
+        "high": 0.4870398758333357,
+        "undefined": 0
+       },
+       "pairs_out": 253,
+       "distance_range": [
+        0.16666666666666666,
+        0.6236095644623235
+       ]
+      }
+     },
+     "miller_nicely": {
+      "pairs_in": 120,
+      "skipped": 0,
+      "unread_at_1": {
+       "score": 0.35525331907153346,
+       "interval": {
+        "low": 0.19288550450392242,
+        "high": 0.4889297488361452,
+        "undefined": 0
+       },
+       "pairs_out": 120,
+       "distance_range": [
+        0.16666666666666666,
+        0.485912657903775
+       ]
+      },
+      "common_subset": {
+       "score": 0.35525331907153346,
+       "interval": {
+        "low": 0.19288550450392242,
+        "high": 0.4889297488361452,
+        "undefined": 0
+       },
+       "pairs_out": 120,
+       "distance_range": [
+        0.16666666666666666,
+        0.485912657903775
+       ]
+      }
+     },
+     "hillenbrand": {
+      "pairs_in": 66,
+      "skipped": 0,
+      "unread_at_1": {
+       "score": 0.5395299984887858,
+       "interval": {
+        "low": 0.36087045079500946,
+        "high": 0.6947852781378022,
+        "undefined": 0
+       },
+       "pairs_out": 66,
+       "distance_range": [
+        0.16666666666666666,
+        0.5527707983925667
+       ]
+      },
+      "common_subset": {
+       "score": 0.5395299984887858,
+       "interval": {
+        "low": 0.36087045079500946,
+        "high": 0.6947852781378022,
+        "undefined": 0
+       },
+       "pairs_out": 66,
+       "distance_range": [
+        0.16666666666666666,
+        0.5527707983925667
+       ]
+      }
+     },
+     "spanish": {
+      "pairs_in": 465,
+      "skipped": 0,
+      "unread_at_1": {
+       "score": 0.11791458915316783,
+       "interval": {
+        "low": 0.0218758936015964,
+        "high": 0.21283108614033636,
+        "undefined": 0
+       },
+       "pairs_out": 465,
+       "distance_range": [
+        0.16666666666666666,
+        0.67700320038633
+       ]
+      },
+      "common_subset": {
+       "score": 0.11791458915316783,
+       "interval": {
+        "low": 0.0218758936015964,
+        "high": 0.21283108614033636,
+        "undefined": 0
+       },
+       "pairs_out": 465,
+       "distance_range": [
+        0.16666666666666666,
+        0.67700320038633
+       ]
+      }
+     }
+    },
+    "pm-p5-indel-0.5": {
+     "mandarin": {
+      "pairs_in": 253,
+      "skipped": 0,
+      "unread_at_1": {
+       "score": 0.29271665868876645,
+       "interval": {
+        "low": 0.1768259162847497,
+        "high": 0.40208913453044837,
+        "undefined": 0
+       },
+       "pairs_out": 253,
+       "distance_range": [
+        0.11470786693528089,
+        0.7117435966472906
+       ]
+      },
+      "common_subset": {
+       "score": 0.29271665868876645,
+       "interval": {
+        "low": 0.1768259162847497,
+        "high": 0.40208913453044837,
+        "undefined": 0
+       },
+       "pairs_out": 253,
+       "distance_range": [
+        0.11470786693528089,
+        0.7117435966472906
+       ]
+      }
+     },
+     "miller_nicely": {
+      "pairs_in": 120,
+      "skipped": 0,
+      "unread_at_1": {
+       "score": 0.34949636526380945,
+       "interval": {
+        "low": 0.17681315668957834,
+        "high": 0.486340388584563,
+        "undefined": 0
+       },
+       "pairs_out": 120,
+       "distance_range": [
+        0.11470786693528089,
+        0.5441071875825088
+       ]
+      },
+      "common_subset": {
+       "score": 0.34949636526380945,
+       "interval": {
+        "low": 0.17681315668957834,
+        "high": 0.486340388584563,
+        "undefined": 0
+       },
+       "pairs_out": 120,
+       "distance_range": [
+        0.11470786693528089,
+        0.5441071875825088
+       ]
+      }
+     },
+     "hillenbrand": {
+      "pairs_in": 66,
+      "skipped": 0,
+      "unread_at_1": {
+       "score": 0.5609720454572342,
+       "interval": {
+        "low": 0.38003248043261173,
+        "high": 0.7125698729440751,
+        "undefined": 0
+       },
+       "pairs_out": 66,
+       "distance_range": [
+        0.11470786693528089,
+        0.47295265146345866
+       ]
+      },
+      "common_subset": {
+       "score": 0.5609720454572342,
+       "interval": {
+        "low": 0.38003248043261173,
+        "high": 0.7125698729440751,
+        "undefined": 0
+       },
+       "pairs_out": 66,
+       "distance_range": [
+        0.11470786693528089,
+        0.47295265146345866
+       ]
+      }
+     },
+     "spanish": {
+      "pairs_in": 465,
+      "skipped": 0,
+      "unread_at_1": {
+       "score": 0.12698160945530187,
+       "interval": {
+        "low": 0.035940824509980714,
+        "high": 0.2170748930076026,
+        "undefined": 0
+       },
+       "pairs_out": 465,
+       "distance_range": [
+        0.11470786693528089,
+        0.7905694150420949
+       ]
+      },
+      "common_subset": {
+       "score": 0.12698160945530187,
+       "interval": {
+        "low": 0.035940824509980714,
+        "high": 0.2170748930076026,
+        "undefined": 0
+       },
+       "pairs_out": 465,
+       "distance_range": [
+        0.11470786693528089,
+        0.7905694150420949
+       ]
+      }
+     }
+    },
+    "pm-p5-indel-1.5": {
+     "mandarin": {
+      "pairs_in": 253,
+      "skipped": 0,
+      "unread_at_1": {
+       "score": 0.29271665868876645,
+       "interval": {
+        "low": 0.1768259162847497,
+        "high": 0.40208913453044837,
+        "undefined": 0
+       },
+       "pairs_out": 253,
+       "distance_range": [
+        0.11470786693528089,
+        0.7117435966472906
+       ]
+      },
+      "common_subset": {
+       "score": 0.29271665868876645,
+       "interval": {
+        "low": 0.1768259162847497,
+        "high": 0.40208913453044837,
+        "undefined": 0
+       },
+       "pairs_out": 253,
+       "distance_range": [
+        0.11470786693528089,
+        0.7117435966472906
+       ]
+      }
+     },
+     "miller_nicely": {
+      "pairs_in": 120,
+      "skipped": 0,
+      "unread_at_1": {
+       "score": 0.34949636526380945,
+       "interval": {
+        "low": 0.17681315668957834,
+        "high": 0.486340388584563,
+        "undefined": 0
+       },
+       "pairs_out": 120,
+       "distance_range": [
+        0.11470786693528089,
+        0.5441071875825088
+       ]
+      },
+      "common_subset": {
+       "score": 0.34949636526380945,
+       "interval": {
+        "low": 0.17681315668957834,
+        "high": 0.486340388584563,
+        "undefined": 0
+       },
+       "pairs_out": 120,
+       "distance_range": [
+        0.11470786693528089,
+        0.5441071875825088
+       ]
+      }
+     },
+     "hillenbrand": {
+      "pairs_in": 66,
+      "skipped": 0,
+      "unread_at_1": {
+       "score": 0.5609720454572342,
+       "interval": {
+        "low": 0.38003248043261173,
+        "high": 0.7125698729440751,
+        "undefined": 0
+       },
+       "pairs_out": 66,
+       "distance_range": [
+        0.11470786693528089,
+        0.47295265146345866
+       ]
+      },
+      "common_subset": {
+       "score": 0.5609720454572342,
+       "interval": {
+        "low": 0.38003248043261173,
+        "high": 0.7125698729440751,
+        "undefined": 0
+       },
+       "pairs_out": 66,
+       "distance_range": [
+        0.11470786693528089,
+        0.47295265146345866
+       ]
+      }
+     },
+     "spanish": {
+      "pairs_in": 465,
+      "skipped": 0,
+      "unread_at_1": {
+       "score": 0.12698160945530187,
+       "interval": {
+        "low": 0.035940824509980714,
+        "high": 0.2170748930076026,
+        "undefined": 0
+       },
+       "pairs_out": 465,
+       "distance_range": [
+        0.11470786693528089,
+        0.7905694150420949
+       ]
+      },
+      "common_subset": {
+       "score": 0.12698160945530187,
+       "interval": {
+        "low": 0.035940824509980714,
+        "high": 0.2170748930076026,
+        "undefined": 0
+       },
+       "pairs_out": 465,
+       "distance_range": [
+        0.11470786693528089,
+        0.7905694150420949
+       ]
+      }
+     }
+    }
+   },
+   "common_subset_pairs": {
+    "mandarin": 253,
+    "miller_nicely": 120,
+    "hillenbrand": 66,
+    "spanish": 465
+   }
+  }
+ },
+ "control": {
+  "segments_in": 4158,
+  "read_by_pm_panphon22": 2627,
+  "read_by_panphon_weighted": 1212,
+  "segments_read_by_both": 1207,
+  "pairs_compared": 727821,
+  "pairs_differing": 561318,
+  "identical_vector_pairs": 115921,
+  "identical_vector_pairs_differing": 0,
+  "tolerance": 1e-09,
+  "scale": 14.5,
+  "segments_with_vector_difference": 725,
+  "vector_difference_causes": {
+   "count_letter": 431,
+   "count_marks_or_tie": 294,
+   "examples_letter": [
+    "a",
+    "aˀ",
+    "aː",
+    "a˞",
+    "aˠ"
+   ],
+   "examples_marks_or_tie": [
+    "bʲ",
+    "bʲː",
+    "bʷ",
+    "bʷː",
+    "bʷˠ"
+   ]
+  },
+  "vector_difference_features": {
+   "tense": 396,
+   "hi": 233,
+   "round": 149,
+   "lo": 102,
+   "lab": 98,
+   "back": 83,
+   "delrel": 63,
+   "son": 27,
+   "cons": 27
+  },
+  "segments_with_vector_difference_list": {
+   "a": [
+    "back",
+    "tense"
+   ],
+   "aˀ": [
+    "back",
+    "tense"
+   ],
+   "aː": [
+    "back",
+    "tense"
+   ],
+   "a˞": [
+    "hi",
+    "back",
+    "round",
+    "tense"
+   ],
+   "aˠ": [
+    "hi",
+    "back",
+    "tense"
+   ],
+   "aˤ": [
+    "back",
+    "tense"
+   ],
+   "aˤː": [
+    "back",
+    "tense"
+   ],
+   "ã": [
+    "back",
+    "tense"
+   ],
+   "ãː": [
+    "back",
+    "tense"
+   ],
+   "ãˤ": [
+    "back",
+    "tense"
+   ],
+   "ă": [
+    "back",
+    "tense"
+   ],
+   "ä": [
+    "back",
+    "tense"
+   ],
+   "a̙": [
+    "back",
+    "tense"
+   ],
+   "a̙ː": [
+    "back",
+    "tense"
+   ],
+   "a̙ˠ": [
+    "hi",
+    "back",
+    "tense"
+   ],
+   "a̝": [
+    "back",
+    "tense"
+   ],
+   "a̞": [
+    "back",
+    "tense"
+   ],
+   "a̟": [
+    "back",
+    "tense"
+   ],
+   "a̠": [
+    "back",
+    "tense"
+   ],
+   "a̤": [
+    "back",
+    "tense"
+   ],
+   "a̤ː": [
+    "back",
+    "tense"
+   ],
+   "ḁ": [
+    "back",
+    "tense"
+   ],
+   "ḁː": [
+    "back",
+    "tense"
+   ],
+   "a̰": [
+    "back",
+    "tense"
+   ],
+   "a̰ː": [
+    "back",
+    "tense"
+   ],
+   "ã̰": [
+    "back",
+    "tense"
+   ],
+   "bʲ": [
+    "hi"
+   ],
+   "bʲː": [
+    "hi"
+   ],
+   "bʷ": [
+    "hi",
+    "round"
+   ],
+   "bʷː": [
+    "hi",
+    "round"
+   ],
+   "bʷˠ": [
+    "hi",
+    "round"
+   ],
+   "bˠ": [
+    "hi"
+   ],
+   "bˤ": [
+    "lo"
+   ],
+   "bˤː": [
+    "lo"
+   ],
+   "b̤ʲ": [
+    "hi"
+   ],
+   "cʷ": [
+    "round"
+   ],
+   "cʷʰ": [
+    "round"
+   ],
+   "dʲ": [
+    "hi"
+   ],
+   "dʷ": [
+    "hi",
+    "round"
+   ],
+   "dʷˠ": [
+    "hi",
+    "round"
+   ],
+   "dˠ": [
+    "hi"
+   ],
+   "dˤ": [
+    "lo"
+   ],
+   "dˤː": [
+    "lo"
+   ],
+   "d̪ʲ": [
+    "hi"
+   ],
+   "d̪ˠ": [
+    "hi"
+   ],
+   "d̪ˤ": [
+    "lo"
+   ],
+   "d̪ˤː": [
+    "lo"
+   ],
+   "dᶣ": [
+    "hi",
+    "round"
+   ],
+   "e": [
+    "tense"
+   ],
+   "eˀ": [
+    "tense"
+   ],
+   "eː": [
+    "tense"
+   ],
+   "e˞": [
+    "hi",
+    "round",
+    "tense"
+   ],
+   "eˠ": [
+    "hi",
+    "tense"
+   ],
+   "eˤ": [
+    "lo",
+    "tense"
+   ],
+   "eˤː": [
+    "lo",
+    "tense"
+   ],
+   "ẽ": [
+    "tense"
+   ],
+   "ẽː": [
+    "tense"
+   ],
+   "ĕ": [
+    "tense"
+   ],
+   "ë": [
+    "tense"
+   ],
+   "e̘": [
+    "tense"
+   ],
+   "e̘ː": [
+    "tense"
+   ],
+   "e̙": [
+    "tense"
+   ],
+   "e̝": [
+    "hi",
+    "tense"
+   ],
+   "e̞": [
+    "tense"
+   ],
+   "e̠": [
+    "tense"
+   ],
+   "e̤": [
+    "tense"
+   ],
+   "e̤ː": [
+    "tense"
+   ],
+   "e̥": [
+    "tense"
+   ],
+   "e̥ː": [
+    "tense"
+   ],
+   "e̯": [
+    "tense"
+   ],
+   "ḛ": [
+    "tense"
+   ],
+   "ḛː": [
+    "tense"
+   ],
+   "ḛ̃": [
+    "tense"
+   ],
+   "fʲ": [
+    "hi"
+   ],
+   "fʲː": [
+    "hi"
+   ],
+   "fʷ": [
+    "hi",
+    "round"
+   ],
+   "fʷː": [
+    "hi",
+    "round"
+   ],
+   "fʷˠ": [
+    "hi",
+    "round"
+   ],
+   "fˠ": [
+    "hi"
+   ],
+   "fˤ": [
+    "lo"
+   ],
+   "fˤː": [
+    "lo"
+   ],
+   "h": [
+    "son",
+    "cons"
+   ],
+   "hʲ": [
+    "son",
+    "cons",
+    "hi"
+   ],
+   "hʷ": [
+    "son",
+    "cons",
+    "hi",
+    "round"
+   ],
+   "hˀ": [
+    "son",
+    "cons"
+   ],
+   "hː": [
+    "son",
+    "cons"
+   ],
+   "hˤ": [
+    "son",
+    "cons",
+    "lo"
+   ],
+   "hᶣ": [
+    "son",
+    "cons",
+    "hi",
+    "round"
+   ],
+   "i": [
+    "tense"
+   ],
+   "iˀ": [
+    "tense"
+   ],
+   "iː": [
+    "tense"
+   ],
+   "i˞": [
+    "round",
+    "tense"
+   ],
+   "iˠ": [
+    "tense"
+   ],
+   "iˤ": [
+    "lo",
+    "tense"
+   ],
+   "iˤː": [
+    "lo",
+    "tense"
+   ],
+   "ĩ": [
+    "tense"
+   ],
+   "ĩː": [
+    "tense"
+   ],
+   "ĩˤ": [
+    "lo",
+    "tense"
+   ],
+   "ĭ": [
+    "tense"
+   ],
+   "ï": [
+    "tense"
+   ],
+   "i̘": [
+    "tense"
+   ],
+   "i̙": [
+    "tense"
+   ],
+   "i̙ː": [
+    "tense"
+   ],
+   "i̞": [
+    "tense"
+   ],
+   "i̠": [
+    "tense"
+   ],
+   "i̤": [
+    "tense"
+   ],
+   "i̤ː": [
+    "tense"
+   ],
+   "i̥": [
+    "tense"
+   ],
+   "i̥ː": [
+    "tense"
+   ],
+   "i̯": [
+    "tense"
+   ],
+   "ḭ": [
+    "tense"
+   ],
+   "ḭː": [
+    "tense"
+   ],
+   "ḭ̃": [
+    "tense"
+   ],
+   "jʷ": [
+    "round"
+   ],
+   "jˤ": [
+    "lo"
+   ],
+   "j̥ʷ": [
+    "round"
+   ],
+   "kʷ": [
+    "round"
+   ],
+   "kʷʰ": [
+    "round"
+   ],
+   "kʷʰː": [
+    "round"
+   ],
+   "kʷʼ": [
+    "round"
+   ],
+   "kʷˀ": [
+    "round"
+   ],
+   "kʷː": [
+    "round"
+   ],
+   "kʷˠ": [
+    "round"
+   ],
+   "kʷˠʰ": [
+    "round"
+   ],
+   "kʷˤ": [
+    "lo",
+    "round"
+   ],
+   "kˤ": [
+    "lo"
+   ],
+   "kˤː": [
+    "lo"
+   ],
+   "kᶣ": [
+    "round"
+   ],
+   "lʲ": [
+    "hi"
+   ],
+   "lʲː": [
+    "hi"
+   ],
+   "lʷ": [
+    "hi",
+    "round"
+   ],
+   "lʷˠ": [
+    "hi",
+    "round"
+   ],
+   "lˠ": [
+    "hi"
+   ],
+   "lˤ": [
+    "lo"
+   ],
+   "lˤː": [
+    "lo"
+   ],
+   "l̥ʲ": [
+    "hi"
+   ],
+   "l̥ʷ": [
+    "hi",
+    "round"
+   ],
+   "l̥ˠ": [
+    "hi"
+   ],
+   "l̪ʲ": [
+    "hi"
+   ],
+   "l̪ʷ": [
+    "hi",
+    "round"
+   ],
+   "l̪ˠ": [
+    "hi"
+   ],
+   "l̪ˤ": [
+    "lo"
+   ],
+   "l̪ˤː": [
+    "lo"
+   ],
+   "l̪̥ˠ": [
+    "hi"
+   ],
+   "lᶣ": [
+    "hi",
+    "round"
+   ],
+   "mʲ": [
+    "hi"
+   ],
+   "mʲː": [
+    "hi"
+   ],
+   "mʷ": [
+    "hi",
+    "round"
+   ],
+   "mʷː": [
+    "hi",
+    "round"
+   ],
+   "mʷˠ": [
+    "hi",
+    "round"
+   ],
+   "mˠ": [
+    "hi"
+   ],
+   "mˤ": [
+    "lo"
+   ],
+   "mˤː": [
+    "lo"
+   ],
+   "m̥ʲ": [
+    "hi"
+   ],
+   "m̥ʷ": [
+    "hi",
+    "round"
+   ],
+   "m̥ˠ": [
+    "hi"
+   ],
+   "nʲ": [
+    "hi"
+   ],
+   "nʲː": [
+    "hi"
+   ],
+   "nʷ": [
+    "hi",
+    "round"
+   ],
+   "nʷˠ": [
+    "hi",
+    "round"
+   ],
+   "nˠ": [
+    "hi"
+   ],
+   "nˤ": [
+    "lo"
+   ],
+   "nˤː": [
+    "lo"
+   ],
+   "n̤ʷ": [
+    "hi",
+    "round"
+   ],
+   "n̥ʲ": [
+    "hi"
+   ],
+   "n̥ʷ": [
+    "hi",
+    "round"
+   ],
+   "n̥ˠ": [
+    "hi"
+   ],
+   "n̪ʲ": [
+    "hi"
+   ],
+   "n̪ʷ": [
+    "hi",
+    "round"
+   ],
+   "n̪ˠ": [
+    "hi"
+   ],
+   "n̪ˤ": [
+    "lo"
+   ],
+   "n̪̥ˠ": [
+    "hi"
+   ],
+   "o": [
+    "lab",
+    "tense"
+   ],
+   "oˀ": [
+    "lab",
+    "tense"
+   ],
+   "oː": [
+    "lab",
+    "tense"
+   ],
+   "o˞": [
+    "lab",
+    "hi",
+    "tense"
+   ],
+   "oˤ": [
+    "lab",
+    "lo",
+    "tense"
+   ],
+   "oˤː": [
+    "lab",
+    "lo",
+    "tense"
+   ],
+   "õ": [
+    "lab",
+    "tense"
+   ],
+   "õː": [
+    "lab",
+    "tense"
+   ],
+   "õˤ": [
+    "lab",
+    "lo",
+    "tense"
+   ],
+   "ŏ": [
+    "lab",
+    "tense"
+   ],
+   "ö": [
+    "lab",
+    "back",
+    "tense"
+   ],
+   "o̘": [
+    "lab",
+    "tense"
+   ],
+   "o̘ː": [
+    "lab",
+    "tense"
+   ],
+   "o̙": [
+    "lab",
+    "tense"
+   ],
+   "o̝": [
+    "lab",
+    "hi",
+    "tense"
+   ],
+   "o̞": [
+    "lab",
+    "tense"
+   ],
+   "o̟": [
+    "lab",
+    "back",
+    "tense"
+   ],
+   "o̠": [
+    "lab",
+    "tense"
+   ],
+   "o̤": [
+    "lab",
+    "tense"
+   ],
+   "o̤ː": [
+    "lab",
+    "tense"
+   ],
+   "o̥": [
+    "lab",
+    "tense"
+   ],
+   "o̯": [
+    "lab",
+    "tense"
+   ],
+   "o̰": [
+    "lab",
+    "tense"
+   ],
+   "o̰ː": [
+    "lab",
+    "tense"
+   ],
+   "õ̰": [
+    "lab",
+    "tense"
+   ],
+   "pʲ": [
+    "hi"
+   ],
+   "pʲʰ": [
+    "hi"
+   ],
+   "pʲʼ": [
+    "hi"
+   ],
+   "pʲː": [
+    "hi"
+   ],
+   "pʷ": [
+    "hi",
+    "round"
+   ],
+   "pʷʰ": [
+    "hi",
+    "round"
+   ],
+   "pʷʼ": [
+    "hi",
+    "round"
+   ],
+   "pʷˠ": [
+    "hi",
+    "round"
+   ],
+   "pʷˠʰ": [
+    "hi",
+    "round"
+   ],
+   "pˠ": [
+    "hi"
+   ],
+   "pˤ": [
+    "lo"
+   ],
+   "pˤʰ": [
+    "lo"
+   ],
+   "qʲ": [
+    "hi"
+   ],
+   "qʲʰ": [
+    "hi"
+   ],
+   "qʲʼ": [
+    "hi"
+   ],
+   "qʷ": [
+    "hi",
+    "round"
+   ],
+   "qʷʰ": [
+    "hi",
+    "round"
+   ],
+   "qʷʼ": [
+    "hi",
+    "round"
+   ],
+   "qʷˀ": [
+    "hi",
+    "round"
+   ],
+   "qʷː": [
+    "hi",
+    "round"
+   ],
+   "qʷˤʰ": [
+    "hi",
+    "lo",
+    "round"
+   ],
+   "qʷˤʼ": [
+    "hi",
+    "lo",
+    "round"
+   ],
+   "qˤ": [
+    "lo"
+   ],
+   "qˤʰ": [
+    "lo"
+   ],
+   "qˤʼ": [
+    "lo"
+   ],
+   "qˤː": [
+    "lo"
+   ],
+   "rʲ": [
+    "hi"
+   ],
+   "rʲː": [
+    "hi"
+   ],
+   "rʷ": [
+    "hi",
+    "round"
+   ],
+   "rʷˠ": [
+    "hi",
+    "round"
+   ],
+   "rˠ": [
+    "hi"
+   ],
+   "rˤ": [
+    "lo"
+   ],
+   "rˤː": [
+    "lo"
+   ],
+   "r̥ʲ": [
+    "hi"
+   ],
+   "r̪ʲ": [
+    "hi"
+   ],
+   "r̪ˤ": [
+    "lo"
+   ],
+   "r̪ˤː": [
+    "lo"
+   ],
+   "rᶣ": [
+    "hi",
+    "round"
+   ],
+   "sʲ": [
+    "hi"
+   ],
+   "sʲʰ": [
+    "hi"
+   ],
+   "sʲː": [
+    "hi"
+   ],
+   "sʷ": [
+    "hi",
+    "round"
+   ],
+   "sʷˠ": [
+    "hi",
+    "round"
+   ],
+   "sˠ": [
+    "hi"
+   ],
+   "sˤ": [
+    "lo"
+   ],
+   "sˤː": [
+    "lo"
+   ],
+   "s̪ʲ": [
+    "hi"
+   ],
+   "s̪ʷ": [
+    "hi",
+    "round"
+   ],
+   "s̪ˤ": [
+    "lo"
+   ],
+   "s̪ˤː": [
+    "lo"
+   ],
+   "sᶣ": [
+    "hi",
+    "round"
+   ],
+   "tʲ": [
+    "hi"
+   ],
+   "tʲʰ": [
+    "hi"
+   ],
+   "tʲʼ": [
+    "hi"
+   ],
+   "tʲː": [
+    "hi"
+   ],
+   "tʷ": [
+    "hi",
+    "round"
+   ],
+   "tʷʰ": [
+    "hi",
+    "round"
+   ],
+   "tʷʼ": [
+    "hi",
+    "round"
+   ],
+   "tʷˠ": [
+    "hi",
+    "round"
+   ],
+   "tʷˠʰ": [
+    "hi",
+    "round"
+   ],
+   "tˠ": [
+    "hi"
+   ],
+   "tˤ": [
+    "lo"
+   ],
+   "tˤː": [
+    "lo"
+   ],
+   "t̪ʲ": [
+    "hi"
+   ],
+   "t̪ʲʰ": [
+    "hi"
+   ],
+   "t̪ʲʼ": [
+    "hi"
+   ],
+   "t̪ʷ": [
+    "hi",
+    "round"
+   ],
+   "t̪ʷʰ": [
+    "hi",
+    "round"
+   ],
+   "t̪ʷʼ": [
+    "hi",
+    "round"
+   ],
+   "t̪ˠ": [
+    "hi"
+   ],
+   "t̪ˤ": [
+    "lo"
+   ],
+   "t̪ˤʰ": [
+    "lo"
+   ],
+   "t̪ˤʼ": [
+    "lo"
+   ],
+   "t̪ˤː": [
+    "lo"
+   ],
+   "u": [
+    "tense"
+   ],
+   "uˀ": [
+    "tense"
+   ],
+   "uː": [
+    "tense"
+   ],
+   "u˞": [
+    "tense"
+   ],
+   "uˤ": [
+    "lo",
+    "tense"
+   ],
+   "uˤː": [
+    "lo",
+    "tense"
+   ],
+   "ũ": [
+    "tense"
+   ],
+   "ũː": [
+    "tense"
+   ],
+   "ũˤ": [
+    "lo",
+    "tense"
+   ],
+   "ŭ": [
+    "tense"
+   ],
+   "ü": [
+    "back",
+    "tense"
+   ],
+   "u̘": [
+    "tense"
+   ],
+   "u̙": [
+    "tense"
+   ],
+   "u̞": [
+    "tense"
+   ],
+   "u̟": [
+    "back",
+    "tense"
+   ],
+   "u̠": [
+    "tense"
+   ],
+   "ṳ": [
+    "tense"
+   ],
+   "ṳː": [
+    "tense"
+   ],
+   "u̥": [
+    "tense"
+   ],
+   "u̥ː": [
+    "tense"
+   ],
+   "u̯": [
+    "tense"
+   ],
+   "ṵ": [
+    "tense"
+   ],
+   "ṵː": [
+    "tense"
+   ],
+   "ṵ̃": [
+    "tense"
+   ],
+   "vʲ": [
+    "hi"
+   ],
+   "vʷ": [
+    "hi",
+    "round"
+   ],
+   "vʷˠ": [
+    "hi",
+    "round"
+   ],
+   "vˠ": [
+    "hi"
+   ],
+   "vˤ": [
+    "lo"
+   ],
+   "wˤ": [
+    "lo"
+   ],
+   "xʷ": [
+    "round"
+   ],
+   "xʷʼ": [
+    "round"
+   ],
+   "xʷː": [
+    "round"
+   ],
+   "y": [
+    "tense"
+   ],
+   "yː": [
+    "tense"
+   ],
+   "ỹ": [
+    "tense"
+   ],
+   "ỹː": [
+    "tense"
+   ],
+   "y̆": [
+    "tense"
+   ],
+   "y̞": [
+    "tense"
+   ],
+   "y̠": [
+    "tense"
+   ],
+   "y̤": [
+    "tense"
+   ],
+   "y̥": [
+    "tense"
+   ],
+   "y̰": [
+    "tense"
+   ],
+   "y̰ː": [
+    "tense"
+   ],
+   "zʲ": [
+    "hi"
+   ],
+   "zʲː": [
+    "hi"
+   ],
+   "zʷ": [
+    "hi",
+    "round"
+   ],
+   "zʷˠ": [
+    "hi",
+    "round"
+   ],
+   "zˠ": [
+    "hi"
+   ],
+   "zˤ": [
+    "lo"
+   ],
+   "zˤː": [
+    "lo"
+   ],
+   "z̪ʲ": [
+    "hi"
+   ],
+   "z̪ʷ": [
+    "hi",
+    "round"
+   ],
+   "z̪ˤ": [
+    "lo"
+   ],
+   "z̪ˤː": [
+    "lo"
+   ],
+   "æ": [
+    "tense"
+   ],
+   "æː": [
+    "tense"
+   ],
+   "æˤ": [
+    "tense"
+   ],
+   "æ̃": [
+    "tense"
+   ],
+   "æ̃ː": [
+    "tense"
+   ],
+   "æ̆": [
+    "tense"
+   ],
+   "æ̝": [
+    "lo",
+    "tense"
+   ],
+   "æ̤": [
+    "tense"
+   ],
+   "æ̤ː": [
+    "tense"
+   ],
+   "æ̥": [
+    "tense"
+   ],
+   "æ̰": [
+    "tense"
+   ],
+   "çʷ": [
+    "round"
+   ],
+   "ðʲ": [
+    "hi"
+   ],
+   "ðˠ": [
+    "hi"
+   ],
+   "ðˤ": [
+    "lo"
+   ],
+   "ð̞": [
+    "son",
+    "cons"
+   ],
+   "ø": [
+    "lab",
+    "tense"
+   ],
+   "øː": [
+    "lab",
+    "tense"
+   ],
+   "ø̃": [
+    "lab",
+    "tense"
+   ],
+   "ø̃ː": [
+    "lab",
+    "tense"
+   ],
+   "ø̆": [
+    "lab",
+    "tense"
+   ],
+   "ø̞": [
+    "lab",
+    "tense"
+   ],
+   "ø̠": [
+    "lab",
+    "tense"
+   ],
+   "ø̤": [
+    "lab",
+    "tense"
+   ],
+   "ø̥": [
+    "lab",
+    "tense"
+   ],
+   "ø̰": [
+    "lab",
+    "tense"
+   ],
+   "ħʷ": [
+    "hi",
+    "round"
+   ],
+   "ŋʷ": [
+    "round"
+   ],
+   "ŋʷː": [
+    "round"
+   ],
+   "ŋˤ": [
+    "lo"
+   ],
+   "ŋ̥ʷ": [
+    "round"
+   ],
+   "œ": [
+    "lab",
+    "tense"
+   ],
+   "œː": [
+    "lab",
+    "tense"
+   ],
+   "œ̃": [
+    "lab",
+    "tense"
+   ],
+   "œ̃ː": [
+    "lab",
+    "tense"
+   ],
+   "œ̈": [
+    "lab",
+    "tense"
+   ],
+   "œ̝": [
+    "lab",
+    "tense"
+   ],
+   "œ̞": [
+    "lab",
+    "lo",
+    "tense"
+   ],
+   "œ̠": [
+    "lab",
+    "tense"
+   ],
+   "œ̤": [
+    "lab",
+    "tense"
+   ],
+   "œ̰ː": [
+    "lab",
+    "tense"
+   ],
+   "ɐ": [
+    "lo",
+    "tense"
+   ],
+   "ɐː": [
+    "lo",
+    "tense"
+   ],
+   "ɐ˞": [
+    "hi",
+    "lo",
+    "round",
+    "tense"
+   ],
+   "ɐˤ": [
+    "tense"
+   ],
+   "ɐ̃": [
+    "lo",
+    "tense"
+   ],
+   "ɐ̆": [
+    "lo",
+    "tense"
+   ],
+   "ɐ̝": [
+    "tense"
+   ],
+   "ɐ̟": [
+    "lo",
+    "tense"
+   ],
+   "ɐ̥": [
+    "lo",
+    "tense"
+   ],
+   "ɐ̯": [
+    "lo",
+    "tense"
+   ],
+   "ɐ̰": [
+    "lo",
+    "tense"
+   ],
+   "ɑ": [
+    "delrel",
+    "tense"
+   ],
+   "ɑː": [
+    "delrel",
+    "tense"
+   ],
+   "ɑ˞": [
+    "delrel",
+    "hi",
+    "round",
+    "tense"
+   ],
+   "ɑˤː": [
+    "delrel",
+    "tense"
+   ],
+   "ɑ̃": [
+    "delrel",
+    "tense"
+   ],
+   "ɑ̃ː": [
+    "delrel",
+    "tense"
+   ],
+   "ɑ̆": [
+    "delrel",
+    "tense"
+   ],
+   "ɑ̈": [
+    "delrel",
+    "back",
+    "tense"
+   ],
+   "ɑ̙": [
+    "delrel",
+    "tense"
+   ],
+   "ɑ̝": [
+    "delrel",
+    "tense"
+   ],
+   "ɑ̟": [
+    "delrel",
+    "back",
+    "tense"
+   ],
+   "ɑ̤": [
+    "delrel",
+    "tense"
+   ],
+   "ɑ̤ː": [
+    "delrel",
+    "tense"
+   ],
+   "ɑ̥": [
+    "delrel",
+    "tense"
+   ],
+   "ɑ̰": [
+    "delrel",
+    "tense"
+   ],
+   "ɑ̰ː": [
+    "delrel",
+    "tense"
+   ],
+   "ɒ": [
+    "lab",
+    "tense"
+   ],
+   "ɒː": [
+    "lab",
+    "tense"
+   ],
+   "ɒ̃": [
+    "lab",
+    "tense"
+   ],
+   "ɒ̃ː": [
+    "lab",
+    "tense"
+   ],
+   "ɒ̆": [
+    "lab",
+    "tense"
+   ],
+   "ɒ̝": [
+    "lab",
+    "tense"
+   ],
+   "ɒ̤": [
+    "lab",
+    "tense"
+   ],
+   "ɓʲ": [
+    "hi"
+   ],
+   "ɓʷ": [
+    "hi",
+    "round"
+   ],
+   "ɔ": [
+    "lab",
+    "tense"
+   ],
+   "ɔː": [
+    "lab",
+    "tense"
+   ],
+   "ɔ˞": [
+    "lab",
+    "hi",
+    "tense"
+   ],
+   "ɔˤ": [
+    "lab",
+    "lo",
+    "tense"
+   ],
+   "ɔˤː": [
+    "lab",
+    "lo",
+    "tense"
+   ],
+   "ɔ̃": [
+    "lab",
+    "tense"
+   ],
+   "ɔ̃ː": [
+    "lab",
+    "tense"
+   ],
+   "ɔ̆": [
+    "lab",
+    "tense"
+   ],
+   "ɔ̘ː": [
+    "lab",
+    "tense"
+   ],
+   "ɔ̙": [
+    "lab",
+    "tense"
+   ],
+   "ɔ̙ː": [
+    "lab",
+    "tense"
+   ],
+   "ɔ̝": [
+    "lab",
+    "tense"
+   ],
+   "ɔ̞": [
+    "lab",
+    "lo",
+    "tense"
+   ],
+   "ɔ̤": [
+    "lab",
+    "tense"
+   ],
+   "ɔ̤ː": [
+    "lab",
+    "tense"
+   ],
+   "ɔ̥": [
+    "lab",
+    "tense"
+   ],
+   "ɔ̥ː": [
+    "lab",
+    "tense"
+   ],
+   "ɔ̯": [
+    "lab",
+    "tense"
+   ],
+   "ɔ̰": [
+    "lab",
+    "tense"
+   ],
+   "ɔ̰ː": [
+    "lab",
+    "tense"
+   ],
+   "ɕᶣ": [
+    "round"
+   ],
+   "ɖʲ": [
+    "hi"
+   ],
+   "ɖʷˠ": [
+    "hi",
+    "round"
+   ],
+   "ɗʲ": [
+    "hi"
+   ],
+   "ɗʷ": [
+    "hi",
+    "round"
+   ],
+   "ɘ": [
+    "delrel",
+    "tense"
+   ],
+   "ɘː": [
+    "delrel",
+    "tense"
+   ],
+   "ɘ̃": [
+    "delrel",
+    "tense"
+   ],
+   "ɘ̃ː": [
+    "delrel",
+    "tense"
+   ],
+   "ɘ̆": [
+    "delrel",
+    "tense"
+   ],
+   "ɘ̟": [
+    "delrel",
+    "tense"
+   ],
+   "ɘ̠": [
+    "delrel",
+    "back",
+    "tense"
+   ],
+   "ɘ̯": [
+    "delrel",
+    "tense"
+   ],
+   "ə": [
+    "back",
+    "tense"
+   ],
+   "əː": [
+    "back",
+    "tense"
+   ],
+   "ə˞": [
+    "hi",
+    "back",
+    "round",
+    "tense"
+   ],
+   "əˤ": [
+    "lo",
+    "back",
+    "tense"
+   ],
+   "ə̃": [
+    "back",
+    "tense"
+   ],
+   "ə̃ː": [
+    "back",
+    "tense"
+   ],
+   "ə̆": [
+    "back",
+    "tense"
+   ],
+   "ə̘ː": [
+    "back",
+    "tense"
+   ],
+   "ə̝": [
+    "back",
+    "tense"
+   ],
+   "ə̟": [
+    "back",
+    "tense"
+   ],
+   "ə̠": [
+    "tense"
+   ],
+   "ə̤": [
+    "back",
+    "tense"
+   ],
+   "ə̥": [
+    "back",
+    "tense"
+   ],
+   "ə̯": [
+    "back",
+    "tense"
+   ],
+   "ə̰": [
+    "back",
+    "tense"
+   ],
+   "ə̰̃": [
+    "back",
+    "tense"
+   ],
+   "ɛ": [
+    "tense"
+   ],
+   "ɛː": [
+    "tense"
+   ],
+   "ɛ˞": [
+    "hi",
+    "round",
+    "tense"
+   ],
+   "ɛˠ": [
+    "hi",
+    "tense"
+   ],
+   "ɛ̃": [
+    "tense"
+   ],
+   "ɛ̃ː": [
+    "tense"
+   ],
+   "ɛ̆": [
+    "tense"
+   ],
+   "ɛ̘ː": [
+    "tense"
+   ],
+   "ɛ̙": [
+    "tense"
+   ],
+   "ɛ̙ː": [
+    "tense"
+   ],
+   "ɛ̙ˠ": [
+    "hi",
+    "tense"
+   ],
+   "ɛ̝": [
+    "tense"
+   ],
+   "ɛ̞": [
+    "lo",
+    "tense"
+   ],
+   "ɛ̠": [
+    "tense"
+   ],
+   "ɛ̤": [
+    "tense"
+   ],
+   "ɛ̤ː": [
+    "tense"
+   ],
+   "ɛ̥": [
+    "tense"
+   ],
+   "ɛ̥ː": [
+    "tense"
+   ],
+   "ɛ̯": [
+    "tense"
+   ],
+   "ɛ̰": [
+    "tense"
+   ],
+   "ɛ̰ː": [
+    "tense"
+   ],
+   "ɛ̰̃": [
+    "tense"
+   ],
+   "ɜ": [
+    "back",
+    "tense"
+   ],
+   "ɜː": [
+    "back",
+    "tense"
+   ],
+   "ɜ˞": [
+    "hi",
+    "back",
+    "round",
+    "tense"
+   ],
+   "ɜ̃": [
+    "back",
+    "tense"
+   ],
+   "ɜ̆": [
+    "back",
+    "tense"
+   ],
+   "ɜ̟": [
+    "back",
+    "tense"
+   ],
+   "ɜ̠": [
+    "tense"
+   ],
+   "ɜ̯": [
+    "back",
+    "tense"
+   ],
+   "ɞ": [
+    "delrel",
+    "tense"
+   ],
+   "ɞː": [
+    "delrel",
+    "tense"
+   ],
+   "ɞ̠": [
+    "delrel",
+    "back",
+    "tense"
+   ],
+   "ɞ̰": [
+    "delrel",
+    "tense"
+   ],
+   "ɟʷ": [
+    "round"
+   ],
+   "ɡʷ": [
+    "round"
+   ],
+   "ɡʷː": [
+    "round"
+   ],
+   "ɡʷˠ": [
+    "round"
+   ],
+   "ɡˤ": [
+    "lo"
+   ],
+   "ɡˤː": [
+    "lo"
+   ],
+   "ɡ̤ʷ": [
+    "round"
+   ],
+   "ɡᶣ": [
+    "round"
+   ],
+   "ɢʲ": [
+    "hi"
+   ],
+   "ɢʷ": [
+    "hi",
+    "round"
+   ],
+   "ɢʷˤ": [
+    "hi",
+    "lo",
+    "round"
+   ],
+   "ɢˤ": [
+    "lo"
+   ],
+   "ɣʷ": [
+    "round"
+   ],
+   "ɣ̞": [
+    "son",
+    "cons"
+   ],
+   "ɤ": [
+    "delrel",
+    "tense"
+   ],
+   "ɤː": [
+    "delrel",
+    "tense"
+   ],
+   "ɤ˞": [
+    "delrel",
+    "hi",
+    "round",
+    "tense"
+   ],
+   "ɤ̃": [
+    "delrel",
+    "tense"
+   ],
+   "ɤ̃ː": [
+    "delrel",
+    "tense"
+   ],
+   "ɤ̝": [
+    "delrel",
+    "hi",
+    "tense"
+   ],
+   "ɤ̞": [
+    "delrel",
+    "tense"
+   ],
+   "ɤ̟": [
+    "delrel",
+    "back",
+    "tense"
+   ],
+   "ɤ̤": [
+    "delrel",
+    "tense"
+   ],
+   "ɤ̤ː": [
+    "delrel",
+    "tense"
+   ],
+   "ɤ̥": [
+    "delrel",
+    "tense"
+   ],
+   "ɤ̯": [
+    "delrel",
+    "tense"
+   ],
+   "ɥˤ": [
+    "lo"
+   ],
+   "ɦ": [
+    "son",
+    "cons"
+   ],
+   "ɦʲ": [
+    "son",
+    "cons",
+    "hi"
+   ],
+   "ɦʷ": [
+    "son",
+    "cons",
+    "hi",
+    "round"
+   ],
+   "ɦʷˠ": [
+    "son",
+    "cons",
+    "hi",
+    "round"
+   ],
+   "ɦˠ": [
+    "son",
+    "cons",
+    "hi"
+   ],
+   "ɦ̃": [
+    "son",
+    "cons"
+   ],
+   "ɦ̤": [
+    "son",
+    "cons"
+   ],
+   "ɦ̥": [
+    "son",
+    "cons"
+   ],
+   "ɨ": [
+    "back",
+    "tense"
+   ],
+   "ɨː": [
+    "back",
+    "tense"
+   ],
+   "ɨ˞": [
+    "back",
+    "round",
+    "tense"
+   ],
+   "ɨ̃": [
+    "back",
+    "tense"
+   ],
+   "ɨ̃ː": [
+    "back",
+    "tense"
+   ],
+   "ɨ̆": [
+    "back",
+    "tense"
+   ],
+   "ɨ̘": [
+    "back",
+    "tense"
+   ],
+   "ɨ̞": [
+    "back",
+    "tense"
+   ],
+   "ɨ̟": [
+    "back",
+    "tense"
+   ],
+   "ɨ̠": [
+    "tense"
+   ],
+   "ɨ̤": [
+    "back",
+    "tense"
+   ],
+   "ɨ̥": [
+    "back",
+    "tense"
+   ],
+   "ɨ̯": [
+    "back",
+    "tense"
+   ],
+   "ɨ̰": [
+    "back",
+    "tense"
+   ],
+   "ɪ": [
+    "tense"
+   ],
+   "ɪː": [
+    "tense"
+   ],
+   "ɪ˞": [
+    "round",
+    "tense"
+   ],
+   "ɪˠ": [
+    "tense"
+   ],
+   "ɪˤ": [
+    "lo",
+    "tense"
+   ],
+   "ɪ̃": [
+    "tense"
+   ],
+   "ɪ̃ː": [
+    "tense"
+   ],
+   "ɪ̆": [
+    "tense"
+   ],
+   "ɪ̈": [
+    "tense"
+   ],
+   "ɪ̙": [
+    "tense"
+   ],
+   "ɪ̙ː": [
+    "tense"
+   ],
+   "ɪ̙ˠ": [
+    "tense"
+   ],
+   "ɪ̝": [
+    "tense"
+   ],
+   "ɪ̞": [
+    "hi",
+    "tense"
+   ],
+   "ɪ̠": [
+    "tense"
+   ],
+   "ɪ̤": [
+    "tense"
+   ],
+   "ɪ̥": [
+    "tense"
+   ],
+   "ɪ̯": [
+    "tense"
+   ],
+   "ɪ̰": [
+    "tense"
+   ],
+   "ɪ̰ː": [
+    "tense"
+   ],
+   "ɫ": [
+    "delrel"
+   ],
+   "ɫː": [
+    "delrel"
+   ],
+   "ɫ̥": [
+    "delrel"
+   ],
+   "ɫ̺": [
+    "delrel"
+   ],
+   "ɫ̻": [
+    "delrel"
+   ],
+   "ɬʲ": [
+    "hi"
+   ],
+   "ɬʲʼ": [
+    "hi"
+   ],
+   "ɬʷ": [
+    "hi",
+    "round"
+   ],
+   "ɬˠ": [
+    "hi"
+   ],
+   "ɬ̪ʲ": [
+    "hi"
+   ],
+   "ɬ̪ʲʼ": [
+    "hi"
+   ],
+   "ɭʲ": [
+    "hi"
+   ],
+   "ɭʷ": [
+    "hi",
+    "round"
+   ],
+   "ɮʲ": [
+    "hi"
+   ],
+   "ɯ": [
+    "tense"
+   ],
+   "ɯː": [
+    "tense"
+   ],
+   "ɯ̃": [
+    "tense"
+   ],
+   "ɯ̃ː": [
+    "tense"
+   ],
+   "ɯ̆": [
+    "tense"
+   ],
+   "ɯ̈": [
+    "back",
+    "tense"
+   ],
+   "ɯ̙": [
+    "tense"
+   ],
+   "ɯ̝": [
+    "tense"
+   ],
+   "ɯ̞": [
+    "tense"
+   ],
+   "ɯ̟": [
+    "back",
+    "tense"
+   ],
+   "ɯ̤": [
+    "tense"
+   ],
+   "ɯ̤ː": [
+    "tense"
+   ],
+   "ɯ̥": [
+    "tense"
+   ],
+   "ɯ̯": [
+    "tense"
+   ],
+   "ɯ̰": [
+    "tense"
+   ],
+   "ɰʷ": [
+    "round"
+   ],
+   "ɱˠ": [
+    "hi"
+   ],
+   "ɲʷ": [
+    "round"
+   ],
+   "ɲᶣ": [
+    "round"
+   ],
+   "ɳʲ": [
+    "hi"
+   ],
+   "ɳʷ": [
+    "hi",
+    "round"
+   ],
+   "ɵ": [
+    "delrel",
+    "tense"
+   ],
+   "ɵː": [
+    "delrel",
+    "tense"
+   ],
+   "ɵ̃": [
+    "delrel",
+    "tense"
+   ],
+   "ɵ̆": [
+    "delrel",
+    "tense"
+   ],
+   "ɵ̞": [
+    "delrel",
+    "tense"
+   ],
+   "ɵ̟": [
+    "delrel",
+    "tense"
+   ],
+   "ɵ̤": [
+    "delrel",
+    "tense"
+   ],
+   "ɵ̤ː": [
+    "delrel",
+    "tense"
+   ],
+   "ɵ̥": [
+    "delrel",
+    "tense"
+   ],
+   "ɶ": [
+    "lab",
+    "tense"
+   ],
+   "ɶː": [
+    "lab",
+    "tense"
+   ],
+   "ɶ̝": [
+    "lab",
+    "tense"
+   ],
+   "ɸʲ": [
+    "hi"
+   ],
+   "ɸʷ": [
+    "hi",
+    "round"
+   ],
+   "ɸʷˠ": [
+    "hi",
+    "round"
+   ],
+   "ɸ̞": [
+    "son",
+    "cons"
+   ],
+   "ɹ": [
+    "hi",
+    "round"
+   ],
+   "ɹˠ": [
+    "hi",
+    "round"
+   ],
+   "ɹˤ": [
+    "hi",
+    "lo",
+    "round"
+   ],
+   "ɹ̃": [
+    "hi",
+    "round"
+   ],
+   "ɹ̝": [
+    "son",
+    "cons",
+    "hi",
+    "round"
+   ],
+   "ɹ̞": [
+    "hi",
+    "round"
+   ],
+   "ɹ̥": [
+    "hi",
+    "round"
+   ],
+   "ɹ̩": [
+    "hi",
+    "round"
+   ],
+   "ɹ̰ˤ": [
+    "hi",
+    "lo",
+    "round"
+   ],
+   "ɹ̺": [
+    "hi",
+    "round"
+   ],
+   "ɺʲ": [
+    "hi"
+   ],
+   "ɺ̥ʲ": [
+    "hi"
+   ],
+   "ɻʲ": [
+    "hi"
+   ],
+   "ɻʷ": [
+    "hi",
+    "round"
+   ],
+   "ɽʲ": [
+    "hi"
+   ],
+   "ɽʷ": [
+    "hi",
+    "round"
+   ],
+   "ɾʲ": [
+    "hi"
+   ],
+   "ɾʷ": [
+    "hi",
+    "round"
+   ],
+   "ɾˠ": [
+    "hi"
+   ],
+   "ɾˤ": [
+    "lo"
+   ],
+   "ɾ̥ʲ": [
+    "hi"
+   ],
+   "ɾ̥ʷ": [
+    "hi",
+    "round"
+   ],
+   "ɾ̥ˠ": [
+    "hi"
+   ],
+   "ʁʲ": [
+    "hi"
+   ],
+   "ʁʷ": [
+    "hi",
+    "round"
+   ],
+   "ʁʷː": [
+    "hi",
+    "round"
+   ],
+   "ʁʷˤ": [
+    "hi",
+    "lo",
+    "round"
+   ],
+   "ʁˤ": [
+    "lo"
+   ],
+   "ʁˤː": [
+    "lo"
+   ],
+   "ʁ̞": [
+    "son",
+    "cons"
+   ],
+   "ʃʲ": [
+    "hi"
+   ],
+   "ʃʲː": [
+    "hi"
+   ],
+   "ʃʷ": [
+    "hi",
+    "round"
+   ],
+   "ʃʷː": [
+    "hi",
+    "round"
+   ],
+   "ʃʷˠ": [
+    "hi",
+    "round"
+   ],
+   "ʃˠ": [
+    "hi"
+   ],
+   "ʃˤ": [
+    "lo"
+   ],
+   "ʃˤː": [
+    "lo"
+   ],
+   "ʃ̞": [
+    "son",
+    "cons"
+   ],
+   "ʈʲ": [
+    "hi"
+   ],
+   "ʈʲʰ": [
+    "hi"
+   ],
+   "ʈʷ": [
+    "hi",
+    "round"
+   ],
+   "ʈʷˠ": [
+    "hi",
+    "round"
+   ],
+   "ʈʷˠʰ": [
+    "hi",
+    "round"
+   ],
+   "ʉ": [
+    "delrel",
+    "back",
+    "tense"
+   ],
+   "ʉː": [
+    "delrel",
+    "back",
+    "tense"
+   ],
+   "ʉ̃": [
+    "delrel",
+    "back",
+    "tense"
+   ],
+   "ʉ̃ː": [
+    "delrel",
+    "back",
+    "tense"
+   ],
+   "ʉ̆": [
+    "delrel",
+    "back",
+    "tense"
+   ],
+   "ʉ̈": [
+    "delrel",
+    "back",
+    "tense"
+   ],
+   "ʉ̞": [
+    "delrel",
+    "back",
+    "tense"
+   ],
+   "ʉ̟": [
+    "delrel",
+    "back",
+    "tense"
+   ],
+   "ʉ̰": [
+    "delrel",
+    "back",
+    "tense"
+   ],
+   "ʊ": [
+    "lab",
+    "tense"
+   ],
+   "ʊː": [
+    "lab",
+    "tense"
+   ],
+   "ʊ˞": [
+    "lab",
+    "tense"
+   ],
+   "ʊˤ": [
+    "lab",
+    "lo",
+    "tense"
+   ],
+   "ʊˤː": [
+    "lab",
+    "lo",
+    "tense"
+   ],
+   "ʊ̃": [
+    "lab",
+    "tense"
+   ],
+   "ʊ̃ː": [
+    "lab",
+    "tense"
+   ],
+   "ʊ̆": [
+    "lab",
+    "tense"
+   ],
+   "ʊ̈": [
+    "lab",
+    "back",
+    "tense"
+   ],
+   "ʊ̙": [
+    "lab",
+    "tense"
+   ],
+   "ʊ̙ː": [
+    "lab",
+    "tense"
+   ],
+   "ʊ̞": [
+    "lab",
+    "hi",
+    "tense"
+   ],
+   "ʊ̟": [
+    "lab",
+    "back",
+    "tense"
+   ],
+   "ʊ̤": [
+    "lab",
+    "tense"
+   ],
+   "ʊ̤ː": [
+    "lab",
+    "tense"
+   ],
+   "ʊ̥": [
+    "lab",
+    "tense"
+   ],
+   "ʊ̯": [
+    "lab",
+    "tense"
+   ],
+   "ʊ̰": [
+    "lab",
+    "tense"
+   ],
+   "ʊ̰ː": [
+    "lab",
+    "tense"
+   ],
+   "ʋʲ": [
+    "hi"
+   ],
+   "ʌ": [
+    "tense"
+   ],
+   "ʌː": [
+    "tense"
+   ],
+   "ʌˤ": [
+    "lo",
+    "tense"
+   ],
+   "ʌˤː": [
+    "lo",
+    "tense"
+   ],
+   "ʌ̃": [
+    "tense"
+   ],
+   "ʌ̃ː": [
+    "tense"
+   ],
+   "ʌ̆": [
+    "tense"
+   ],
+   "ʌ̤": [
+    "tense"
+   ],
+   "ʌ̤ː": [
+    "tense"
+   ],
+   "ʌ̥": [
+    "tense"
+   ],
+   "ʌ̯": [
+    "tense"
+   ],
+   "ʏ": [
+    "lab",
+    "tense"
+   ],
+   "ʏː": [
+    "lab",
+    "tense"
+   ],
+   "ʏ̃": [
+    "lab",
+    "tense"
+   ],
+   "ʏ̃ː": [
+    "lab",
+    "tense"
+   ],
+   "ʐʲ": [
+    "hi"
+   ],
+   "ʐʷ": [
+    "hi",
+    "round"
+   ],
+   "ʑᶣ": [
+    "round"
+   ],
+   "ʒʲ": [
+    "hi"
+   ],
+   "ʒʲː": [
+    "hi"
+   ],
+   "ʒʷ": [
+    "hi",
+    "round"
+   ],
+   "ʒˠ": [
+    "hi"
+   ],
+   "ʒˤ": [
+    "lo"
+   ],
+   "ʒˤː": [
+    "lo"
+   ],
+   "ʔ": [
+    "son",
+    "cons"
+   ],
+   "ʔʲ": [
+    "son",
+    "cons",
+    "hi"
+   ],
+   "ʔʲː": [
+    "son",
+    "cons",
+    "hi"
+   ],
+   "ʔʷ": [
+    "son",
+    "cons",
+    "hi",
+    "round"
+   ],
+   "ʔː": [
+    "son",
+    "cons"
+   ],
+   "ʕʷ": [
+    "hi",
+    "round"
+   ],
+   "ʕ̰ʷ": [
+    "hi",
+    "round"
+   ],
+   "ʝʷ": [
+    "round"
+   ],
+   "ˀy": [
+    "tense"
+   ],
+   "βʲ": [
+    "hi"
+   ],
+   "βʲː": [
+    "hi"
+   ],
+   "βʷ": [
+    "hi",
+    "round"
+   ],
+   "βʷˠ": [
+    "hi",
+    "round"
+   ],
+   "βˠ": [
+    "hi"
+   ],
+   "β̞": [
+    "son",
+    "cons"
+   ],
+   "χʲ": [
+    "hi"
+   ],
+   "χʷ": [
+    "hi",
+    "round"
+   ],
+   "χʷʼ": [
+    "hi",
+    "round"
+   ],
+   "χʷː": [
+    "hi",
+    "round"
+   ],
+   "χʷˤ": [
+    "hi",
+    "lo",
+    "round"
+   ],
+   "χˤ": [
+    "lo"
+   ],
+   "χˤː": [
+    "lo"
+   ]
+  }
+ }
+}

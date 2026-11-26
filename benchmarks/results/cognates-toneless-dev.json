@@ -1,0 +1,1414 @@
+{
+ "task": "cognates-toneless",
+ "system": "phonematcher,levenshtein,panphon-weighted,panphon-hamming,aline,soundvectors,sca",
+ "split": "dev",
+ "commit": null,
+ "head": "bc69674664ae12e7528361bbb4593095b7cf2a9c",
+ "tree_dirty": false,
+ "source": "https://doi.org/10.5281/zenodo.192607 (v1.0, glottobank/potential-of-cognate-detection-v1.0.zip, md5 d270e3803e5be2f018c9a2975b750ce8)",
+ "datasets": [
+  "Austronesian-210-20",
+  "Bai-110-09",
+  "Chinese-140-15",
+  "IndoEuropean-207-20",
+  "Japanese-200-10",
+  "ObUgrian-110-21"
+ ],
+ "tone_tokens_dropped": true,
+ "words": {
+  "Austronesian-210-20": 4358,
+  "Bai-110-09": 1028,
+  "Chinese-140-15": 2789,
+  "IndoEuropean-207-20": 4393,
+  "Japanese-200-10": 1986,
+  "ObUgrian-110-21": 2055
+ },
+ "systems": {
+  "phonematcher": {
+   "common": {
+    "data_sets_scored": [
+     "Austronesian-210-20",
+     "Bai-110-09",
+     "Chinese-140-15",
+     "IndoEuropean-207-20",
+     "Japanese-200-10",
+     "ObUgrian-110-21"
+    ],
+    "average_precision": {
+     "Austronesian-210-20": 0.6213553244201455,
+     "Bai-110-09": 0.9563602960777622,
+     "Chinese-140-15": 0.7909993101912511,
+     "IndoEuropean-207-20": 0.6832619002321574,
+     "Japanese-200-10": 0.9804934389187248,
+     "ObUgrian-110-21": 0.9872206034355594,
+     "mean": 0.8366151455459333
+    },
+    "bcubed_f": {
+     "Austronesian-210-20": 0.8159523377659093,
+     "Bai-110-09": 0.9092104087162227,
+     "Chinese-140-15": 0.8593643136864254,
+     "IndoEuropean-207-20": 0.8194249054077747,
+     "Japanese-200-10": 0.9420485361252925,
+     "ObUgrian-110-21": 0.9216906875261929,
+     "mean": 0.8779485315379696
+    },
+    "bcubed_precision_mean": 0.9062397837683936,
+    "bcubed_recall_mean": 0.8563565612010913,
+    "threshold": 0.27,
+    "paper_grid": {
+     "threshold": 0.3,
+     "bcubed_f": {
+      "Austronesian-210-20": 0.7721617409306335,
+      "Bai-110-09": 0.912299797932287,
+      "Chinese-140-15": 0.8474265461066719,
+      "IndoEuropean-207-20": 0.8292841796173768,
+      "Japanese-200-10": 0.9493410955515834,
+      "ObUgrian-110-21": 0.9391890829920522,
+      "mean": 0.8749504071884342
+     }
+    },
+    "per_word": {
+     "bcubed_f": {
+      "Austronesian-210-20": 0.7993754871975721,
+      "Bai-110-09": 0.9074390518535417,
+      "Chinese-140-15": 0.8295621543414141,
+      "IndoEuropean-207-20": 0.8148861984538757,
+      "Japanese-200-10": 0.9420485361252925,
+      "ObUgrian-110-21": 0.9216906875261929,
+      "mean": 0.8691670192496482
+     },
+     "bcubed_precision_mean": 0.8911174754019825,
+     "bcubed_recall_mean": 0.854574530229841,
+     "threshold": 0.27,
+     "paper_grid": {
+      "threshold": 0.25,
+      "bcubed_f": {
+       "Austronesian-210-20": 0.8158491797516021,
+       "Bai-110-09": 0.8932759841499057,
+       "Chinese-140-15": 0.8336307426124384,
+       "IndoEuropean-207-20": 0.8021806657381191,
+       "Japanese-200-10": 0.9357418058578801,
+       "ObUgrian-110-21": 0.907014626704671,
+       "mean": 0.864615500802436
+      }
+     }
+    },
+    "words_in": {
+     "Austronesian-210-20": 4358,
+     "Bai-110-09": 1028,
+     "Chinese-140-15": 2789,
+     "IndoEuropean-207-20": 4393,
+     "Japanese-200-10": 1986,
+     "ObUgrian-110-21": 2055
+    },
+    "words_out": {
+     "Austronesian-210-20": 3795,
+     "Bai-110-09": 575,
+     "Chinese-140-15": 1073,
+     "IndoEuropean-207-20": 2403,
+     "Japanese-200-10": 1081,
+     "ObUgrian-110-21": 892
+    }
+   },
+   "unread_at_1": {
+    "data_sets_scored": [
+     "Austronesian-210-20",
+     "Bai-110-09",
+     "Chinese-140-15",
+     "IndoEuropean-207-20",
+     "Japanese-200-10",
+     "ObUgrian-110-21"
+    ],
+    "average_precision": {
+     "Austronesian-210-20": 0.6003257096587251,
+     "Bai-110-09": 0.9298243629310491,
+     "Chinese-140-15": 0.6279857461434593,
+     "IndoEuropean-207-20": 0.6314975565318264,
+     "Japanese-200-10": 0.9604431794565814,
+     "ObUgrian-110-21": 0.9684550577302249,
+     "mean": 0.7864219354086442
+    },
+    "bcubed_f": {
+     "Austronesian-210-20": 0.7776695963139403,
+     "Bai-110-09": 0.8710771852061652,
+     "Chinese-140-15": 0.7774994252114374,
+     "IndoEuropean-207-20": 0.785220908516063,
+     "Japanese-200-10": 0.9083471710551599,
+     "ObUgrian-110-21": 0.9065692757189104,
+     "mean": 0.8377305936702794
+    },
+    "bcubed_precision_mean": 0.8708305408603936,
+    "bcubed_recall_mean": 0.8138673837177546,
+    "threshold": 0.29,
+    "paper_grid": {
+     "threshold": 0.3,
+     "bcubed_f": {
+      "Austronesian-210-20": 0.7598081561703022,
+      "Bai-110-09": 0.874907359172988,
+      "Chinese-140-15": 0.7779687534489526,
+      "IndoEuropean-207-20": 0.7911494352197895,
+      "Japanese-200-10": 0.9133424039730031,
+      "ObUgrian-110-21": 0.908618601516024,
+      "mean": 0.8376324515835099
+     }
+    },
+    "per_word": {
+     "bcubed_f": {
+      "Austronesian-210-20": 0.7609093341748433,
+      "Bai-110-09": 0.8691842550222252,
+      "Chinese-140-15": 0.7451369703739941,
+      "IndoEuropean-207-20": 0.780253650740605,
+      "Japanese-200-10": 0.9079494201647049,
+      "ObUgrian-110-21": 0.9065692757189104,
+      "mean": 0.8283338176992138
+     },
+     "bcubed_precision_mean": 0.8543795127535017,
+     "bcubed_recall_mean": 0.8117190590611562,
+     "threshold": 0.29,
+     "paper_grid": {
+      "threshold": 0.3,
+      "bcubed_f": {
+       "Austronesian-210-20": 0.7428083194642762,
+       "Bai-110-09": 0.8730025520827197,
+       "Chinese-140-15": 0.7409206575513881,
+       "IndoEuropean-207-20": 0.785888650569192,
+       "Japanese-200-10": 0.9129489174985496,
+       "ObUgrian-110-21": 0.908618601516024,
+       "mean": 0.8273646164470249
+      }
+     }
+    },
+    "words_in": {
+     "Austronesian-210-20": 4358,
+     "Bai-110-09": 1028,
+     "Chinese-140-15": 2789,
+     "IndoEuropean-207-20": 4393,
+     "Japanese-200-10": 1986,
+     "ObUgrian-110-21": 2055
+    },
+    "words_out": {
+     "Austronesian-210-20": 4358,
+     "Bai-110-09": 1028,
+     "Chinese-140-15": 2789,
+     "IndoEuropean-207-20": 4393,
+     "Japanese-200-10": 1986,
+     "ObUgrian-110-21": 2055
+    }
+   },
+   "skipped": {
+    "words": {
+     "Austronesian-210-20": 1,
+     "Bai-110-09": 0,
+     "Chinese-140-15": 368,
+     "IndoEuropean-207-20": 6,
+     "Japanese-200-10": 1,
+     "ObUgrian-110-21": 0
+    },
+    "pairs": {
+     "Austronesian-210-20": 25,
+     "Bai-110-09": 0,
+     "Chinese-140-15": 6824,
+     "IndoEuropean-207-20": 121,
+     "Japanese-200-10": 9,
+     "ObUgrian-110-21": 0
+    },
+    "pairs_in": {
+     "Austronesian-210-20": 44269,
+     "Bai-110-09": 4362,
+     "Chinese-140-15": 28672,
+     "IndoEuropean-207-20": 45032,
+     "Japanese-200-10": 8882,
+     "ObUgrian-110-21": 18759
+    }
+   }
+  },
+  "levenshtein": {
+   "common": {
+    "data_sets_scored": [
+     "Austronesian-210-20",
+     "Bai-110-09",
+     "Chinese-140-15",
+     "IndoEuropean-207-20",
+     "Japanese-200-10",
+     "ObUgrian-110-21"
+    ],
+    "average_precision": {
+     "Austronesian-210-20": 0.5978180979058177,
+     "Bai-110-09": 0.9061679105757994,
+     "Chinese-140-15": 0.7174028490274895,
+     "IndoEuropean-207-20": 0.6291397306906853,
+     "Japanese-200-10": 0.9732483445741953,
+     "ObUgrian-110-21": 0.9805817617228072,
+     "mean": 0.800726449082799
+    },
+    "bcubed_f": {
+     "Austronesian-210-20": 0.7768484467008345,
+     "Bai-110-09": 0.8719135806191125,
+     "Chinese-140-15": 0.8436384419232791,
+     "IndoEuropean-207-20": 0.8122303649528448,
+     "Japanese-200-10": 0.9469338084440712,
+     "ObUgrian-110-21": 0.9331731607238665,
+     "mean": 0.8641229672273347
+    },
+    "bcubed_precision_mean": 0.8803707732039506,
+    "bcubed_recall_mean": 0.8573638095719209,
+    "threshold": 0.69,
+    "paper_grid": {
+     "threshold": 0.7,
+     "bcubed_f": {
+      "Austronesian-210-20": 0.7681688689358297,
+      "Bai-110-09": 0.8719135806191125,
+      "Chinese-140-15": 0.8418534663581136,
+      "IndoEuropean-207-20": 0.8155059825024289,
+      "Japanese-200-10": 0.9439411812928733,
+      "ObUgrian-110-21": 0.9349612654184649,
+      "mean": 0.8627240575211372
+     }
+    },
+    "per_word": {
+     "bcubed_f": {
+      "Austronesian-210-20": 0.7636701282794492,
+      "Bai-110-09": 0.8734590605422057,
+      "Chinese-140-15": 0.8051590650163049,
+      "IndoEuropean-207-20": 0.8057800977138634,
+      "Japanese-200-10": 0.9452325163938347,
+      "ObUgrian-110-21": 0.9321951775256316,
+      "mean": 0.8542493409118815
+     },
+     "bcubed_precision_mean": 0.8676405939726272,
+     "bcubed_recall_mean": 0.8512501640797497,
+     "threshold": 0.68,
+     "paper_grid": {
+      "threshold": 0.7,
+      "bcubed_f": {
+       "Austronesian-210-20": 0.7501783653097681,
+       "Bai-110-09": 0.8708048475555659,
+       "Chinese-140-15": 0.8041504373783253,
+       "IndoEuropean-207-20": 0.8111346877681659,
+       "Japanese-200-10": 0.9439411812928733,
+       "ObUgrian-110-21": 0.9349612654184649,
+       "mean": 0.8525284641205273
+      }
+     }
+    },
+    "words_in": {
+     "Austronesian-210-20": 4358,
+     "Bai-110-09": 1028,
+     "Chinese-140-15": 2789,
+     "IndoEuropean-207-20": 4393,
+     "Japanese-200-10": 1986,
+     "ObUgrian-110-21": 2055
+    },
+    "words_out": {
+     "Austronesian-210-20": 3795,
+     "Bai-110-09": 575,
+     "Chinese-140-15": 1073,
+     "IndoEuropean-207-20": 2403,
+     "Japanese-200-10": 1081,
+     "ObUgrian-110-21": 892
+    }
+   },
+   "unread_at_1": {
+    "data_sets_scored": [
+     "Austronesian-210-20",
+     "Bai-110-09",
+     "Chinese-140-15",
+     "IndoEuropean-207-20",
+     "Japanese-200-10",
+     "ObUgrian-110-21"
+    ],
+    "average_precision": {
+     "Austronesian-210-20": 0.5662408998236953,
+     "Bai-110-09": 0.8565118534601764,
+     "Chinese-140-15": 0.6457291401817367,
+     "IndoEuropean-207-20": 0.5520089087603273,
+     "Japanese-200-10": 0.9393677823133854,
+     "ObUgrian-110-21": 0.9493664340447777,
+     "mean": 0.7515375030973498
+    },
+    "bcubed_f": {
+     "Austronesian-210-20": 0.7620884630947758,
+     "Bai-110-09": 0.8041599546109964,
+     "Chinese-140-15": 0.7829588084130463,
+     "IndoEuropean-207-20": 0.7520467574961772,
+     "Japanese-200-10": 0.8849494699068878,
+     "ObUgrian-110-21": 0.8841501117929227,
+     "mean": 0.8117255942191344
+    },
+    "bcubed_precision_mean": 0.8617828257177463,
+    "bcubed_recall_mean": 0.7810427142387281,
+    "threshold": 0.71,
+    "paper_grid": {
+     "threshold": 0.7,
+     "bcubed_f": {
+      "Austronesian-210-20": 0.7651653056378385,
+      "Bai-110-09": 0.8010728615492823,
+      "Chinese-140-15": 0.784380626808852,
+      "IndoEuropean-207-20": 0.7476639654657637,
+      "Japanese-200-10": 0.8816134632353425,
+      "ObUgrian-110-21": 0.8809263424731023,
+      "mean": 0.8101370941950301
+     }
+    },
+    "per_word": {
+     "bcubed_f": {
+      "Austronesian-210-20": 0.7448734120265993,
+      "Bai-110-09": 0.8026304223026923,
+      "Chinese-140-15": 0.736621196186038,
+      "IndoEuropean-207-20": 0.7472543520299231,
+      "Japanese-200-10": 0.8845529765792426,
+      "ObUgrian-110-21": 0.8841501117929227,
+      "mean": 0.8000137451529029
+     },
+     "bcubed_precision_mean": 0.8422856370291774,
+     "bcubed_recall_mean": 0.7790775271892864,
+     "threshold": 0.71,
+     "paper_grid": {
+      "threshold": 0.7,
+      "bcubed_f": {
+       "Austronesian-210-20": 0.7483619747025537,
+       "Bai-110-09": 0.7995564931867931,
+       "Chinese-140-15": 0.7390751447424025,
+       "IndoEuropean-207-20": 0.7426818157959298,
+       "Japanese-200-10": 0.8812172701940105,
+       "ObUgrian-110-21": 0.8809263424731023,
+       "mean": 0.798636506849132
+      }
+     }
+    },
+    "words_in": {
+     "Austronesian-210-20": 4358,
+     "Bai-110-09": 1028,
+     "Chinese-140-15": 2789,
+     "IndoEuropean-207-20": 4393,
+     "Japanese-200-10": 1986,
+     "ObUgrian-110-21": 2055
+    },
+    "words_out": {
+     "Austronesian-210-20": 4358,
+     "Bai-110-09": 1028,
+     "Chinese-140-15": 2789,
+     "IndoEuropean-207-20": 4393,
+     "Japanese-200-10": 1986,
+     "ObUgrian-110-21": 2055
+    }
+   },
+   "skipped": {
+    "words": {
+     "Austronesian-210-20": 0,
+     "Bai-110-09": 0,
+     "Chinese-140-15": 0,
+     "IndoEuropean-207-20": 0,
+     "Japanese-200-10": 0,
+     "ObUgrian-110-21": 0
+    },
+    "pairs": {
+     "Austronesian-210-20": 0,
+     "Bai-110-09": 0,
+     "Chinese-140-15": 0,
+     "IndoEuropean-207-20": 0,
+     "Japanese-200-10": 0,
+     "ObUgrian-110-21": 0
+    },
+    "pairs_in": {
+     "Austronesian-210-20": 44269,
+     "Bai-110-09": 4362,
+     "Chinese-140-15": 28672,
+     "IndoEuropean-207-20": 45032,
+     "Japanese-200-10": 8882,
+     "ObUgrian-110-21": 18759
+    }
+   }
+  },
+  "panphon-weighted": {
+   "common": {
+    "data_sets_scored": [
+     "Austronesian-210-20",
+     "Bai-110-09",
+     "Chinese-140-15",
+     "IndoEuropean-207-20",
+     "Japanese-200-10",
+     "ObUgrian-110-21"
+    ],
+    "average_precision": {
+     "Austronesian-210-20": 0.4970173573704261,
+     "Bai-110-09": 0.9478012840547256,
+     "Chinese-140-15": 0.7479803369713565,
+     "IndoEuropean-207-20": 0.5828019039837631,
+     "Japanese-200-10": 0.9669482513504878,
+     "ObUgrian-110-21": 0.9817051725151295,
+     "mean": 0.7873757177076482
+    },
+    "bcubed_f": {
+     "Austronesian-210-20": 0.7969826625398071,
+     "Bai-110-09": 0.8718564861514572,
+     "Chinese-140-15": 0.8302176250225265,
+     "IndoEuropean-207-20": 0.7672786826420971,
+     "Japanese-200-10": 0.8939856050547037,
+     "ObUgrian-110-21": 0.8849580026276447,
+     "mean": 0.8408798440063728
+    },
+    "bcubed_precision_mean": 0.9114087286625457,
+    "bcubed_recall_mean": 0.783075192475143,
+    "threshold": 2.07,
+    "paper_grid": {
+     "threshold": 0.9,
+     "bcubed_f": {
+      "Austronesian-210-20": 0.8309836154051181,
+      "Bai-110-09": 0.8608732440547406,
+      "Chinese-140-15": 0.8117284745079366,
+      "IndoEuropean-207-20": 0.729310164472415,
+      "Japanese-200-10": 0.8498135961219845,
+      "ObUgrian-110-21": 0.7975826866360982,
+      "mean": 0.8133819635330489
+     }
+    },
+    "per_word": {
+     "bcubed_f": {
+      "Austronesian-210-20": 0.7827884700358374,
+      "Bai-110-09": 0.8699242735763777,
+      "Chinese-140-15": 0.8142690665976371,
+      "IndoEuropean-207-20": 0.7630477365011612,
+      "Japanese-200-10": 0.8939856050547037,
+      "ObUgrian-110-21": 0.8849580026276447,
+      "mean": 0.8348288590655604
+     },
+     "bcubed_precision_mean": 0.9010152752020213,
+     "bcubed_recall_mean": 0.7807640639657708,
+     "threshold": 2.07,
+     "paper_grid": {
+      "threshold": 0.9,
+      "bcubed_f": {
+       "Austronesian-210-20": 0.8178778492964509,
+       "Bai-110-09": 0.8601721398743282,
+       "Chinese-140-15": 0.8041402235948828,
+       "IndoEuropean-207-20": 0.7266198032772366,
+       "Japanese-200-10": 0.8498135961219845,
+       "ObUgrian-110-21": 0.7975826866360982,
+       "mean": 0.8093677164668303
+      }
+     }
+    },
+    "words_in": {
+     "Austronesian-210-20": 4358,
+     "Bai-110-09": 1028,
+     "Chinese-140-15": 2789,
+     "IndoEuropean-207-20": 4393,
+     "Japanese-200-10": 1986,
+     "ObUgrian-110-21": 2055
+    },
+    "words_out": {
+     "Austronesian-210-20": 3795,
+     "Bai-110-09": 575,
+     "Chinese-140-15": 1073,
+     "IndoEuropean-207-20": 2403,
+     "Japanese-200-10": 1081,
+     "ObUgrian-110-21": 892
+    }
+   },
+   "unread_at_1": {
+    "data_sets_scored": [
+     "Austronesian-210-20",
+     "Bai-110-09",
+     "Chinese-140-15",
+     "IndoEuropean-207-20",
+     "Japanese-200-10",
+     "ObUgrian-110-21"
+    ],
+    "average_precision": {
+     "Austronesian-210-20": 0.4096477732350657,
+     "Bai-110-09": 0.8588022357860639,
+     "Chinese-140-15": 0.4028222779141294,
+     "IndoEuropean-207-20": 0.36574184111134384,
+     "Japanese-200-10": 0.8555606814068424,
+     "ObUgrian-110-21": 0.9494558529180657,
+     "mean": 0.6403384437285852
+    },
+    "bcubed_f": {
+     "Austronesian-210-20": 0.7628120096266704,
+     "Bai-110-09": 0.844280716139268,
+     "Chinese-140-15": 0.7138500892911188,
+     "IndoEuropean-207-20": 0.67515171811758,
+     "Japanese-200-10": 0.8524767242550996,
+     "ObUgrian-110-21": 0.8567719113144056,
+     "mean": 0.784223861457357
+    },
+    "bcubed_precision_mean": 0.7741284793180059,
+    "bcubed_recall_mean": 0.8096380503302453,
+    "threshold": 2.24,
+    "paper_grid": {
+     "threshold": 0.9,
+     "bcubed_f": {
+      "Austronesian-210-20": 0.8286442756349874,
+      "Bai-110-09": 0.7371019856869535,
+      "Chinese-140-15": 0.690821297996575,
+      "IndoEuropean-207-20": 0.6519547271758073,
+      "Japanese-200-10": 0.6579412527083005,
+      "ObUgrian-110-21": 0.7266748919541168,
+      "mean": 0.7155230718594567
+     }
+    },
+    "per_word": {
+     "bcubed_f": {
+      "Austronesian-210-20": 0.7820492279102721,
+      "Bai-110-09": 0.8378850141342938,
+      "Chinese-140-15": 0.6542839084697746,
+      "IndoEuropean-207-20": 0.6645323997091684,
+      "Japanese-200-10": 0.8311154575576456,
+      "ObUgrian-110-21": 0.8251999454734169,
+      "mean": 0.7658443255424285
+     },
+     "bcubed_precision_mean": 0.7957985205949901,
+     "bcubed_recall_mean": 0.7602123404334994,
+     "threshold": 1.82,
+     "paper_grid": {
+      "threshold": 0.9,
+      "bcubed_f": {
+       "Austronesian-210-20": 0.815808669161354,
+       "Bai-110-09": 0.7368156274992037,
+       "Chinese-140-15": 0.6874611793271671,
+       "IndoEuropean-207-20": 0.6479822448366432,
+       "Japanese-200-10": 0.6570994122070134,
+       "ObUgrian-110-21": 0.7266748919541168,
+       "mean": 0.7119736708309164
+      }
+     }
+    },
+    "words_in": {
+     "Austronesian-210-20": 4358,
+     "Bai-110-09": 1028,
+     "Chinese-140-15": 2789,
+     "IndoEuropean-207-20": 4393,
+     "Japanese-200-10": 1986,
+     "ObUgrian-110-21": 2055
+    },
+    "words_out": {
+     "Austronesian-210-20": 4358,
+     "Bai-110-09": 1028,
+     "Chinese-140-15": 2789,
+     "IndoEuropean-207-20": 4393,
+     "Japanese-200-10": 1986,
+     "ObUgrian-110-21": 2055
+    }
+   },
+   "skipped": {
+    "words": {
+     "Austronesian-210-20": 91,
+     "Bai-110-09": 234,
+     "Chinese-140-15": 1217,
+     "IndoEuropean-207-20": 639,
+     "Japanese-200-10": 520,
+     "ObUgrian-110-21": 72
+    },
+    "pairs": {
+     "Austronesian-210-20": 1482,
+     "Bai-110-09": 1347,
+     "Chinese-140-15": 17173,
+     "IndoEuropean-207-20": 12058,
+     "Japanese-200-10": 3579,
+     "ObUgrian-110-21": 1265
+    },
+    "pairs_in": {
+     "Austronesian-210-20": 44269,
+     "Bai-110-09": 4362,
+     "Chinese-140-15": 28672,
+     "IndoEuropean-207-20": 45032,
+     "Japanese-200-10": 8882,
+     "ObUgrian-110-21": 18759
+    }
+   }
+  },
+  "panphon-hamming": {
+   "common": {
+    "data_sets_scored": [
+     "Austronesian-210-20",
+     "Bai-110-09",
+     "Chinese-140-15",
+     "IndoEuropean-207-20",
+     "Japanese-200-10",
+     "ObUgrian-110-21"
+    ],
+    "average_precision": {
+     "Austronesian-210-20": 0.4133148187181131,
+     "Bai-110-09": 0.9379425147411042,
+     "Chinese-140-15": 0.695755638737731,
+     "IndoEuropean-207-20": 0.5126364251678169,
+     "Japanese-200-10": 0.9553004914358656,
+     "ObUgrian-110-21": 0.976428566976318,
+     "mean": 0.7485630759628248
+    },
+    "bcubed_f": {
+     "Austronesian-210-20": 0.8221475465155519,
+     "Bai-110-09": 0.8676778669781489,
+     "Chinese-140-15": 0.8184483075313659,
+     "IndoEuropean-207-20": 0.735928798272895,
+     "Japanese-200-10": 0.8650963691056093,
+     "ObUgrian-110-21": 0.8465549893672263,
+     "mean": 0.825975646295133
+    },
+    "bcubed_precision_mean": 0.9561725426163513,
+    "bcubed_recall_mean": 0.7298555744889793,
+    "threshold": 0.11,
+    "paper_grid": {
+     "threshold": 0.1,
+     "bcubed_f": {
+      "Austronesian-210-20": 0.8262291535975802,
+      "Bai-110-09": 0.866921564698926,
+      "Chinese-140-15": 0.8171410488166417,
+      "IndoEuropean-207-20": 0.7341760185979466,
+      "Japanese-200-10": 0.8657574818343058,
+      "ObUgrian-110-21": 0.8320131084540655,
+      "mean": 0.8237063959999108
+     }
+    },
+    "per_word": {
+     "bcubed_f": {
+      "Austronesian-210-20": 0.8085592474591371,
+      "Bai-110-09": 0.8658186067513477,
+      "Chinese-140-15": 0.8073082184004958,
+      "IndoEuropean-207-20": 0.7328941425023355,
+      "Japanese-200-10": 0.8650963691056093,
+      "ObUgrian-110-21": 0.8465549893672263,
+      "mean": 0.8210385955976921
+     },
+     "bcubed_precision_mean": 0.947904753934328,
+     "bcubed_recall_mean": 0.7272115954336204,
+     "threshold": 0.11,
+     "paper_grid": {
+      "threshold": 0.1,
+      "bcubed_f": {
+       "Austronesian-210-20": 0.8129771343775708,
+       "Bai-110-09": 0.8652590899969225,
+       "Chinese-140-15": 0.8077522578672303,
+       "IndoEuropean-207-20": 0.7312637938349528,
+       "Japanese-200-10": 0.8657574818343058,
+       "ObUgrian-110-21": 0.8320131084540655,
+       "mean": 0.819170477727508
+      }
+     }
+    },
+    "words_in": {
+     "Austronesian-210-20": 4358,
+     "Bai-110-09": 1028,
+     "Chinese-140-15": 2789,
+     "IndoEuropean-207-20": 4393,
+     "Japanese-200-10": 1986,
+     "ObUgrian-110-21": 2055
+    },
+    "words_out": {
+     "Austronesian-210-20": 3795,
+     "Bai-110-09": 575,
+     "Chinese-140-15": 1073,
+     "IndoEuropean-207-20": 2403,
+     "Japanese-200-10": 1081,
+     "ObUgrian-110-21": 892
+    }
+   },
+   "unread_at_1": {
+    "data_sets_scored": [
+     "Austronesian-210-20",
+     "Bai-110-09",
+     "Chinese-140-15",
+     "IndoEuropean-207-20",
+     "Japanese-200-10",
+     "ObUgrian-110-21"
+    ],
+    "average_precision": {
+     "Austronesian-210-20": 0.3902216523468333,
+     "Bai-110-09": 0.8582428912831795,
+     "Chinese-140-15": 0.45607290605201845,
+     "IndoEuropean-207-20": 0.4296394010582525,
+     "Japanese-200-10": 0.841630860942819,
+     "ObUgrian-110-21": 0.9272207839126426,
+     "mean": 0.6505047492659576
+    },
+    "bcubed_f": {
+     "Austronesian-210-20": 0.798480546269849,
+     "Bai-110-09": 0.7571278489636304,
+     "Chinese-140-15": 0.7013761243651112,
+     "IndoEuropean-207-20": 0.6616913068129713,
+     "Japanese-200-10": 0.6738621848638496,
+     "ObUgrian-110-21": 0.8039799603233629,
+     "mean": 0.7327529952664623
+    },
+    "bcubed_precision_mean": 0.9440380299272727,
+    "bcubed_recall_mean": 0.6058204877527942,
+    "threshold": 0.13,
+    "paper_grid": {
+     "threshold": 0.1,
+     "bcubed_f": {
+      "Austronesian-210-20": 0.8224447632176946,
+      "Bai-110-09": 0.7451424650283606,
+      "Chinese-140-15": 0.6981955015305094,
+      "IndoEuropean-207-20": 0.6601836080989502,
+      "Japanese-200-10": 0.6726742232874393,
+      "ObUgrian-110-21": 0.775510115259976,
+      "mean": 0.7290251127371551
+     }
+    },
+    "per_word": {
+     "bcubed_f": {
+      "Austronesian-210-20": 0.7846937403440593,
+      "Bai-110-09": 0.7567656595332407,
+      "Chinese-140-15": 0.6957527567513255,
+      "IndoEuropean-207-20": 0.6574903753373168,
+      "Japanese-200-10": 0.6730367186141989,
+      "ObUgrian-110-21": 0.8039799603233629,
+      "mean": 0.7286198684839174
+     },
+     "bcubed_precision_mean": 0.9370827016107932,
+     "bcubed_recall_mean": 0.6029943675341866,
+     "threshold": 0.13,
+     "paper_grid": {
+      "threshold": 0.1,
+      "bcubed_f": {
+       "Austronesian-210-20": 0.8093155028083037,
+       "Bai-110-09": 0.745048208327434,
+       "Chinese-140-15": 0.6940732180004421,
+       "IndoEuropean-207-20": 0.6562979583377864,
+       "Japanese-200-10": 0.6718408597173784,
+       "ObUgrian-110-21": 0.775510115259976,
+       "mean": 0.7253476437418868
+      }
+     }
+    },
+    "words_in": {
+     "Austronesian-210-20": 4358,
+     "Bai-110-09": 1028,
+     "Chinese-140-15": 2789,
+     "IndoEuropean-207-20": 4393,
+     "Japanese-200-10": 1986,
+     "ObUgrian-110-21": 2055
+    },
+    "words_out": {
+     "Austronesian-210-20": 4358,
+     "Bai-110-09": 1028,
+     "Chinese-140-15": 2789,
+     "IndoEuropean-207-20": 4393,
+     "Japanese-200-10": 1986,
+     "ObUgrian-110-21": 2055
+    }
+   },
+   "skipped": {
+    "words": {
+     "Austronesian-210-20": 91,
+     "Bai-110-09": 234,
+     "Chinese-140-15": 1217,
+     "IndoEuropean-207-20": 639,
+     "Japanese-200-10": 520,
+     "ObUgrian-110-21": 72
+    },
+    "pairs": {
+     "Austronesian-210-20": 1482,
+     "Bai-110-09": 1347,
+     "Chinese-140-15": 17173,
+     "IndoEuropean-207-20": 12058,
+     "Japanese-200-10": 3579,
+     "ObUgrian-110-21": 1265
+    },
+    "pairs_in": {
+     "Austronesian-210-20": 44269,
+     "Bai-110-09": 4362,
+     "Chinese-140-15": 28672,
+     "IndoEuropean-207-20": 45032,
+     "Japanese-200-10": 8882,
+     "ObUgrian-110-21": 18759
+    }
+   }
+  },
+  "aline": {
+   "common": {
+    "data_sets_scored": [
+     "Austronesian-210-20",
+     "Bai-110-09",
+     "Chinese-140-15",
+     "IndoEuropean-207-20",
+     "Japanese-200-10",
+     "ObUgrian-110-21"
+    ],
+    "average_precision": {
+     "Austronesian-210-20": 0.5704883063472418,
+     "Bai-110-09": 0.9375954899542737,
+     "Chinese-140-15": 0.7672446001262299,
+     "IndoEuropean-207-20": 0.672489988967387,
+     "Japanese-200-10": 0.9759821721772141,
+     "ObUgrian-110-21": 0.9871939927073159,
+     "mean": 0.8184990917132771
+    },
+    "bcubed_f": {
+     "Austronesian-210-20": 0.7840367575622618,
+     "Bai-110-09": 0.9067482712016383,
+     "Chinese-140-15": 0.8318287794839245,
+     "IndoEuropean-207-20": 0.8168824653257917,
+     "Japanese-200-10": 0.9278283449463691,
+     "ObUgrian-110-21": 0.9347230377695557,
+     "mean": 0.8670079427149235
+    },
+    "bcubed_precision_mean": 0.8842861907333269,
+    "bcubed_recall_mean": 0.8536807845908297,
+    "threshold": 0.34,
+    "paper_grid": {
+     "threshold": 0.35,
+     "bcubed_f": {
+      "Austronesian-210-20": 0.7767830478410305,
+      "Bai-110-09": 0.9056309295606002,
+      "Chinese-140-15": 0.8277571097349101,
+      "IndoEuropean-207-20": 0.8187010536807139,
+      "Japanese-200-10": 0.9293671450957286,
+      "ObUgrian-110-21": 0.9385205816587942,
+      "mean": 0.8661266445952963
+     }
+    },
+    "per_word": {
+     "bcubed_f": {
+      "Austronesian-210-20": 0.7686799605254204,
+      "Bai-110-09": 0.9055644857717945,
+      "Chinese-140-15": 0.806603873393602,
+      "IndoEuropean-207-20": 0.8124729570533286,
+      "Japanese-200-10": 0.9278283449463691,
+      "ObUgrian-110-21": 0.9347230377695557,
+      "mean": 0.8593121099100117
+     },
+     "bcubed_precision_mean": 0.8714689945465001,
+     "bcubed_recall_mean": 0.8514421352096724,
+     "threshold": 0.34,
+     "paper_grid": {
+      "threshold": 0.3,
+      "bcubed_f": {
+       "Austronesian-210-20": 0.794908546754411,
+       "Bai-110-09": 0.9023293319290787,
+       "Chinese-140-15": 0.8222948201351304,
+       "IndoEuropean-207-20": 0.8063757680991194,
+       "Japanese-200-10": 0.9209076807831637,
+       "ObUgrian-110-21": 0.9052925512172746,
+       "mean": 0.8586847831530297
+      }
+     }
+    },
+    "words_in": {
+     "Austronesian-210-20": 4358,
+     "Bai-110-09": 1028,
+     "Chinese-140-15": 2789,
+     "IndoEuropean-207-20": 4393,
+     "Japanese-200-10": 1986,
+     "ObUgrian-110-21": 2055
+    },
+    "words_out": {
+     "Austronesian-210-20": 3795,
+     "Bai-110-09": 575,
+     "Chinese-140-15": 1073,
+     "IndoEuropean-207-20": 2403,
+     "Japanese-200-10": 1081,
+     "ObUgrian-110-21": 892
+    }
+   },
+   "unread_at_1": {
+    "data_sets_scored": [
+     "Austronesian-210-20",
+     "Bai-110-09",
+     "Chinese-140-15",
+     "IndoEuropean-207-20",
+     "Japanese-200-10",
+     "ObUgrian-110-21"
+    ],
+    "average_precision": {
+     "Austronesian-210-20": 0.4906969183347471,
+     "Bai-110-09": 0.7819495227372145,
+     "Chinese-140-15": 0.39730382313926094,
+     "IndoEuropean-207-20": 0.39479072353175904,
+     "Japanese-200-10": 0.8188893165013693,
+     "ObUgrian-110-21": 0.7881142354466673,
+     "mean": 0.6119574232818363
+    },
+    "bcubed_f": {
+     "Austronesian-210-20": 0.7763407446374463,
+     "Bai-110-09": 0.7014278487568243,
+     "Chinese-140-15": 0.6779006450291903,
+     "IndoEuropean-207-20": 0.6711199694642739,
+     "Japanese-200-10": 0.6787784552895115,
+     "ObUgrian-110-21": 0.526660941705935,
+     "mean": 0.6720381008138636
+    },
+    "bcubed_precision_mean": 0.9176538432984636,
+    "bcubed_recall_mean": 0.5523049603498854,
+    "threshold": 0.36,
+    "paper_grid": {
+     "threshold": 0.35,
+     "bcubed_f": {
+      "Austronesian-210-20": 0.7837144871046563,
+      "Bai-110-09": 0.6985634822741931,
+      "Chinese-140-15": 0.6760467940975765,
+      "IndoEuropean-207-20": 0.6702045843284323,
+      "Japanese-200-10": 0.6770692040485949,
+      "ObUgrian-110-21": 0.5252107018884422,
+      "mean": 0.671801542290316
+     }
+    },
+    "per_word": {
+     "bcubed_f": {
+      "Austronesian-210-20": 0.7621993855441768,
+      "Bai-110-09": 0.7007175319199654,
+      "Chinese-140-15": 0.6722118455261189,
+      "IndoEuropean-207-20": 0.6667604121162743,
+      "Japanese-200-10": 0.6781374271191828,
+      "ObUgrian-110-21": 0.526660941705935,
+      "mean": 0.6677812573219422
+     },
+     "bcubed_precision_mean": 0.910253911048199,
+     "bcubed_recall_mean": 0.5497963182935405,
+     "threshold": 0.36,
+     "paper_grid": {
+      "threshold": 0.35,
+      "bcubed_f": {
+       "Austronesian-210-20": 0.7694219148592794,
+       "Bai-110-09": 0.6978659756107825,
+       "Chinese-140-15": 0.6703258156270996,
+       "IndoEuropean-207-20": 0.6656871612779847,
+       "Japanese-200-10": 0.6764271773790695,
+       "ObUgrian-110-21": 0.5252107018884422,
+       "mean": 0.6674897911071097
+      }
+     }
+    },
+    "words_in": {
+     "Austronesian-210-20": 4358,
+     "Bai-110-09": 1028,
+     "Chinese-140-15": 2789,
+     "IndoEuropean-207-20": 4393,
+     "Japanese-200-10": 1986,
+     "ObUgrian-110-21": 2055
+    },
+    "words_out": {
+     "Austronesian-210-20": 4358,
+     "Bai-110-09": 1028,
+     "Chinese-140-15": 2789,
+     "IndoEuropean-207-20": 4393,
+     "Japanese-200-10": 1986,
+     "ObUgrian-110-21": 2055
+    }
+   },
+   "skipped": {
+    "words": {
+     "Austronesian-210-20": 563,
+     "Bai-110-09": 453,
+     "Chinese-140-15": 1716,
+     "IndoEuropean-207-20": 1990,
+     "Japanese-200-10": 905,
+     "ObUgrian-110-21": 1163
+    },
+    "pairs": {
+     "Austronesian-210-20": 10379,
+     "Bai-110-09": 2544,
+     "Chinese-140-15": 22850,
+     "IndoEuropean-207-20": 31374,
+     "Japanese-200-10": 5530,
+     "ObUgrian-110-21": 14034
+    },
+    "pairs_in": {
+     "Austronesian-210-20": 44269,
+     "Bai-110-09": 4362,
+     "Chinese-140-15": 28672,
+     "IndoEuropean-207-20": 45032,
+     "Japanese-200-10": 8882,
+     "ObUgrian-110-21": 18759
+    }
+   }
+  },
+  "soundvectors": {
+   "common": {
+    "data_sets_scored": [
+     "Austronesian-210-20",
+     "Bai-110-09",
+     "Chinese-140-15",
+     "IndoEuropean-207-20",
+     "Japanese-200-10",
+     "ObUgrian-110-21"
+    ],
+    "average_precision": {
+     "Austronesian-210-20": 0.3871229128368384,
+     "Bai-110-09": 0.9340109789984269,
+     "Chinese-140-15": 0.6858720109208899,
+     "IndoEuropean-207-20": 0.4791357454172561,
+     "Japanese-200-10": 0.9528418995761535,
+     "ObUgrian-110-21": 0.9750165233163993,
+     "mean": 0.7356666785109941
+    },
+    "bcubed_f": {
+     "Austronesian-210-20": 0.816862354924568,
+     "Bai-110-09": 0.8648512662975278,
+     "Chinese-140-15": 0.8207581575440875,
+     "IndoEuropean-207-20": 0.7323886603822571,
+     "Japanese-200-10": 0.8615486309799261,
+     "ObUgrian-110-21": 0.8512033495725665,
+     "mean": 0.8246020699501555
+    },
+    "bcubed_precision_mean": 0.952671509606747,
+    "bcubed_recall_mean": 0.7293783474752257,
+    "threshold": 0.08,
+    "paper_grid": {
+     "threshold": 0.1,
+     "bcubed_f": {
+      "Austronesian-210-20": 0.792559917951724,
+      "Bai-110-09": 0.8660409916468912,
+      "Chinese-140-15": 0.818926836259129,
+      "IndoEuropean-207-20": 0.7256956225071527,
+      "Japanese-200-10": 0.8569700332049672,
+      "ObUgrian-110-21": 0.8637075227732822,
+      "mean": 0.8206501540571911
+     }
+    },
+    "per_word": {
+     "bcubed_f": {
+      "Austronesian-210-20": 0.8031796017868338,
+      "Bai-110-09": 0.8630190848149223,
+      "Chinese-140-15": 0.8096372130361269,
+      "IndoEuropean-207-20": 0.7293704264901048,
+      "Japanese-200-10": 0.8615486309799261,
+      "ObUgrian-110-21": 0.8512033495725665,
+      "mean": 0.8196597177800801
+     },
+     "bcubed_precision_mean": 0.9442738814755063,
+     "bcubed_recall_mean": 0.7267609750393573,
+     "threshold": 0.08,
+     "paper_grid": {
+      "threshold": 0.1,
+      "bcubed_f": {
+       "Austronesian-210-20": 0.7776422394485129,
+       "Bai-110-09": 0.8641856098504072,
+       "Chinese-140-15": 0.8060225086194279,
+       "IndoEuropean-207-20": 0.7224174421075461,
+       "Japanese-200-10": 0.8569700332049672,
+       "ObUgrian-110-21": 0.8637075227732822,
+       "mean": 0.815157559334024
+      }
+     }
+    },
+    "words_in": {
+     "Austronesian-210-20": 4358,
+     "Bai-110-09": 1028,
+     "Chinese-140-15": 2789,
+     "IndoEuropean-207-20": 4393,
+     "Japanese-200-10": 1986,
+     "ObUgrian-110-21": 2055
+    },
+    "words_out": {
+     "Austronesian-210-20": 3795,
+     "Bai-110-09": 575,
+     "Chinese-140-15": 1073,
+     "IndoEuropean-207-20": 2403,
+     "Japanese-200-10": 1081,
+     "ObUgrian-110-21": 892
+    }
+   },
+   "unread_at_1": {
+    "data_sets_scored": [
+     "Austronesian-210-20",
+     "Bai-110-09",
+     "Chinese-140-15",
+     "IndoEuropean-207-20",
+     "Japanese-200-10",
+     "ObUgrian-110-21"
+    ],
+    "average_precision": {
+     "Austronesian-210-20": 0.36620042229603056,
+     "Bai-110-09": 0.9078076522460057,
+     "Chinese-140-15": 0.5641120476018017,
+     "IndoEuropean-207-20": 0.43512221794006734,
+     "Japanese-200-10": 0.9045435127060423,
+     "ObUgrian-110-21": 0.9353829764097747,
+     "mean": 0.6855281381999538
+    },
+    "bcubed_f": {
+     "Austronesian-210-20": 0.7977970459400076,
+     "Bai-110-09": 0.8244799294670618,
+     "Chinese-140-15": 0.749005512983978,
+     "IndoEuropean-207-20": 0.6712031426043136,
+     "Japanese-200-10": 0.766732781782777,
+     "ObUgrian-110-21": 0.81795070494519,
+     "mean": 0.771194852953888
+    },
+    "bcubed_precision_mean": 0.9343552793867973,
+    "bcubed_recall_mean": 0.6609985752154239,
+    "threshold": 0.09,
+    "paper_grid": {
+     "threshold": 0.1,
+     "bcubed_f": {
+      "Austronesian-210-20": 0.7858408314309923,
+      "Bai-110-09": 0.8282207217845077,
+      "Chinese-140-15": 0.7450301896549895,
+      "IndoEuropean-207-20": 0.6705225236674852,
+      "Japanese-200-10": 0.7675532040845571,
+      "ObUgrian-110-21": 0.8222986268132751,
+      "mean": 0.7699110162393011
+     }
+    },
+    "per_word": {
+     "bcubed_f": {
+      "Austronesian-210-20": 0.7834604052646772,
+      "Bai-110-09": 0.8232238333966275,
+      "Chinese-140-15": 0.7388235115528096,
+      "IndoEuropean-207-20": 0.6668075914642203,
+      "Japanese-200-10": 0.7659395007710378,
+      "ObUgrian-110-21": 0.81795070494519,
+      "mean": 0.7660342578990939
+     },
+     "bcubed_precision_mean": 0.9255896983856645,
+     "bcubed_recall_mean": 0.65791281873549,
+     "threshold": 0.09,
+     "paper_grid": {
+      "threshold": 0.1,
+      "bcubed_f": {
+       "Austronesian-210-20": 0.7709201086585238,
+       "Bai-110-09": 0.827598513753126,
+       "Chinese-140-15": 0.7333770803999443,
+       "IndoEuropean-207-20": 0.6660388836372051,
+       "Japanese-200-10": 0.7666938160324166,
+       "ObUgrian-110-21": 0.8222917300648516,
+       "mean": 0.7644866887576779
+      }
+     }
+    },
+    "words_in": {
+     "Austronesian-210-20": 4358,
+     "Bai-110-09": 1028,
+     "Chinese-140-15": 2789,
+     "IndoEuropean-207-20": 4393,
+     "Japanese-200-10": 1986,
+     "ObUgrian-110-21": 2055
+    },
+    "words_out": {
+     "Austronesian-210-20": 4358,
+     "Bai-110-09": 1028,
+     "Chinese-140-15": 2789,
+     "IndoEuropean-207-20": 4393,
+     "Japanese-200-10": 1986,
+     "ObUgrian-110-21": 2055
+    }
+   },
+   "skipped": {
+    "words": {
+     "Austronesian-210-20": 89,
+     "Bai-110-09": 0,
+     "Chinese-140-15": 333,
+     "IndoEuropean-207-20": 66,
+     "Japanese-200-10": 14,
+     "ObUgrian-110-21": 0
+    },
+    "pairs": {
+     "Austronesian-210-20": 1436,
+     "Bai-110-09": 0,
+     "Chinese-140-15": 6242,
+     "IndoEuropean-207-20": 1308,
+     "Japanese-200-10": 125,
+     "ObUgrian-110-21": 0
+    },
+    "pairs_in": {
+     "Austronesian-210-20": 44269,
+     "Bai-110-09": 4362,
+     "Chinese-140-15": 28672,
+     "IndoEuropean-207-20": 45032,
+     "Japanese-200-10": 8882,
+     "ObUgrian-110-21": 18759
+    }
+   }
+  },
+  "sca": {
+   "common": {
+    "data_sets_scored": [
+     "Austronesian-210-20",
+     "Bai-110-09",
+     "Chinese-140-15",
+     "IndoEuropean-207-20",
+     "Japanese-200-10",
+     "ObUgrian-110-21"
+    ],
+    "average_precision": {
+     "Austronesian-210-20": 0.598578104017678,
+     "Bai-110-09": 0.9559685432682563,
+     "Chinese-140-15": 0.7994529973583068,
+     "IndoEuropean-207-20": 0.7222908667873897,
+     "Japanese-200-10": 0.9793435501237094,
+     "ObUgrian-110-21": 0.9883231752409868,
+     "mean": 0.8406595394660544
+    },
+    "bcubed_f": {
+     "Austronesian-210-20": 0.8180332597466174,
+     "Bai-110-09": 0.921618984473443,
+     "Chinese-140-15": 0.8542569727031564,
+     "IndoEuropean-207-20": 0.844404990202596,
+     "Japanese-200-10": 0.9377024704187431,
+     "ObUgrian-110-21": 0.9299477082167424,
+     "mean": 0.8843273976268832
+    },
+    "bcubed_precision_mean": 0.9056505595339356,
+    "bcubed_recall_mean": 0.8659364326284414,
+    "threshold": 0.44,
+    "paper_grid": {
+     "threshold": 0.45,
+     "bcubed_f": {
+      "Austronesian-210-20": 0.8146086228346664,
+      "Bai-110-09": 0.919030662193495,
+      "Chinese-140-15": 0.8510032768835607,
+      "IndoEuropean-207-20": 0.8482508829607728,
+      "Japanese-200-10": 0.9382212767436516,
+      "ObUgrian-110-21": 0.9332291475573273,
+      "mean": 0.8840573115289123
+     }
+    },
+    "per_word": {
+     "bcubed_f": {
+      "Austronesian-210-20": 0.8079243927354613,
+      "Bai-110-09": 0.9205643833944692,
+      "Chinese-140-15": 0.8281300547206594,
+      "IndoEuropean-207-20": 0.8401185208133565,
+      "Japanese-200-10": 0.9350149688912641,
+      "ObUgrian-110-21": 0.9282977655810476,
+      "mean": 0.8766750143560431
+     },
+     "bcubed_precision_mean": 0.8985324601173666,
+     "bcubed_recall_mean": 0.8585370178104309,
+     "threshold": 0.43,
+     "paper_grid": {
+      "threshold": 0.45,
+      "bcubed_f": {
+       "Austronesian-210-20": 0.7996016723370516,
+       "Bai-110-09": 0.9172468487019998,
+       "Chinese-140-15": 0.8215635927714967,
+       "IndoEuropean-207-20": 0.8445437679463627,
+       "Japanese-200-10": 0.9382212767436516,
+       "ObUgrian-110-21": 0.9332291475573273,
+       "mean": 0.8757343843429816
+      }
+     }
+    },
+    "words_in": {
+     "Austronesian-210-20": 4358,
+     "Bai-110-09": 1028,
+     "Chinese-140-15": 2789,
+     "IndoEuropean-207-20": 4393,
+     "Japanese-200-10": 1986,
+     "ObUgrian-110-21": 2055
+    },
+    "words_out": {
+     "Austronesian-210-20": 3795,
+     "Bai-110-09": 575,
+     "Chinese-140-15": 1073,
+     "IndoEuropean-207-20": 2403,
+     "Japanese-200-10": 1081,
+     "ObUgrian-110-21": 892
+    }
+   },
+   "unread_at_1": {
+    "data_sets_scored": [
+     "Austronesian-210-20",
+     "Bai-110-09",
+     "Chinese-140-15",
+     "IndoEuropean-207-20",
+     "Japanese-200-10",
+     "ObUgrian-110-21"
+    ],
+    "average_precision": {
+     "Austronesian-210-20": 0.5766026323835977,
+     "Bai-110-09": 0.9452901608339463,
+     "Chinese-140-15": 0.7966153683500389,
+     "IndoEuropean-207-20": 0.6897802309293095,
+     "Japanese-200-10": 0.9576790159348377,
+     "ObUgrian-110-21": 0.9708141653774844,
+     "mean": 0.8227969289682023
+    },
+    "bcubed_f": {
+     "Austronesian-210-20": 0.8115621563927969,
+     "Bai-110-09": 0.9046780414910837,
+     "Chinese-140-15": 0.8157241250229887,
+     "IndoEuropean-207-20": 0.8031253860016843,
+     "Japanese-200-10": 0.8859089459895798,
+     "ObUgrian-110-21": 0.8948615470011353,
+     "mean": 0.8526433669832115
+    },
+    "bcubed_precision_mean": 0.8799093479294635,
+    "bcubed_recall_mean": 0.833199704153372,
+    "threshold": 0.43,
+    "paper_grid": {
+     "threshold": 0.45,
+     "bcubed_f": {
+      "Austronesian-210-20": 0.802403918721589,
+      "Bai-110-09": 0.9001320125412691,
+      "Chinese-140-15": 0.8116605809961717,
+      "IndoEuropean-207-20": 0.8070595367546097,
+      "Japanese-200-10": 0.8922938618001479,
+      "ObUgrian-110-21": 0.8965950234564366,
+      "mean": 0.8516908223783707
+     }
+    },
+    "per_word": {
+     "bcubed_f": {
+      "Austronesian-210-20": 0.7975958782456026,
+      "Bai-110-09": 0.9035842734892862,
+      "Chinese-140-15": 0.7806543828517681,
+      "IndoEuropean-207-20": 0.7992177775895,
+      "Japanese-200-10": 0.8855064640358415,
+      "ObUgrian-110-21": 0.8948615470011353,
+      "mean": 0.8435700538688556
+     },
+     "bcubed_precision_mean": 0.8661953975887325,
+     "bcubed_recall_mean": 0.8309299452968477,
+     "threshold": 0.43,
+     "paper_grid": {
+      "threshold": 0.4,
+      "bcubed_f": {
+       "Austronesian-210-20": 0.8047066568730222,
+       "Bai-110-09": 0.9017742402870937,
+       "Chinese-140-15": 0.80164522975012,
+       "IndoEuropean-207-20": 0.7910760540422671,
+       "Japanese-200-10": 0.8666334368341274,
+       "ObUgrian-110-21": 0.8827736003156128,
+       "mean": 0.8414348696837072
+      }
+     }
+    },
+    "words_in": {
+     "Austronesian-210-20": 4358,
+     "Bai-110-09": 1028,
+     "Chinese-140-15": 2789,
+     "IndoEuropean-207-20": 4393,
+     "Japanese-200-10": 1986,
+     "ObUgrian-110-21": 2055
+    },
+    "words_out": {
+     "Austronesian-210-20": 4358,
+     "Bai-110-09": 1028,
+     "Chinese-140-15": 2789,
+     "IndoEuropean-207-20": 4393,
+     "Japanese-200-10": 1986,
+     "ObUgrian-110-21": 2055
+    }
+   },
+   "skipped": {
+    "words": {
+     "Austronesian-210-20": 0,
+     "Bai-110-09": 0,
+     "Chinese-140-15": 0,
+     "IndoEuropean-207-20": 0,
+     "Japanese-200-10": 0,
+     "ObUgrian-110-21": 0
+    },
+    "pairs": {
+     "Austronesian-210-20": 0,
+     "Bai-110-09": 0,
+     "Chinese-140-15": 0,
+     "IndoEuropean-207-20": 0,
+     "Japanese-200-10": 0,
+     "ObUgrian-110-21": 0
+    },
+    "pairs_in": {
+     "Austronesian-210-20": 44269,
+     "Bai-110-09": 4362,
+     "Chinese-140-15": 28672,
+     "IndoEuropean-207-20": 45032,
+     "Japanese-200-10": 8882,
+     "ObUgrian-110-21": 18759
+    }
+   }
+  }
+ }
+}

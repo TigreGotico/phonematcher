@@ -1,0 +1,453 @@
+{
+ "task": "coverage",
+ "system": "phonematcher,levenshtein,panphon-weighted,panphon-hamming,aline,soundvectors,sca",
+ "split": "seen",
+ "commit": null,
+ "head": "bc69674664ae12e7528361bbb4593095b7cf2a9c",
+ "tree_dirty": false,
+ "data": {
+  "phoible": {
+   "url": "https://raw.githubusercontent.com/phoible/dev/master/data/phoible.csv",
+   "sha256": "0816e698563b68ec6a309bab404a06dfb221d4334aa5ffcbc0c18f2bd01844b8",
+   "rows": 105484,
+   "inventories": 3020
+  },
+  "wikipron": {
+   "url": "https://github.com/CUNY-CL/wikipron",
+   "commit": "d282e848a211ea31cfd730f0ced8bc8cdab9e83d",
+   "files": 543
+  },
+  "orthography2ipa": {
+   "version": "7.124.51a2",
+   "specs": 7404,
+   "dropped": [
+    "ˈ",
+    "ˌ"
+   ]
+  }
+ },
+ "systems": {
+  "phonematcher": {
+   "phoible": {
+    "direct": {
+     "types": 4158,
+     "types_read": 3783,
+     "types_unread": 375,
+     "type_share": 0.9098124098124099,
+     "tokens": 116373,
+     "tokens_read": 115760,
+     "token_share": 0.9947324551227519
+    },
+    "tie_retry": {
+     "types": 4158,
+     "types_read": 3783,
+     "types_unread": 375,
+     "type_share": 0.9098124098124099,
+     "tokens": 116373,
+     "tokens_read": 115760,
+     "token_share": 0.9947324551227519
+    }
+   },
+   "wikipron": {
+    "direct": {
+     "types": 3604,
+     "types_read": 2639,
+     "types_unread": 965,
+     "type_share": 0.7322419533851277,
+     "tokens": 55266303,
+     "tokens_read": 54932639,
+     "token_share": 0.9939626140724485
+    }
+   },
+   "orthography2ipa": {
+    "direct": {
+     "types": 2519,
+     "types_read": 2299,
+     "types_unread": 220,
+     "type_share": 0.9126637554585153,
+     "tokens": 58589,
+     "tokens_read": 58311,
+     "token_share": 0.9952550820119818
+    }
+   }
+  },
+  "levenshtein": {
+   "phoible": {
+    "direct": {
+     "types": 4158,
+     "types_read": 4158,
+     "types_unread": 0,
+     "type_share": 1.0,
+     "tokens": 116373,
+     "tokens_read": 116373,
+     "token_share": 1.0
+    },
+    "tie_retry": {
+     "types": 4158,
+     "types_read": 4158,
+     "types_unread": 0,
+     "type_share": 1.0,
+     "tokens": 116373,
+     "tokens_read": 116373,
+     "token_share": 1.0
+    }
+   },
+   "wikipron": {
+    "direct": {
+     "types": 3604,
+     "types_read": 3604,
+     "types_unread": 0,
+     "type_share": 1.0,
+     "tokens": 55266303,
+     "tokens_read": 55266303,
+     "token_share": 1.0
+    }
+   },
+   "orthography2ipa": {
+    "direct": {
+     "types": 2519,
+     "types_read": 2519,
+     "types_unread": 0,
+     "type_share": 1.0,
+     "tokens": 58589,
+     "tokens_read": 58589,
+     "token_share": 1.0
+    }
+   }
+  },
+  "panphon-weighted": {
+   "phoible": {
+    "direct": {
+     "types": 4158,
+     "types_read": 1212,
+     "types_unread": 2946,
+     "type_share": 0.29148629148629146,
+     "tokens": 116373,
+     "tokens_read": 97674,
+     "token_share": 0.8393183985976128
+    },
+    "tie_retry": {
+     "types": 4158,
+     "types_read": 1353,
+     "types_unread": 2805,
+     "type_share": 0.3253968253968254,
+     "tokens": 116373,
+     "tokens_read": 101309,
+     "token_share": 0.870554166344427
+    }
+   },
+   "wikipron": {
+    "direct": {
+     "types": 3604,
+     "types_read": 1113,
+     "types_unread": 2491,
+     "type_share": 0.3088235294117647,
+     "tokens": 55266303,
+     "tokens_read": 51397951,
+     "token_share": 0.9300052330259906
+    }
+   },
+   "orthography2ipa": {
+    "direct": {
+     "types": 2519,
+     "types_read": 975,
+     "types_unread": 1544,
+     "type_share": 0.3870583564906709,
+     "tokens": 58589,
+     "tokens_read": 52596,
+     "token_share": 0.8977111744525423
+    }
+   }
+  },
+  "panphon-hamming": {
+   "phoible": {
+    "direct": {
+     "types": 4158,
+     "types_read": 1212,
+     "types_unread": 2946,
+     "type_share": 0.29148629148629146,
+     "tokens": 116373,
+     "tokens_read": 97674,
+     "token_share": 0.8393183985976128
+    },
+    "tie_retry": {
+     "types": 4158,
+     "types_read": 1353,
+     "types_unread": 2805,
+     "type_share": 0.3253968253968254,
+     "tokens": 116373,
+     "tokens_read": 101309,
+     "token_share": 0.870554166344427
+    }
+   },
+   "wikipron": {
+    "direct": {
+     "types": 3604,
+     "types_read": 1113,
+     "types_unread": 2491,
+     "type_share": 0.3088235294117647,
+     "tokens": 55266303,
+     "tokens_read": 51397951,
+     "token_share": 0.9300052330259906
+    }
+   },
+   "orthography2ipa": {
+    "direct": {
+     "types": 2519,
+     "types_read": 975,
+     "types_unread": 1544,
+     "type_share": 0.3870583564906709,
+     "tokens": 58589,
+     "tokens_read": 52596,
+     "token_share": 0.8977111744525423
+    }
+   }
+  },
+  "aline": {
+   "phoible": {
+    "direct": {
+     "types": 4158,
+     "types_read": 89,
+     "types_unread": 4069,
+     "type_share": 0.021404521404521405,
+     "tokens": 116373,
+     "tokens_read": 66768,
+     "token_share": 0.5737413317522105
+    },
+    "tie_retry": {
+     "types": 4158,
+     "types_read": 90,
+     "types_unread": 4068,
+     "type_share": 0.021645021645021644,
+     "tokens": 116373,
+     "tokens_read": 66851,
+     "token_share": 0.5744545556099783
+    }
+   },
+   "wikipron": {
+    "direct": {
+     "types": 3604,
+     "types_read": 89,
+     "types_unread": 3515,
+     "type_share": 0.024694783573806882,
+     "tokens": 55266303,
+     "tokens_read": 43373800,
+     "token_share": 0.7848145731767149
+    }
+   },
+   "orthography2ipa": {
+    "direct": {
+     "types": 2519,
+     "types_read": 86,
+     "types_unread": 2433,
+     "type_share": 0.034140531957125846,
+     "tokens": 58589,
+     "tokens_read": 38028,
+     "token_share": 0.6490638174401339
+    }
+   }
+  },
+  "soundvectors": {
+   "phoible": {
+    "direct": {
+     "types": 4158,
+     "types_read": 3380,
+     "types_unread": 778,
+     "type_share": 0.8128908128908129,
+     "tokens": 116373,
+     "tokens_read": 113979,
+     "token_share": 0.979428217885592
+    },
+    "tie_retry": {
+     "types": 4158,
+     "types_read": 3401,
+     "types_unread": 757,
+     "type_share": 0.817941317941318,
+     "tokens": 116373,
+     "tokens_read": 114354,
+     "token_share": 0.9826506148333376
+    }
+   },
+   "wikipron": {
+    "direct": {
+     "types": 3604,
+     "types_read": 2766,
+     "types_unread": 838,
+     "type_share": 0.767480577136515,
+     "tokens": 55266303,
+     "tokens_read": 54926270,
+     "token_share": 0.9938473720596075
+    }
+   },
+   "orthography2ipa": {
+    "direct": {
+     "types": 2519,
+     "types_read": 1900,
+     "types_unread": 619,
+     "type_share": 0.7542675664946408,
+     "tokens": 58589,
+     "tokens_read": 57819,
+     "token_share": 0.9868576012562085
+    }
+   }
+  },
+  "sca": {
+   "phoible": {
+    "direct": {
+     "types": 4158,
+     "types_read": 4103,
+     "types_unread": 55,
+     "type_share": 0.9867724867724867,
+     "tokens": 116373,
+     "tokens_read": 116061,
+     "token_share": 0.9973189657394756
+    },
+    "tie_retry": {
+     "types": 4158,
+     "types_read": 4106,
+     "types_unread": 52,
+     "type_share": 0.9874939874939875,
+     "tokens": 116373,
+     "tokens_read": 116080,
+     "token_share": 0.9974822338514948
+    }
+   },
+   "wikipron": {
+    "direct": {
+     "types": 3604,
+     "types_read": 3434,
+     "types_unread": 170,
+     "type_share": 0.9528301886792453,
+     "tokens": 55266303,
+     "tokens_read": 55133278,
+     "token_share": 0.9975930179371687
+    }
+   },
+   "orthography2ipa": {
+    "direct": {
+     "types": 2519,
+     "types_read": 2471,
+     "types_unread": 48,
+     "type_share": 0.980944819372767,
+     "tokens": 58589,
+     "tokens_read": 58480,
+     "token_share": 0.9981395825154893
+    }
+   }
+  }
+ },
+ "common_subset": {
+  "phoible": {
+   "direct": {
+    "types_read_by_all": 87,
+    "tokens_read_by_all": 66748
+   },
+   "tie_retry": {
+    "types_read_by_all": 88,
+    "tokens_read_by_all": 66831
+   }
+  },
+  "wikipron": {
+   "direct": {
+    "types_read_by_all": 88,
+    "tokens_read_by_all": 43373655
+   }
+  },
+  "orthography2ipa": {
+   "direct": {
+    "types_read_by_all": 86,
+    "tokens_read_by_all": 38028
+   }
+  }
+ },
+ "phonematcher_readings": {
+  "segments_only": {
+   "phoible": {
+    "direct": {
+     "types": 4158,
+     "types_read": 2627,
+     "types_unread": 1531,
+     "type_share": 0.6317941317941318,
+     "tokens": 116373,
+     "tokens_read": 109744,
+     "token_share": 0.9430366150223849
+    },
+    "tie_retry": {
+     "types": 4158,
+     "types_read": 2704,
+     "types_unread": 1454,
+     "type_share": 0.6503126503126503,
+     "tokens": 116373,
+     "tokens_read": 110384,
+     "token_share": 0.9485361724798708
+    }
+   },
+   "wikipron": {
+    "direct": {
+     "types": 3604,
+     "types_read": 2429,
+     "types_unread": 1175,
+     "type_share": 0.6739733629300777,
+     "tokens": 55266303,
+     "tokens_read": 52266926,
+     "token_share": 0.9457286477078085
+    }
+   },
+   "orthography2ipa": {
+    "direct": {
+     "types": 2519,
+     "types_read": 2181,
+     "types_unread": 338,
+     "type_share": 0.8658197697499007,
+     "tokens": 58589,
+     "tokens_read": 58170,
+     "token_share": 0.9928484869173394
+    }
+   }
+  },
+  "with_tones": {
+   "phoible": {
+    "direct": {
+     "types": 4158,
+     "types_read": 3783,
+     "types_unread": 375,
+     "type_share": 0.9098124098124099,
+     "tokens": 116373,
+     "tokens_read": 115760,
+     "token_share": 0.9947324551227519
+    },
+    "tie_retry": {
+     "types": 4158,
+     "types_read": 3783,
+     "types_unread": 375,
+     "type_share": 0.9098124098124099,
+     "tokens": 116373,
+     "tokens_read": 115760,
+     "token_share": 0.9947324551227519
+    }
+   },
+   "wikipron": {
+    "direct": {
+     "types": 3604,
+     "types_read": 2639,
+     "types_unread": 965,
+     "type_share": 0.7322419533851277,
+     "tokens": 55266303,
+     "tokens_read": 54932639,
+     "token_share": 0.9939626140724485
+    }
+   },
+   "orthography2ipa": {
+    "direct": {
+     "types": 2519,
+     "types_read": 2299,
+     "types_unread": 220,
+     "type_share": 0.9126637554585153,
+     "tokens": 58589,
+     "tokens_read": 58311,
+     "token_share": 0.9952550820119818
+    }
+   }
+  }
+ }
+}
